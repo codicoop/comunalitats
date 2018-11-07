@@ -1,3 +1,7 @@
-from django.db import models
+from cc_users.models import BaseUser
 
-# Create your models here.
+
+class User(BaseUser):
+    @property
+    def full_name(self):
+        return self.get_full_name() if self.get_full_name() else self.username

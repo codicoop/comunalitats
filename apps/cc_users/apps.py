@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class UsersConfig(AppConfig):
-    name = 'users'
+    name = 'cc_users'
 
     def ready(self):
         # TODO: This should be placed into a global app, meanwhile having it here is (more-or-less) fine

@@ -3,7 +3,7 @@
 
 from django.urls import path
 from django.urls import include
-from apps.users import views
+from apps.cc_users import views
 
 urlpatterns = [
     path('users/login/', views.UsersLoginView.as_view(), name='login'),

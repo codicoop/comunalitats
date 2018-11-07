@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class CoopolisConfig(AppConfig):
-    name = 'coopolis'
+class CoursesConfig(AppConfig):
+    name = 'cc_courses'

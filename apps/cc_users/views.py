@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from apps.users.forms import SignUpForm
+from apps.cc_users.forms import SignUpForm
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
