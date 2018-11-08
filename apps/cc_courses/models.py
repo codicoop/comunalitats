@@ -9,7 +9,7 @@ class Course(models.Model):
     place = models.ForeignKey("Places", on_delete=models.SET_NULL, null=True)
     date_start = models.DateTimeField("Dia inici")
     date_end = models.DateTimeField("Dia finalització")
-    hours = models.CharField("Horaris", max_length=100, blank=False)
+    hours = models.CharField("Horaris", blank=False)
     objectives = models.TextField("Objectius")
     category = models.ForeignKey("Categories", on_delete=models.SET_NULL, null=True)
     published = models.BooleanField("Publicat")
@@ -22,6 +22,10 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Activity(models.Model):
+    pass
 
 
 class Categories(models.Model):
