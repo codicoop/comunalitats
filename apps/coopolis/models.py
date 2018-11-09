@@ -3,12 +3,18 @@ from django.db import models
 
 
 class User(BaseUser):
+    class Meta:
+        verbose_name_plural = "Usuaris"
+
     @property
     def full_name(self):
         return self.get_full_name() if self.get_full_name() else self.username
 
 
 class Project(models.Model):
+    class Meta:
+        verbose_name_plural = "Projectes"
+
     SECTORS = (
         ('A', 'Altres'),
         ('C', 'Comunicació i tecnologia'),

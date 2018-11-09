@@ -30,18 +30,18 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
-    'apps.cc_users.apps.UsersConfig',
-    'apps.cc_courses.apps.CoursesConfig',
-    'apps.coopolis.apps.CoopolisConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apps.cc_users.apps.UsersConfig',
+    'apps.cc_courses.apps.CoursesConfig',
+    'apps.coopolis.apps.CoopolisConfig',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -88,7 +88,6 @@ DATABASES = {
 }
 
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -133,3 +132,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 AUTH_USER_MODEL = 'coopolis.User'
 DEV_SETTINGS_MODULE = 'coopolis_backoffice.settings.dev'
+
+# ADMIN
