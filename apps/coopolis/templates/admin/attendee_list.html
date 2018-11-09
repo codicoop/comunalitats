@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Llistat d'assistencia</title>
+  </head>
+  <body>
+  Hola <span style="color: red;">caracola</span>
+  <ul>
+    {% for assistant in assistants %}
+    <li>{{ assistant.full_name }}</li>
+    {% endfor %}
+  </ul>
+  </body>
+</html>

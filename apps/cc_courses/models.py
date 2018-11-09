@@ -21,10 +21,15 @@ class Course(models.Model):
     creator = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True, related_name='works')
     enrolled = models.ManyToManyField(get_user_model(), blank=True, related_name='enrolled_courses')
     activities = models.ManyToManyField(Activity, blank=True, related_name='courses')
+    applications = models.IntegerField('Places totals', default=0)
 
     @classmethod
     def pre_save(cls, sender, instance, **kwargs):
         slugify_model(instance, 'title')
+
+    @property
+    def remain_applications(self):
+        return self.applications - self.enrolled.count()
 
     def __str__(self):
         return self.title
