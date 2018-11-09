@@ -133,4 +133,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 AUTH_USER_MODEL = 'coopolis.User'
 DEV_SETTINGS_MODULE = 'coopolis_backoffice.settings.dev'
 
-# ADMIN
+# APPS
+
+USERS_APP_TITLE = 'Gestió de persones'
+COURSES_APP_TITLE = 'Gestió d\'activitats'

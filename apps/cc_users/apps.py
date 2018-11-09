@@ -1,8 +1,10 @@
 from django.apps import AppConfig
+from django.conf import settings
 
 
 class UsersConfig(AppConfig):
     name = 'cc_users'
+    verbose_name = settings.USERS_APP_TITLE
 
     def ready(self):
         # TODO: This should be placed into a global app, meanwhile having it here is (more-or-less) fine
