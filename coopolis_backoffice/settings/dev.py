@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'apps.cc_users.apps.UsersConfig',
     'apps.cc_courses.apps.CoursesConfig',
     'apps.coopolis.apps.CoopolisConfig',
+    'django_summernote'
 ]
 
 
