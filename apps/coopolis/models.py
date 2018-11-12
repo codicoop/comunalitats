@@ -31,3 +31,4 @@ class Project(models.Model):
     web = models.CharField("Web", max_length=200, blank=True)
     mail = models.EmailField("Correu electrònic")
     phone = models.CharField("Telèfon", max_length=15)
+    members = models.ManyToManyField(User, blank=True, related_name='projects')
