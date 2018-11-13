@@ -1,6 +1,8 @@
 from django.db import models
 from cc_lib.utils import slugify_model
 from django.contrib.auth import get_user_model
+from django.shortcuts import reverse
+from django.db.models.signals import pre_save
 
 
 class Activity(models.Model):
@@ -31,6 +33,10 @@ class Course(models.Model):
     def remain_applications(self):
         return self.applications - self.enrolled.count()
 
+    @property
+    def absolute_url(self):
+        return reverse('course', args=[str(self.slug)])
+
     def __str__(self):
         return self.title
 
@@ -45,3 +51,6 @@ class CoursePlace(models.Model):
 
     def __str__(self):
         return self.name
+
+
+pre_save.connect(Course.pre_save, sender=Course)
