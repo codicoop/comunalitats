@@ -5,4 +5,4 @@ from django.contrib import admin
 
 
 class UserAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('last_name', 'first_name', 'username')

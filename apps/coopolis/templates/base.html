@@ -11,9 +11,23 @@
   <meta name="author" content="name">
   <meta name="description" content="description here">
   <meta name="keywords" content="keywords,here">
-  <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">
   </head>
   <body>
+    <div>
+      {% if user.is_anonymous %}
+      <ul>
+        <li><a href="{% url 'login' %}">Login</a></li>
+        <li><a href="{% url 'signup' %}">Sign up</a></li>
+      </ul>
+      {% else %}
+      <ul>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% for project in user.projects.all %}
+        <li><a href="{% url 'project' pk=project.id %}">{{ project.name }}</a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
 
     <div class="content">
     {% block content %}

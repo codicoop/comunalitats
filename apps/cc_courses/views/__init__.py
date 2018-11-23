@@ -3,3 +3,4 @@
 
 from .CoursesListView import CoursesListView
 from .CourseDetailView import CourseDetailView
+from .EnrollCourseView import EnrollCourseView

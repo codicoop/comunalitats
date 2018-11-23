@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h1>Course page</h1>
     {{ object.title }}
+
+<a href="{% url 'enroll_course' slug=object.slug %}">Incriure's</a>
 {% endblock %}
