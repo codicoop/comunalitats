@@ -22,6 +22,7 @@
       {% else %}
       <ul>
         <li><a href="{% url 'logout' %}">Logout</a></li>
+        <li><a href="{% url 'my_courses' %}">Els meus cursos</a></li>
         {% for project in user.projects.all %}
         <li><a href="{% url 'project' pk=project.id %}">{{ project.name }}</a></li>
         {% endfor %}

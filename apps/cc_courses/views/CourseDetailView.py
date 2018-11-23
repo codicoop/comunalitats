@@ -8,3 +8,4 @@ from django.apps import apps
 class CourseDetailView(generic.DetailView):
     model = apps.get_model('cc_courses', 'Course')
     template_name = 'course.html'
+
