@@ -2,11 +2,18 @@
     padding: 0;
     margin: 0;
     font-family: $base-font;
+    color: $color-3;
 }
 
 body {
     margin: 20px;
     min-height: 100vh;
+    background-color: $color-0;
+}
+
+a {
+    color: $color-2;
+    font-weight: bold;
 }
 
 .content {

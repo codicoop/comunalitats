@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% include 'reusable/introduction.html' %}
     <h1>Llistat de cursos:</h1>
     <ul>
     {% for course in course_list %}

@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.cc_users.apps.UsersConfig',
-    'apps.cc_courses.apps.CoursesConfig',
     'apps.coopolis.apps.CoopolisConfig',
+    'apps.cc_courses.apps.CoursesConfig',
     'django_summernote'
 ]
 

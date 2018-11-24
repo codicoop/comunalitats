@@ -3,21 +3,32 @@
   padding: 0;
   margin: 0;
   font-family: "Open Sans", sans-serif;
+  color: #242424;
 }
 
 body {
   margin: 20px;
   min-height: 100vh;
+  background-color: white;
+}
+
+a {
+  color: #2C3C61;
+  font-weight: bold;
 }
 
 .content {
   min-height: 100vh;
 }
 
+header {
+  display: flex;
+  flex-direction: column;
+}
 header div {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: stretch;
 }
 header div h1 {
   font-family: "Raleway", sans-serif;
@@ -27,28 +38,70 @@ header div h2 {
   font-family: "Raleway", sans-serif;
   color: #2C3C61;
 }
+header .logo {
+  align-items: center;
+}
+header .title-link {
+  display: inline-block;
+  text-decoration: none;
+  margin-bottom: 20px;
+  width: 50%;
+}
 header .title {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-left: 20px;
 }
+header .secondary-menu {
+  width: 50%;
+  display: flex;
+  flex-direction: row-reverse;
+  align-content: flex-end;
+  margin-top: auto;
+}
+header .secondary-menu form {
+  margin-bottom: 10px;
+}
+header .secondary-menu form input[type=submit] {
+  padding: 0 10px;
+}
+header .secondary-menu ul {
+  background-color: white;
+  flex-direction: column;
+}
 header ul {
   font-weight: bolder;
   display: flex;
   flex-direction: row-reverse;
-  margin: 20px 0;
   background-color: #D8C4A4;
   padding: 10px 0;
 }
 header ul li {
   list-style: none;
-  margin: 0 20px;
+  margin: 0 50px;
 }
 header ul a {
   font-family: "Raleway", sans-serif;
   text-decoration: none;
   color: #2C3C61;
+}
+header ul a:hover {
+  text-decoration: underline;
+}
+
+.introduction {
+  background-color: #2C3C61;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 0;
+}
+.introduction p {
+  color: white;
+  width: 60%;
+  text-align: center;
+  display: inline-block;
 }
 
 footer {
