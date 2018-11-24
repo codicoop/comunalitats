@@ -11,6 +11,7 @@ weasyprint = "*"
 arrow = "*"
 django-summernote = "*"
 django-constance = "*"
+django-picklefield = "*"
 
 [dev-packages]
 

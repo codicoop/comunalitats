@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'apps.cc_users.apps.UsersConfig',
     'apps.coopolis.apps.CoopolisConfig',
     'apps.cc_courses.apps.CoursesConfig',
-    'django_summernote'
+    'django_summernote',
+    'constance.backends.database',
+    'constance',
 ]
 
 
@@ -138,3 +140,17 @@ DEV_SETTINGS_MODULE = 'coopolis_backoffice.settings.dev'
 
 USERS_APP_TITLE = 'Gestió de persones'
 COURSES_APP_TITLE = 'Gestió d\'activitats'
+
+# Constance
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_CONFIG = {
+    'INTRODUCTION_TEXT': ("""
+Des de Coòpolis disposem d’una oferta regular de formació en economia social i cooperativisme per a tots els públics, tant per a aquelles persones que tenen ganes d’apropar-se a l’economia social i solidària, com per a aquelles persones o col·lectius que estan pensant en constituir el seu propi projecte econòmic. A més de les activitats a l’espai Coòpolis de Can Batlló, també oferim formacions descentralitzades en altres espais comunitaris i seus de l’economia social i solidària barcelonina.
+""", 'Text de presentació')
+}
+CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
+
+# CC Courses
+
+COURSES_VIEWS = 'apps.coopolis.views'
+COURSES_LIST_VIEW_CLASS = 'CoopolisCoursesListView'
