@@ -1,0 +1,24 @@
+<header>
+    {% load staticfiles %}
+    <div>
+        <img src="{% static 'images/logo.png' %}" />
+        <div class="title">
+            <h1>Coòpolis</h1>
+            <h2>Gestió d'inscripcions</h2>
+        </div>
+    </div>
+    {% if user.is_anonymous %}
+    <ul>
+        <li><a href="{% url 'login' %}">Login</a></li>
+        <li><a href="{% url 'signup' %}">Sign up</a></li>
+    </ul>
+    {% else %}
+    <ul>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+        <li><a href="{% url 'my_courses' %}">Els meus cursos</a></li>
+        {% for project in user.projects.all %}
+        <li><a href="{% url 'project' pk=project.id %}">{{ project.name }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</header>

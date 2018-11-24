@@ -1,0 +1,44 @@
+header {
+    div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        h1 {
+            font-family: $menu-font;
+            color: $color-2;
+        }
+
+        h2 {
+            font-family: $menu-font;
+            color: $color-2;
+        }
+    }
+
+    .title {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 20px; 
+    }
+    
+    ul {
+        font-weight: bolder;
+        display: flex;
+        flex-direction: row-reverse;
+        margin: 20px 0;
+        background-color: $color-1;
+        padding: 10px 0;
+        
+        li {
+            list-style: none;
+            margin: 0 20px;
+        }
+        
+        a {
+            font-family: $menu-font;
+            text-decoration: none;
+            color: $color-2;
+        }
+    }
+}
