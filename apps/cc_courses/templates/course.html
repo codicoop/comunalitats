@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="page-content">
 <h1>Course page</h1>
     {{ object.title }}
-{% if user not in object.enrolled.all %}
-<a href="{% url 'enroll_course' slug=object.slug %}" class="enroll-button">
-<div>
-    Incriure's
+    {% if user not in object.enrolled.all %}
+    <a href="{% url 'enroll_course' slug=object.slug %}" class="enroll-button">
+    <div>
+        Incriure's
+    </div>
+    </a>
+    {% else %}
+    Ya estàs inscrit a aquest curs
+    {% endif %}
 </div>
-</a>
-{% endif %}
 {% endblock %}

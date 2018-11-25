@@ -2,10 +2,19 @@
 
 {% block content %}
     {% include 'reusable/introduction.html' %}
-    <h1>Llistat de cursos:</h1>
-    <ul>
-    {% for course in course_list %}
-        <li><a href="{{ course.absolute_url }}">{{ course.title }}</a></li>
-    {% endfor %}
-    </ul>
+    <div class="page-content">
+        <h1>Oferta formativa</h1>
+        <div class="course-container">
+            {% for course in course_list %}
+                <a href="{{ course.absolute_url }}">
+                <div class="course-container">
+                    <div class="course-image" style="background-image: url('{{ course.banner.url }}')"></div>
+                    <div class="course-data">
+                        <h3>{{ course.title }}</h3>
+                    </div>
+                </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
