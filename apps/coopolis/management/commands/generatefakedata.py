@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.core.management.commands.flush import Command as Flush
 from django.db import DEFAULT_DB_ALIAS
-from apps.coopolis.tests.fixtures import UserFactory
+from apps.coopolis.tests.fixtures import UserFactory, ProjectFactory
 
 class Command(BaseCommand):
     help = 'Generates fake data for all the models, for testing purposes.'
@@ -25,9 +25,15 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Fake data for model %s created.' % 'Users'))
         return users
 
+    def create_projects(self, n_projects=50):
+        projects = ProjectFactory.create_batch(size=n_projects)
+        self.stdout.write(self.style.SUCCESS('Fake data for model %s created.' % 'Projects'))
+        return projects
+
     def handle(self, *args, **options):
         is_test = options['is-test']
         n_users = options['users']
         assert settings.DEBUG or is_test
         Flush().handle(interactive=not is_test, database=DEFAULT_DB_ALIAS, **options)
         self.create_users(n_users=n_users)
+        self.create_projects()
