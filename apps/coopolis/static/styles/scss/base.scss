@@ -6,7 +6,6 @@
 }
 
 body {
-    margin: 20px;
     min-height: 100vh;
     background-color: $color-0;
 }
@@ -18,4 +17,5 @@ a {
 
 .content {
     min-height: 100vh;
+    background-color: $color-4;
 }

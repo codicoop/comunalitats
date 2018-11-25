@@ -7,7 +7,6 @@
 }
 
 body {
-  margin: 20px;
   min-height: 100vh;
   background-color: white;
 }
@@ -19,6 +18,7 @@ a {
 
 .content {
   min-height: 100vh;
+  background-color: #F0F0F0;
 }
 
 header {
@@ -29,6 +29,7 @@ header div {
   display: flex;
   flex-direction: row;
   align-items: stretch;
+  background-color: #F0F0F0;
 }
 header div h1 {
   font-family: "Raleway", sans-serif;
@@ -40,6 +41,7 @@ header div h2 {
 }
 header .logo {
   align-items: center;
+  padding: 15px 0 0 15px;
 }
 header .title-link {
   display: inline-block;
@@ -62,12 +64,13 @@ header .secondary-menu {
 }
 header .secondary-menu form {
   margin-bottom: 10px;
+  margin-right: 10px;
 }
 header .secondary-menu form input[type=submit] {
   padding: 0 10px;
 }
 header .secondary-menu ul {
-  background-color: white;
+  background-color: #F0F0F0;
   flex-direction: column;
 }
 header ul {

@@ -6,6 +6,7 @@ header {
         display: flex;
         flex-direction: row;
         align-items: stretch;
+        background-color: $color-4;
 
         h1 {
             font-family: $menu-font;
@@ -20,6 +21,7 @@ header {
 
     .logo {
         align-items: center;
+        padding: 15px 0 0 15px;
     }
 
     .title-link {
@@ -46,6 +48,7 @@ header {
 
         form {
             margin-bottom: 10px;
+            margin-right: 10px;
 
             input[type=submit] {
                 padding: 0 10px;
@@ -53,7 +56,7 @@ header {
         }
 
         ul {
-            background-color: $color-0;
+            background-color: $color-4;
             flex-direction: column;
         }
     }
