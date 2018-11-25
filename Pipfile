@@ -12,6 +12,8 @@ arrow = "*"
 django-summernote = "*"
 django-constance = "==2.3.1"
 django-picklefield = "*"
+"boto3" = "*"
+django-storages = "*"
 
 [dev-packages]
 

@@ -3,6 +3,12 @@ from cc_lib.utils import slugify_model
 from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 from django.db.models.signals import pre_save
+from uuid import uuid4
+
+
+def upload_path(instance, filename):
+    if isinstance(instance, Course):
+        return 'course.banner/{0}/banner.png'.format(uuid4(), filename)
 
 
 class Activity(models.Model):
@@ -24,6 +30,7 @@ class Course(models.Model):
     enrolled = models.ManyToManyField(get_user_model(), blank=True, related_name='enrolled_courses')
     activities = models.ManyToManyField(Activity, blank=True, related_name='courses')
     applications = models.IntegerField('Places totals', default=0)
+    banner = models.ImageField(null=True, upload_to=upload_path)
 
     @classmethod
     def pre_save(cls, sender, instance, **kwargs):
