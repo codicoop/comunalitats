@@ -107,6 +107,19 @@ header ul a:hover {
   display: inline-block;
 }
 
+.enroll-button div {
+  background-color: #B29279;
+  padding: 10px 80px;
+  display: inline-block;
+  color: white;
+  text-decoration: none;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.8);
+  font-size: 1.25rem;
+}
+.enroll-button div:hover {
+  background-color: #AF6468;
+}
+
 footer {
   min-height: 100px;
   background-color: #2C3C61;

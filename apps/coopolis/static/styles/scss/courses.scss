@@ -12,3 +12,19 @@
         display: inline-block;
     }
 }
+
+.enroll-button {
+    div {
+        background-color: $backcolor-enroll-button;
+        padding: 10px 80px;
+        display: inline-block;
+        color: $frontcolor-enroll-button;
+        text-decoration: none;
+        box-shadow: 0 0 4px 0 rgba(0,0,0,.8);
+        font-size: 1.25rem;
+
+        &:hover {
+            background-color: $hovercolor-enroll-button;
+        }
+    }
+}
