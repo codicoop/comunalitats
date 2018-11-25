@@ -10,6 +10,8 @@ Django = "==2.1.3"
 weasyprint = "*"
 arrow = "*"
 django-summernote = "*"
+"boto3" = "*"
+django-storages = "*"
 
 [dev-packages]
 

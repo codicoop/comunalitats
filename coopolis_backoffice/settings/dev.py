@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'apps.cc_users.apps.UsersConfig',
     'apps.cc_courses.apps.CoursesConfig',
     'apps.coopolis.apps.CoopolisConfig',
-    'django_summernote'
+    'django_summernote',
+    'storages'
 ]
 
 
@@ -84,7 +85,7 @@ DATABASES = {
         'NAME': 'coopolis',
         'USER': 'postgres',
         'PASSWORD': 'mysecretpassword',
-        'HOST': '127.0.0.1',
+        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
     }
 }
 
@@ -138,3 +139,17 @@ DEV_SETTINGS_MODULE = 'coopolis_backoffice.settings.dev'
 
 USERS_APP_TITLE = 'Gestió de persones'
 COURSES_APP_TITLE = 'Gestió d\'activitats'
+
+FIXTURES_PATH_TO_COURSE_IMAGES = 'test-images/coopolis-courses'
+
+# Storage Service
+
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
+AWS_STORAGE_BUCKET_NAME = 'codi.coop.test'
+AWS_S3_CUSTOM_DOMAIN = f's3.wasabisys.com/{AWS_STORAGE_BUCKET_NAME}'
+AWS_S3_ENDPOINT_URL = 'https://s3.wasabisys.com'
+AWS_DEFAULT_ACL = 'public-read'
+DEFAULT_FILE_STORAGE = 'cc_lib.storages.MediaStorage'
+EXTERNAL_MEDIA_PATH = 'coopolis/media'
+MEDIA_FILE_OVERWRITE = True
