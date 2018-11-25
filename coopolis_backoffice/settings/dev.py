@@ -152,5 +152,4 @@ CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 
 # CC Courses
 
-COURSES_VIEWS = 'apps.coopolis.views'
-COURSES_LIST_VIEW_CLASS = 'CoopolisCoursesListView'
+COURSES_LIST_VIEW_CLASS = 'apps.coopolis.views.CoopolisCoursesListView'
