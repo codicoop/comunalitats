@@ -10,6 +10,7 @@ from django.apps import apps
 from django.contrib.auth import get_user_model
 import lorem
 
+
 def _get_tzinfo():
     """Fetch the current timezone."""
     if settings.USE_TZ:
@@ -39,13 +40,13 @@ class UserFactory(factory.django.DjangoModelFactory):
         end_dt=timezone.now() - datetime.timedelta(days=10)
     )
 
+
 class ProjectFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = apps.get_model('coopolis', 'Project')
 
     sector = factory.Iterator(i[0] for i in Meta.model.SECTORS)
     name = factory.Faker('name')
-    web = "example.com"
-    mail = "a@example.com"
-    phone = "666111000"
-    #TODO: Make factory.Faker('web'), factory.Faker('mail') and factory.Faker('phone').
+    web = factory.Faker('url')
+    mail = factory.Faker('email')
+    phone = factory.Faker('phone_number')
