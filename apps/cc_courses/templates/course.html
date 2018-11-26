@@ -1,11 +1,17 @@
 {% extends "base.html" %}
 
+{% block head %}
+    {% load staticfiles %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'js/modal.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 <div class="page-content">
 <h1>Course page</h1>
     {{ object.title }}
     {% if user not in object.enrolled.all %}
-    <a href="{% url 'enroll_course' slug=object.slug %}" class="enroll-button">
+    <a href="#" onclick="javascript:showModal('#modal-confirm');" class="enroll-button">
     <div>
         Incriure's
     </div>
@@ -14,4 +20,30 @@
     Ya estàs inscrit a aquest curs
     {% endif %}
 </div>
+
+<div id="modal-confirm" class="modal">
+    <span class="modal-close" onclick="javascript:hideModal('#modal-confirm');">&times;</span>
+    <div class="modal-container">
+        <div class="modal-title">
+            Atenció!
+        </div>
+        <div class="modal-content">
+            Està a punt d'inscriure's al curs <strong>{{ object.title }}</strong>.
+            <br>
+            Està segur?
+        </div>
+        <div class="modal-buttons">
+            <a href="{% url 'enroll_course' slug=object.slug %}" class="enroll-button">
+            <div>
+                Incriure's
+            </div>
+            </a>
+        </div>
+    </div>
+</div>
+<script>
+    $( document ).ready(function() {
+        makeModal('#modal-confirm');
+    });
+</script>
 {% endblock %}
