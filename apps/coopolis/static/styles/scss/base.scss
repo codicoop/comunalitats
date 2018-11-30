@@ -41,3 +41,33 @@ a {
     flex-direction: column;
     flex: 1;
 }
+
+.cookies-consent {
+    background-color: black;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px;
+    visibility: hidden;
+
+    p {
+        color: white;
+    }
+
+    a {
+        color: #4285F4;
+    }
+
+    .button {
+        margin-right: 100px;
+        padding: 3px 20px;
+        background-color: red;
+        border-radius: 25px;
+        color: white;
+        text-decoration: none;
+    }
+}
