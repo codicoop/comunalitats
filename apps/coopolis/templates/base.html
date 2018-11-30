@@ -14,6 +14,8 @@
     <meta name="keywords" content="keywords,here">
     <link rel="stylesheet" href="{% static 'styles/stylesheet.css' %}" type="text/css">
     <link rel="icon" href="{% static 'images/logo.png' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'js/js.cookie-2.2.0.min.js' %}"></script>
     {% block head %}{% endblock %}
   </head>
   <body>
@@ -72,5 +74,26 @@
 
     {% include 'reusable/footer.html' %}
 
+    <div class="cookies-consent">
+        <p>
+        Aquest lloc web fa servir cookies pròpies i de tercers. En continuar la navegació entenem que s’accepta la nostra <a href="http://bcn.coop/politica-de-cookies/">política de cookies</a>.
+        </p>
+        <a href="#" onclick="javascript:addCookieConsent();" class="button">Continuar</a>
+        <script>
+            function addCookieConsent () {
+                Cookies.set("consent", "true");
+                $(".cookies-consent").hide();
+            }
+
+            $( document ).ready(function() {
+                var consent = Cookies.get("consent");
+                if (consent == undefined) {
+                   $(".cookies-consent").css("visibility", "visible");
+                } else {
+                   $(".cookies-consent").css("visibility", "hidden");
+                }
+            });
+        </script>
+    </div>
   </body>
 </html>
