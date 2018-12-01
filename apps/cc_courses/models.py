@@ -1,6 +1,6 @@
 from django.db import models
 from cc_lib.utils import slugify_model
-from django.contrib.auth import get_user_model
+from .utils import get_enrollable_class
 from django.shortcuts import reverse
 from django.db.models.signals import pre_save
 from uuid import uuid4
@@ -13,6 +13,13 @@ def upload_path(instance, filename):
 
 class Activity(models.Model):
     name = models.CharField("Nom", max_length=200, blank=False, unique=False, default='')
+    applications = models.IntegerField('Places totals', default=0)
+    enrolled = models.ManyToManyField(get_enrollable_class(), blank=True, related_name='enrolled_activities')
+    applications = models.IntegerField('Places totals', default=0)
+
+    @property
+    def remain_applications(self):
+        return self.applications - self.enrolled.count()
 
 
 class Course(models.Model):
@@ -26,8 +33,7 @@ class Course(models.Model):
     category = models.ForeignKey("CourseCategory", on_delete=models.SET_NULL, null=True)
     published = models.BooleanField("Publicat")
     created = models.DateTimeField(null=True, blank=True)
-    creator = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True, related_name='works')
-    enrolled = models.ManyToManyField(get_user_model(), blank=True, related_name='enrolled_courses')
+    enrolled = models.ManyToManyField(get_enrollable_class(), blank=True, related_name='enrolled_courses')
     activities = models.ManyToManyField(Activity, blank=True, related_name='courses')
     applications = models.IntegerField('Places totals', default=0)
     banner = models.ImageField(null=True, upload_to=upload_path)
