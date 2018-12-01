@@ -30,10 +30,13 @@
       <td>{{ form.password }}</td>
     </p>
     <p>
+      <td>{{ form.remember_me.label_tag }}</td>
+      <td>{{ form.remember_me }}</td>
+    </p>
+    <p>
       <input type="submit" value="login" />
       <input type="hidden" name="next" value="{{ next }}" />
     </p>
-
     <p><a href="{% url 'password_reset' %}">Lost password?</a> | <a href="{% url 'signup' %}">Sign up</a></p>
     </form>
 </div>

@@ -52,6 +52,7 @@ $django-form-button-hover-background-color: #9fc1f8 !default;
             display: block;
             position: relative;
             margin-bottom: 20px;
+
         }
 
         ul {
@@ -63,13 +64,12 @@ $django-form-button-hover-background-color: #9fc1f8 !default;
         }
 
         label {
-            display: block;
             font-weight: bold;
-            margin-bottom: 5px;
         }
 
         input[type=text], input[type=password], input[type=email] {
-            display: inline-block;
+            margin-top: 5px;
+            display: block;
             width: 50%;
             min-width: 300px;
             padding: 3px;
@@ -86,6 +86,16 @@ $django-form-button-hover-background-color: #9fc1f8 !default;
             &:hover {
                 background-color: $django-form-button-hover-background-color;
             }
+        }
+
+        label + input[type=checkbox] {
+            display: inline-block;
+            margin: auto;
+            margin-left: 10px;
+            width: 1rem;
+            height: 1rem;
+            line-height: 200px;
+            vertical-align: middle;
         }
 
         .errorlist ~ p + ul {

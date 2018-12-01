@@ -115,6 +115,29 @@ header .secondary-menu form {
   margin-bottom: 10px;
   margin-right: 10px;
 }
+header .secondary-menu form label {
+  font-size: 0.8rem;
+}
+header .secondary-menu form input {
+  margin: 3px;
+}
+header .secondary-menu form input[type=checkbox] {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+header .secondary-menu form .div-column {
+  display: flex;
+  flex-direction: column;
+}
+header .secondary-menu form .div-row {
+  display: flex;
+  flex-direction: row;
+}
+header .secondary-menu form .div-row-reverse {
+  display: flex;
+  flex-direction: row-reverse;
+  align-content: flex-end;
+}
 header .secondary-menu form input[type=submit] {
   padding: 0 10px;
 }
@@ -315,12 +338,11 @@ footer p span {
   display: none;
 }
 .generated-form form label {
-  display: block;
   font-weight: bold;
-  margin-bottom: 5px;
 }
 .generated-form form input[type=text], .generated-form form input[type=password], .generated-form form input[type=email] {
-  display: inline-block;
+  margin-top: 5px;
+  display: block;
   width: 50%;
   min-width: 300px;
   padding: 3px;
@@ -335,6 +357,15 @@ footer p span {
 }
 .generated-form form input[type=submit]:hover, .generated-form form button:hover {
   background-color: #9fc1f8;
+}
+.generated-form form label + input[type=checkbox] {
+  display: inline-block;
+  margin: auto;
+  margin-left: 10px;
+  width: 1rem;
+  height: 1rem;
+  line-height: 200px;
+  vertical-align: middle;
 }
 .generated-form form .errorlist ~ p + ul {
   display: block;

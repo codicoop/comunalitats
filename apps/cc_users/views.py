@@ -10,6 +10,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_text
 from .tokens import AccountActivationTokenGenerator
+from .forms import LogInForm
 
 
 def get_activate_url(request, user):
@@ -68,3 +69,4 @@ def activate(request, uuid, token):
 
 class UsersLoginView(LoginView):
     redirect_authenticated_user = True
+    form_class = LogInForm
