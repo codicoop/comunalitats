@@ -186,8 +186,25 @@ header ul a:hover {
   background-size: cover;
 }
 footer {
+  display: flex;
   min-height: 100px;
   background-color: #2C3C61;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+footer a {
+  color: #D8C4A4;
+}
+footer p {
+  display: flex;
+  color: #F0F0F0;
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+}
+footer p span {
+  margin-right: 50px;
 }
 
 .modal-background {

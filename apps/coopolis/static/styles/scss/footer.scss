@@ -1,4 +1,24 @@
 footer {
+    display: flex;
     min-height: 100px;
     background-color: $color-2;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    a {
+        color: $color-1;
+    }
+
+    p {
+        display: flex;
+        color: $color-4;
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+
+        span {
+            margin-right: 50px;
+        }
+    }
 }
