@@ -11,17 +11,6 @@ def upload_path(instance, filename):
         return 'course.banner/{0}/banner.png'.format(uuid4(), filename)
 
 
-class Activity(models.Model):
-    name = models.CharField("Nom", max_length=200, blank=False, unique=False, default='')
-    applications = models.IntegerField('Places totals', default=0)
-    enrolled = models.ManyToManyField(get_enrollable_class(), blank=True, related_name='enrolled_activities')
-    applications = models.IntegerField('Places totals', default=0)
-
-    @property
-    def remain_applications(self):
-        return self.applications - self.enrolled.count()
-
-
 class Course(models.Model):
     title = models.CharField("Títol", max_length=200, blank=False, unique=True)
     slug = models.CharField(max_length=100, unique=True)
@@ -34,8 +23,7 @@ class Course(models.Model):
     published = models.BooleanField("Publicat")
     created = models.DateTimeField(null=True, blank=True)
     enrolled = models.ManyToManyField(get_enrollable_class(), blank=True, related_name='enrolled_courses')
-    activities = models.ManyToManyField(Activity, blank=True, related_name='courses')
-    applications = models.IntegerField('Places totals', default=0)
+    spots = models.IntegerField('Places totals', default=0)
     banner = models.ImageField(null=True, upload_to=upload_path)
 
     @classmethod
@@ -43,8 +31,8 @@ class Course(models.Model):
         slugify_model(instance, 'title')
 
     @property
-    def remain_applications(self):
-        return self.applications - self.enrolled.count()
+    def remaining_spots(self):
+        return self.spots - self.enrolled.count()
 
     @property
     def absolute_url(self):
@@ -52,6 +40,17 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Activity(models.Model):
+    name = models.CharField("Nom", max_length=200, blank=False, unique=False, default='')
+    spots = models.IntegerField('Places totals', default=0)
+    enrolled = models.ManyToManyField(get_enrollable_class(), blank=True, related_name='enrolled_activities')
+    course = models.ForeignKey(Course, "Curs", on_delete=models.CASCADE)
+
+    @property
+    def remaining_spots(self):
+        return self.spots - self.enrolled.count()
 
 
 class CourseCategory(models.Model):
