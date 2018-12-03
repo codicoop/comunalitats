@@ -9,13 +9,15 @@
 <div class="page-content">
 <h1>Course page</h1>
     {{ object.title }}
-    {% if user not in object.enrolled.all %}
+    {% load enrollable %}
+    {% if object|can_enroll:user %}
     <a href="#" onclick="javascript:showModal('#modal-confirm');" class="enroll-button">
     <div>
         Incriure's
     </div>
     </a>
-    {% else %}
+    {% endif %}
+    {% if user in object.enrolled.all %}
     Ya estàs inscrit a aquest curs
     {% endif %}
 </div>
@@ -29,12 +31,16 @@
         <div class="modal-content">
             Està a punt d'inscriure's al curs <strong>{{ object.title }}</strong>.
             <br>
+            {% if user.is_anonymous %}
+            Però per fer-lo haurà de fer login abans:
+            {% else %}
             Està segur?
+            {% endif %}
         </div>
         <div class="modal-buttons">
             <a href="{% url 'enroll_course' slug=object.slug %}" class="enroll-button">
             <div>
-                Incriure's
+                {% if user.is_anonymous %}Login{% else %}Incriure's{% endif %}
             </div>
             </a>
         </div>
