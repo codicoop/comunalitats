@@ -50,6 +50,35 @@ header {
             margin-bottom: 10px;
             margin-right: 10px;
 
+            label {
+                font-size: 0.8rem;
+            }
+
+            input {
+                margin: 3px;
+            }
+
+            input[type=checkbox] {
+                width: 0.9rem;
+                height: 0.9rem;
+            }
+
+            .div-column {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .div-row {
+                display: flex;
+                flex-direction: row;
+            }
+
+            .div-row-reverse {
+                display: flex;
+                flex-direction: row-reverse;
+                align-content: flex-end;
+            }
+
             input[type=submit] {
                 padding: 0 10px;
             }

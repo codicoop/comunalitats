@@ -32,22 +32,36 @@
                 </div>
             </div>
             </a>
-            <div class="secondary-menu">
                 {% if not user.is_authenticated %}
                 {% block loginbox %}
+                <div class="secondary-menu">
                 <form action="{% url 'login' %}" method="POST">
                     {% csrf_token %}
-                    <input type="text" name="username" placeholder="Nom d'usuari">
-                    <input type="password" name="password" placeholder="Contrasenya">
-                    <input type='submit' value='Accedir'>
+                    <div class="div-row">
+                        <div class="div-column">
+                            <div class="div-row">
+                                <input type="text" name="username" placeholder="Nom d'usuari">
+                                <input type="password" name="password" placeholder="Contrasenya">
+                            </div>
+                            <div class="div-row-reverse">
+                            <input type="checkbox" name="remember_me"> <label>Remember me</label>
+                            </div>
+                        </div>
+                        <div class="div-column">
+                            <input type='submit' value='Accedir'>
+                        </div>
+                    </div>
                 </form>
+                </div>
                 {% endblock %}
                 {% else %}
+                <div class="secondary-menu">
                 <ul>
                     <li>{{ user.username }} ─ <a href="{% url 'logout' %}">Sortir</a></li>
                 </ul>
+                </div>
                 {% endif %}
-            </div>
+
         </div>
         <ul>
             <li><a href="https://bcn.coop/">Web de Coòpolis</a></li>
