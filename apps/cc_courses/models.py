@@ -4,6 +4,7 @@ from .utils import get_enrollable_class
 from django.shortcuts import reverse
 from django.db.models.signals import pre_save
 from uuid import uuid4
+from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 
 
 def upload_path(instance, filename):
@@ -43,14 +44,20 @@ class Course(models.Model):
 
 
 class Activity(models.Model):
-    name = models.CharField("Nom", max_length=200, blank=False, unique=False, default='')
+    name = models.CharField("Nom", max_length=200, blank=False, null=False)
     spots = models.IntegerField('Places totals', default=0)
     enrolled = models.ManyToManyField(get_enrollable_class(), blank=True, related_name='enrolled_activities')
-    course = models.ForeignKey(Course, "Curs", on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     @property
     def remaining_spots(self):
         return self.spots - self.enrolled.count()
+
+    def enroll_user(self, user):
+        if user in self.enrolled.all():
+            raise EnrollToActivityNotValidException()
+        self.enrolled.add(user)
+        self.save()
 
 
 class CourseCategory(models.Model):

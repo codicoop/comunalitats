@@ -5,8 +5,10 @@ from django.conf import settings
 from django.core.management.commands.flush import Command as Flush
 from django.db import DEFAULT_DB_ALIAS
 import factory
+import factory.fuzzy as fuzzy
 from apps.coopolis.tests.fixtures import UserFactory, ProjectFactory
-from apps.cc_courses.tests.fixtures import CourseFactory, CourseCategoryFactory, CoursePlaceFactory
+from apps.cc_courses.tests.fixtures import ActivityFactory, CourseFactory, CourseCategoryFactory, CoursePlaceFactory
+import random
 
 class Command(BaseCommand):
     help = 'Generates fake data for all the models, for testing purposes.'
@@ -52,22 +54,30 @@ class Command(BaseCommand):
         return courses
 
     def create_activities(self, courses, n_activities=200):
-        activities = CourseCategoryFactory.create_batch(
+        activities = ActivityFactory.create_batch(
             size=n_activities,
             course=factory.Iterator(courses)
         )
         self.stdout.write(self.style.SUCCESS('Fake data for model %s created.' % 'Course Activities'))
         return activities
 
+    def enroll_users(self, users, activities):
+        for activity in activities:
+            n_enrolled_users = random.randint(2, 10)
+            #for x in range(0, n_enrolled_users):
+                #TODO: How to pass the right object? -> activity.enroll_user(user=fuzzy.FuzzyChoice(users))
+        self.stdout.write(self.style.SUCCESS('Users randomly enrolled into Activities.'))
+
+
     def handle(self, *args, **options):
         is_test = options['is-test']
         n_users = options['users']
         assert settings.DEBUG or is_test
         Flush().handle(interactive=not is_test, database=DEFAULT_DB_ALIAS, **options)
-        self.create_users(n_users=n_users)
+        users = self.create_users(n_users=n_users)
         self.create_projects()
         course_places = self.create_course_places()
         course_categories = self.create_course_categories()
         courses = self.create_courses(course_categories = course_categories, course_places = course_places)
-        #TODO Uncomment quan el model estigui canviat pel ForeignKey:
-        #self.create_activities(courses=courses)
+        activities = self.create_activities(courses=courses)
+        self.enroll_users(activities=activities, users=users)

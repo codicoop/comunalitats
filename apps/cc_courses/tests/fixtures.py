@@ -20,11 +20,7 @@ def _get_tzinfo():
     else:
         return None
 
-class ActivityFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = apps.get_model('cc_courses', 'Activity')
 
-    name = fuzzy.FuzzyText(length=30, chars=lorem.sentence())
 
 class CoursePlaceFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -34,12 +30,14 @@ class CoursePlaceFactory(factory.django.DjangoModelFactory):
     name = factory.Faker('name')
     address = factory.Faker('address')
 
+
 class CourseCategoryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = apps.get_model('cc_courses', 'CourseCategory')
         django_get_or_create = ('name',)
 
     name = factory.Faker('name')
+
 
 class CourseFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -52,13 +50,13 @@ class CourseFactory(factory.django.DjangoModelFactory):
     objectives = fake.paragraph(nb_sentences=5, variable_nb_sentences=True, ext_word_list=None)
     published = True
     created = timezone.now()
-    #TODO: creator=fuzzy.FuzzyChoice(users) (a generatefakedata)
-    #TODO: enrolled (manytomany)
-    #TODO: activities (manytomany per error, ha de ser ForeignKey en realitat)
-    applications = random.randint(20, 30)
+    spots = random.randint(20, 30)
+
 
 class ActivityFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = apps.get_model('cc_courses', 'Activity')
 
     name = factory.Faker('text', max_nb_chars=80)
+    spots = random.randint(10, 40)
+
