@@ -59,10 +59,15 @@ class Activity(models.Model):
         self.enrolled.add(user)
         self.save()
 
+    def __str__(self):
+        return self.name
+
 
 class CourseCategory(models.Model):
     name = models.CharField("Nom", max_length=200, blank=False, unique=True)
 
+    def __str__(self):
+        return self.name
 
 class CoursePlace(models.Model):
     name = models.CharField("Nom", max_length=200, blank=False, unique=True)

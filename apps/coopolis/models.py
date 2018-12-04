@@ -32,3 +32,6 @@ class Project(models.Model):
     mail = models.EmailField("Correu electrònic")
     phone = models.CharField("Telèfon", max_length=25)
     members = models.ManyToManyField(User, blank=True, related_name='projects')
+
+    def __str__(self):
+        return self.name

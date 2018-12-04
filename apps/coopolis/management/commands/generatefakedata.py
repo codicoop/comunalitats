@@ -63,9 +63,9 @@ class Command(BaseCommand):
 
     def enroll_users(self, users, activities):
         for activity in activities:
-            n_enrolled_users = random.randint(2, 10)
-            #for x in range(0, n_enrolled_users):
-                #TODO: How to pass the right object? -> activity.enroll_user(user=fuzzy.FuzzyChoice(users))
+            users_sample = random.sample(users, k=random.randint(2, 10))
+            for user in users_sample:
+                activity.enroll_user(user)
         self.stdout.write(self.style.SUCCESS('Users randomly enrolled into Activities.'))
 
 
