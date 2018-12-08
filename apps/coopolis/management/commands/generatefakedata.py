@@ -13,6 +13,8 @@ import tempfile
 from django.core.files import File
 import factory.fuzzy as fuzzy
 from cc_lib.utils import storage_files
+from django.utils import timezone
+import datetime
 
 
 class Command(BaseCommand):
@@ -50,17 +52,42 @@ class Command(BaseCommand):
         return categories
 
     def create_courses(self, course_categories, course_places, n_courses=20):
-        courses = CourseFactory.create_batch(
-            size=n_courses,
-            place=factory.Iterator(course_places),
-            category=factory.Iterator(course_categories),
-            banner=fuzzy.FuzzyChoice(
-                storage_files(
-                    settings.FIXTURES_PATH_TO_COURSE_IMAGES,
-                    f'http://{settings.AWS_S3_CUSTOM_DOMAIN}/{settings.AWS_STORAGE_BUCKET_NAME}'
+        times = {
+            'past': {
+                'date_start': fuzzy.FuzzyDateTime(
+                    start_dt=timezone.now() - datetime.timedelta(days=500),
+                    end_dt=timezone.now() - datetime.timedelta(days=365)
+                ),
+                'date_end': fuzzy.FuzzyDateTime(
+                    start_dt=timezone.now() - datetime.timedelta(days=365),
+                    end_dt=timezone.now()
                 )
+            },
+            'future': {
+                'date_start': fuzzy.FuzzyDateTime(
+                    start_dt=timezone.now(),
+                    end_dt=timezone.now() + datetime.timedelta(days=100)
+                ) ,
+                'date_end': fuzzy.FuzzyDateTime(
+                    start_dt=timezone.now() + datetime.timedelta(days=100),
+                    end_dt=timezone.now() + datetime.timedelta(days=365)
+                )
+            }
+        }
+        for when in times.values():
+            courses = CourseFactory.create_batch(
+                size=int(n_courses / len(times)),
+                place=factory.Iterator(course_places),
+                category=factory.Iterator(course_categories),
+                banner=fuzzy.FuzzyChoice(
+                    storage_files(
+                        settings.FIXTURES_PATH_TO_COURSE_IMAGES,
+                        f'http://{settings.AWS_S3_CUSTOM_DOMAIN}/{settings.AWS_STORAGE_BUCKET_NAME}'
+                    )
+                ),
+                date_start=when['date_start'],
+                date_end=when['date_end']
             )
-        )
         self.stdout.write(self.style.SUCCESS('Fake data for model %s created.' % 'Courses'))
         return courses
 
@@ -82,7 +109,6 @@ class Command(BaseCommand):
     def download_and_upload_images(self, courses):
         def _download_and_upload_images(obj, prop):
             url = str(getattr(obj, prop))
-            print(url)
             response = request.urlopen(url)
             data = response.read()
             fp = tempfile.TemporaryFile()
