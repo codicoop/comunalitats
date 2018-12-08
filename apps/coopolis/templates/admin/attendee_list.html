@@ -3,13 +3,84 @@
   <head>
     <meta charset="UTF-8">
     <title>Llistat d'assistencia</title>
+    <style type="text/css">
+      @page { margin: 1em; }
+      @page { size: A4 landscape }
+
+      body, html{
+        height:100%;
+        font: normal 12px/150% Arial, Helvetica, sans-serif;
+      }
+
+      #page td {
+         padding:0;
+         margin:0;
+      }
+
+      #page {
+         border-collapse: collapse;
+      }
+
+      table {
+        width: 100%;
+        border: 1px solid black;
+        border-collapse: collapse;
+        table-layout: fixed;
+      }
+
+      td {
+        border: 1px solid black;
+        padding: 5px;
+        height:100%;
+      }
+
+      .llista {
+        height: 100%;
+      }
+
+      .llista td {
+        height: 50px;
+      }
+
+      .table-header-caption {
+        width: 20%;
+        font-weight: bold;
+      }
+
+      .table-header-content {
+        width: 30%;
+      }
+    </style>
   </head>
   <body>
-  Hola <span style="color: red;">caracola</span>
-  <ul>
-    {% for assistant in assistants %}
-    <li>{{ assistant.full_name }}</li>
-    {% endfor %}
-  </ul>
+  <table cellspacing="0" cellpadding="0">
+    <tbody>
+      <tr>
+        <td class="table-header-caption">EXPEDIENT</td><td class="content""></td><td class="table-header-caption">PROJECTE</td><td class="table-header-content""></td>
+      </tr>
+      <tr>
+        <td class="table-header-caption">ENTITAT</td><td colspan="3"></td>
+      </tr>
+      <tr>
+        <td class="table-header-caption">NOM DE L'ACTIVITAT</td><td></td><td class="table-header-caption">DATA</td><td></td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="height: 500px; margin-top: 50px;">
+  <table class="llista" cellspacing="0" cellpadding="0">
+    <thead>
+      <tr>
+        <th style="width: 20%;">DNI</th><th>Nom</th><th>Signatura</th>
+      </tr>
+    </thead>
+    <tbody style="height: auto;">
+      {% for assistant in assistants %}
+      <tr>
+        <td></td><td>{{ assistant.full_name }}</td><td></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
   </body>
 </html>
