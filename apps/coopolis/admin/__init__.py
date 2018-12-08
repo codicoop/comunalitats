@@ -10,6 +10,7 @@ from .ProjectAdmin import ProjectAdmin
 from .UserAdmin import UserAdmin
 from .CourseCategoryAdmin import CourseCategoryAdmin
 from .CoursePlaceAdmin import CoursePlaceAdmin
+from constance.admin import ConstanceAdmin, Config
 
 
 class CoopolisAdmin(admin.AdminSite):
@@ -26,3 +27,4 @@ coopolis_admin_site.register(Course, CourseAdmin)
 coopolis_admin_site.register(Activity, ActivityAdmin)
 coopolis_admin_site.register(CourseCategory, CourseCategoryAdmin)
 coopolis_admin_site.register(CoursePlace, CoursePlaceAdmin)
+coopolis_admin_site.register([Config], ConstanceAdmin)
