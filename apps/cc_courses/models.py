@@ -62,6 +62,10 @@ class Activity(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def absolute_url(self):
+        return self.course.absolute_url
+
 
 class CourseCategory(models.Model):
     name = models.CharField("Nom", max_length=200, blank=False, unique=True)
