@@ -74,8 +74,9 @@ class Command(BaseCommand):
                 )
             }
         }
+        courses = []
         for when in times.values():
-            courses = CourseFactory.create_batch(
+            courses.extend(CourseFactory.create_batch(
                 size=int(n_courses / len(times)),
                 place=factory.Iterator(course_places),
                 category=factory.Iterator(course_categories),
@@ -87,7 +88,7 @@ class Command(BaseCommand):
                 ),
                 date_start=when['date_start'],
                 date_end=when['date_end']
-            )
+            ))
         self.stdout.write(self.style.SUCCESS('Fake data for model %s created.' % 'Courses'))
         return courses
 

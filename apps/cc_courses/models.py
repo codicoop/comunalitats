@@ -9,7 +9,7 @@ from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 
 def upload_path(instance, filename):
     if isinstance(instance, Course):
-        return 'course.banner/{0}/banner.png'.format(uuid4(), filename)
+        return 'course.banner/{0}/banner.png'.format(str(uuid4()), filename)
 
 
 class Course(models.Model):
