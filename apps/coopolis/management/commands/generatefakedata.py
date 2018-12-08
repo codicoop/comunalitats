@@ -5,10 +5,10 @@ from django.conf import settings
 from django.core.management.commands.flush import Command as Flush
 from django.db import DEFAULT_DB_ALIAS
 import factory
-import factory.fuzzy as fuzzy
 from apps.coopolis.tests.fixtures import UserFactory, ProjectFactory
 from apps.cc_courses.tests.fixtures import ActivityFactory, CourseFactory, CourseCategoryFactory, CoursePlaceFactory
 import random
+
 
 class Command(BaseCommand):
     help = 'Generates fake data for all the models, for testing purposes.'
@@ -68,7 +68,6 @@ class Command(BaseCommand):
                 activity.enroll_user(user)
         self.stdout.write(self.style.SUCCESS('Users randomly enrolled into Activities.'))
 
-
     def handle(self, *args, **options):
         is_test = options['is-test']
         n_users = options['users']
@@ -78,6 +77,6 @@ class Command(BaseCommand):
         self.create_projects()
         course_places = self.create_course_places()
         course_categories = self.create_course_categories()
-        courses = self.create_courses(course_categories = course_categories, course_places = course_places)
+        courses = self.create_courses(course_categories=course_categories, course_places=course_places)
         activities = self.create_activities(courses=courses)
         self.enroll_users(activities=activities, users=users)
