@@ -8,7 +8,7 @@
             {% for course in course_list %}
                 <a href="{{ course.absolute_url }}">
                 <div class="course-container">
-                    <div class="course-image" style="background-image: url('{{ course.banner.url }}')"></div>
+                    {% if course.banner %} <div class="course-image" style="background-image: url('{{ course.banner.url }}')"></div> {% endif %}
                     <div class="course-data">
                         <h3>{{ course.title }}</h3>
                     </div>
