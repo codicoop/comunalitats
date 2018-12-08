@@ -35,5 +35,3 @@ class CourseAdmin(SummernoteModelAdmin):
     """.format(abs_url))
 
     copy_clipboard_field.short_description = 'Direcció del curs'
-
-
