@@ -25,7 +25,7 @@ class Course(models.Model):
     created = models.DateTimeField(null=True, blank=True)
     enrolled = models.ManyToManyField(get_enrollable_class(), blank=True, related_name='enrolled_courses')
     spots = models.IntegerField('Places totals', default=0)
-    banner = models.ImageField(null=True, upload_to=upload_path)
+    banner = models.ImageField(null=True, upload_to=upload_path, max_length=250)
 
     @classmethod
     def pre_save(cls, sender, instance, **kwargs):
@@ -68,6 +68,7 @@ class CourseCategory(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class CoursePlace(models.Model):
     name = models.CharField("Nom", max_length=200, blank=False, unique=True)

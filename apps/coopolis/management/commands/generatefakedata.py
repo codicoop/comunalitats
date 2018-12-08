@@ -8,6 +8,11 @@ import factory
 from apps.coopolis.tests.fixtures import UserFactory, ProjectFactory
 from apps.cc_courses.tests.fixtures import ActivityFactory, CourseFactory, CourseCategoryFactory, CoursePlaceFactory
 import random
+import urllib.request as request
+import tempfile
+from django.core.files import File
+import factory.fuzzy as fuzzy
+from cc_lib.utils import storage_files
 
 
 class Command(BaseCommand):
@@ -44,11 +49,17 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Fake data for model %s created.' % 'Course Categories'))
         return categories
 
-    def create_courses(self, course_categories, course_places, n_courses=50):
+    def create_courses(self, course_categories, course_places, n_courses=20):
         courses = CourseFactory.create_batch(
             size=n_courses,
             place=factory.Iterator(course_places),
-            category=factory.Iterator(course_categories)
+            category=factory.Iterator(course_categories),
+            banner=fuzzy.FuzzyChoice(
+                storage_files(
+                    settings.FIXTURES_PATH_TO_COURSE_IMAGES,
+                    f'http://{settings.AWS_S3_CUSTOM_DOMAIN}/{settings.AWS_STORAGE_BUCKET_NAME}'
+                )
+            )
         )
         self.stdout.write(self.style.SUCCESS('Fake data for model %s created.' % 'Courses'))
         return courses
@@ -68,6 +79,20 @@ class Command(BaseCommand):
                 activity.enroll_user(user)
         self.stdout.write(self.style.SUCCESS('Users randomly enrolled into Activities.'))
 
+    def download_and_upload_images(self, courses):
+        def _download_and_upload_images(obj, prop):
+            url = str(getattr(obj, prop))
+            print(url)
+            response = request.urlopen(url)
+            data = response.read()
+            fp = tempfile.TemporaryFile()
+            fp.write(data)
+            fp.seek(0)
+            setattr(obj, prop, File(fp))
+            obj.save()
+        [_download_and_upload_images(course, 'banner') for course in courses]
+        self.stdout.write(self.style.SUCCESS('Updated courses banner.'))
+
     def handle(self, *args, **options):
         is_test = options['is-test']
         n_users = options['users']
@@ -80,3 +105,5 @@ class Command(BaseCommand):
         courses = self.create_courses(course_categories=course_categories, course_places=course_places)
         activities = self.create_activities(courses=courses)
         self.enroll_users(activities=activities, users=users)
+        if not is_test:
+            self.download_and_upload_images(courses)

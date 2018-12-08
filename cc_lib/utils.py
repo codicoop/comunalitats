@@ -29,4 +29,8 @@ def storage_files(folder, prefix=None):
         endpoint_url=settings.AWS_S3_ENDPOINT_URL,
     )
     response = s3_client.list_objects(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Prefix=folder)
-    return [urljoin(prefix, obj['Key']) if prefix else obj['Key'] for obj in response['Contents']]
+    return [
+        urljoin(prefix, obj['Key']) if prefix else obj['Key']
+        for obj in response['Contents']
+        if obj['Key'] and obj['Size'] > 0
+    ]
