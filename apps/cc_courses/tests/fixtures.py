@@ -4,14 +4,15 @@
 import factory
 from factory import fuzzy
 from faker import Faker
-fake = Faker()
-from faker.providers import lorem
 import datetime
 from django.conf import settings
 from django.utils import timezone
 from django.apps import apps
-import lorem
 import random
+
+
+fake = Faker()
+
 
 def _get_tzinfo():
     """Fetch the current timezone."""
@@ -19,7 +20,6 @@ def _get_tzinfo():
         return timezone.get_current_timezone()
     else:
         return None
-
 
 
 class CoursePlaceFactory(factory.django.DjangoModelFactory):
@@ -59,4 +59,3 @@ class ActivityFactory(factory.django.DjangoModelFactory):
 
     name = factory.Faker('text', max_nb_chars=80)
     spots = random.randint(10, 40)
-
