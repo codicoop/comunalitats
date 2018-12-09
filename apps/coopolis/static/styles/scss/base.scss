@@ -3,6 +3,7 @@
     margin: 0;
     font-family: $base-font;
     color: $color-3;
+    font-size: $base-font-size;
 }
 
 body {
@@ -13,6 +14,14 @@ body {
 a {
     color: $color-2;
     font-weight: bold;
+}
+
+h1 {
+    font-size: $h1-font-size;
+}
+
+h2 {
+    font-size: $h2-font-size;
 }
 
 .content {
@@ -32,6 +41,7 @@ a {
     display: flex;
     flex-direction: column;
     flex: 1;
+    margin: 50px 0;
 }
 
 .generic-content {

@@ -1,16 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Future courses</h1>
-    <ul>
-    {% for course in future_courses %}
-        <li><a href="{{ course.absolute_url }}">{{ course.title }}</a></li>
-    {% endfor %}
-    </ul>
-    <h1>Past courses</h1>
-    <ul>
-    {% for course in past_courses %}
-        <li>{{ course.name }}</li>
-    {% endfor %}
-    </ul>
+
+
 {% endblock %}

@@ -3,18 +3,37 @@
 {% block content %}
     {% include 'reusable/introduction.html' %}
     <div class="page-content">
-        <h1>Oferta formativa</h1>
-        <div class="course-container">
-            {% for course in course_list %}
+        <h2 class="subtitle">Oferta formativa</h2>
+        <div class="courses-container">
+            {% for course in future_courses %}
                 <a href="{{ course.absolute_url }}">
-                <div class="course-container">
-                    {% if course.banner %} <div class="course-image" style="background-image: url('{{ course.banner.url }}')"></div> {% endif %}
+                <div class="course">
+                    {% if course.banner %}
+                    <div class="course-image" style="background-image: url('{{ course.banner.url }}')"></div>
+                    {% endif %}
                     <div class="course-data">
                         <h3>{{ course.title }}</h3>
                     </div>
                 </div>
                 </a>
             {% endfor %}
+        </div>
+
+        <div class="old-courses-container">
+            <div class="container">
+                <h2 class="subtitle">Cursos pasats</h2>
+                <ul>
+                {% for course in past_courses %}
+                    <li>
+                        <a href="{{ course.absolute_url }}">
+                        <p class="title">{{ course.title }}</p>
+                        <p>{{ course.date_start }}</p>
+                        </a>
+                    </li>
+                    </a>
+                {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
 {% endblock %}
