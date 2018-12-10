@@ -34,4 +34,4 @@ class CourseAdmin(SummernoteModelAdmin):
     </script>
     """.format(abs_url))
 
-    copy_clipboard_field.short_description = 'Direcció del curs'
+    copy_clipboard_field.short_description = 'Adreça del curs'

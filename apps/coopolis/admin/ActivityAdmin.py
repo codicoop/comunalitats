@@ -36,7 +36,7 @@ class ActivityAdmin(admin.ModelAdmin):
     </script>
     """.format(abs_url))
 
-    copy_clipboard_field.short_description = 'Direcció de l\'activitat'
+    copy_clipboard_field.short_description = 'Adreça de l\'activitat'
 
     def get_urls(self):
         urls = super().get_urls()
