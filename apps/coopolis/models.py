@@ -1,5 +1,21 @@
 from cc_users.models import BaseUser
 from django.db import models
+from uuid import uuid4
+
+
+def estatuts_upload_path(instance, filename):
+    if isinstance(instance, Project):
+        return 'course.estatuts/{0}/estatuts.png'.format(str(uuid4()), filename)
+
+
+def viability_upload_path(instance, filename):
+    if isinstance(instance, Project):
+        return 'course.pla_viabilitat/{0}/pla_viabilitat.png'.format(str(uuid4()), filename)
+
+
+def sostenibility_upload_path(instance, filename):
+    if isinstance(instance, Project):
+        return 'course.pla_sostenibilitat/{0}/pla_sostenibilitat.png'.format(str(uuid4()), filename)
 
 
 class User(BaseUser):
@@ -101,7 +117,16 @@ class Project(models.Model):
     web = models.CharField("Web", max_length=200, blank=True)
     mail = models.EmailField("Correu electrònic")
     phone = models.CharField("Telèfon", max_length=25)
+    project_responsible = models.ForeignKey("User", blank=True, null=True, on_delete=models.SET_NULL)
+    number_people = models.IntegerField("Número de persones", blank=True, null=True)
     members = models.ManyToManyField(User, blank=True, related_name='projects')
+    registration_date = models.DateField("Data de registre", blank=True, null=True)
+    estatuts = models.FileField("Estatuts", blank=True, null=True, upload_to=estatuts_upload_path, max_length=250)
+    viability = models.FileField("Pla de viabilitat", blank=True, null=True,
+                                 upload_to=estatuts_upload_path, max_length=250)
+    sostenibility = models.FileField("Pla de sostenibilitat", blank=True, null=True,
+                                     upload_to=estatuts_upload_path, max_length=250)
+    # TODO: Fix credentials, ara no puc pujar fitxers pq falta posar-les.
 
     def __str__(self):
         return self.name
