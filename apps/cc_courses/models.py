@@ -11,12 +11,14 @@ def upload_path(instance, filename):
     if isinstance(instance, Course):
         return 'course.banner/{0}/banner.png'.format(str(uuid4()), filename)
 
+
 class CoursePlace(models.Model):
     name = models.CharField("Nom", max_length=200, blank=False, unique=True)
     address = models.CharField("Adreça", max_length=200)
 
     def __str__(self):
         return self.name
+
 
 class Course(models.Model):
     title = models.CharField("Títol", max_length=200, blank=False, unique=True)
