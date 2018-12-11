@@ -11,6 +11,12 @@ def upload_path(instance, filename):
     if isinstance(instance, Course):
         return 'course.banner/{0}/banner.png'.format(str(uuid4()), filename)
 
+class CoursePlace(models.Model):
+    name = models.CharField("Nom", max_length=200, blank=False, unique=True)
+    address = models.CharField("Adreça", max_length=200)
+
+    def __str__(self):
+        return self.name
 
 class Course(models.Model):
     title = models.CharField("Títol", max_length=200, blank=False, unique=True)
@@ -44,10 +50,17 @@ class Course(models.Model):
 
 
 class Activity(models.Model):
-    name = models.CharField("Nom", max_length=200, blank=False, null=False)
-    spots = models.IntegerField('Places totals', default=0)
-    enrolled = models.ManyToManyField(get_enrollable_class(), blank=True, related_name='enrolled_activities')
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    name = models.CharField("Nom", max_length=200, blank=False, null=False)
+    objectives = models.TextField("Objectius", null=True)
+    spots = models.IntegerField('Places totals', default=0)
+    place = models.ForeignKey(CoursePlace, on_delete=models.SET_NULL, null=True)
+    date_start = models.DateField("Dia inici")
+    date_end = models.DateField("Dia finalització", blank=True, null=True)
+    starting_time = models.TimeField("Hora d'inici")
+    ending_time = models.TimeField("Hora de finalització")
+    published = models.BooleanField("Publicat", default=True)
+    enrolled = models.ManyToManyField(get_enrollable_class(), blank=True, related_name='enrolled_activities')
 
     @property
     def remaining_spots(self):
@@ -69,14 +82,6 @@ class Activity(models.Model):
 
 class CourseCategory(models.Model):
     name = models.CharField("Nom", max_length=200, blank=False, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
-class CoursePlace(models.Model):
-    name = models.CharField("Nom", max_length=200, blank=False, unique=True)
-    address = models.CharField("Adreça", max_length=200)
 
     def __str__(self):
         return self.name
