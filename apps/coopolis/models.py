@@ -5,17 +5,17 @@ from uuid import uuid4
 
 def estatuts_upload_path(instance, filename):
     if isinstance(instance, Project):
-        return 'course.estatuts/{0}/estatuts.png'.format(str(uuid4()), filename)
+        return 'course.estatuts/{0}/{1}'.format(str(uuid4()), filename)
 
 
 def viability_upload_path(instance, filename):
     if isinstance(instance, Project):
-        return 'course.pla_viabilitat/{0}/pla_viabilitat.png'.format(str(uuid4()), filename)
+        return 'course.pla_viabilitat/{0}/{1}'.format(str(uuid4()), filename)
 
 
 def sostenibility_upload_path(instance, filename):
     if isinstance(instance, Project):
-        return 'course.pla_sostenibilitat/{0}/pla_sostenibilitat.png'.format(str(uuid4()), filename)
+        return 'course.pla_sostenibilitat/{0}/{1}'.format(str(uuid4()), filename)
 
 
 class User(BaseUser):
