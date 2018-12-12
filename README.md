@@ -7,6 +7,11 @@ Aplicació online per gestionar les formacions que fa Coòpolis durant l'any, ai
 *⚠ For the file and image uploads to work, set a `DJANGO_SETTINGS_MODULE` environment variable pointing to a config
 module that sets `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` values.*
 
+*⚠ If you get the "failed to load a library: cairo" when generating attendees lists, you need to install Cairo in your system.
+Follow the [official website's instruccions](https://www.cairographics.org/download/).
+
+For the file and image uploads to work, set a `DJANGO_SETTINGS_MODULE` environment variable pointing to a config
+
 ### Update requirements
 
 Make sure you have pipenv installed and to initiate it in the project's folder.
