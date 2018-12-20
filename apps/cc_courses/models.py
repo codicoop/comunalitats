@@ -20,6 +20,15 @@ class CoursePlace(models.Model):
         return self.name
 
 
+class Entity(models.Model):
+    name = models.CharField("Nom", max_length=200, blank=False, unique=True)
+    legal_id = models.CharField("C.I.F.", max_length=9)
+    # TODO: Validate CIF format.
+
+    def __str__(self):
+        return self.name
+
+
 class Course(models.Model):
     title = models.CharField("Títol", max_length=200, blank=False)
     slug = models.CharField(max_length=100, unique=True)
@@ -57,8 +66,8 @@ class Course(models.Model):
 
 class Activity(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    name = models.CharField("Nom", max_length=200, blank=False, null=False)
-    objectives = models.TextField("Objectius", null=True)
+    name = models.CharField("Títol", max_length=200, blank=False, null=False)
+    objectives = models.TextField("Descripció", null=True)
     spots = models.IntegerField('Places totals', default=0)
     place = models.ForeignKey(CoursePlace, on_delete=models.SET_NULL, null=True)
     date_start = models.DateField("Dia inici")
@@ -67,6 +76,21 @@ class Activity(models.Model):
     ending_time = models.TimeField("Hora de finalització")
     published = models.BooleanField("Publicat", default=True)
     enrolled = models.ManyToManyField(get_enrollable_class(), blank=True, related_name='enrolled_activities')
+    ORGANIZER_OTIONS = (
+        ('AT', 'Ateneu'),
+        ('CM', 'Cercle Migracions'),
+        ('CI', "Cercle Incubació"),
+        ('CC', 'Cercle Consum')
+    )
+    organizer = models.TextField("Qui ho organitza", choices=ORGANIZER_OTIONS)
+    entity = models.ForeignKey(Entity, on_delete=models.SET_NULL)
+    AXIS_OPTIONS = (
+        ('A', 'Eix A'),
+        ('B', 'Eix B'),
+        ('C', "Eix C"),
+        ('D', 'Eix D')
+    )
+    organizer = models.TextField("Eix", help_text="Eix de la convocatòria on es justificarà.", choices=ORGANIZER_OTIONS)
 
     @property
     def remaining_spots(self):
