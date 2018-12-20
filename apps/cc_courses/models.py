@@ -21,27 +21,31 @@ class CoursePlace(models.Model):
 
 
 class Course(models.Model):
-    title = models.CharField("Títol", max_length=200, blank=False, unique=True)
+    title = models.CharField("Títol", max_length=200, blank=False)
     slug = models.CharField(max_length=100, unique=True)
-    place = models.ForeignKey("CoursePlace", on_delete=models.SET_NULL, null=True)
     date_start = models.DateField("Dia inici")
     date_end = models.DateField("Dia finalització")
-    hours = models.CharField("Horaris", blank=False, max_length=200)
-    objectives = models.TextField("Objectius")
-    category = models.ForeignKey("CourseCategory", on_delete=models.SET_NULL, null=True)
+    hours = models.CharField("Horaris", blank=False, max_length=200,
+                             help_text="Indica només els horaris, sense els dies.")
+    description = models.TextField("Descripció")
     published = models.BooleanField("Publicat")
     created = models.DateTimeField(null=True, blank=True)
-    enrolled = models.ManyToManyField(get_enrollable_class(), blank=True, related_name='enrolled_courses')
-    spots = models.IntegerField('Places totals', default=0)
     banner = models.ImageField(null=True, upload_to=upload_path, max_length=250)
+
+    # Fields currently not needed:
+    # spots = models.IntegerField('Places totals', default=0)
+    # enrolled = models.ManyToManyField(get_enrollable_class(), blank=True, related_name='enrolled_courses')
+    # place = models.ForeignKey("CoursePlace", on_delete=models.SET_NULL, null=True)
+    # category = models.ForeignKey("CourseCategory", on_delete=models.SET_NULL, null=True)
+    #
+    # @property
+    # def remaining_spots(self):
+    #    return self.spots - self.enrolled.count()
 
     @classmethod
     def pre_save(cls, sender, instance, **kwargs):
         slugify_model(instance, 'title')
 
-    @property
-    def remaining_spots(self):
-        return self.spots - self.enrolled.count()
 
     @property
     def absolute_url(self):
