@@ -13,6 +13,9 @@ def upload_path(instance, filename):
 
 
 class CoursePlace(models.Model):
+    class Meta:
+        verbose_name = "Lloc"
+
     name = models.CharField("Nom", max_length=200, blank=False, unique=True)
     address = models.CharField("Adreça", max_length=200)
 
@@ -21,6 +24,9 @@ class CoursePlace(models.Model):
 
 
 class Entity(models.Model):
+    class Meta:
+        verbose_name = "Entitat"
+
     name = models.CharField("Nom", max_length=200, blank=False, unique=True)
     legal_id = models.CharField("C.I.F.", max_length=9)
     # TODO: Validate CIF format.
@@ -30,6 +36,10 @@ class Entity(models.Model):
 
 
 class Course(models.Model):
+    class Meta:
+        verbose_name = "Curs"
+        verbose_name_plural = "Cursos"
+
     title = models.CharField("Títol", max_length=200, blank=False)
     slug = models.CharField(max_length=100, unique=True)
     date_start = models.DateField("Dia inici")
@@ -65,6 +75,9 @@ class Course(models.Model):
 
 
 class Activity(models.Model):
+    class Meta:
+        verbose_name = "Activitat"
+
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     name = models.CharField("Títol", max_length=200, blank=False, null=False)
     objectives = models.TextField("Descripció", null=True)
@@ -111,6 +124,9 @@ class Activity(models.Model):
 
 
 class CourseCategory(models.Model):
+    class Meta:
+        verbose_name = "Categoria del curs [PENDENT IMPLEMENTAR O TREURE]"
+
     name = models.CharField("Nom", max_length=200, blank=False, unique=True)
 
     def __str__(self):
