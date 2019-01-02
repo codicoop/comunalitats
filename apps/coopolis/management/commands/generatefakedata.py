@@ -15,6 +15,7 @@ import factory.fuzzy as fuzzy
 from cc_lib.utils import storage_files
 from django.utils import timezone
 import datetime
+from cc_courses.models import Entity, Activity
 
 
 class Command(BaseCommand):
@@ -25,11 +26,27 @@ class Command(BaseCommand):
             '--test', '--test', action='store_true', dest='is-test'
         )
         parser.add_argument(
-            '--works', '--works', action='store', type=int, dest='works', default=50
-        )
-        parser.add_argument(
             '--users', '--users', action='store', type=int, dest='users', default=25
         )
+
+    def create_entities(self):
+        entities = [
+            Entity(
+                name="Ateneu cooperatiu",
+                legal_id="G66622002"
+            ),
+            Entity(
+                name="Cercle de mar",
+                legal_id="G66622003"
+            ),
+            Entity(
+                name="Cercle B",
+                legal_id="G66622004"
+            )
+        ]
+        Entity.objects.bulk_create(entities)
+        self.stdout.write(self.style.SUCCESS('Fake data for model %s created.' % 'Entities'))
+        return entities
 
     def create_users(self, n_users=50):
         users = UserFactory.create_batch(size=n_users)
@@ -51,7 +68,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Fake data for model %s created.' % 'Course Categories'))
         return categories
 
-    def create_courses(self, course_categories, course_places, n_courses=20):
+    def create_courses(self, n_courses=20):
         times = {
             'past': {
                 'date_start': fuzzy.FuzzyDateTime(
@@ -78,8 +95,6 @@ class Command(BaseCommand):
         for when in times.values():
             courses.extend(CourseFactory.create_batch(
                 size=int(n_courses / len(times)),
-                place=factory.Iterator(course_places),
-                category=factory.Iterator(course_categories),
                 banner=fuzzy.FuzzyChoice(
                     storage_files(
                         settings.FIXTURES_PATH_TO_COURSE_IMAGES,
@@ -92,10 +107,22 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Fake data for model %s created.' % 'Courses'))
         return courses
 
-    def create_activities(self, courses, n_activities=200):
+    def create_activities(self, courses, course_places, entities, n_activities=200):
         activities = ActivityFactory.create_batch(
             size=n_activities,
-            course=factory.Iterator(courses)
+            course=factory.Iterator(courses),
+            place=factory.Iterator(course_places),
+            date_start=fuzzy.FuzzyDateTime(
+                start_dt=timezone.now(),
+                end_dt=timezone.now() + datetime.timedelta(days=100)
+            ),
+            date_end=fuzzy.FuzzyDateTime(
+                start_dt=timezone.now() + datetime.timedelta(days=100),
+                end_dt=timezone.now() + datetime.timedelta(days=365)
+            ),
+            organizer=factory.Iterator(Activity.ORGANIZER_OTIONS),
+            entity=factory.Iterator(entities),
+            axis=factory.Iterator(Activity.AXIS_OPTIONS)
         )
         self.stdout.write(self.style.SUCCESS('Fake data for model %s created.' % 'Course Activities'))
         return activities
@@ -125,12 +152,13 @@ class Command(BaseCommand):
         n_users = options['users']
         assert settings.DEBUG or is_test
         Flush().handle(interactive=not is_test, database=DEFAULT_DB_ALIAS, **options)
+        entities = self.create_entities()
         users = self.create_users(n_users=n_users)
         self.create_projects()
         course_places = self.create_course_places()
         course_categories = self.create_course_categories()
-        courses = self.create_courses(course_categories=course_categories, course_places=course_places)
-        activities = self.create_activities(courses=courses)
+        courses = self.create_courses()
+        activities = self.create_activities(courses=courses, course_places=course_places, entities=entities)
         self.enroll_users(activities=activities, users=users)
         if not is_test:
             self.download_and_upload_images(courses)

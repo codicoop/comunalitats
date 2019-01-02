@@ -36,7 +36,7 @@ class Course(models.Model):
     date_end = models.DateField("Dia finalització")
     hours = models.CharField("Horaris", blank=False, max_length=200,
                              help_text="Indica només els horaris, sense els dies.")
-    description = models.TextField("Descripció")
+    description = models.TextField("Descripció", null=True)
     published = models.BooleanField("Publicat")
     created = models.DateTimeField(null=True, blank=True)
     banner = models.ImageField(null=True, upload_to=upload_path, max_length=250)
@@ -83,14 +83,14 @@ class Activity(models.Model):
         ('CC', 'Cercle Consum')
     )
     organizer = models.TextField("Qui ho organitza", choices=ORGANIZER_OTIONS)
-    entity = models.ForeignKey(Entity, on_delete=models.SET_NULL)
+    entity = models.ForeignKey(Entity, on_delete=models.SET_NULL, null=True)
     AXIS_OPTIONS = (
         ('A', 'Eix A'),
         ('B', 'Eix B'),
         ('C', "Eix C"),
         ('D', 'Eix D')
     )
-    organizer = models.TextField("Eix", help_text="Eix de la convocatòria on es justificarà.", choices=ORGANIZER_OTIONS)
+    axis = models.TextField("Eix", help_text="Eix de la convocatòria on es justificarà.", choices=AXIS_OPTIONS)
 
     @property
     def remaining_spots(self):

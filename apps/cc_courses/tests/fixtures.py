@@ -22,6 +22,15 @@ def _get_tzinfo():
         return None
 
 
+class EntityFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = apps.get_model('cc_courses', 'Entity')
+        django_get_or_create = ('name',)
+
+    name = factory.Faker('name')
+    legal_id = factory.Faker('address')
+
+
 class CoursePlaceFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = apps.get_model('cc_courses', 'CoursePlace')
@@ -47,10 +56,9 @@ class CourseFactory(factory.django.DjangoModelFactory):
     date_start = fuzzy.FuzzyDate(datetime.date(2018, 11, 1), datetime.date(2019, 6, 26))
     date_end = fuzzy.FuzzyDate(datetime.date(2019, 6, 27), datetime.date(2019, 12, 26))
     hours = factory.Faker('text', max_nb_chars=15, ext_word_list=None)
-    objectives = fake.paragraph(nb_sentences=5, variable_nb_sentences=True, ext_word_list=None)
+    description = fake.paragraph(nb_sentences=5, variable_nb_sentences=True, ext_word_list=None)
     published = True
     created = timezone.now()
-    spots = random.randint(20, 30)
 
 
 class ActivityFactory(factory.django.DjangoModelFactory):
@@ -58,4 +66,10 @@ class ActivityFactory(factory.django.DjangoModelFactory):
         model = apps.get_model('cc_courses', 'Activity')
 
     name = factory.Faker('text', max_nb_chars=80)
+    objectives = fake.paragraph(nb_sentences=5, variable_nb_sentences=True, ext_word_list=None)
     spots = random.randint(10, 40)
+    starting_time = "10:00"
+    ending_time = "14:00"
+    published = True
+
+

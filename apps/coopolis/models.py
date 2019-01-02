@@ -126,7 +126,6 @@ class Project(models.Model):
                                  upload_to=estatuts_upload_path, max_length=250)
     sostenibility = models.FileField("Pla de sostenibilitat", blank=True, null=True,
                                      upload_to=estatuts_upload_path, max_length=250)
-    # TODO: Fix credentials, ara no puc pujar fitxers pq falta posar-les.
 
     def __str__(self):
         return self.name
