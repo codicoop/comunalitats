@@ -6,34 +6,20 @@
         <h2 class="subtitle">Oferta formativa</h2>
         <div class="courses-container">
             {% for course in future_courses %}
-                <a href="{{ course.absolute_url }}">
                 <div class="course">
                     {% if course.banner %}
-                    <div class="course-image" style="background-image: url('{{ course.banner.url }}')"></div>
+                    <a href="{{ course.absolute_url }}"><div class="course-image" style="background-image: url('{{ course.banner.url }}')"></div></a>
                     {% endif %}
                     <div class="course-data">
-                        <h3>{{ course.title }}</h3>
+                        <a href="{{ course.absolute_url }}"><h3>{{ course.title }}</h3></a>
+                        <p>Inici de les activitats: {{ course.date_start }}</p>
+                        <br />
+                        <p>Horaris: {{ course.hours }}</p>
+                        <br />
+                        <p>{{ course.description }}</p>
                     </div>
                 </div>
-                </a>
             {% endfor %}
-        </div>
-
-        <div class="old-courses-container">
-            <div class="container">
-                <h2 class="subtitle">Cursos pasats</h2>
-                <ul>
-                {% for course in past_courses %}
-                    <li>
-                        <a href="{{ course.absolute_url }}">
-                        <p class="title">{{ course.title }}</p>
-                        <p>{{ course.date_start }}</p>
-                        </a>
-                    </li>
-                    </a>
-                {% endfor %}
-                </ul>
-            </div>
         </div>
     </div>
 {% endblock %}
