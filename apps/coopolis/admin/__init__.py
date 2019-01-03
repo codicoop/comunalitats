@@ -16,7 +16,7 @@ from constance.admin import ConstanceAdmin, Config
 class CoopolisAdmin(admin.AdminSite):
     site_header = "Coòpolis Backoffice"
     site_title = "Coòpolis backoffice"
-    index_title = "Hola!"
+    index_title = "Gestió d'usuàries, acompanyaments i activitats"
 
 
 coopolis_admin_site = CoopolisAdmin(name='coopolis_admin')

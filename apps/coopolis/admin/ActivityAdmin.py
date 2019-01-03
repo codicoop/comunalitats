@@ -7,11 +7,13 @@ from django.http import HttpResponse
 from django.urls import path, reverse
 from cc_courses.models import Activity
 from django.utils.safestring import mark_safe
+from django_summernote.admin import SummernoteModelAdmin
 
 
-class ActivityAdmin(admin.ModelAdmin):
-    list_display = ('name', 'attendee_list_field',)
-    readonly_fields = ('copy_clipboard_field',)
+class ActivityAdmin(SummernoteModelAdmin):
+    list_display = ('name', 'attendee_list_field', 'copy_clipboard_list_field',)
+    readonly_fields = ('copy_clipboard_field', 'attendee_list_field',)
+    summernote_fields = ('objectives',)
 
     def get_queryset(self, request):
         qs = super(ActivityAdmin, self).get_queryset(request)
@@ -36,7 +38,27 @@ class ActivityAdmin(admin.ModelAdmin):
     </script>
     """.format(abs_url))
 
-    copy_clipboard_field.short_description = 'Adreça de l\'activitat'
+    copy_clipboard_field.short_description = 'Link a l\'activitat'
+
+    def copy_clipboard_list_field(self, obj):
+        abs_url = self.request.build_absolute_uri(obj.absolute_url)
+        return mark_safe("""
+    <a href="javascript:copyToClipboard('{0}');">Copiar &#128203;</a>
+    <script>
+    function copyToClipboard (str) {{
+    var dummy = document.createElement("input");
+      document.body.appendChild(dummy);
+      dummy.setAttribute("id", "dummy_id");
+      document.getElementById("dummy_id").value=str;
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+      alert(str + ' copied.');
+    }}
+    </script>
+    """.format(abs_url))
+
+    copy_clipboard_list_field.short_description = 'Link a l\'activitat'
 
     def get_urls(self):
         urls = super().get_urls()
@@ -46,14 +68,20 @@ class ActivityAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.attendee_list),
                 name='attendee-list',
             ),
+            path(
+                r'<_id>/attendee-management/',
+                self.admin_site.admin_view(self.attendee_management),
+                name='attendee-management',
+            ),
         ]
         return custom_urls + urls
 
     def attendee_list_field(self, obj):
-        return format_html('<a href="%s" target="_new">Llista d\'assistencia</a>' % reverse('admin:attendee-list', kwargs={'_id': obj.id}))
+        return format_html('<a href="%s" target="_new">Llista d\'assistencia</a>' % reverse('admin:attendee-list',
+                                                                                            kwargs={'_id': obj.id}))
 
     attendee_list_field.allow_tags = True
-    attendee_list_field.short_description = 'Column description'
+    attendee_list_field.short_description = 'Exportar'
 
     def attendee_list(self, request, _id):
         import weasyprint
@@ -65,3 +93,14 @@ class ActivityAdmin(admin.ModelAdmin):
         # response['Content-Disposition'] = 'attachment; filename="llista_assistencia.pdf"'
         response['Content-Disposition'] = 'filename="llista_assistencia.pdf"'
         return response
+
+    def attendee_management_field(self, obj):
+        return format_html('<a href="%s">Gestionar inscripcions</a>' % reverse('admin:attendee-management',
+                                                                               kwargs={'_id': obj.id}))
+
+    attendee_management_field.allow_tags = True
+    attendee_management_field.short_description = 'Gestió'
+
+    def attendee_management(self, request, _id):
+        return True
+

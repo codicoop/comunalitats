@@ -140,7 +140,7 @@ DEV_SETTINGS_MODULE = 'coopolis_backoffice.settings.dev'
 # APPS
 
 USERS_APP_TITLE = 'Gestió de persones'
-COURSES_APP_TITLE = 'Gestió d\'activitats'
+COURSES_APP_TITLE = "les formacions i activitats"
 
 FIXTURES_PATH_TO_COURSE_IMAGES = 'test-images/coopolis-courses'
 
