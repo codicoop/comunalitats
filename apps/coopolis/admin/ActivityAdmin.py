@@ -11,8 +11,8 @@ from django_summernote.admin import SummernoteModelAdmin
 
 
 class ActivityAdmin(SummernoteModelAdmin):
-    list_display = ('name', 'attendee_list_field', 'copy_clipboard_list_field',)
-    readonly_fields = ('copy_clipboard_field', 'attendee_list_field',)
+    list_display = ('name', 'attendee_list_field',)
+    readonly_fields = ('attendee_list_field',)
     summernote_fields = ('objectives',)
 
     def get_queryset(self, request):
