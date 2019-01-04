@@ -39,6 +39,7 @@ class Course(models.Model):
     class Meta:
         verbose_name = "Formació"
         verbose_name_plural = "Formacions"
+        ordering = ["date_start"]
 
     title = models.CharField("Títol", max_length=200, blank=False)
     slug = models.CharField(max_length=100, unique=True)
@@ -77,6 +78,7 @@ class Course(models.Model):
 class Activity(models.Model):
     class Meta:
         verbose_name = "Activitat"
+        ordering = ["date_start"]
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Formació / Programa")
     name = models.CharField("Títol", max_length=200, blank=False, null=False)
