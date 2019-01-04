@@ -21,7 +21,7 @@
         {% if activity|can_enroll:user %}
         <a href="#" onclick="javascript:showModal('#modal-confirm');" class="enroll-button">
         <div>
-            Incriure's
+            Incriure's-hi
         </div>
         </a>
         {% endif %}
@@ -40,18 +40,19 @@
             Confirmació
         </div>
         <div class="modal-content">
-            Està a punt d'inscriure's al curs <strong>{{ object.title }}</strong>.
+            Ets a punt d'inscriure't al curs:
+            <p><strong>{{ object.title }}</strong></p>.
             <br>
             {% if user.is_anonymous %}
-            Però per fer-lo haurà de fer login abans:
+            Però per fer-ho has d'accedir al teu compte o bé registrar-te.
             {% else %}
-            Està segur?
+            Segur que vols inscriure't-hi?
             {% endif %}
         </div>
         <div class="modal-buttons">
             <a href="{% url 'enroll_course' slug=object.slug %}" class="enroll-button">
             <div>
-                {% if user.is_anonymous %}Login{% else %}Incriure's{% endif %}
+                {% if user.is_anonymous %}Login{% else %}Incriure's-hi{% endif %}
             </div>
             </a>
         </div>
