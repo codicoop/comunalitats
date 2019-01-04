@@ -9,6 +9,6 @@ from .utils import get_courses_list_view_class
 urlpatterns = [
     path('', get_courses_list_view_class().as_view(), name='courses'),
     path('my_courses', MyCoursesListView.as_view(), name='my_courses'),
-    path('<slug>', CourseDetailView.as_view(), name='course'),
+    path('program/<slug>', CourseDetailView.as_view(), name='course'),
     path('<slug:slug>/enroll', EnrollCourseView.as_view(), name='enroll_course')
 ]
