@@ -9,12 +9,11 @@
 {% load enrollable %}
 <div class="page-content">
 <h1>{{ course.title }}</h1>
-<h1>{{ test }}</h1>
 
     <h2>Activitats programades</h2>
 
     <ul>
-    {% for activity in activities %}
+    {% for activity in course.activity_set.all %}
         <li>
             <p class="title">{{ activity.name }}</p>
             <p>{{ activity.date_start }}</p>
