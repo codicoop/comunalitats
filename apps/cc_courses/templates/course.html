@@ -6,41 +6,32 @@
 {% endblock %}
 
 {% block content %}
+{% load enrollable %}
 <div class="page-content">
-<h1>{{ object.title }}</h1>
-<h2>Activitats programades</h2>
+<h1>{{ course.title }}</h1>
+<h1>{{ test }}</h1>
+
+    <h2>Activitats programades</h2>
 
     <ul>
-    {% for activity in course_activities %}
+    {% for activity in activities %}
         <li>
-            <a href="{{ course.absolute_url }}">
-            <p class="title">{{ course.title }}</p>
-            <p>{{ course.date_start }}</p>
-            </a>
+            <p class="title">{{ activity.name }}</p>
+            <p>{{ activity.date_start }}</p>
         </li>
+        {% if activity|can_enroll:user %}
+        <a href="#" onclick="javascript:showModal('#modal-confirm');" class="enroll-button">
+        <div>
+            Incriure's
+        </div>
         </a>
+        {% endif %}
+        {% if user in object.enrolled.all %}
+        Ja estàs inscrita a aquesta activitat.
+        {% endif %}
     {% endfor %}
     </ul>
 
-
-
-
-    {% load enrollable %}
-    {% if object|can_enroll:user %}
-    <a href="#" onclick="javascript:showModal('#modal-confirm');" class="enroll-button">
-    <div>
-        Incriure's
-    </div>
-    </a>
-    {% endif %}
-    <a href="#" onclick="javascript:showModal('#modal-confirm');" class="enroll-button">
-    <div>
-        Incriure's
-    </div>
-    </a>
-    {% if user in object.enrolled.all %}
-    Ya estàs inscrit a aquest curs
-    {% endif %}
 </div>
 
 <div id="modal-confirm" class="modal">
