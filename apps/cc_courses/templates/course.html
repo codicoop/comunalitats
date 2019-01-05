@@ -21,7 +21,7 @@
         {% if activity|can_enroll:user %}
         <a
                 href="#"
-                onclick="javascript:onInscriptionButtonClick('{{activity.name}}', '{% url 'enroll_course' id=activity.id %}', '{% url 'login' %}', '{% url 'signup' %}');"
+                onclick="javascript:onInscriptionButtonClick('{{activity.name}}', '{% url 'enroll_course' id=activity.id %}', '{% url 'login' %}?next=foobar', '{% url 'signup' %}?next=foobar');"
                 class="enroll-button"
         >
         <div>

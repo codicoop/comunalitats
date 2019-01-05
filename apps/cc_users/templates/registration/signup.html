@@ -3,7 +3,7 @@
 {% block generic %}
 <div class="generated-form">
   <h1>Sign up</h1>
-  <form method="post">
+  <form method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Sign up</button>

@@ -6,13 +6,13 @@ from django.template.loader import render_to_string
 from django.shortcuts import render, redirect
 from django.conf import settings
 from cc_users.views import get_activate_url
-from apps.cc_users.forms import SignUpForm as SignUpFormClass
 from django.contrib.auth import login
+from django.http import HttpResponseRedirect
 
 
 def signup(request):
     # TODO: Make this view as class so it's not required to set the settings for the form class, just inherit
-    SignUpForm = get_class_from_route(settings.SIGNUP_FORM) if hasattr(settings, 'SIGNUP_FORM') else SignUpFormClass
+    SignUpForm = get_class_from_route(settings.SIGNUP_FORM)
 
     if request.user and request.user.is_authenticated:
         return redirect('/')
@@ -29,7 +29,12 @@ def signup(request):
                 'user': user
             })
             user.email_user(subject, message)
-            return render(request, 'registration/user_registered.html', {'email': form.cleaned_data.get('email')})
+
+            next_url = request.GET.get('next')
+            if next_url:
+                return HttpResponseRedirect(next_url)
+            else:
+                return render(request, 'registration/user_registered.html', {'email': form.cleaned_data.get('email')})
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
