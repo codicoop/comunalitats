@@ -1,13 +1,14 @@
 from django.apps import AppConfig
+from django.conf import settings
 
 
 class UsersConfig(AppConfig):
-    name = 'users'
+    name = 'cc_users'
+    verbose_name = settings.USERS_APP_TITLE if hasattr(settings, 'USERS_APP_TITLE') else 'Users'
 
     def ready(self):
         # TODO: This should be placed into a global app, meanwhile having it here is (more-or-less) fine
         # This ensures the SECRET_KEY has not been published on a git repo by checking the dev key
-        from django.conf import settings
         from importlib import import_module
         assert hasattr(settings, 'DEV_SETTINGS_MODULE'), 'Please add DEV_SETTINGS_MODULE value to your settings.'
         dev_module = import_module(settings.DEV_SETTINGS_MODULE)

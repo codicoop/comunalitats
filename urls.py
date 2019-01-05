@@ -3,11 +3,13 @@
 
 from django.urls import path
 from django.urls import include
-from apps.users import views
+from apps.cc_users import views
+
 
 urlpatterns = [
+    path('login/', views.UsersLoginView.as_view(), name='login'),
+    path('signup', views.signup, name='signup'),
+    path('activate/<uuid>/<token>/', views.activate, name='users_activate'),
     path('users/login/', views.UsersLoginView.as_view(), name='login'),
-    path('users/signup', views.signup, name='signup'),
-    path('users/activate/<uuid>/<token>/', views.activate, name='users_activate'),
-    path('users/', include('django.contrib.auth.urls')),
+    path('users/', include('django.contrib.auth.urls'))
 ]

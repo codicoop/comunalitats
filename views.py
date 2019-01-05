@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from apps.users.forms import SignUpForm
+from apps.cc_users.forms import SignUpForm as SignUpFormClass
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
@@ -10,6 +10,8 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_text
 from .tokens import AccountActivationTokenGenerator
+from .forms import LogInForm
+from django.conf import settings
 
 
 def get_activate_url(request, user):
@@ -24,6 +26,10 @@ def get_activate_url(request, user):
 
 
 def signup(request):
+    # TODO: Make this view as class so it's not required to set the settings for the form class, just inherit
+    from cc_lib.utils import get_class_from_route
+    SignUpForm = get_class_from_route(settings.SIGNUP_FORM) if hasattr(settings, 'SIGNUP_FORM') else SignUpFormClass
+
     if request.user and request.user.is_authenticated:
         return redirect('/')
     if request.method == 'POST':
@@ -68,3 +74,4 @@ def activate(request, uuid, token):
 
 class UsersLoginView(LoginView):
     redirect_authenticated_user = True
+    form_class = LogInForm

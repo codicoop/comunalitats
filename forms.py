@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import get_user_model
 
 
@@ -14,3 +14,17 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = get_user_model()
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
+
+
+class LogInForm(AuthenticationForm):
+    remember_me = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(),
+        label="Remember me"
+    )
+
+    def clean(self):
+        super().clean()
+        if not self.cleaned_data.get('remember_me'):
+            self.request.session.set_expiry(0)
+        return self.cleaned_data
