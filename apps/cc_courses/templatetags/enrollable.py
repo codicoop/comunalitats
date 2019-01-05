@@ -6,6 +6,7 @@ from django import template
 
 
 def can_enroll(enrollable, individual):
+    return individual not in enrollable.enrolled.all()
     """
     Can enroll if...
     - This class can enroll

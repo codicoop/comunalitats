@@ -19,7 +19,7 @@
             <p>{{ activity.date_start }}</p>
         </li>
         {% if activity|can_enroll:user %}
-        <a href="#" onclick="javascript:showModal('#modal-confirm');" class="enroll-button">
+        <a href="#" onclick="javascript:$('#modal-title-text').text('{{activity.name}}');showModal('#modal-confirm');" class="enroll-button">
         <div>
             Incriure's-hi
         </div>
@@ -41,7 +41,7 @@
         </div>
         <div class="modal-content">
             Ets a punt d'inscriure't al curs:
-            <p><strong>{{ object.title }}</strong></p>.
+            <p><strong id="modal-title-text"></strong></p>.
             <br>
             {% if user.is_anonymous %}
             Però per fer-ho has d'accedir al teu compte o bé registrar-te.
@@ -50,11 +50,24 @@
             {% endif %}
         </div>
         <div class="modal-buttons">
-            <a href="{% url 'enroll_course' slug=object.slug %}" class="enroll-button">
+            {% if user.is_anonymous %}
+            <a href="{% url 'login' %}" class="enroll-button">
             <div>
-                {% if user.is_anonymous %}Login{% else %}Incriure's-hi{% endif %}
+                Fes login
             </div>
             </a>
+            <a href="{% url 'signup' %}" class="enroll-button">
+            <div>
+                Enregistrar-se
+            </div>
+            </a>
+            {% else %}
+            <a href="{% url 'enroll_course' slug=object.slug %}" class="enroll-button">
+            <div>
+                Incriure's-hi
+            </div>
+            </a>
+            {% endif %}
         </div>
     </div>
 </div>
