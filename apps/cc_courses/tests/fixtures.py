@@ -8,19 +8,10 @@ import datetime
 from django.conf import settings
 from django.utils import timezone
 from django.apps import apps
-import random
 from cc_lib.utils import storage_files
 
 
 fake = Faker()
-
-
-def _get_tzinfo():
-    """Fetch the current timezone."""
-    if settings.USE_TZ:
-        return timezone.get_current_timezone()
-    else:
-        return None
 
 
 class EntityFactory(factory.django.DjangoModelFactory):
@@ -60,7 +51,6 @@ class CourseFactory(factory.django.DjangoModelFactory):
     description = fake.paragraph(nb_sentences=5, variable_nb_sentences=True, ext_word_list=None)
     published = True
     created = timezone.now()
-    spots = random.randint(20, 30)
     banner = fuzzy.FuzzyChoice(
         storage_files(
             settings.FIXTURES_PATH_TO_COURSE_IMAGES,
@@ -75,7 +65,6 @@ class ActivityFactory(factory.django.DjangoModelFactory):
 
     name = factory.Faker('text', max_nb_chars=80)
     objectives = fake.paragraph(nb_sentences=5, variable_nb_sentences=True, ext_word_list=None)
-    spots = random.randint(10, 40)
     starting_time = "10:00"
     ending_time = "14:00"
     published = True
