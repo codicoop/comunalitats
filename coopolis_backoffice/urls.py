@@ -20,7 +20,7 @@ urlpatterns = [
 ]
 
 urlpatterns += [
+    path('', include('coopolis.urls')),
     path('', include('cc_users.urls')),
-    path('', include('cc_courses.urls')),
-    path('', include('coopolis.urls'))
+    path('', include('cc_courses.urls'))
 ]

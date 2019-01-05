@@ -40,7 +40,7 @@
                     <div class="div-row">
                         <div class="div-column">
                             <div class="div-row">
-                                <input type="text" name="username" placeholder="Nom d'usuari">
+                                <input type="text" name="username" placeholder="Adreça d'e-mail">
                                 <input type="password" name="password" placeholder="Contrasenya">
                             </div>
                             <div class="div-row-reverse">
@@ -57,7 +57,7 @@
                 {% else %}
                 <div class="secondary-menu">
                 <ul>
-                    <li>{{ user.username }} ─ <a href="{% url 'logout' %}">Sortir</a></li>
+                    <li>{{ user.email }} ─ <a href="{% url 'logout' %}">Sortir</a></li>
                 </ul>
                 </div>
                 {% endif %}

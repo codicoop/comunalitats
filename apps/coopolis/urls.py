@@ -3,7 +3,7 @@
 
 from django.urls import path, include
 from .admin import coopolis_admin_site
-from .views import CoopolisCoursesListView, ProjectFormView
+from .views import CoopolisCoursesListView, ProjectFormView, SignUp
 from django.conf.urls import url
 from django.conf import settings
 from django.views.generic.base import RedirectView
@@ -14,8 +14,9 @@ urlpatterns = [
 ]
 
 urlpatterns += [
+    path('signup', SignUp.signup, name='signup'),
     path('admin/', coopolis_admin_site.urls),
     path('summernote/', include('django_summernote.urls')),
     path('', CoopolisCoursesListView.as_view(), name='home'),
-    path('project/<pk>', ProjectFormView.as_view(), name='project')
+    path('project/<pk>', ProjectFormView.as_view(), name='project'),
 ]

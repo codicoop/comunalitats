@@ -27,6 +27,7 @@ class User(BaseUser):
     REQUIRED_FIELDS = []
     objects = CCUserManager()
 
+    username = models.CharField(unique=False, max_length=150,)
     surname2 = models.CharField("Segon cognom", max_length=50, blank=True, null=True)
     id_number = models.CharField("DNI", max_length=11, blank=True, null=True)
     GENDERS = (

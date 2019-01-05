@@ -36,8 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.cc_users.apps.UsersConfig',
     'apps.coopolis.apps.CoopolisConfig',
+    'apps.cc_users.apps.UsersConfig',
     'apps.cc_courses.apps.CoursesConfig',
     'django.contrib.admin',
     'constance.backends.database',
@@ -178,7 +178,9 @@ FIXTURE_FACTORIES = [
     ('cc_courses.tests.fixtures.EntityFactory', {}),
     ('cc_courses.tests.fixtures.CourseCategoryFactory', {}),
     ('cc_courses.tests.fixtures.CoursePlaceFactory', {}),
-    ('cc_courses.tests.fixtures.ActivityFactory', {}),
+    ('cc_courses.tests.fixtures.ActivityFactory', {
+        'number': 500
+    }),
 ]
 
 STATIC_ROOT = 'static'

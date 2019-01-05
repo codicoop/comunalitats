@@ -18,10 +18,13 @@ On your users model you will have to set the authentication field the `email` fi
 ```python
 from cc_users.models import BaseUser
 from cc_users.managers import CCUserManager
+from django.db import models
+
 class User(BaseUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = CCUserManager()
+    username = models.CharField(unique=False, max_length=1)
 ```
 
 Then you will have to override the `cc_users.SignUpForm` removing the `username` field from it.
