@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from django.utils.text import slugify
-
 
 def slugify_model(instance, attrib, slug_attrib='slug', _iter=0):
+    from django.utils.text import slugify
     value = getattr(instance, attrib)
     assert isinstance(value, str)
     prev_value = getattr(instance, slug_attrib)
@@ -29,4 +28,19 @@ def storage_files(folder, prefix=None):
         endpoint_url=settings.AWS_S3_ENDPOINT_URL,
     )
     response = s3_client.list_objects(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Prefix=folder)
-    return [urljoin(prefix, obj['Key']) if prefix else obj['Key'] for obj in response['Contents']]
+    return [
+        urljoin(prefix, obj['Key']) if prefix else obj['Key']
+        for obj in response['Contents']
+        if obj['Key'] and obj['Size'] > 0
+    ]
+
+
+def get_class_from_route(route):
+    """
+    From a Python class path in string format, returns the class
+    """
+    from importlib import import_module
+    values = route.split('.')
+    module = import_module('.'.join(values[:-1]))
+    cl = getattr(module, values[-1])
+    return cl
