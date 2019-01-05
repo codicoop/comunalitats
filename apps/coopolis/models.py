@@ -1,6 +1,7 @@
 from cc_users.models import BaseUser
 from django.db import models
 from uuid import uuid4
+from cc_users.managers import CCUserManager
 
 
 def estatuts_upload_path(instance, filename):
@@ -21,6 +22,10 @@ def sostenibility_upload_path(instance, filename):
 class User(BaseUser):
     class Meta:
         verbose_name_plural = "Usuaris"
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+    objects = CCUserManager()
 
     surname2 = models.CharField("Segon cognom", max_length=50, blank=True, null=True)
     id_number = models.CharField("DNI", max_length=11, blank=True, null=True)
