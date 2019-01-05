@@ -34,3 +34,14 @@ def storage_files(folder, prefix=None):
         for obj in response['Contents']
         if obj['Key'] and obj['Size'] > 0
     ]
+
+
+def get_class_from_route(route):
+    """
+    From a Python class path in string format, returns the class
+    """
+    from importlib import import_module
+    values = route.split('.')
+    module = import_module('.'.join(values[:-1]))
+    cl = getattr(module, values[-1])
+    return cl

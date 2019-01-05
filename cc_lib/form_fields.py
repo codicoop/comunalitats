@@ -17,13 +17,13 @@ class ExtendedImageField(forms.ImageField):
         if not self.resize:
             return f
 
-        byte_aray = BytesIO()
+        byte_array = BytesIO()
         image = Image.open(f)
         # image.show()
         image = image.resize(self.resize)
-        image.save(byte_aray, format='PNG')
+        image.save(byte_array, format='PNG')
         f.name = self.filename if self.filename else f.name
-        f.file = byte_aray
+        f.file = byte_array
         f.content_type = Image.MIME.get(image.format)
         f.image = image
         return f
