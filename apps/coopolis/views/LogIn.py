@@ -8,5 +8,5 @@ class CoopolisLoginView(LoginView):
     def get_success_url(self):
         url = self.request.GET.get('next')
         if url:
-            return url
+            return url + '?' + self.request.GET.urlencode()
         return super().get_success_url()

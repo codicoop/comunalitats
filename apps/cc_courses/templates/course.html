@@ -20,8 +20,9 @@
         </li>
         {% if activity|can_enroll:user %}
         <a
+                id="actButton{{activity.id}}"
                 href="#"
-                onclick="javascript:onInscriptionButtonClick('{{activity.name}}', '{% url 'enroll_course' id=activity.id %}', '{% url 'login' %}?next={{ request.get_full_path }}', '{% url 'signup' %}?next={{ request.get_full_path }}');"
+                onclick="javascript:onInscriptionButtonClick('{{activity.name}}', '{% url 'enroll_course' id=activity.id %}', '{% url 'login' %}?next={{ request.get_full_path }}&act={{activity.id}}', '{% url 'signup' %}?next={{ request.get_full_path }}&act={{activity.id}}');"
                 class="enroll-button"
         >
         <div>
@@ -78,6 +79,12 @@
 <script>
     $( document ).ready(function() {
         makeModal('#modal-confirm');
+
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('act')) {
+            var id = urlParams.get('act');
+            $("#actButton" + id).click();
+        }
     });
 
     function onInscriptionButtonClick (activityName, activityUrl, loginUrl, signupUrl) {

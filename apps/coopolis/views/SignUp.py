@@ -32,7 +32,7 @@ def signup(request):
 
             next_url = request.GET.get('next')
             if next_url:
-                return HttpResponseRedirect(next_url)
+                return HttpResponseRedirect(next_url + '?' + request.GET.urlencode())
             else:
                 return render(request, 'registration/user_registered.html', {'email': form.cleaned_data.get('email')})
     else:
