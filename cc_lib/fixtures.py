@@ -10,7 +10,7 @@ known_attributes = {
     'first_name':  factory.Faker('first_name'),
     'last_name': factory.Faker('last_name'),
     'username': factory.Sequence(lambda n: "user%d" % n),
-    'email': factory.Sequence(lambda n: "user%d@email.coop" % n),
+    'email': factory.Sequence(lambda n: "user%d@codi.coop" % n),
     'password': factory.PostGenerationMethodCall('set_password', 'test'),
     'is_active': True,
     'is_staff': False,

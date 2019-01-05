@@ -169,7 +169,15 @@ CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 
 COURSES_LIST_VIEW_CLASS = 'apps.coopolis.views.CoopolisCoursesListView'
 COURSES_CLASS_TO_ENROLL = 'coopolis.User'
-COURSES_CLASSES_CAN_ENROLL = ['cc_courses.models.Activity']
+COURSES_CLASSES_CAN_ENROLL = ['cc_courses.models.Course']
+
+FIXTURE_FACTORIES = [
+    ('coopolis.tests.fixtures.UserFactory',),
+    ('coopolis.tests.fixtures.ProjectFactory',),
+    ('cc_courses.tests.fixtures.CourseFactory', 1)
+]
+
+STATIC_ROOT = 'static'
 
 
 SIGNUP_FORM = 'coopolis.forms.MySignUpForm'

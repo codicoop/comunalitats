@@ -9,6 +9,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.apps import apps
 import random
+from cc_lib.utils import storage_files
 
 
 fake = Faker()
@@ -59,6 +60,13 @@ class CourseFactory(factory.django.DjangoModelFactory):
     description = fake.paragraph(nb_sentences=5, variable_nb_sentences=True, ext_word_list=None)
     published = True
     created = timezone.now()
+    spots = random.randint(20, 30)
+    banner = fuzzy.FuzzyChoice(
+        storage_files(
+            settings.FIXTURES_PATH_TO_COURSE_IMAGES,
+            f'http://{settings.AWS_S3_CUSTOM_DOMAIN}/{settings.AWS_STORAGE_BUCKET_NAME}'
+        )
+    )
 
 
 class ActivityFactory(factory.django.DjangoModelFactory):

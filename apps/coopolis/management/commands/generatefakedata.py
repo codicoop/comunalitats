@@ -152,13 +152,12 @@ class Command(BaseCommand):
         n_users = options['users']
         assert settings.DEBUG or is_test
         Flush().handle(interactive=not is_test, database=DEFAULT_DB_ALIAS, **options)
-        entities = self.create_entities()
         users = self.create_users(n_users=n_users)
         self.create_projects()
         course_places = self.create_course_places()
         course_categories = self.create_course_categories()
-        courses = self.create_courses()
-        activities = self.create_activities(courses=courses, course_places=course_places, entities=entities)
+        courses = self.create_courses(course_categories=course_categories, course_places=course_places)
+        activities = self.create_activities(courses=courses)
         self.enroll_users(activities=activities, users=users)
         if not is_test:
             self.download_and_upload_images(courses)
