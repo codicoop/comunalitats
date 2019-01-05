@@ -19,7 +19,11 @@
             <p>{{ activity.date_start }}</p>
         </li>
         {% if activity|can_enroll:user %}
-        <a href="#" onclick="javascript:$('#modal-title-text').text('{{activity.name}}');showModal('#modal-confirm');" class="enroll-button">
+        <a
+                href="#"
+                onclick="javascript:onInscriptionButtonClick('{{activity.name}}', '{% url 'enroll_course' id=activity.id %}', '{% url 'login' %}', '{% url 'signup' %}');"
+                class="enroll-button"
+        >
         <div>
             Incriure's-hi
         </div>
@@ -51,18 +55,18 @@
         </div>
         <div class="modal-buttons">
             {% if user.is_anonymous %}
-            <a href="{% url 'login' %}" class="enroll-button">
+            <a id="button1" href="#" class="enroll-button">
             <div>
                 Fes login
             </div>
             </a>
-            <a href="{% url 'signup' %}" class="enroll-button">
+            <a id="button2" href="#" class="enroll-button">
             <div>
                 Enregistrar-se
             </div>
             </a>
             {% else %}
-            <a href="{% url 'enroll_course' slug=object.slug %}" class="enroll-button">
+            <a id="button3" href="#" class="enroll-button">
             <div>
                 Incriure's-hi
             </div>
@@ -75,5 +79,13 @@
     $( document ).ready(function() {
         makeModal('#modal-confirm');
     });
+
+    function onInscriptionButtonClick (activityName, activityUrl, loginUrl, signupUrl) {
+        $('#modal-title-text').text(activityName);
+        $("#button1").attr("href", loginUrl);
+        $("#button2").attr("href", signupUrl);
+        $("#button3").attr("href", activityUrl);
+        showModal('#modal-confirm');
+    }
 </script>
 {% endblock %}
