@@ -4,7 +4,6 @@
 from django.apps import apps
 from django.contrib.auth import get_user_model
 from cc_lib.fixtures import DjangoFactory
-import factory
 
 
 class UserFactory(DjangoFactory):
@@ -15,4 +14,3 @@ class UserFactory(DjangoFactory):
 class ProjectFactory(DjangoFactory):
     class Meta:
         model = apps.get_model('coopolis', 'Project')
-    name = factory.Faker('name')

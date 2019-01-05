@@ -9,6 +9,16 @@ from django.db import DEFAULT_DB_ALIAS
 from django.conf import settings
 from cc_lib.utils import get_class_from_route
 import inspect
+import random
+import factory
+from factory import fuzzy
+
+
+relationship_strategies = {
+    'choice': lambda **kwargs: fuzzy.FuzzyChoice(kwargs['objects']),
+    'sample': lambda **kwargs: random.sample(kwargs['objects'], kwargs['number']),
+    'iterator': lambda **kwargs: factory.Iterator(kwargs['objects'])
+}
 
 
 class GenerateFakesCommand(BaseCommand):
@@ -29,13 +39,30 @@ class GenerateFakesCommand(BaseCommand):
         from django.db.models.fields.files import ImageFileDescriptor
         return [f[0] for f in inspect.getmembers(factory_class._meta.model) if isinstance(f[1], ImageFileDescriptor)]
 
-    def create_data(self, factory_class, number=50):
-        factory = get_class_from_route(factory_class)
+    def create_data(self, factory, prev_factories, prev_objects, number=50, related=None):
         cls_name = factory._meta.model.__name__
-        objects = factory.create_batch(size=number)
+        related_instances = {}
+        if related:
+            for field_name, values in related.items():
+                relationship_field = getattr(factory._meta.model, field_name)
+                to_class = relationship_field.field.related_model._meta.label.split('.')[-1]
+                assert to_class in prev_factories.keys(), \
+                    f"""
+                    You have to generate {to_class} fixtures, before {cls_name} fixtures for assigning them 
+                    to the {field_name} field.
+                    """
+                related_factory = prev_factories[to_class]
+                related_objects = prev_objects[related_factory]['objects']
+                strategy = values.get('strategy', 'iterator')
+                strategy = relationship_strategies[strategy]
+                related_instances[field_name] = strategy(objects=related_objects, **values)
+        objects = factory.create_batch(
+            size=number,
+            **related_instances
+        )
         self.stdout.write(self.style.SUCCESS(f'Fake data ({number} objects) for {cls_name} model created.'))
         self.generated_fake_data(objects, cls_name, factory)
-        return objects, factory
+        return objects
 
     def download_and_upload_images(self, objects, fields):
         import urllib.request as request
@@ -68,9 +95,14 @@ class GenerateFakesCommand(BaseCommand):
         """
         factories = settings.FIXTURE_FACTORIES
         factories_dict = {}
+        factory_by_models = {}
         have_images_list = []
         for factory in factories:
-            objects, factory_class = self.create_data(*factory)
+            factory_class = get_class_from_route(factory[0])
+            cls_name = factory_class._meta.model.__name__
+            fnc = getattr(self, 'create_' + cls_name.lower() + 's', self.create_data)
+            objects = fnc(factory_class, factory_by_models, factories_dict, **factory[1])
+            factory_by_models[cls_name] = factory[0]
             factories_dict[factory[0]] = {
                 'objects': objects,
                 'factory': factory_class

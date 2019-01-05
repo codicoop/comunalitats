@@ -21,16 +21,21 @@ known_attributes = {
     'text': factory.Faker('text', max_nb_chars=2000),
     'web': factory.Faker('url'),
     'url': factory.Faker('url'),
-    'phone': factory.Faker('phone_number')
+    'phone': factory.Faker('phone_number'),
+    'name': lambda cls_name: factory.Sequence(lambda n: f'{cls_name} {n}')
 }
 
 
 def set_att_value(cls, field):
-    cls._meta.pre_declarations.declarations[field.attname] = known_attributes[field.attname]
-    if hasattr(known_attributes[field.attname], 'unroll_context') and hasattr(known_attributes[field.attname], 'call'):
+    the_field = known_attributes[field.attname]
+    the_field = the_field \
+        if not hasattr(known_attributes[field.attname], '__call__') \
+        else the_field(cls._meta.model.__name__)
+    cls._meta.pre_declarations.declarations[field.attname] = the_field
+    if hasattr(the_field, 'unroll_context') and hasattr(the_field, 'call'):
         cls._meta.post_declarations.declarations[field.attname] = known_attributes[field.attname]
-    setattr(cls, field.attname, known_attributes[field.attname])
-    cls._meta.base_declarations[field.attname] = known_attributes[field.attname]
+    setattr(cls, field.attname, the_field)
+    cls._meta.base_declarations[field.attname] = the_field
 
 
 class DjangoFactory(DjangoModelFactory):
@@ -41,6 +46,7 @@ class DjangoFactory(DjangoModelFactory):
     def _generate(cls, strategy, params):
         fields = cls._meta.model._meta.get_fields(True, True)
         for field in fields:
+            # is a field that has attname not None and has not been previously declared, then set attribute
             hasattr(field, 'attname') \
                 and known_attributes.get(field.attname, None) \
                 and not cls._meta.pre_declarations.declarations.get(field.attname, None) \

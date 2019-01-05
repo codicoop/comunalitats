@@ -172,9 +172,17 @@ COURSES_CLASS_TO_ENROLL = 'coopolis.User'
 COURSES_CLASSES_CAN_ENROLL = ['cc_courses.models.Course']
 
 FIXTURE_FACTORIES = [
-    ('coopolis.tests.fixtures.UserFactory',),
-    ('coopolis.tests.fixtures.ProjectFactory',),
-    ('cc_courses.tests.fixtures.CourseFactory', 1)
+    ('coopolis.tests.fixtures.UserFactory', {}),
+    ('coopolis.tests.fixtures.ProjectFactory', {}),
+    ('cc_courses.tests.fixtures.CourseFactory', {'number': 5}),
+    ('cc_courses.tests.fixtures.ActivityFactory', {
+        'number': 3,
+        'related': {
+                'course': {
+                    'strategy': 'iterator'
+                }
+            }
+    })
 ]
 
 STATIC_ROOT = 'static'
