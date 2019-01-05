@@ -16,13 +16,14 @@ known_attributes = {
     'is_staff': False,
     'is_superuser': False,
     'last_login': helpers.one_moment_in_the_last_days(10),
-    'date_joined': helpers.one_moment_between_days(100, 10),
+    'date_joined': helpers.one_past_moment_between_days(100, 10),
     'title': factory.Faker('sentence'),
     'text': factory.Faker('text', max_nb_chars=2000),
     'web': factory.Faker('url'),
     'url': factory.Faker('url'),
     'phone': factory.Faker('phone_number'),
-    'name': lambda cls_name: factory.Sequence(lambda n: f'{cls_name} {n}')
+    'name': lambda cls_name: factory.Sequence(lambda n: f'{cls_name} {n}'),
+    'address': factory.Faker('address')
 }
 
 
