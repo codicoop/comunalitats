@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from django.utils.text import slugify
-
 
 def slugify_model(instance, attrib, slug_attrib='slug', _iter=0):
+    from django.utils.text import slugify
     value = getattr(instance, attrib)
     assert isinstance(value, str)
     prev_value = getattr(instance, slug_attrib)
