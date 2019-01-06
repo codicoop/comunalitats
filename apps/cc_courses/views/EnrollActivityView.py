@@ -11,7 +11,7 @@ class EnrollActivityView(generic.RedirectView):
         if request.user.is_anonymous:
             self.url = reverse('login')
         else:
-            course = Activity.objects.get(id=kwargs['id'])
-            request.user.enrolled_activities.add(course)
-            self.url = request.META.get('HTTP_REFERER')
+            activity = Activity.objects.get(id=kwargs['id'])
+            request.user.enrolled_activities.add(activity)
+            self.url = activity.course.absolute_url
         return super().get(request, *args, **kwargs)
