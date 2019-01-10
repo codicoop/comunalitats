@@ -8,32 +8,40 @@
 {% block content %}
 {% load enrollable %}
 <div class="page-content">
-<h1>{{ course.title }}</h1>
 
-    <h2>Activitats programades</h2>
+    <img src="{{ course.banner.url }}" />
+    <h1>{{ course.title }}</h1><br />
+
+    <h2>Activitats programades:</h2>
 
     <ul>
-    {% for activity in course.activity_set.all %}
+        {% for activity in course.activity_set.all %}
         <li>
             <p class="title">{{ activity.name }}</p>
-            <p>{{ activity.date_start }}</p>
+            <p>Data: {{ activity.date_start }}</p>
+            <p>Horari: de {{ activity.starting_time }} a {{ activity.ending_time }}</p>
+            <p>Lloc: {{ activity.lloc }}</p>
+            <p>Descripció: {{ activity.objectives }}</p>
+            <p>Organitza: {{ activity.organizer }}</p>
+            <p>Entitat: {{ activity.entity }}</p>
+            {% if activity|can_enroll:user %}
+            <a
+                    id="actButton{{activity.id}}"
+                    href="#"
+                    onclick="javascript:onInscriptionButtonClick('{{activity.name}}', '{% url 'enroll_course' id=activity.id %}', '{% url 'login' %}?next={{ request.get_full_path }}&act={{activity.id}}', '{% url 'signup' %}?next={{ request.get_full_path }}&act={{activity.id}}');"
+                    class="enroll-button"
+            >
+            <div>
+                Incriure's-hi
+            </div>
+            </a>
+            {% endif %}
+            {% if user in object.enrolled.all %}
+            Ja estàs inscrita a aquesta activitat.
+            {% endif %}
+            <p><br>&nbsp;</p>
         </li>
-        {% if activity|can_enroll:user %}
-        <a
-                id="actButton{{activity.id}}"
-                href="#"
-                onclick="javascript:onInscriptionButtonClick('{{activity.name}}', '{% url 'enroll_course' id=activity.id %}', '{% url 'login' %}?next={{ request.get_full_path }}&act={{activity.id}}', '{% url 'signup' %}?next={{ request.get_full_path }}&act={{activity.id}}');"
-                class="enroll-button"
-        >
-        <div>
-            Incriure's-hi
-        </div>
-        </a>
-        {% endif %}
-        {% if user in object.enrolled.all %}
-        Ja estàs inscrita a aquesta activitat.
-        {% endif %}
-    {% endfor %}
+        {% endfor %}
     </ul>
 
 </div>
