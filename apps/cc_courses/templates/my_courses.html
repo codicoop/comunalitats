@@ -2,5 +2,22 @@
 
 {% block content %}
 
+<div class="page-content">
 
+    <h1>Estàs inscrit/a als següents cursos:</h1><br />
+
+    <ul>
+        {% for activity in enrolled_activities %}
+        <li>
+            <p class="title">{{ activity.name }}</p>
+            <p>Data: {{ activity.date_start }}</p>
+            <p>Horari: de {{ activity.starting_time }} a {{ activity.ending_time }}</p>
+            <p>Lloc: {{ activity.lloc }}</p>
+            <p>Descripció: {{ activity.objectives }}</p>
+            <p>Organitza: {{ activity.organizer }}</p>
+            <p>Entitat: {{ activity.entity }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
