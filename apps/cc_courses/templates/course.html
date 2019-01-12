@@ -20,10 +20,11 @@
             <p class="title">{{ activity.name }}</p>
             <p>Data: {{ activity.date_start }}</p>
             <p>Horari: de {{ activity.starting_time }} a {{ activity.ending_time }}</p>
-            <p>Lloc: {{ activity.lloc }}</p>
+            <p>Lloc: {{ activity.place }}</p>
             <p>Descripció: {{ activity.objectives }}</p>
-            <p>Organitza: {{ activity.organizer }}</p>
+            <p>Organitza: {{ activity.get_organizer_display }}</p>
             <p>Entitat: {{ activity.entity }}</p>
+            <p>Eix: {{ activity.get_axis_display }}</p>
             {% if activity|can_enroll:user %}
             <a
                     id="actButton{{activity.id}}"
