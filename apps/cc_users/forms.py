@@ -7,9 +7,9 @@ from django.contrib.auth import get_user_model
 
 
 class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+    first_name = forms.CharField(label="Nom", max_length=30, required=False, help_text='Opcional.')
+    last_name = forms.CharField(label="Cognoms", max_length=30, required=False, help_text='Opcional.')
+    email = forms.EmailField(label="Correu electrònic", max_length=254, help_text='Requerit, ha de ser una adreça vàlida.')
 
     class Meta:
         model = get_user_model()
@@ -20,7 +20,7 @@ class LogInForm(AuthenticationForm):
     remember_me = forms.BooleanField(
         required=False,
         widget=forms.CheckboxInput(),
-        label="Remember me"
+        label="Mantingues la sessió oberta"
     )
 
     def clean(self):

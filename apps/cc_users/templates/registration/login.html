@@ -4,7 +4,7 @@
 <div class="generated-form">
     <div class="message-container">
     {% if form.errors %}
-      <p class="error-message">Usuari i/o contrassenya incorrectes. Si us plau torna-ho a intentar.</p>
+      <p class="error-message">Usuari i/o contrasenya incorrectes. Si us plau torna-ho a intentar.</p>
     {% endif %}
 
     {% if next %}
@@ -37,7 +37,7 @@
       <input type="submit" value="Accedir" />
       <input type="hidden" name="next" value="{{ next }}" />
     </p>
-    <p><a href="{% url 'password_reset' %}">Has perdut la contrassenya?</a> | <a href="{% url 'signup' %}">Registrar-se</a></p>
+    <p><a href="{% url 'password_reset' %}">Has perdut la contrasenya?</a> | <a href="{% url 'signup' %}">Registrar-se</a></p>
     </form>
 </div>
 {% endblock %}
