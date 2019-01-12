@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% block head %}
+    {% load staticfiles %}
+    <script src="{% static 'js/modal.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 
 <div class="page-content">
@@ -16,8 +21,51 @@
             <p>Descripció: {{ activity.objectives }}</p>
             <p>Organitza: {{ activity.organizer }}</p>
             <p>Entitat: {{ activity.entity }}</p>
+            <a
+                    id="actButton{{activity.id}}"
+                    href="#"
+                    onclick="javascript:onOptoutButtonClick('{{activity.name}}', '{% url 'activity_optout' id=activity.id %}');"
+                    class="enroll-button"
+            >
+            <div>
+                Eliminar inscripció
+            </div>
+            </a>
         </li>
         {% endfor %}
     </ul>
 </div>
+
+<div id="modal-confirm" class="modal">
+    <span class="modal-close" onclick="javascript:hideModal('#modal-confirm');">&times;</span>
+    <div class="modal-container">
+        <div class="modal-title">
+            Confirmació
+        </div>
+        <div class="modal-content">
+            Ets a punt d'eliminar la inscripció a l'activitat:
+            <p><strong id="modal-title-text"></strong></p>
+            <br>
+            Segur que vols continuar? (si t'ho repenses, i queden places, podràs tornar-t'hi a inscriure)
+        </div>
+        <div class="modal-buttons">
+            <a id="button3" href="#" class="enroll-button">
+            <div>
+                Anul·lar la inscripció
+            </div>
+            </a>
+        </div>
+    </div>
+</div>
+<script>
+    $( document ).ready(function() {
+        makeModal('#modal-confirm');
+    });
+
+    function onOptoutButtonClick (activityName, activityUrl) {
+        $('#modal-title-text').text(activityName);
+        $("#button3").attr("href", activityUrl);
+        showModal('#modal-confirm');
+    }
+</script>
 {% endblock %}

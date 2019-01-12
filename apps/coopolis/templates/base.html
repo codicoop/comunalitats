@@ -69,7 +69,7 @@
             <li><a href="{% url 'password_reset' %}">Recuperar contrasenya</a></li>
             <li><a href="{% url 'signup' %}">Crear compte</a></li>
         {% else %}
-            <li><a href="{% url 'my_courses' %}">Els meus cursos</a></li>
+            <li><a href="{% url 'my_activities' %}">Els meus cursos</a></li>
             {% for project in user.projects.all %}
             <li><a href="{% url 'project' pk=project.id %}">{{ project.name }}</a></li>
             {% endfor %}
