@@ -36,8 +36,8 @@
             </div>
             </a>
             {% endif %}
-            {% if user in object.enrolled.all %}
-            Ja estàs inscrita a aquesta activitat.
+            {% if user in activity.enrolled.all %}
+            <p>Ja estàs inscrita a aquesta activitat. Pots veure i gestionar les teves inscripcions a <a href="{% url 'my_activities' %}">Les meves activitats</a>. </p>
             {% endif %}
             <p><br>&nbsp;</p>
         </li>
