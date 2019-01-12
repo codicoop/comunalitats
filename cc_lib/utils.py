@@ -44,3 +44,10 @@ def get_class_from_route(route):
     module = import_module('.'.join(values[:-1]))
     cl = getattr(module, values[-1])
     return cl
+
+
+def tuplelize(multidim_list):
+    """
+    Returns a tuple with each first element in the given multidimensional object.
+    """
+    return [i[0] for i in multidim_list]

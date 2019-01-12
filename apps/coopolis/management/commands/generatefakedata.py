@@ -8,6 +8,7 @@ import datetime
 from cc_courses.models import Entity, Activity
 from cc_lib.commands.generate_fakes_command import GenerateFakesCommand
 import factory
+from cc_lib.utils import tuplelize
 
 
 class Command(GenerateFakesCommand):
@@ -69,9 +70,9 @@ class Command(GenerateFakesCommand):
                 start_dt=timezone.now() + datetime.timedelta(days=100),
                 end_dt=timezone.now() + datetime.timedelta(days=365)
             ),
-            organizer=factory.Iterator(Activity.ORGANIZER_OTIONS),
+            organizer=factory.Iterator(tuplelize(multidim_list=Activity.ORGANIZER_OTIONS)),
             entity=factory.Iterator(entities),
-            axis=factory.Iterator(Activity.AXIS_OPTIONS)
+            axis=factory.Iterator(tuplelize(multidim_list=Activity.AXIS_OPTIONS))
         )
         self.stdout.write(self.style.SUCCESS('Fake data for model %s created.' % 'Course Activities'))
         return activities
@@ -88,3 +89,5 @@ class Command(GenerateFakesCommand):
     def fakes_generation_finished(self):
         self.enroll_users()
 
+    def tuplelize(self, multidim_list):
+        return [i[0] for i in multidim_list]
