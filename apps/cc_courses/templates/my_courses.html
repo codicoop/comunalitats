@@ -9,12 +9,17 @@
 
 <div class="page-content">
 
-    <h1>Estàs inscrit/a als següents cursos:</h1><br />
+    {% if enrolled_activities.count is 0 %}
+    <h1>Encara no t'has inscrit a cap activitat.</h1>
+    <p>Aquí podràs veure i gestionar les activitats a les que t'hagis inscrit. Per veure quins cursos i activitats hi ha programades, accedeix al <a href="{% url 'courses' %}">llistat de cursos</a>. </p>
+    {% else %}
+    <h1>Estàs inscrit/a a les següents activitats:</h1><br />
 
     <ul>
         {% for activity in enrolled_activities %}
         <li>
-            <p class="title">{{ activity.name }}</p>
+            <h3>Programa / curs: "{{ activity.course }}"</h3>
+            <p class="title">Activitat: {{ activity.name }}</p>
             <p>Data: {{ activity.date_start }}</p>
             <p>Horari: de {{ activity.starting_time }} a {{ activity.ending_time }}</p>
             <p>Lloc: {{ activity.lloc }}</p>
@@ -22,10 +27,10 @@
             <p>Organitza: {{ activity.organizer }}</p>
             <p>Entitat: {{ activity.entity }}</p>
             <a
-                    id="actButton{{activity.id}}"
-                    href="#"
-                    onclick="javascript:onOptoutButtonClick('{{activity.name}}', '{% url 'activity_optout' id=activity.id %}');"
-                    class="enroll-button"
+                id="actButton{{activity.id}}"
+                href="#"
+                onclick="javascript:onOptoutButtonClick('{{activity.name}}', '{% url 'activity_optout' id=activity.id %}');"
+                class="enroll-button"
             >
             <div>
                 Eliminar inscripció
@@ -34,6 +39,7 @@
         </li>
         {% endfor %}
     </ul>
+    {% endif %}
 </div>
 
 <div id="modal-confirm" class="modal">
