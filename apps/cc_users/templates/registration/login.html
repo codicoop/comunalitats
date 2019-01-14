@@ -4,20 +4,20 @@
 <div class="generated-form">
     <div class="message-container">
     {% if form.errors %}
-      <p class="error-message">Your username and password didn't match. Please try again.</p>
+      <p class="error-message">Usuari i/o contrasenya incorrectes. Si us plau torna-ho a intentar.</p>
     {% endif %}
 
     {% if next %}
       {% if user.is_authenticated %}
-        <p class="info-message">Your account doesn't have access to this page. To proceed,
-        please login with an account that has access.</p>
+        <p class="info-message">El teu compte no té accés a aquesta pàgina. Per continuar, acedeix amb el teu compte o
+            crea un compte nou si encara no t'has registrat.</p>
       {% else %}
-        <p class="info-message">Please login to see the requested page.</p>
+        <p class="info-message">Si us plau accedeix amb el teu compte per accedir a aquesta pàgina.</p>
       {% endif %}
     {% endif %}
     </div>
 
-    <h1>Log in</h1>
+    <h1>Accés</h1>
     <form method="post" action="{% url 'login' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
     {% csrf_token %}
 
@@ -34,10 +34,10 @@
       <td>{{ form.remember_me }}</td>
     </p>
     <p>
-      <input type="submit" value="login" />
+      <input type="submit" value="Accedir" />
       <input type="hidden" name="next" value="{{ next }}" />
     </p>
-    <p><a href="{% url 'password_reset' %}">Lost password?</a> | <a href="{% url 'signup' %}">Sign up</a></p>
+    <p><a href="{% url 'password_reset' %}">Has perdut la contrasenya?</a> | <a href="{% url 'signup' %}">Registrar-se</a></p>
     </form>
 </div>
 {% endblock %}

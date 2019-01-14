@@ -1,6 +1,6 @@
 {% extends "generic.html" %}
 
 {% block generic %}
-  <h1>Logged out!</h1>
-  <p><a href="{% url 'login'%}">Click here to login again</a>, or go to back the <a href="{% url 'home' %}">home</a>.</p>
+  <h1>Sessió tancada!</h1>
+  <p><a href="{% url 'login'%}">Clica aquí per tornar a iniciar la sessió</a>, o torna a la <a href="{% url 'home' %}">portada</a>.</p>
 {% endblock %}
