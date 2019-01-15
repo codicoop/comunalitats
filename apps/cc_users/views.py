@@ -74,3 +74,22 @@ def activate(request, uuid, token):
 
 class UsersLoginView(LoginView):
     redirect_authenticated_user = True
+
+
+from cc_users.forms import MyAccountForm
+from django.http import HttpResponseRedirect
+
+def MyAccountView(request):
+    user = request.user
+    if request.method == 'POST':
+        form = MyAccountForm(request.POST, instance=user)
+        if form.is_valid():
+            user = form.save()
+            # messages.success(request, 'Dades modificades correctament.', extra_tags='html_dante')
+            return HttpResponseRedirect(reverse('user_profile'))
+    else:
+        form = MyAccountForm(instance=user)
+    context = {
+        'form': form,
+    }
+    return render(request, 'registration/profile.html', context)

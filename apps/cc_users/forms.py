@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth import get_user_model
 
 
@@ -28,3 +28,14 @@ class LogInForm(AuthenticationForm):
         if not self.cleaned_data.get('remember_me'):
             self.request.session.set_expiry(0)
         return self.cleaned_data
+
+
+class MyAccountForm(UserChangeForm):
+
+    class Meta:
+        model = get_user_model()
+        # fields = ('username', 'first_name', 'last_name', 'email', )
+        fields = UserChangeForm.Meta.fields
+        exclude = ['password', 'is_confirmed', 'username', 'groups', 'user_permissions', 'is_staff', 'is_active',
+                   'is_superuser', 'last_login', 'date_joined']
+

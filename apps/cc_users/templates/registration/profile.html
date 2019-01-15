@@ -1,0 +1,12 @@
+{% extends "generic.html" %}
+
+{% block generic %}
+<div class="generated-form">
+  <h1>Gestió del teu compte</h1>
+  <form method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar els canvis</button>
+  </form>
+</div>
+{% endblock %}
