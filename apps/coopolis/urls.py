@@ -20,5 +20,5 @@ urlpatterns += [
     path('admin/', coopolis_admin_site.urls),
     path('summernote/', include('django_summernote.urls')),
     path('', CoopolisCoursesListView.as_view(), name='home'),
-    path('project/<pk>', ProjectFormView.as_view(), name='project'),
+    path('project/', ProjectFormView.as_view(), name='project'),
 ]
