@@ -78,6 +78,7 @@ class UsersLoginView(LoginView):
 
 from cc_users.forms import MyAccountForm
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 def MyAccountView(request):
     user = request.user
@@ -85,7 +86,7 @@ def MyAccountView(request):
         form = MyAccountForm(request.POST, instance=user)
         if form.is_valid():
             user = form.save()
-            # messages.success(request, 'Dades modificades correctament.', extra_tags='html_dante')
+            messages.success(request, 'Dades modificades correctament.')
             return HttpResponseRedirect(reverse('user_profile'))
     else:
         form = MyAccountForm(instance=user)
