@@ -37,5 +37,5 @@ class MyAccountForm(UserChangeForm):
         # fields = ('username', 'first_name', 'last_name', 'email', )
         fields = UserChangeForm.Meta.fields
         exclude = ['password', 'is_confirmed', 'username', 'groups', 'user_permissions', 'is_staff', 'is_active',
-                   'is_superuser', 'last_login', 'date_joined']
+                   'is_superuser', 'last_login', 'date_joined', 'project']
 
