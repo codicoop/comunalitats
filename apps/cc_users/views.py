@@ -76,6 +76,7 @@ class UsersLoginView(LoginView):
     redirect_authenticated_user = True
 
 
+# TODO: Refactor into CBV (use ProjectformView for an example)
 from cc_users.forms import MyAccountForm
 from django.http import HttpResponseRedirect
 from django.contrib import messages
