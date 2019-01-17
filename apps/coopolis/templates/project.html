@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="page-content">
-<h1>Pàgina projecte</h1>
+<div class="generated-form">
+    <h1>Dades del vostre projecte</h1>
+    <form method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
 {{ form.as_p }}
+{% csrf_token %}
+    <button type="submit">Guardar els canvis</button>
+    </form>
 </div>
 {% endblock %}

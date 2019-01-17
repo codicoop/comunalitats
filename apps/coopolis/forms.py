@@ -10,6 +10,7 @@ class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = '__all__'
+        exclude = ['project_responsible']
 
 
 class MySignUpForm(SignUpForm):
