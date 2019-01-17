@@ -19,6 +19,40 @@ def sostenibility_upload_path(instance, filename):
         return 'course.pla_sostenibilitat/{0}/{1}'.format(str(uuid4()), filename)
 
 
+class Project(models.Model):
+    class Meta:
+        verbose_name_plural = "Projectes"
+
+    SECTORS = (
+        ('A', 'Altres'),
+        ('C', 'Comunicació i tecnologia'),
+        ('F', 'Finances'),
+        ('O', 'Oci'),
+        ('H', 'Habitatge'),
+        ('L', 'Logística'),
+        ('E', 'Educació'),
+        ('C', 'Cultura'),
+        ('S', 'Assessorament')
+    )
+    name = models.CharField("Nom", max_length=200, blank=False, unique=True)
+    sector = models.CharField(max_length=2, choices=SECTORS)
+    web = models.CharField("Web", max_length=200, blank=True)
+    mail = models.EmailField("Correu electrònic")
+    phone = models.CharField("Telèfon", max_length=25)
+    project_responsible = models.ForeignKey("User", blank=True, null=True, on_delete=models.SET_NULL,
+                                            related_name='project_responsible')
+    number_people = models.IntegerField("Número de persones", blank=True, null=True)
+    registration_date = models.DateField("Data de registre", blank=True, null=True)
+    estatuts = models.FileField("Estatuts", blank=True, null=True, upload_to=estatuts_upload_path, max_length=250)
+    viability = models.FileField("Pla de viabilitat", blank=True, null=True,
+                                 upload_to=estatuts_upload_path, max_length=250)
+    sostenibility = models.FileField("Pla de sostenibilitat", blank=True, null=True,
+                                     upload_to=estatuts_upload_path, max_length=250)
+
+    def __str__(self):
+        return self.name
+
+
 class User(BaseUser):
     class Meta:
         verbose_name_plural = "Usuaris"
@@ -97,41 +131,8 @@ class User(BaseUser):
     adreca_bloc = models.CharField("Bloc / Escala", max_length=50, blank=True, null=True)
     adreca_planta = models.CharField("Planta", max_length=50, blank=True, null=True)
     adreca_porta = models.CharField("Porta", max_length=50, blank=True, null=True)
+    project = models.ForeignKey(Project, blank=True, null=True, on_delete=models.SET_NULL)
 
     @property
     def full_name(self):
         return self.get_full_name() if self.get_full_name() else self.username
-
-
-class Project(models.Model):
-    class Meta:
-        verbose_name_plural = "Projectes"
-
-    SECTORS = (
-        ('A', 'Altres'),
-        ('C', 'Comunicació i tecnologia'),
-        ('F', 'Finances'),
-        ('O', 'Oci'),
-        ('H', 'Habitatge'),
-        ('L', 'Logística'),
-        ('E', 'Educació'),
-        ('C', 'Cultura'),
-        ('S', 'Assessorament')
-    )
-    name = models.CharField("Nom", max_length=200, blank=False, unique=True)
-    sector = models.CharField(max_length=2, choices=SECTORS)
-    web = models.CharField("Web", max_length=200, blank=True)
-    mail = models.EmailField("Correu electrònic")
-    phone = models.CharField("Telèfon", max_length=25)
-    project_responsible = models.ForeignKey("User", blank=True, null=True, on_delete=models.SET_NULL)
-    number_people = models.IntegerField("Número de persones", blank=True, null=True)
-    members = models.ManyToManyField(User, blank=True, related_name='projects')
-    registration_date = models.DateField("Data de registre", blank=True, null=True)
-    estatuts = models.FileField("Estatuts", blank=True, null=True, upload_to=estatuts_upload_path, max_length=250)
-    viability = models.FileField("Pla de viabilitat", blank=True, null=True,
-                                 upload_to=estatuts_upload_path, max_length=250)
-    sostenibility = models.FileField("Pla de sostenibilitat", blank=True, null=True,
-                                     upload_to=estatuts_upload_path, max_length=250)
-
-    def __str__(self):
-        return self.name
