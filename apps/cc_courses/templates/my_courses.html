@@ -40,6 +40,36 @@
         {% endfor %}
     </ul>
     {% endif %}
+
+    {% if past_enrolled_activities.count %}
+    <h1>Activitats a les que has assistit anteriorment:</h1><br />
+
+    <ul>
+        {% for activity in past_enrolled_activities %}
+        <li>
+            <h3>Programa / curs: "{{ activity.course }}"</h3>
+            <p class="title">Activitat: {{ activity.name }}</p>
+            <p>Data: {{ activity.date_start }}</p>
+            <p>Horari: de {{ activity.starting_time }} a {{ activity.ending_time }}</p>
+            <p>Lloc: {{ activity.lloc }}</p>
+            <p>Descripció: {{ activity.objectives }}</p>
+            <p>Organitza: {{ activity.organizer }}</p>
+            <p>Entitat: {{ activity.entity }}</p>
+            <a
+                id="actButton{{activity.id}}"
+                href="#"
+                onclick="javascript:onOptoutButtonClick('{{activity.name}}', '{% url 'activity_optout' id=activity.id %}');"
+                class="enroll-button"
+            >
+            <div>
+                Eliminar inscripció
+            </div>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
 </div>
 
 <div id="modal-confirm" class="modal">
