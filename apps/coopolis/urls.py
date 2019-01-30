@@ -18,8 +18,10 @@ urlpatterns += [
         template_name="home.html",
         extra_context={
             # The lambda makes this expression to be executed each call of home (because of the admin updates)
+            'courses_title': "Formació i activitats",
             'courses_text': "TEXT D'INTRODUCCIÓ A LES FORMACIONS QUE FEM",
-            'projects_text': "Lorem ipsum TEXT D'INTRODUCCIÓ A L'ACOMPANYAMENT DE PROJECTES"
+            'projects_title': "Acompanyament de projectes",
+            'projects_text': "TEXT D'INTRODUCCIÓ A L'ACOMPANYAMENT DE PROJECTES"
         }
     ), name='home'),
     path('login/', LogIn.CoopolisLoginView.as_view(), name='login'),
@@ -29,4 +31,11 @@ urlpatterns += [
     path('summernote/', include('django_summernote.urls')),
     path('project/', ProjectFormView.as_view(), name='project'),
     path('project/new/', ProjectCreateFormView.as_view(), name='new_project'),
+    path('project/info/', TemplateView.as_view(
+        template_name="home.html",
+        extra_context={
+            # The lambda makes this expression to be executed each call of home (because of the admin updates)
+            'some_content': "CONTENT"
+        }
+    ), name='project_info'),
 ]
