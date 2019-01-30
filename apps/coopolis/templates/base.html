@@ -69,13 +69,13 @@
             <li><a href="{% url 'password_reset' %}">Recuperar contrasenya</a></li>
             <li><a href="{% url 'signup' %}">Crear compte</a></li>
         {% else %}
-            <li><a href="{% url 'project' %}">El nostre projecte</a></li>
-            <li><a href="{% url 'user_profile' %}">El meu compte</a></li>
             <li><a href="{% url 'my_activities' %}">Les meves activitats</a></li>
-            <li><a href="{% url 'courses' %}">Formació</a></li>
-            {% if user.is_superuser %}
+            <li><a href="{% url 'user_profile' %}">El meu compte</a></li>
+        {% endif %}
+            <li><a href="{% url 'project' %}">Projecte</a></li>
+            <li><a href="{% url 'courses' %}">Activitats</a></li>
+        {% if user.is_superuser %}
             <li><a href="{% url 'admin:index'%}">Backoffice</a></li>
-            {% endif %}
         {% endif %}
         </ul>
     </header>
