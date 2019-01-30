@@ -2,4 +2,4 @@
 # -*- coding: utf-8 -*-
 
 from .CoopolisCoursesListView import CoopolisCoursesListView
-from .ProjectFormView import ProjectFormView, ProjectCreateFormView
+from .ProjectFormView import ProjectFormView, ProjectCreateFormView, ProjectInfoView

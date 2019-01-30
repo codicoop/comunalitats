@@ -22,6 +22,7 @@ class LogInForm(AuthenticationForm):
         widget=forms.CheckboxInput(),
         label="Mantingues la sessió oberta"
     )
+    # referer = request.META.get('HTTP_REFERER')
 
     def clean(self):
         super().clean()
@@ -34,7 +35,6 @@ class MyAccountForm(UserChangeForm):
 
     class Meta:
         model = get_user_model()
-        # fields = ('username', 'first_name', 'last_name', 'email', )
         fields = UserChangeForm.Meta.fields
         exclude = ['password', 'is_confirmed', 'username', 'groups', 'user_permissions', 'is_staff', 'is_active',
                    'is_superuser', 'last_login', 'date_joined', 'project']

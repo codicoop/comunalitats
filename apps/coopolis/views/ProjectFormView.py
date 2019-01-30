@@ -21,7 +21,8 @@ class ProjectFormView(generic.UpdateView):
 
     def get(self, request):
         if self.request.user.project is None:
-            return HttpResponseRedirect(urls.reverse('new_project'))
+            return HttpResponseRedirect(urls.reverse('project_info'))
+        return super().get(self, request)
 
 
 class ProjectCreateFormView(generic.CreateView):
@@ -30,10 +31,22 @@ class ProjectCreateFormView(generic.CreateView):
     template_name = 'project.html'
 
     def get_success_url(self):
-        return urls.reverse('project')
+        return urls.reverse('edit_project')
 
     def form_valid(self, form):
         newproject = form.save()
         self.request.user.project = newproject
         self.request.user.save()
         return HttpResponseRedirect(self.get_success_url())
+
+
+class ProjectInfoView(generic.TemplateView):
+    template_name = "project_info.html"
+    extra_context = {
+        'description': "TEXT QUE EXPLICA DE QUÈ VA L'ACOMPANYAMENT DE PROJECTES BREUMENT"
+    }
+
+    def get(self, request):
+        if self.request.user.project:
+            return HttpResponseRedirect(urls.reverse('edit_project'))
+        return super().get(self, request)

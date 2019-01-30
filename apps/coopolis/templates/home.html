@@ -1,15 +1,11 @@
 {% extends "base.html" %}
 
-{% block loginbox %}{% endblock %}
-
 {% block content %}
 <div class="page-content">
     <div class="generic-content">
-    {% block generic %}
         <h1>Extranet de Coòpolis per gestionar cursos i projectes</h1>
         <span><h2>{{ courses_title }}</h2><p>{{ courses_text }}</p></span>
         <span><h2>{{ projects_title }}</h2><p>{{ projects_text }}</p></span>
-    {% endblock %}
     </div>
 </div>
 {% endblock %}
