@@ -5,6 +5,7 @@ from django.shortcuts import reverse
 from django.db.models.signals import pre_save
 from uuid import uuid4
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
+from datetime import date
 
 
 def upload_path(instance, filename):
@@ -125,6 +126,10 @@ class Activity(models.Model):
     @property
     def absolute_url(self):
         return self.course.absolute_url
+
+    @property
+    def is_past_due(self):
+        return date.today() > self.date_start
 
 
 class CourseCategory(models.Model):
