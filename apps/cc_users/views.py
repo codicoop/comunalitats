@@ -75,6 +75,9 @@ def activate(request, uuid, token):
 class UsersLoginView(LoginView):
     redirect_authenticated_user = True
 
+    def get_success_url(self):
+        return super().resolve_url(self.request.get_redirect_url())
+
 
 # TODO: Refactor into CBV (use ProjectformView for an example)
 from cc_users.forms import MyAccountForm
