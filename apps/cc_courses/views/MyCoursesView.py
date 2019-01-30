@@ -14,6 +14,6 @@ class MyCoursesListView(generic.ListView):
         context = super().get_context_data(**kwargs)
         context['enrolled_activities'] = Activity.objects.filter(date_start__gte=timezone.now().date(),
                                                                  enrolled=self.request.user)
-        context['past_enrolled_activities'] = Activity.objects.filter(date_start__lte=timezone.now().date(),
+        context['past_enrolled_activities'] = Activity.objects.filter(date_start__lt=timezone.now().date(),
                                                                       enrolled=self.request.user)
         return context
