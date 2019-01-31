@@ -93,10 +93,7 @@ class User(BaseUser):
         ('SS', 'Sarrià-Sant Gervasi'),
         ('GR', 'Gràcia')
     )
-    residence_district = models.TextField("DNI", blank=True, null=True, choices=DISTRICTS)
-    disability = models.BooleanField("Discapacitat", blank=True, null=True)
-    family_in_charge = models.BooleanField("Responsabilitats familiars", blank=True, null=True)
-    social_exclusion_risk = models.BooleanField("Risc d'exclusió social", blank=True, null=True)
+    residence_district = models.TextField("Barri", blank=True, null=True, choices=DISTRICTS)
     phone_number = models.TextField("Telèfon", max_length=25, blank=True, null=True)
     STUDY_LEVELS = (
         ('MP', 'Màster / Postgrau'),
