@@ -47,6 +47,6 @@ class ProjectInfoView(generic.TemplateView):
     }
 
     def get(self, request):
-        if self.request.user.project:
+        if self.request.user.is_authenticated and self.request.user.project:
             return HttpResponseRedirect(urls.reverse('edit_project'))
         return super().get(self, request)
