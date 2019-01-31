@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from apps.cc_users.forms import SignUpForm as SignUpFormClass
+from apps.cc_users.forms import SignUpForm as SignUpFormClass, MyAccountForm
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
@@ -10,9 +10,11 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_text
 from .tokens import AccountActivationTokenGenerator
-from .forms import LogInForm
 from django.conf import settings
-
+from django.views.generic import CreateView
+from django import urls
+from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 def get_activate_url(request, user):
     _id = urlsafe_base64_encode(force_bytes(user.pk)).decode('utf-8')
@@ -72,6 +74,18 @@ def activate(request, uuid, token):
         return render(request, 'registration/user_activation_invalid.html')
 
 
+class SignUpView(CreateView):
+    form_class = SignUpFormClass
+    model = get_user_model()
+    template_name = 'registration/signup.html'
+
+    def get_success_url(self):
+        url = self.request.META.get('HTTP_REFERER')
+        if url is None:
+            url = urls.reverse('user_profile')
+        return url
+
+
 class UsersLoginView(LoginView):
     redirect_authenticated_user = True
 
@@ -80,10 +94,6 @@ class UsersLoginView(LoginView):
 
 
 # TODO: Refactor into CBV (use ProjectformView for an example)
-from cc_users.forms import MyAccountForm
-from django.http import HttpResponseRedirect
-from django.contrib import messages
-
 def MyAccountView(request):
     user = request.user
     if request.method == 'POST':

@@ -8,6 +8,7 @@ from django.conf.urls import url
 from django.conf import settings
 from django.views.generic.base import RedirectView, TemplateView
 from django.contrib.auth.decorators import login_required
+from coopolis.views import SignUpView
 
 
 urlpatterns = [
@@ -24,9 +25,8 @@ urlpatterns += [
             'projects_text': "TEXT D'INTRODUCCIÓ A L'ACOMPANYAMENT DE PROJECTES"
         }
     ), name='home'),
-    path('login/', LogIn.CoopolisLoginView.as_view(), name='login'),
     path('users/login/', LogIn.CoopolisLoginView.as_view(), name='login'),
-    path('signup', SignUp.signup, name='signup'),
+    path('users/signup', SignUpView.as_view(), name='signup'),
     path('admin/', coopolis_admin_site.urls),
     path('summernote/', include('django_summernote.urls')),
     path('project/edit/', login_required(ProjectFormView.as_view()), name='edit_project'),
