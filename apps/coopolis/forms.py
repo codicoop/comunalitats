@@ -21,7 +21,6 @@ class MySignUpForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        UserCreationForm.Meta.fields = None
         fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
                   'birth_place', 'password1', 'password2']
 
