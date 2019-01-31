@@ -14,15 +14,17 @@ class ProjectForm(forms.ModelForm):
 
 
 class MySignUpForm(UserCreationForm):
-    first_name = forms.CharField(label="Nom", max_length=30, required=False, help_text='Opcional.')
-    last_name = forms.CharField(label="Cognoms", max_length=30, required=False, help_text='Opcional.')
+    first_name = forms.CharField(label="Nom", max_length=30)
+    last_name = forms.CharField(label="Cognom", max_length=30, required=False, help_text='Opcional.')
     email = forms.EmailField(label="Correu electrònic", max_length=254, help_text='Requerit, ha de ser una adreça vàlida.')
     birthdate = forms.DateField(widget=forms.SelectDateWidget())
 
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
-                  'birth_place', 'password1', 'password2']
+                  'birth_place', 'adreca_tipus_via', 'adreca_nom_via', 'adreca_numero', 'adreca_bloc', 'adreca_planta',
+                  'adreca_porta', 'residence_town', 'residence_district', 'gender', 'educational_level',
+                  'employment_situation', 'discovered_us', 'password1', 'password2']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
