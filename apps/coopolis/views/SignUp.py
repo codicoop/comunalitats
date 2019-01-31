@@ -14,8 +14,3 @@ class SignUpView(SignUpView):
     model = User
     template_name = 'registration/signup.html'
 
-    def get_success_url(self):
-        url = self.request.META.get('HTTP_REFERER')
-        if url is None:
-            url = urls.reverse('user_profile')
-        return url
