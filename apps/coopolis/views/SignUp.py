@@ -6,9 +6,10 @@ from django.conf import settings
 from django.views.generic import CreateView
 from coopolis.models import User
 from django import urls
+from cc_users.views import SignUpView
 
 
-class SignUpView(CreateView):
+class SignUpView(SignUpView):
     form_class = get_class_from_route(settings.SIGNUP_FORM)
     model = User
     template_name = 'registration/signup.html'
