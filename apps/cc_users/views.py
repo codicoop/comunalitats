@@ -13,8 +13,9 @@ from .tokens import AccountActivationTokenGenerator
 from django.conf import settings
 from django.views.generic import CreateView
 from django import urls
-from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.contrib.auth import authenticate, login
 
 def get_activate_url(request, user):
     _id = urlsafe_base64_encode(force_bytes(user.pk)).decode('utf-8')
@@ -84,6 +85,14 @@ class SignUpView(CreateView):
         if url is None:
             url = urls.reverse('user_profile')
         return url
+
+    def form_valid(self, form):
+        form.save()
+        username = self.request.POST['email']
+        password = self.request.POST['password1']
+        user = authenticate(username=username, password=password)
+        login(self.request, user)
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class UsersLoginView(LoginView):

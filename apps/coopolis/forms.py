@@ -3,7 +3,7 @@
 
 from django import forms
 from coopolis.models import Project, User
-from cc_users.forms import SignUpForm
+from django.contrib.auth.forms import UserCreationForm
 
 
 class ProjectForm(forms.ModelForm):
@@ -13,15 +13,19 @@ class ProjectForm(forms.ModelForm):
         exclude = ['project_responsible']
 
 
-class MySignUpForm(SignUpForm):
+class MySignUpForm(UserCreationForm):
     first_name = forms.CharField(label="Nom", max_length=30, required=False, help_text='Opcional.')
+    last_name = forms.CharField(label="Cognoms", max_length=30, required=False, help_text='Opcional.')
+    email = forms.EmailField(label="Correu electrònic", max_length=254, help_text='Requerit, ha de ser una adreça vàlida.')
+    birthdate = forms.DateField(widget=forms.SelectDateWidget())
 
-    class Meta:
+    class Meta(UserCreationForm.Meta):
         model = User
-        fields = '__all__'
-        exclude = ['is_confirmed', 'groups', 'user_permissions', 'is_staff', 'is_active',
-                   'is_superuser', 'last_login', 'date_joined', 'project']
+        UserCreationForm.Meta.fields = None
+        fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
+                  'birth_place', 'password1', 'password2']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields.pop('username')
+        if 'username' in self.fields:
+            self.fields.pop('username')

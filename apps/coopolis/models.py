@@ -94,7 +94,7 @@ class User(BaseUser):
         ('GR', 'Gràcia')
     )
     residence_district = models.TextField("Barri", blank=True, null=True, choices=DISTRICTS)
-    phone_number = models.TextField("Telèfon", max_length=25, blank=True, null=True)
+    phone_number = models.CharField("Telèfon", max_length=25, blank=True, null=True)
     STUDY_LEVELS = (
         ('MP', 'Màster / Postgrau'),
         ('SD', 'Secundària'),
