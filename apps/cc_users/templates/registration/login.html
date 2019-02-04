@@ -18,7 +18,7 @@
     </div>
 
     <h1>Accés</h1>
-    <form method="post" action="{% url 'login' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
+    <form method="post" action="{% url 'loginsignup' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
     {% csrf_token %}
 
     <p>

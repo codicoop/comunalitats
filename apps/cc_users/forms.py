@@ -20,7 +20,7 @@ class LogInForm(AuthenticationForm):
     remember_me = forms.BooleanField(
         required=False,
         widget=forms.CheckboxInput(),
-        label="Mantingues la sessió oberta"
+        label="Mantenir la sessió oberta"
     )
     # referer = request.META.get('HTTP_REFERER')
 

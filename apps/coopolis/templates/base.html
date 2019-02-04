@@ -35,7 +35,7 @@
                 {% if not user.is_authenticated %}
                 {% block loginbox %}
                 <div class="secondary-menu">
-                <form action="{% url 'login' %}" method="POST">
+                <form action="{% url 'login_post' %}" method="POST">
                     {% csrf_token %}
                     <div class="div-row">
                         <div class="div-column">
@@ -44,7 +44,7 @@
                                 <input type="password" name="password" placeholder="Contrasenya">
                             </div>
                             <div class="div-row-reverse">
-                            <input type="checkbox" name="remember_me"> <label>Remember me</label>
+                            <input type="checkbox" name="remember_me"> <label>Mantenir la sessió oberta</label>
                             </div>
                         </div>
                         <div class="div-column">
