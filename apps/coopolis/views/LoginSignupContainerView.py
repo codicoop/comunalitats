@@ -37,9 +37,12 @@ class CoopolisSignUpView(SignUpView):
         )
 
     def get_success_url(self):
-        url = self.request.META.get('HTTP_REFERER')
+        if 'next' in self.request.GET:
+            url = self.request.GET.get('next') + '?' + self.request.GET.urlencode()
+        else:
+            url = self.request.META.get('HTTP_REFERER')
         if url is None:
-            url = urls.reverse('user_profile')
+            url = super().get_success_url()
         return url
 
     def form_valid(self, form):
@@ -63,7 +66,10 @@ class CoopolisLoginView(LoginView):
         )
 
     def get_success_url(self):
-        url = self.request.GET.get('next')
-        if url:
-            return url + '?' + self.request.GET.urlencode()
-        return super().get_success_url()
+        if 'next' in self.request.GET:
+            url = self.request.GET.get('next') + '?' + self.request.GET.urlencode()
+        else:
+            url = self.request.META.get('HTTP_REFERER')
+        if url is None:
+            url = super().get_success_url()
+        return url
