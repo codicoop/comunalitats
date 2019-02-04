@@ -3,13 +3,13 @@
 
 from django.urls import path, include
 from .admin import coopolis_admin_site
-from .views import ProjectFormView, SignUp, LogIn, ProjectCreateFormView, ProjectInfoView
+from .views import ProjectFormView, ProjectCreateFormView, ProjectInfoView, LoginSignupContainerView,\
+    CoopolisSignUpView, CoopolisLoginView
 from django.conf.urls import url
 from django.conf import settings
 from django.views.generic.base import RedirectView, TemplateView
 from django.contrib.auth.decorators import login_required
-from coopolis.views import SignUpView
-
+from cc_users.decorators import anonymous_required
 
 urlpatterns = [
     url('admin/login', RedirectView.as_view(pattern_name=settings.LOGIN_URL, permanent=True, query_string=True)),
@@ -25,8 +25,9 @@ urlpatterns += [
             'projects_text': "TEXT D'INTRODUCCIÓ A L'ACOMPANYAMENT DE PROJECTES"
         }
     ), name='home'),
-    path('users/login/', LogIn.CoopolisLoginView.as_view(), name='login'),
-    path('users/signup', SignUpView.as_view(), name='signup'),
+    path('users/loginsignup/', anonymous_required(LoginSignupContainerView.as_view()), name='loginsignup'),
+    path('users/login_post/', anonymous_required(CoopolisLoginView.as_view()), name='login_post'),
+    path('users/signup_post', CoopolisSignUpView.as_view(), name='signup_post'),
     path('admin/', coopolis_admin_site.urls),
     path('summernote/', include('django_summernote.urls')),
     path('project/edit/', login_required(ProjectFormView.as_view()), name='edit_project'),

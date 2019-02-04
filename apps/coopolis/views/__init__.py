@@ -3,4 +3,4 @@
 
 from .CoopolisCoursesListView import CoopolisCoursesListView
 from .ProjectFormView import ProjectFormView, ProjectCreateFormView, ProjectInfoView
-from .SignUp import SignUpView
+from .LoginSignupContainerView import LoginSignupContainerView, CoopolisSignUpView, CoopolisLoginView

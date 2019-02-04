@@ -28,31 +28,6 @@ def get_activate_url(request, user):
     return urljoin(f'{protocol}://{domain}', url)
 
 
-def signup(request):
-    # TODO: Make this view as class so it's not required to set the settings for the form class, just inherit
-    from cc_lib.utils import get_class_from_route
-    SignUpForm = get_class_from_route(settings.SIGNUP_FORM) if hasattr(settings, 'SIGNUP_FORM') else SignUpFormClass
-
-    if request.user and request.user.is_authenticated:
-        return redirect('/')
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            user.is_active = False
-            user.save()
-            subject = 'Activate Your Account'
-            message = render_to_string('emails/user_registration.html', {
-                'url': get_activate_url(request, user),
-                'user': user
-            })
-            user.email_user(subject, message)
-            return render(request, 'registration/user_registered.html', {'email': form.cleaned_data.get('email')})
-    else:
-        form = SignUpForm()
-    return render(request, 'registration/signup.html', {'form': form})
-
-
 def activate(request, uuid, token):
     try:
         _id = force_text(urlsafe_base64_decode(uuid))
@@ -75,6 +50,7 @@ def activate(request, uuid, token):
         return render(request, 'registration/user_activation_invalid.html')
 
 
+# TODO: Merge login and signup forms like in Coòpolis + apply anonymous_required decorator to URLs
 class SignUpView(CreateView):
     form_class = SignUpFormClass
     model = get_user_model()
