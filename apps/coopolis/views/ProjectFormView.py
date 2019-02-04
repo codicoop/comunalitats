@@ -21,7 +21,7 @@ class ProjectFormView(generic.UpdateView):
 
     def get(self, request):
         if self.request.user.project is None:
-            return HttpResponseRedirect(urls.reverse('project_info'))
+            return HttpResponseRedirect(urls.reverse('new_project'))
         return super().get(self, request)
 
 
@@ -38,6 +38,11 @@ class ProjectCreateFormView(generic.CreateView):
         self.request.user.project = newproject
         self.request.user.save()
         return HttpResponseRedirect(self.get_success_url())
+
+    def get(self, request):
+        if self.request.user.project is not None:
+            return HttpResponseRedirect(urls.reverse('edit_project'))
+        return super().get(self, request)
 
 
 class ProjectInfoView(generic.TemplateView):
