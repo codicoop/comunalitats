@@ -27,7 +27,7 @@
             <a
                     id="actButton{{activity.id}}"
                     href="#"
-                    onclick="javascript:onInscriptionButtonClick('{{activity.name}}', '{% url 'enroll_course' id=activity.id %}', '{% url 'login' %}?next={{ request.get_full_path }}&act={{activity.id}}', '{% url 'signup' %}?next={{ request.get_full_path }}&act={{activity.id}}');"
+                    onclick="javascript:onInscriptionButtonClick('{{activity.name}}', '{% url 'enroll_course' id=activity.id %}', '{% url 'loginsignup' %}?next={{ request.get_full_path }}&act={{activity.id}}');"
                     class="enroll-button"
             >
             <div>
@@ -67,12 +67,7 @@
             {% if user.is_anonymous %}
             <a id="button1" href="#" class="enroll-button">
             <div>
-                Fes login
-            </div>
-            </a>
-            <a id="button2" href="#" class="enroll-button">
-            <div>
-                Registrar-se
+                Fes login // Registra't
             </div>
             </a>
             {% else %}
@@ -96,10 +91,9 @@
         }
     });
 
-    function onInscriptionButtonClick (activityName, activityUrl, loginUrl, signupUrl) {
+    function onInscriptionButtonClick (activityName, activityUrl, loginsignupUrl) {
         $('#modal-title-text').text(activityName);
-        $("#button1").attr("href", loginUrl);
-        $("#button2").attr("href", signupUrl);
+        $("#button1").attr("href", loginsignupUrl);
         $("#button3").attr("href", activityUrl);
         showModal('#modal-confirm');
     }
