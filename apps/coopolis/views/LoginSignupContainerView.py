@@ -7,7 +7,6 @@ from django.views.generic import TemplateView
 from coopolis.models import User
 from coopolis.forms import MySignUpForm
 from cc_users.forms import LogInForm
-from django import urls
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 
