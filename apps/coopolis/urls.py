@@ -27,7 +27,7 @@ urlpatterns += [
     ), name='home'),
     path('users/loginsignup/', anonymous_required(LoginSignupContainerView.as_view()), name='loginsignup'),
     path('users/login_post/', anonymous_required(CoopolisLoginView.as_view()), name='login_post'),
-    path('users/signup_post', CoopolisSignUpView.as_view(), name='signup_post'),
+    path('users/signup_post', anonymous_required(CoopolisSignUpView.as_view()), name='signup_post'),
     path('admin/', coopolis_admin_site.urls),
     path('summernote/', include('django_summernote.urls')),
     path('project/edit/', login_required(ProjectFormView.as_view()), name='edit_project'),
