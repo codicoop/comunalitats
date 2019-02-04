@@ -78,9 +78,45 @@ class User(BaseUser):
     gender = models.TextField("Gènere", blank=True, null=True, choices=GENDERS)
     birthdate = models.DateField("Data de naixement", blank=True, null=True)
     birth_place = models.TextField("Lloc de naixement", blank=True, null=True, choices=BIRTH_PLACES)
-    # TODO: Populate the dropdown with cities of Catalunya
-    residence_town = models.CharField("Municipi de residència", max_length=150, blank=True, null=True,
-                                      help_text="PENDING TO IMPORT IT FROM THE WORDPRESS DATABASE!!")
+    CITIES = (
+        ('78', 'Badalona'),
+        ('79', 'Badia del Vallès'),
+        ('89', 'Barberà del vallès'),
+        ('90', 'Barcelona'),
+        ('96', 'Begues'),
+        ('200', 'Castellbisbal'),
+        ('203', 'Castelldefels'),
+        ('226', 'Cerdanyola del Vallès'),
+        ('227', 'Cervelló'),
+        ('246', 'Corbera de Llobregat'),
+        ('250', 'Cornellà de Llobregat'),
+        ('527', 'El Papiol'),
+        ('581', 'El Prat de Llobregat'),
+        ('269', 'Esplugues de Llobregat'),
+        ('323', 'Gavà'),
+        ('356', "L'Hospitalet de Llobregat"),
+        ('523', 'La Palma de Cervelló'),
+        ('441', 'Molins de Rei'),
+        ('452', 'Montcada i Reixac '),
+        ('459', 'Montgat'),
+        ('522', 'Pallejà'),
+        ('621', 'Ripollet'),
+        ('653', 'Sant Adrià de Besòs'),
+        ('655', 'Sant Andreu de la barca'),
+        ('661', 'Sant Boi de Llobregat'),
+        ('666', 'Sant Climent de Llobregat'),
+        ('668', 'Sant Cugat del Valles'),
+        ('676', 'Sant Feliu de Llobregat'),
+        ('695', 'Sant Joan Despí'),
+        ('702', 'Sant Just Desvern'),
+        ('738', 'Sant Vicenç dels Horts'),
+        ('743', 'Santa Coloma de Gramenet'),
+        ('818', 'Tiana'),
+        ('841', 'Torrelles de Llobregat'),
+        ('899', 'Viladencans'),
+        ('0', 'Altres')
+    )
+    residence_town = models.CharField("Municipi de residència", max_length=150, blank=True, null=True, choices=CITIES)
     DISTRICTS = (
         ('CV', 'Ciutat Vella'),
         ('EX', 'Eixample'),
