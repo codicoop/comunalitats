@@ -4,6 +4,7 @@
 from django import forms
 from coopolis.models import Project, User
 from django.contrib.auth.forms import UserCreationForm
+from coopolis.widgets import XDSoftDatePickerInput
 
 
 class ProjectForm(forms.ModelForm):
@@ -17,7 +18,7 @@ class MySignUpForm(UserCreationForm):
     first_name = forms.CharField(label="Nom", max_length=30)
     last_name = forms.CharField(label="Cognom", max_length=30, required=False, help_text='Opcional.')
     email = forms.EmailField(label="Correu electrònic", max_length=254, help_text='Requerit, ha de ser una adreça vàlida.')
-    birthdate = forms.DateField(widget=forms.SelectDateWidget())
+    birthdate = forms.DateField(label="Data de naixement", widget=XDSoftDatePickerInput())
 
     class Meta(UserCreationForm.Meta):
         model = User
