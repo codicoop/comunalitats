@@ -2,8 +2,10 @@
 
 <script>
     $(function () {
+        $.datetimepicker.setLocale('ca');
         $("input[name='{{ widget.name }}']").datetimepicker({
-            timepicker:false,
+            dayOfWeekStart: 1,
+            timepicker: false,
             format: 'd/m/Y'
         });
     });
