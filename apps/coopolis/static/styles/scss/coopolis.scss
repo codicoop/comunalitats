@@ -1,3 +1,4 @@
+$django-form-success-message-background-color: #5EC76A !default;
 
 
 
@@ -6,6 +7,10 @@
     padding-top: 30px;
 
     form {
+
+        .errorlist {
+            position: inherit;
+        }
 
         .helptext {
             display: block;
@@ -16,5 +21,18 @@
             margin-bottom: 10px;
         }
 
+        textarea {
+            display: block;
+        }
+
+    }
+
+    .message-container {
+        position: inherit;
+
+        .success-message {
+            @extend %message;
+            background-color: $django-form-success-message-background-color;
+        }
     }
 }

@@ -346,7 +346,7 @@ footer p span {
 
 /*
 */
-.generated-form .message-container .info-message, .generated-form .message-container .error-message, .generated-form form .errorlist li {
+.generated-form .message-container .success-message, .generated-form .message-container .info-message, .generated-form .message-container .error-message, .generated-form form .errorlist li {
   width: 100%;
   margin-top: 5px;
   padding: 3px;
@@ -458,12 +458,24 @@ footer p span {
   align-self: flex-start;
   padding-top: 30px;
 }
+.generated-form form .errorlist {
+  position: inherit;
+}
 .generated-form form .helptext {
   display: block;
   font-style: italic;
 }
 .generated-form form p {
   margin-bottom: 10px;
+}
+.generated-form form textarea {
+  display: block;
+}
+.generated-form .message-container {
+  position: inherit;
+}
+.generated-form .message-container .success-message {
+  background-color: #5EC76A;
 }
 
 /*# sourceMappingURL=stylesheet.css.map */

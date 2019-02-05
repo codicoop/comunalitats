@@ -2,20 +2,21 @@
 
 {% block content %}
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-<div class="generated-form">
-    <h1>Dades del vostre projecte</h1>
-    <form method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}" enctype="multipart/form-data">
-{{ form.as_p }}
-{% csrf_token %}
-    <button type="submit">Guardar els canvis</button>
-    </form>
+<div class="page-content">
+    <div class="generated-form">
+        {% if messages %}
+        <ul class="message-container">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}-message"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <h1>Dades del vostre projecte</h1>
+        <form method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}" enctype="multipart/form-data">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="submit">Guardar els canvis</button>
+        </form>
+    </div>
 </div>
 {% endblock %}

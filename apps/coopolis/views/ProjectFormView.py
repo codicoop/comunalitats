@@ -6,15 +6,17 @@ from django import urls
 from django.http import HttpResponseRedirect
 from coopolis.models import Project
 from coopolis.forms import ProjectForm
+from django.contrib.messages.views import SuccessMessageMixin
 
 
-class ProjectFormView(generic.UpdateView):
+class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
     model = Project
     form_class = ProjectForm
     template_name = 'project.html'
+    success_message = "Dades del projecte actualitzades correctament."
 
     def get_success_url(self):
-        return urls.reverse('project')
+        return urls.reverse('edit_project')
 
     def get_object(self, queryset=None):
         return self.model.objects.get(user=self.request.user)
