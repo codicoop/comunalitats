@@ -8,6 +8,8 @@ from coopolis.widgets import XDSoftDatePickerInput
 
 
 class ProjectForm(forms.ModelForm):
+    registration_date = forms.DateField(widget=XDSoftDatePickerInput())
+
     class Meta:
         model = Project
         fields = '__all__'
