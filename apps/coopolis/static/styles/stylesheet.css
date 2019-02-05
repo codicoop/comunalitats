@@ -456,6 +456,7 @@ footer p span {
 
 .generated-form {
   align-self: flex-start;
+  padding-top: 30px;
 }
 .generated-form form .helptext {
   display: block;
