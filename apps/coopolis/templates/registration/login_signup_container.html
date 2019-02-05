@@ -20,8 +20,8 @@
     {% endif %}
     </div>
 
-    <div class="generic-content">
-        <div style="flex: 50%; padding: 10px;">
+    <div class="" style="display: flex; justify-content: space-evenly; flex-direction; row;">
+        <div class="generated-form">
             <h1>Accedir</h1>
             <form method="post" action="{% url 'login_post' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
             {% csrf_token %}
@@ -45,7 +45,7 @@
             </form>
         </div>
 
-        <div style="flex: 50%; padding: 10px;">
+        <div class="generated-form">
             <h1>Registrar-se</h1>
             <form method="post"
                   action="{% url 'signup_post' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">

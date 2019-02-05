@@ -454,4 +454,15 @@ footer p span {
   background-color: #4285F4;
 }
 
+.generated-form {
+  align-self: flex-start;
+}
+.generated-form form .helptext {
+  display: block;
+  font-style: italic;
+}
+.generated-form form p {
+  margin-bottom: 10px;
+}
+
 /*# sourceMappingURL=stylesheet.css.map */
