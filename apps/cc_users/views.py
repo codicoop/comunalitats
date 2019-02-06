@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from apps.cc_users.forms import SignUpForm as SignUpFormClass, MyAccountForm
+from coopolis.models import User
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
@@ -11,11 +12,13 @@ from django.utils.encoding import force_bytes
 from django.utils.encoding import force_text
 from .tokens import AccountActivationTokenGenerator
 from django.conf import settings
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from django import urls
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
+from django.contrib.messages.views import SuccessMessageMixin
+
 
 def get_activate_url(request, user):
     _id = urlsafe_base64_encode(force_bytes(user.pk)).decode('utf-8')
@@ -78,18 +81,14 @@ class UsersLoginView(LoginView):
         return super().resolve_url(self.request.get_redirect_url())
 
 
-# TODO: Refactor into CBV (use ProjectformView for an example)
-def MyAccountView(request):
-    user = request.user
-    if request.method == 'POST':
-        form = MyAccountForm(request.POST, instance=user)
-        if form.is_valid():
-            user = form.save()
-            messages.success(request, 'Dades modificades correctament.')
-            return HttpResponseRedirect(reverse('user_profile'))
-    else:
-        form = MyAccountForm(instance=user)
-    context = {
-        'form': form,
-    }
-    return render(request, 'registration/profile.html', context)
+class MyAccountView(SuccessMessageMixin, UpdateView):
+    template_name = 'registration/profile.html'
+    form_class = MyAccountForm
+    model = User
+    success_message = "Dades modificades correctament"
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_success_url(self):
+        return urls.reverse('user_profile')
