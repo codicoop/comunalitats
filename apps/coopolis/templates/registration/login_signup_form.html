@@ -1,6 +1,11 @@
     <div class="" style="display: flex; justify-content: space-evenly; flex-direction; row;">
         <div class="generated-form">
             <h1>Accedir</h1>
+            {% if login_form.errors %}
+            <div class="message-container">
+                <p class="error-message">Usuari i/o contrasenya incorrectes. Si us plau torna-ho a intentar.</p>
+            </div>
+            {% endif %}
             <form method="post" action="{% url 'login_post' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
             {% csrf_token %}
                 <p>
@@ -25,6 +30,12 @@
 
         <div class="generated-form">
             <h1>Registrar-se</h1>
+            {% if signup_form.errors %}
+            <div class="message-container">
+                <p class="error-message">No s'ha pogut completar el registre, si us plau, revisa els errors del
+                    formulari.</p>
+            </div>
+            {% endif %}
             <form method="post"
                   action="{% url 'signup_post' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
                 {% csrf_token %}

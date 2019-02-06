@@ -34,5 +34,10 @@ $django-form-success-message-background-color: #5EC76A !default;
             @extend %message;
             background-color: $django-form-success-message-background-color;
         }
+
+        .error-message {
+            width: 90%;
+            margin-bottom: 5px;
+        }
     }
 }

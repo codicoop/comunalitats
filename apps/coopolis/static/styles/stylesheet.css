@@ -477,5 +477,9 @@ footer p span {
 .generated-form .message-container .success-message {
   background-color: #5EC76A;
 }
+.generated-form .message-container .error-message {
+  width: 90%;
+  margin-bottom: 5px;
+}
 
 /*# sourceMappingURL=stylesheet.css.map */
