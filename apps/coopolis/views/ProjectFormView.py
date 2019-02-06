@@ -7,7 +7,9 @@ from django.http import HttpResponseRedirect
 from coopolis.models import Project
 from coopolis.forms import ProjectForm
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
 from django.core.mail import send_mail
+from coopolis_backoffice import settings
 
 
 class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
@@ -28,7 +30,7 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
         return super().get(self, request)
 
 
-class ProjectCreateFormView(generic.CreateView):
+class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
     model = Project
     form_class = ProjectForm
     template_name = 'project.html'
@@ -40,23 +42,30 @@ class ProjectCreateFormView(generic.CreateView):
         newproject = form.save()
         self.request.user.project = newproject
         self.request.user.save()
-        send_mail(
-            subject="Nova sol·licitud d'acompanyament: "+self.request.user.project.name,
-            message=("Nova sol·licitud d'acompanyament\n"
-                     "\n"
-                     "Nom del projecte: {}\n<br>"
-                     "Telèfon de contacte: {}\n<br>"
-                     "Correu electrònic de contacte del projecte:{}\n<br>"
-                     "Correu electrònic de l'usuari que l'ha creat: {}\n<br>"
+        mail_to = {"p.picornell@gmail.com"}
+        if settings.DEBUG is not True:
+            mail_to.add("coopolis.laie@gmail.com")
+        message = ("Nova sol·licitud d'acompanyament<br />"
+                     "<br />"
+                     "Nom del projecte: {} <br />"
+                     "Telèfon de contacte: {} <br />"
+                     "Correu electrònic de contacte del projecte: {} <br />"
+                     "Correu electrònic de l'usuari que l'ha creat: {} <br />"
                      ).format(
                         self.request.user.project.name,
                         self.request.user.project.phone,
                         self.request.user.project.mail,
                         self.request.user.email
-            ),
-            recipient_list={"p.picornell@gmail.com", "coopolis.laie@gmail.com"},
+            )
+        send_mail(
+            subject="Nova sol·licitud d'acompanyament: "+self.request.user.project.name,
+            message=message,
+            html_message=message,
+            recipient_list=mail_to,
             from_email="hola@codi.coop"
         )
+        messages.success(self.request, "S'ha enviat una sol·licitud d'acompanyament del projecte. En els propers dies "
+            "et contactarà una persona de Coòpolis per concertar una primera reunió.")
         return HttpResponseRedirect(self.get_success_url())
 
     def get(self, request):
