@@ -9,6 +9,7 @@ from coopolis.forms import MySignUpForm
 from cc_users.forms import LogInForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
+from django import urls
 
 
 class LoginSignupContainerView(TemplateView):
@@ -52,6 +53,9 @@ class CoopolisSignUpView(SignUpView):
         login(self.request, user)
         return HttpResponseRedirect(self.get_success_url())
 
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(urls.reverse('loginsignup'))
+
 
 class CoopolisLoginView(LoginView):
     template_name = 'registration/login_signup_container.html'
@@ -72,3 +76,6 @@ class CoopolisLoginView(LoginView):
         if url is None:
             url = super().get_success_url()
         return url
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(urls.reverse('loginsignup'))
