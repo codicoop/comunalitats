@@ -8,7 +8,7 @@ from coopolis.widgets import XDSoftDatePickerInput
 
 
 class ProjectForm(forms.ModelForm):
-    registration_date = forms.DateField(widget=XDSoftDatePickerInput(), required=False)
+    registration_date = forms.DateField(label="Data d'entrada a registre", widget=XDSoftDatePickerInput(), required=False)
 
     class Meta:
         model = Project
