@@ -7,5 +7,8 @@
         <span><h2>{{ courses_title }}</h2><p>{{ courses_text }}</p></span>
         <span><h2>{{ projects_title }}</h2><p>{{ projects_text }}</p></span>
     </div>
+    {% if not user.is_authenticated %}
+        {% include 'registration/login_signup_form.html' %}
+    {% endif %}
 </div>
 {% endblock %}

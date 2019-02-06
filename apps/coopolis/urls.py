@@ -4,10 +4,10 @@
 from django.urls import path, include
 from .admin import coopolis_admin_site
 from .views import ProjectFormView, ProjectCreateFormView, ProjectInfoView, LoginSignupContainerView,\
-    CoopolisSignUpView, CoopolisLoginView
+    CoopolisSignUpView, CoopolisLoginView, HomeView
 from django.conf.urls import url
 from django.conf import settings
-from django.views.generic.base import RedirectView, TemplateView
+from django.views.generic.base import RedirectView
 from django.contrib.auth.decorators import login_required
 from cc_users.decorators import anonymous_required
 
@@ -16,15 +16,7 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('', TemplateView.as_view(
-        template_name="home.html",
-        extra_context={
-            'courses_title': "Formació i activitats",
-            'courses_text': "TEXT D'INTRODUCCIÓ A LES FORMACIONS QUE FEM",
-            'projects_title': "Acompanyament de projectes",
-            'projects_text': "TEXT D'INTRODUCCIÓ A L'ACOMPANYAMENT DE PROJECTES"
-        }
-    ), name='home'),
+    path('', HomeView.as_view(), name='home'),
     path('users/loginsignup/', anonymous_required(LoginSignupContainerView.as_view()), name='loginsignup'),
     path('users/login_post/', anonymous_required(CoopolisLoginView.as_view()), name='login_post'),
     path('users/signup_post', anonymous_required(CoopolisSignUpView.as_view()), name='signup_post'),
