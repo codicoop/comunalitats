@@ -1,17 +1,14 @@
 from django.shortcuts import render, redirect, reverse
 from apps.cc_users.forms import SignUpForm as SignUpFormClass, MyAccountForm
 from coopolis.models import User
-from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
-from django.contrib.auth import login
 from urllib.parse import urljoin
 from django.contrib.auth.views import LoginView
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_text
 from .tokens import AccountActivationTokenGenerator
-from django.conf import settings
 from django.views.generic import CreateView, UpdateView
 from django import urls
 from django.contrib import messages
@@ -20,6 +17,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+
 
 def get_activate_url(request, user):
     _id = urlsafe_base64_encode(force_bytes(user.pk)).decode('utf-8')
