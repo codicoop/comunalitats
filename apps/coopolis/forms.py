@@ -20,7 +20,7 @@ class MySignUpForm(UserCreationForm):
     first_name = forms.CharField(label="Nom", max_length=30)
     last_name = forms.CharField(label="Cognom", max_length=30, required=False, help_text='Opcional.')
     email = forms.EmailField(label="Correu electrònic", max_length=254, help_text='Requerit, ha de ser una adreça vàlida.')
-    birthdate = forms.DateField(label="Data de naixement", widget=XDSoftDatePickerInput())
+    birthdate = forms.DateField(label="Data de naixement", required=False, widget=XDSoftDatePickerInput())
 
     class Meta(UserCreationForm.Meta):
         model = User
