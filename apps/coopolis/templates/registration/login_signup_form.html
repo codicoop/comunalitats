@@ -1,0 +1,35 @@
+    <div class="" style="display: flex; justify-content: space-evenly; flex-direction; row;">
+        <div class="generated-form">
+            <h1>Accedir</h1>
+            <form method="post" action="{% url 'login_post' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
+            {% csrf_token %}
+                <p>
+                  {{ login_form.username.label_tag }}
+                  {{ login_form.username }}
+                </p>
+                <p>
+                  {{ login_form.password.label_tag }}
+                  {{ login_form.password }}
+                </p>
+                <p>
+                  {{ login_form.remember_me.label_tag }}
+                  {{ login_form.remember_me }}
+                </p>
+                <p>
+                  <input type="submit" value="Accedir" />
+                  <input type="hidden" name="next" value="{{ next }}" />
+                </p>
+                <p><a href="{% url 'password_reset' %}">Has perdut la contrasenya?</a></p>
+            </form>
+        </div>
+
+        <div class="generated-form">
+            <h1>Registrar-se</h1>
+            <form method="post"
+                  action="{% url 'signup_post' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
+                {% csrf_token %}
+                {{ signup_form.as_p }}
+                <button type="submit">Crear compte</button>
+            </form>
+        </div>
+    </div>
