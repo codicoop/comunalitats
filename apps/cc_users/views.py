@@ -18,7 +18,8 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.messages.views import SuccessMessageMixin
-
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 def get_activate_url(request, user):
     _id = urlsafe_base64_encode(force_bytes(user.pk)).decode('utf-8')
@@ -53,7 +54,6 @@ def activate(request, uuid, token):
         return render(request, 'registration/user_activation_invalid.html')
 
 
-# TODO: Merge login and signup forms like in Coòpolis + apply anonymous_required decorator to URLs
 class SignUpView(CreateView):
     form_class = SignUpFormClass
     model = get_user_model()
@@ -92,3 +92,20 @@ class MyAccountView(SuccessMessageMixin, UpdateView):
 
     def get_success_url(self):
         return urls.reverse('user_profile')
+
+
+def change_password_view(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Contrassenya modificada correctament!')
+            return redirect('user_password')
+        else:
+            messages.error(request, 'Si us plau revisa els errors.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'registration/password.html', {
+        'form': form
+    })

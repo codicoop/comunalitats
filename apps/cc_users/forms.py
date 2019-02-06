@@ -39,3 +39,7 @@ class MyAccountForm(UserChangeForm):
         exclude = ['password', 'is_confirmed', 'username', 'groups', 'user_permissions', 'is_staff', 'is_active',
                    'is_superuser', 'last_login', 'date_joined', 'project']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'password' in self.fields:
+            self.fields.pop('password')
