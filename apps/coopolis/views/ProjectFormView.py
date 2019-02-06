@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from coopolis.models import Project
 from coopolis.forms import ProjectForm
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.mail import send_mail
 
 
 class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
@@ -39,6 +40,23 @@ class ProjectCreateFormView(generic.CreateView):
         newproject = form.save()
         self.request.user.project = newproject
         self.request.user.save()
+        send_mail(
+            subject="Nova sol·licitud d'acompanyament: "+self.request.user.project.name,
+            message=("Nova sol·licitud d'acompanyament\n"
+                     "\n"
+                     "Nom del projecte: {}\n<br>"
+                     "Telèfon de contacte: {}\n<br>"
+                     "Correu electrònic de contacte del projecte:{}\n<br>"
+                     "Correu electrònic de l'usuari que l'ha creat: {}\n<br>"
+                     ).format(
+                        self.request.user.project.name,
+                        self.request.user.project.phone,
+                        self.request.user.project.mail,
+                        self.request.user.email
+            ),
+            recipient_list={"p.picornell@gmail.com", "coopolis.laie@gmail.com"},
+            from_email="hola@codi.coop"
+        )
         return HttpResponseRedirect(self.get_success_url())
 
     def get(self, request):
