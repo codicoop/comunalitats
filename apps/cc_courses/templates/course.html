@@ -14,37 +14,36 @@
 
     <h2>Activitats programades:</h2>
 
-    <ul>
+    <div class="courses-container">
         {% for activity in course.activity_set.all %}
-        <li>
-            <p class="title">{{ activity.name }}</p>
-            <p>Data: {{ activity.date_start }}</p>
-            <p>Horari: de {{ activity.starting_time }} a {{ activity.ending_time }}</p>
-            <p>Lloc: {{ activity.place }}</p>
-            <p>Descripció: {{ activity.objectives }}</p>
-            {% if activity.is_past_due is False %}
-                {% if activity|can_enroll:user %}
-            <a
-                    id="actButton{{activity.id}}"
-                    href="#"
-                    onclick="javascript:onInscriptionButtonClick('{{activity.name}}', '{% url 'enroll_course' id=activity.id %}', '{% url 'loginsignup' %}?next={{ request.get_full_path }}&act={{activity.id}}');"
-                    class="enroll-button"
-            >
-            <div>
-                Inscriure's-hi
+        <div class="course">
+            <div class="course-data">
+                <h3>{{ activity.name }}</h3>
+                <p><strong>Data:</strong> {{ activity.date_start }}</p>
+                <p><strong>Horari:</strong> de {{ activity.starting_time }} a {{ activity.ending_time }}</p>
+                <p><strong>Lloc:</strong> {{ activity.place }}</p>
+                <p><strong>Descripció:</strong> {{ activity.objectives }}</p>
+                {% if activity.is_past_due is False %}
+                    {% if activity|can_enroll:user %}
+                <a
+                        id="actButton{{activity.id}}"
+                        href="#"
+                        onclick="javascript:onInscriptionButtonClick('{{activity.name}}', '{% url 'enroll_course' id=activity.id %}', '{% url 'loginsignup' %}?next={{ request.get_full_path }}&act={{activity.id}}');"
+                        class="enroll-button"
+                >
+                <div>
+                    Inscriure's-hi
+                </div>
+                </a>
+                    {% endif %}
+                    {% if user in activity.enrolled.all %}
+                <p>Ja estàs inscrita a aquesta activitat. Pots veure i gestionar les teves inscripcions a <a href="{% url 'my_activities' %}">Les meves activitats</a>. </p>
+                    {% endif %}
+                {% endif %}
             </div>
-            </a>
-                {% endif %}
-                {% if user in activity.enrolled.all %}
-            <p>Ja estàs inscrita a aquesta activitat. Pots veure i gestionar les teves inscripcions a <a href="{% url 'my_activities' %}">Les meves activitats</a>. </p>
-                {% endif %}
-            <p>
-            {% endif %}
-            <br>&nbsp;</p>
-        </li>
+        </div>
         {% endfor %}
-    </ul>
-
+    </div>
 </div>
 
 <div id="modal-confirm" class="modal">

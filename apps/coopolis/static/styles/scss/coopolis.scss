@@ -42,3 +42,14 @@ $django-form-success-message-background-color: #5EC76A !default;
         }
     }
 }
+
+h3 {
+    font-size: 1.1rem;
+}
+
+.page-content {
+    img {
+        width: fit-content;
+        align-self: center;
+    }
+}

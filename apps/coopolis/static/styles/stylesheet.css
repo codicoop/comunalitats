@@ -191,9 +191,13 @@ header ul a:hover {
   display: inline-block;
 }
 
+.enroll-button {
+  align-self: center;
+}
 .enroll-button div {
   background-color: #B29279;
   padding: 10px 80px;
+  margin-top: 15px;
   display: inline-block;
   color: white;
   text-decoration: none;
@@ -218,8 +222,7 @@ header ul a:hover {
 }
 .courses-container .course {
   display: flex;
-  width: 80%;
-  height: 150px;
+  width: 100%;
   border: 1px solid #BE9D7A;
   margin-top: 20px;
   padding: 25px;
@@ -231,6 +234,12 @@ header ul a:hover {
   background-size: contain;
   margin-right: 20px;
 }
+.courses-container .course .course-data {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
 .old-courses-container {
   margin-top: 50px;
   display: flex;
@@ -481,6 +490,15 @@ footer p span {
 .generated-form .message-container .error-message {
   width: 90%;
   margin-bottom: 5px;
+}
+
+h3 {
+  font-size: 1.1rem;
+}
+
+.page-content img {
+  width: fit-content;
+  align-self: center;
 }
 
 /*# sourceMappingURL=stylesheet.css.map */

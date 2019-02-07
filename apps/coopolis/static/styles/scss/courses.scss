@@ -14,9 +14,12 @@
 }
 
 .enroll-button {
+    align-self: center;
+
     div {
         background-color: $backcolor-enroll-button;
         padding: 10px 80px;
+        margin-top: 15px;
         display: inline-block;
         color: $frontcolor-enroll-button;
         text-decoration: none;
@@ -43,8 +46,7 @@
 
     .course {
         display: flex;
-        width: 80%;
-        height: 150px;
+        width: 100%;
         border: 1px solid $color-1;
         margin-top: 20px;
         padding: 25px;
@@ -58,7 +60,9 @@
         }
 
         .course-data {
-
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
         }
     }
 }
