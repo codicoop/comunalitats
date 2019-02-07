@@ -21,19 +21,20 @@
                 {% include "reusable/my_courses_activity.html" %}
             {% endfor %}
         {% endwith %}
-    </ul>
+    </div>
     {% endif %}
 
     {% if past_enrolled_activities.count %}
+</div>
+<div class="page-content">
     <h1>Activitats a les que has assistit anteriorment:</h1><br />
 
     <div class="courses-container">
         {% for activity in past_enrolled_activities %}
-                {% include "reusable/my_courses_activity.html" %}
+            {% include "reusable/my_courses_activity.html" %}
         {% endfor %}
     </div>
     {% endif %}
-
 </div>
 
 <div id="modal-confirm" class="modal">
