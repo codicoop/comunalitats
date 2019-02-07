@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 
 
 class CourseAdmin(SummernoteModelAdmin):
-    list_display = ('title', 'date_start', 'hours', 'copy_clipboard_list_field',)
+    list_display = ('date_start', 'title', 'hours', 'activities_list_field', 'copy_clipboard_list_field',)
     summernote_fields = ('description',)
     readonly_fields = ('copy_clipboard_field',)
     exclude = ('slug',)
@@ -17,23 +17,30 @@ class CourseAdmin(SummernoteModelAdmin):
         self.request = request
         return qs
 
+    def activities_list_field(self, obj):
+        return mark_safe(u'<a href="../../%s/%s?course_id__exact=%d">Activitats</a>' % (
+            obj._meta.app_label, 'activity', obj.id))
+
     def copy_clipboard_field(self, obj):
-        abs_url = self.request.build_absolute_uri(obj.absolute_url)
-        return mark_safe("""
-    {0} <a href="javascript:copyToClipboard('{0}');"> ─ Copiar &#128203;</a>
-    <script>
-    function copyToClipboard (str) {{
-    var dummy = document.createElement("input");
-      document.body.appendChild(dummy);
-      dummy.setAttribute("id", "dummy_id");
-      document.getElementById("dummy_id").value=str;
-      dummy.select();
-      document.execCommand("copy");
-      document.body.removeChild(dummy);
-      alert(str + ' copied.');
-    }}
-    </script>
-    """.format(abs_url))
+        if obj.absolute_url:
+            abs_url = self.request.build_absolute_uri(obj.absolute_url)
+            return mark_safe("""
+        {0} <a href="javascript:copyToClipboard('{0}');"> ─ Copiar &#128203;</a>
+        <script>
+        function copyToClipboard (str) {{
+        var dummy = document.createElement("input");
+          document.body.appendChild(dummy);
+          dummy.setAttribute("id", "dummy_id");
+          document.getElementById("dummy_id").value=str;
+          dummy.select();
+          document.execCommand("copy");
+          document.body.removeChild(dummy);
+          alert(str + ' copied.');
+        }}
+        </script>
+        """.format(abs_url))
+        else:
+            return "(estarà disponible un cop creat)"
 
     copy_clipboard_field.short_description = 'Link al curs'
 

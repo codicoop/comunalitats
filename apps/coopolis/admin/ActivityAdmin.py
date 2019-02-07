@@ -11,9 +11,14 @@ from django_summernote.admin import SummernoteModelAdmin
 
 
 class ActivityAdmin(SummernoteModelAdmin):
-    list_display = ('name', 'attendee_list_field',)
+    list_display = ('date_start', 'spots', 'remaining_spots', 'name', 'attendee_list_field',)
     readonly_fields = ('attendee_list_field',)
     summernote_fields = ('objectives',)
+
+    def remaining_spots(self, obj):
+        return obj.remaining_spots
+
+    remaining_spots.short_description = "Places disponibles"
 
     def get_queryset(self, request):
         qs = super(ActivityAdmin, self).get_queryset(request)
@@ -90,7 +95,6 @@ class ActivityAdmin(SummernoteModelAdmin):
         content = temp.render({'assistants': Activity.objects.get(pk=_id).enrolled.all()})
         pdf = weasyprint.HTML(string=content.encode('utf-8'))
         response = HttpResponse(pdf.write_pdf(), content_type='application/pdf')
-        # response['Content-Disposition'] = 'attachment; filename="llista_assistencia.pdf"'
         response['Content-Disposition'] = 'filename="llista_assistencia.pdf"'
         return response
 

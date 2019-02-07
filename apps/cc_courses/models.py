@@ -66,10 +66,11 @@ class Course(models.Model):
     def pre_save(cls, sender, instance, **kwargs):
         slugify_model(instance, 'title')
 
-
     @property
     def absolute_url(self):
-        return reverse('course', args=[str(self.slug)])
+        if self.slug:
+            return reverse('course', args=[str(self.slug)])
+        return None
 
     def __str__(self):
         return self.title
