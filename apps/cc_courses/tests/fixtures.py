@@ -32,14 +32,6 @@ class CoursePlaceFactory(factory.django.DjangoModelFactory):
     address = factory.Faker('address')
 
 
-class CourseCategoryFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = apps.get_model('cc_courses', 'CourseCategory')
-        django_get_or_create = ('name',)
-
-    name = factory.Faker('name')
-
-
 class CourseFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = apps.get_model('cc_courses', 'Course')

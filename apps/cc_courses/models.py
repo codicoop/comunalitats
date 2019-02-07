@@ -57,7 +57,6 @@ class Course(models.Model):
     # spots = models.IntegerField('Places totals', default=0)
     # enrolled = models.ManyToManyField(get_enrollable_class(), blank=True, related_name='enrolled_courses')
     # place = models.ForeignKey("CoursePlace", on_delete=models.SET_NULL, null=True)
-    # category = models.ForeignKey("CourseCategory", on_delete=models.SET_NULL, null=True)
     #
     # @property
     # def remaining_spots(self):
@@ -130,16 +129,6 @@ class Activity(models.Model):
     @property
     def is_past_due(self):
         return date.today() > self.date_start
-
-
-class CourseCategory(models.Model):
-    class Meta:
-        verbose_name = "Categoria del curs [PENDENT IMPLEMENTAR O TREURE]"
-
-    name = models.CharField("Nom", max_length=200, blank=False, unique=True)
-
-    def __str__(self):
-        return self.name
 
 
 pre_save.connect(Course.pre_save, sender=Course)

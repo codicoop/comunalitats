@@ -176,7 +176,6 @@ FIXTURE_FACTORIES = [
     ('coopolis.tests.fixtures.ProjectFactory', {}),
     ('cc_courses.tests.fixtures.CourseFactory', {}),
     ('cc_courses.tests.fixtures.EntityFactory', {}),
-    ('cc_courses.tests.fixtures.CourseCategoryFactory', {}),
     ('cc_courses.tests.fixtures.CoursePlaceFactory', {}),
     ('cc_courses.tests.fixtures.ActivityFactory', {
         'number': 500
