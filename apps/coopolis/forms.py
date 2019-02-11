@@ -13,7 +13,7 @@ class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = '__all__'
-        exclude = ['project_responsible']
+        exclude = ['project_responsible', 'nif', 'subsidy_period']
 
 
 class MySignUpForm(UserCreationForm):
