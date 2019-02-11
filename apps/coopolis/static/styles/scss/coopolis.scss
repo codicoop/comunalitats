@@ -1,6 +1,3 @@
-$django-form-success-message-background-color: #5EC76A !default;
-
-
 
 .generated-form {
     align-self: flex-start;
@@ -53,3 +50,13 @@ h3 {
         align-self: center;
     }
 }
+
+.flex-h {
+    display: flex;
+    justify-content: space-around;
+}
+
+.margin-block {
+    margin-top: 20px;
+}
+

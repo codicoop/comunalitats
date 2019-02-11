@@ -4,8 +4,10 @@
 <div class="page-content">
     <div class="generic-content">
         <h1>Extranet de Coòpolis per gestionar cursos i projectes</h1>
-        <span><h2>{{ courses_title }}</h2><p>{{ courses_text }}</p></span>
-        <span><h2>{{ projects_title }}</h2><p>{{ projects_text }}</p></span>
+        <div class="flex-h margin-block">
+            <span><h2>{{ courses_title }}</h2><p>{{ courses_text }}</p></span>
+            <span><h2>{{ projects_title }}</h2><p>{{ projects_text }}</p></span>
+        </div>
     </div>
     {% if not user.is_authenticated %}
         {% include 'registration/login_signup_form.html' %}
