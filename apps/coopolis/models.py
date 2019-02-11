@@ -39,10 +39,30 @@ class Project(models.Model):
     web = models.CharField("Web", max_length=200, blank=True)
     mail = models.EmailField("Correu electrònic")
     phone = models.CharField("Telèfon", max_length=25)
+    DISTRICTS = (
+        ('CV', 'Ciutat Vella'),
+        ('EX', 'Eixample'),
+        ('HG', 'Horta-Guinardó'),
+        ('LC', 'Les Corts'),
+        ('NB', 'Nou Barris'),
+        ('SA', 'Sant Andreu'),
+        ('SM', 'Sant Martí'),
+        ('ST', 'Sants-Montjuïc'),
+        ('SS', 'Sarrià-Sant Gervasi'),
+        ('GR', 'Gràcia')
+    )
+    district = models.TextField("Districte", blank=True, null=True, choices=DISTRICTS)
     project_responsible = models.ForeignKey("User", blank=True, null=True, on_delete=models.SET_NULL,
                                             related_name='project_responsible')
     number_people = models.IntegerField("Número de persones", blank=True, null=True)
     registration_date = models.DateField("Data de registre", blank=True, null=True)
+    cif = models.CharField("NIF", max_length=11, blank=True, null=True)
+    subsidy_period = models.TextField("Convocatòria", blank=True, null=True,
+                                      choices=(("2018", "2018"), ("2019", "2019")))
+    object_finality = models.TextField("Objecte i finalitat", blank=True, null=True)
+    project_origins = models.TextField("Orígens del projecte", blank=True, null=True)
+    solves_necessities = models.TextField("Quines necessitats resol el vostre projecte?", blank=True, null=True)
+    social_base = models.TextField("Compta el vostre projecte amb una base social?", blank=True, null=True)
     estatuts = models.FileField("Estatuts", blank=True, null=True, upload_to=estatuts_upload_path, max_length=250)
     viability = models.FileField("Pla de viabilitat", blank=True, null=True,
                                  upload_to=estatuts_upload_path, max_length=250)
