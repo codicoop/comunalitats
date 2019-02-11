@@ -184,5 +184,9 @@ FIXTURE_FACTORIES = [
 
 STATIC_ROOT = 'static'
 
-
 SIGNUP_FORM = 'coopolis.forms.MySignUpForm'
+
+# Static texts
+PROJECT_INFO_DESCRIPTION = "TEXT QUE EXPLICA DE QUÈ VA L'ACOMPANYAMENT DE PROJECTES BREUMENT"
+PROJECT_INFO_SUPPORT_PETITION = "Per sol·licitar acompanyament per al teu projecte, accedeix amb el teu compte o " \
+"crea'n un amb els formularis que hi ha a continuació."

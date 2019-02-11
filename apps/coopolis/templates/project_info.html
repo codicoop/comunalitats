@@ -6,7 +6,8 @@
         <h1>Acompanyament de projectes</h1>
         <p>{{ description }}</p>
         <span><a href="https://bcn.coop/suport/">[botó]Més informació a la web de Coòpolis</a></span>
-        <span><a href="{% url 'new_project' %}">Sol·licitar acompanyament</a></span>
+        <p>{{ support_petition }}</p>
     </div>
+    {% include 'registration/login_signup_form.html' %}
 </div>
 {% endblock %}
