@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'apps.coopolis.apps.CoopolisConfig',
     'apps.cc_users.apps.UsersConfig',
     'apps.cc_courses.apps.CoursesConfig',
+    'grappelli.dashboard',
     'grappelli',
     'django.contrib.admin',
     'constance.backends.database',
@@ -194,4 +195,5 @@ PROJECT_INFO_SUPPORT_PETITION = "Per sol·licitar acompanyament per al teu proje
 
 # Grappeli
 GRAPPELLI_ADMIN_TITLE = "test"
-GRAPPELLI_SWITCH_USER = True
+GRAPPELLI_SWITCH_USER = False
+GRAPPELLI_INDEX_DASHBOARD = 'coopolis.dashboard.MyDashboard'
