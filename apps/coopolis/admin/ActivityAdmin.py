@@ -108,3 +108,9 @@ class ActivityAdmin(SummernoteModelAdmin):
     def attendee_management(self, request, _id):
         return True
 
+    # define the raw_id_fields
+    raw_id_fields = ('enrolled',)
+    # define the autocomplete_lookup_fields
+    autocomplete_lookup_fields = {
+        'm2m': ['enrolled'],
+    }
