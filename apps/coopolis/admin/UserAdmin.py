@@ -5,4 +5,4 @@ from django.contrib import admin
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('last_name', 'first_name', 'username')
+    list_display = ('id_number', 'last_name', 'first_name', 'email', 'project')
