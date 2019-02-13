@@ -57,6 +57,6 @@ class MyDashboard(Dashboard):
             title='Enllaços',
             column=3,
             children=(
-                ['Gestió de textos del back-office', 'constance/'],
+                ['Gestió de textos del back-office', 'constance/config'],
             )
         ))
