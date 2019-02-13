@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from coopolis_backoffice import settings
 from coopolis.views import LoginSignupContainerView
+from constance import config
 
 
 class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
@@ -52,27 +53,21 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
         mail_to = {"p.picornell@gmail.com"}
         if settings.DEBUG is not True:
             mail_to.add("coopolis.laie@gmail.com")
-        message = ("Nova sol·licitud d'acompanyament<br />"
-                     "<br />"
-                     "Nom del projecte: {} <br />"
-                     "Telèfon de contacte: {} <br />"
-                     "Correu electrònic de contacte del projecte: {} <br />"
-                     "Correu electrònic de l'usuari que l'ha creat: {} <br />"
-                     ).format(
+        message = config.EMAIL_NEW_PROJECT.format(
                         self.request.user.project.name,
                         self.request.user.project.phone,
                         self.request.user.project.mail,
                         self.request.user.email
             )
         send_mail(
-            subject="Nova sol·licitud d'acompanyament: "+self.request.user.project.name,
+            subject=config.EMAIL_NEW_PROJECT_SUBJECT.format(self.request.user.project.name),
             message=message,
             html_message=message,
             recipient_list=mail_to,
             from_email="hola@codi.coop"
         )
         messages.success(self.request, "S'ha enviat una sol·licitud d'acompanyament del projecte. En els propers dies "
-            "et contactarà una persona de Coòpolis per concertar una primera reunió.")
+                                       "et contactarà una persona de Coòpolis per concertar una primera reunió.")
         return HttpResponseRedirect(self.get_success_url())
 
     def get(self, request):
