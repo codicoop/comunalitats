@@ -22,6 +22,7 @@ def sostenibility_upload_path(instance, filename):
 class Project(models.Model):
     class Meta:
         verbose_name_plural = "Projectes"
+        verbose_name = "Projecte"
 
     SECTORS = (
         ('A', 'Altres'),
@@ -52,8 +53,11 @@ class Project(models.Model):
         ('GR', 'Gràcia')
     )
     district = models.TextField("Districte", blank=True, null=True, choices=DISTRICTS)
-    project_responsible = models.ForeignKey("User", blank=True, null=True, on_delete=models.SET_NULL,
-                                            related_name='project_responsible')
+    project_responsible = models.ForeignKey("User", verbose_name="Persona responsable", blank=True, null=True,
+                                            on_delete=models.SET_NULL, related_name='project_responsible',
+                                            help_text="Persona de l'equip al càrrec de l'acompanyament. Per aparèixer "
+                                            "al desplegable, cal que la persona tingui activada la opció 'Membre del "
+                                            "personal'.")
     number_people = models.IntegerField("Número de persones", blank=True, null=True)
     registration_date = models.DateField("Data de registre", blank=True, null=True)
     cif = models.CharField("NIF", max_length=11, blank=True, null=True)
@@ -185,7 +189,7 @@ class User(BaseUser):
     adreca_bloc = models.CharField("Bloc / Escala", max_length=50, blank=True, null=True)
     adreca_planta = models.CharField("Planta", max_length=50, blank=True, null=True)
     adreca_porta = models.CharField("Porta", max_length=50, blank=True, null=True)
-    project = models.ForeignKey(Project, blank=True, null=True, on_delete=models.SET_NULL)
+    project = models.ForeignKey(Project, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Projecte")
 
     @property
     def full_name(self):
