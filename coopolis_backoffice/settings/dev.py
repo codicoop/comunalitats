@@ -193,8 +193,12 @@ SIGNUP_FORM = 'coopolis.forms.MySignUpForm'
 PROJECT_INFO_DESCRIPTION = "TEXT QUE EXPLICA DE QUÈ VA L'ACOMPANYAMENT DE PROJECTES BREUMENT"
 PROJECT_INFO_SUPPORT_PETITION = "Per sol·licitar acompanyament per al teu projecte, accedeix amb el teu compte o " \
     "crea'n un amb els formularis que hi ha a continuació."
+ADMIN_HEADER = 'Back-office de Coòpolis'
+ADMIN_SITE_TITLE = ''
+ADMIN_INDEX_TITLE = ''
 
-# Grappeli
-GRAPPELLI_ADMIN_TITLE = "test"
+# Grappeli (https://django-grappelli.readthedocs.io/en/latest/customization.html)
+GRAPPELLI_ADMIN_TITLE = "Back-office de Coòpolis"
 GRAPPELLI_SWITCH_USER = False
 GRAPPELLI_INDEX_DASHBOARD = 'coopolis.dashboard.MyDashboard'
+

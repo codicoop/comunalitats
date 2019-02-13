@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
+from coopolis_backoffice import settings
 from coopolis.models import User, Project
 from cc_courses.models import Course, Activity, CoursePlace, Entity
 from .ActivityAdmin import ActivityAdmin
@@ -17,3 +18,7 @@ admin.site.register(Course, CourseAdmin)
 admin.site.register(Activity, ActivityAdmin)
 admin.site.register(CoursePlace, CoursePlaceAdmin)
 admin.site.register(Entity)
+
+admin.site.site_header = settings.ADMIN_HEADER
+admin.site.site_title = settings.ADMIN_SITE_TITLE
+admin.site.index_title = settings.ADMIN_INDEX_TITLE
