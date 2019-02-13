@@ -84,6 +84,9 @@ class ProjectInfoView(LoginSignupContainerView):
     }
 
     def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated and self.request.user.project:
-            return HttpResponseRedirect(urls.reverse('edit_project'))
+        if self.request.user.is_authenticated:
+            if self.request.user.project:
+                return HttpResponseRedirect(urls.reverse('edit_project'))
+            else:
+                return HttpResponseRedirect(urls.reverse('new_project'))
         return super().get(self, request, *args, **kwargs)
