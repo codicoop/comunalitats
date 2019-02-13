@@ -75,7 +75,8 @@ class Project(models.Model):
 
 class User(BaseUser):
     class Meta:
-        verbose_name_plural = "Usuaris"
+        verbose_name = "Persona"
+        verbose_name_plural = "Persones"
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
