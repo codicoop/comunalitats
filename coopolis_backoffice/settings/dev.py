@@ -141,8 +141,8 @@ DEV_SETTINGS_MODULE = 'coopolis_backoffice.settings.dev'
 
 # APPS
 
-USERS_APP_TITLE = 'Gestió de persones'
-COURSES_APP_TITLE = "les formacions i activitats"
+USERS_APP_TITLE = 'Usuàries'
+COURSES_APP_TITLE = "Formacions"
 
 FIXTURES_PATH_TO_COURSE_IMAGES = 'test-images/coopolis-courses'
 
@@ -186,12 +186,13 @@ FIXTURE_FACTORIES = [
 
 STATIC_ROOT = 'static'
 
+
 SIGNUP_FORM = 'coopolis.forms.MySignUpForm'
 
 # Static texts
 PROJECT_INFO_DESCRIPTION = "TEXT QUE EXPLICA DE QUÈ VA L'ACOMPANYAMENT DE PROJECTES BREUMENT"
 PROJECT_INFO_SUPPORT_PETITION = "Per sol·licitar acompanyament per al teu projecte, accedeix amb el teu compte o " \
-"crea'n un amb els formularis que hi ha a continuació."
+    "crea'n un amb els formularis que hi ha a continuació."
 
 # Grappeli
 GRAPPELLI_ADMIN_TITLE = "test"
