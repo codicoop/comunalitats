@@ -3,26 +3,17 @@
 
 from django.contrib import admin
 from coopolis.models import User, Project
-from cc_courses.models import Course, Activity, CoursePlace
+from cc_courses.models import Course, Activity, CoursePlace, Entity
 from .ActivityAdmin import ActivityAdmin
 from .CourseAdmin import CourseAdmin
 from .ProjectAdmin import ProjectAdmin
 from .UserAdmin import UserAdmin
 from .CoursePlaceAdmin import CoursePlaceAdmin
-from constance.admin import ConstanceAdmin, Config
 
 
-class CoopolisAdmin(admin.AdminSite):
-    site_header = "Coòpolis Backoffice"
-    site_title = "Coòpolis backoffice"
-    index_title = "Gestió d'usuàries, acompanyaments i activitats"
-
-
-coopolis_admin_site = CoopolisAdmin(name='coopolis_admin')
-
-coopolis_admin_site.register(User, UserAdmin)
-coopolis_admin_site.register(Project, ProjectAdmin)
-coopolis_admin_site.register(Course, CourseAdmin)
-coopolis_admin_site.register(Activity, ActivityAdmin)
-coopolis_admin_site.register(CoursePlace, CoursePlaceAdmin)
-coopolis_admin_site.register([Config], ConstanceAdmin)
+admin.site.register(User, UserAdmin)
+admin.site.register(Project, ProjectAdmin)
+admin.site.register(Course, CourseAdmin)
+admin.site.register(Activity, ActivityAdmin)
+admin.site.register(CoursePlace, CoursePlaceAdmin)
+admin.site.register(Entity)

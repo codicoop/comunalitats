@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.urls import path, include
-from .admin import coopolis_admin_site
+from django.contrib import admin
 from .views import ProjectFormView, ProjectCreateFormView, ProjectInfoView, LoginSignupContainerView,\
     CoopolisSignUpView, CoopolisLoginView, HomeView
 from django.conf.urls import url
@@ -23,7 +23,7 @@ urlpatterns += [
     path('users/signup_post', anonymous_required(CoopolisSignUpView.as_view()), name='signup_post'),
     path('users/signup', anonymous_required(CoopolisSignUpView.as_view()), name='signup'),
     path('grappelli/', include('grappelli.urls')),
-    path('admin/', coopolis_admin_site.urls),
+    path('admin/', admin.site.urls),
     path('summernote/', include('django_summernote.urls')),
     path('project/edit/', login_required(ProjectFormView.as_view()), name='edit_project'),
     path('project/new/', login_required(ProjectCreateFormView.as_view()), name='new_project'),

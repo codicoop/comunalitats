@@ -10,28 +10,53 @@ from grappelli.dashboard import modules, Dashboard
 
 
 class MyDashboard(Dashboard):
-    title = "Back-office de Coòpolis"
+    title = "Back-office de Coòpolis"  # Aquest títol no l'està mostrant enlloc.
+
     def __init__(self, **kwargs):
         Dashboard.__init__(self, **kwargs)
 
-        self.children.append(modules.LinkList(
-            title='Enllaços',
-            column=2,
-            children=(
-                {
-                    'title': 'Python website',
-                    'url': 'http://www.python.org',
-                    'external': True,
-                    'description': 'Python programming language rocks!',
-                    'target': '_blank',
-                },
-                ['Django website', 'http://www.djangoproject.com', True],
-                ['Some internal link', '/some/internal/link/'],
-            )
+        self.children.append(modules.Group(
+            title="Coòpolis",
+            column=1,
+            collapsible=True,
+            children=[
+                modules.ModelList(
+                    title='Formacions i activitats',
+                    column=1,
+                    collapsible=False,
+                    models=('cc_courses.models.Course', 'cc_courses.models.Activity',),
+                ),
+                modules.ModelList(
+                    title='Acompanyament de projectes',
+                    column=1,
+                    collapsible=False,
+                    models=('coopolis.models.Project',),
+                ),
+                modules.ModelList(
+                    title="Gestió d'usuàries",
+                    column=1,
+                    collapsible=False,
+                    models=('coopolis.models.User',),
+                ),
+                modules.ModelList(
+                    title="Gestió de dades",
+                    column=1,
+                    collapsible=False,
+                    models=('cc_courses.models.Entity', 'cc_courses.models.CoursePlace'),
+                )
+            ]
         ))
 
         self.children.append(modules.RecentActions(
-            title='Accions recents',
-            column=3,
+            title='Accions que has fet recentment',
+            column=2,
             limit=5,
+        ))
+
+        self.children.append(modules.LinkList(
+            title='Enllaços',
+            column=3,
+            children=(
+                ['Gestió de textos del back-office', 'constance/'],
+            )
         ))
