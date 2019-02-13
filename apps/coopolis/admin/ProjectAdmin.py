@@ -12,9 +12,10 @@ class UserInline(admin.StackedInline):
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    inlines = [
+    # TODO: Pulir això.
+    '''inlines = [
         UserInline,
-    ]
+    ]'''
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "project_responsible":
