@@ -16,8 +16,9 @@ django-picklefield = "*"
 django-storages = "*"
 django-grappelli = "==2.12.2"
 gunicorn = "*"
+factory-boy = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.7"
+python_version = "3.6"
