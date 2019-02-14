@@ -160,6 +160,7 @@ MEDIA_FILE_OVERWRITE = True
 
 # Constance
 CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
+CONSTANCE_SUPERUSER_ONLY = False
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     'INTRODUCTION_TEXT': (
@@ -210,6 +211,12 @@ CONSTANCE_CONFIG = {
     'CONTACT_EMAIL': (
         "coopolis.laie@gmail.com",
         "Correu electrònic que voleu indicar per si algú té dubtes o gestions."),
+}
+CONSTANCE_CONFIG_FIELDSETS = {
+    'Configuració': ('CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG', 'EMAIL_TO', 'EMAIL_FROM'),
+    'Correus': ('EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT', 'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT',
+                'EMAIL_ENROLLMENT_CONFIRMATION', 'EMAIL_ENROLLMENT_REMINDER_SUBJECT', 'EMAIL_ENROLLMENT_REMINDER',),
+    'Textos de la web': ('INTRODUCTION_TEXT',),
 }
 
 # CC Courses
