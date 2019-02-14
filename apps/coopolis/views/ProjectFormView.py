@@ -50,9 +50,9 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
         newproject = form.save()
         self.request.user.project = newproject
         self.request.user.save()
-        mail_to = {"p.picornell@gmail.com"}
+        mail_to = {config.EMAIL_TO_DEBUG}
         if settings.DEBUG is not True:
-            mail_to.add("coopolis.laie@gmail.com")
+            mail_to.add(config.EMAIL_TO)
         message = config.EMAIL_NEW_PROJECT.format(
                         self.request.user.project.name,
                         self.request.user.project.phone,
@@ -64,7 +64,7 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
             message=message,
             html_message=message,
             recipient_list=mail_to,
-            from_email="hola@codi.coop"
+            from_email=config.EMAIL_FROM
         )
         messages.success(self.request, "S'ha enviat una sol·licitud d'acompanyament del projecte. En els propers dies "
                                        "et contactarà una persona de Coòpolis per concertar una primera reunió.")
