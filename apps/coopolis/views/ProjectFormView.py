@@ -19,9 +19,6 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
     form_class = ProjectForm
     template_name = 'project.html'
     success_message = "Dades del projecte actualitzades correctament."
-    extra_context = {
-        'description': settings.PROJECT_INFO_DESCRIPTION
-    }
 
     def get_success_url(self):
         return urls.reverse('edit_project')
@@ -39,9 +36,7 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
     model = Project
     form_class = ProjectForm
     template_name = 'project.html'
-    extra_context = {
-        'description': settings.PROJECT_INFO_DESCRIPTION
-    }
+    extra_context = {'show_new_project_info': True}
 
     def get_success_url(self):
         return urls.reverse('edit_project')
@@ -78,10 +73,6 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
 
 class ProjectInfoView(LoginSignupContainerView):
     template_name = "project_info.html"
-    extra_context = {
-        'description': settings.PROJECT_INFO_DESCRIPTION,
-        'support_petition': settings.PROJECT_INFO_SUPPORT_PETITION
-    }
 
     def get(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:

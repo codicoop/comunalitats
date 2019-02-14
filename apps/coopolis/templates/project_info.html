@@ -3,10 +3,8 @@
 {% block content %}
 <div class="page-content">
     <div class="generic-content">
-        <h1>Acompanyament de projectes</h1>
-        <p>{{ description }}</p>
-        <span><a href="https://bcn.coop/suport/">[botó]Més informació a la web de Coòpolis</a></span>
-        <p>{{ support_petition }}</p>
+        <h1>{{ config.CONTENT_PROJECT_TITLE }}</h1>
+        {{ config.CONTENT_PROJECT_INFO|safe }}
     </div>
     {% include 'registration/login_signup_form.html' %}
 </div>

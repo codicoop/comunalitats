@@ -70,6 +70,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'constance.context_processors.config',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -172,6 +173,31 @@ CONSTANCE_CONFIG = {
         "les activitats a l’espai Coòpolis de Can Batlló, també oferim formacions descentralitzades en altres espais "
         "comunitaris i seus de l’economia social i solidària barcelonina.",
         'Text de presentació'),
+    'CONTENT_PROJECT_TITLE': (
+        "Acompanyament de projectes",
+        "Apartat Projecte: text d'encapçalament"),
+    'CONTENT_PROJECT_INFO': (
+        "<p>Per sol·licitar acompanyament per al teu projecte, accedeix amb el teu compte o crea'n un amb els "
+        "formularis que hi ha a continuació.</p>",
+        "Aartat Projecte: Text que es mostra a l'apartat si hi accedeix sense haver fet login"),
+    'CONTENT_PROJECT_NEW': (
+        "<p>Omple el següent formulari per sol·licitar un acompanyament.</p>",
+        "Apartat Projecte: Text que es mostra al formulari per sol·licitar un acompanyament"),
+    'CONTENT_HOME_COURSES_TITLE': (
+        "Formació i activitats",
+        "Portada, títol del bloc que informa sobre la formació."),
+    'CONTENT_HOME_COURSES_TEXT': (
+        "Text explicant la oferta formativa.",
+        "Portada, bloc que informa sobre la formació."),
+    "CONTENT_HOME_PROJECTS_TITLE": (
+        "Acompanyament de projectes",
+        "Portada: títol del bloc que informa sobre l'acompanyament de projectes."),
+    "CONTENT_HOME_PROJECTS_TEXT": (
+        "Text explicant el servei d'acompanyament en la creació i consolidació de projectes.",
+        "Portada: bloc que informa sobre l'acompanyament de projectes."),
+    'CONTENT_HOME_TITLE': (
+        "Extranet de Coòpolis per gestionar cursos i projectes",
+        'Portada: títol.'),
     'EMAIL_NEW_PROJECT': (
         "Nova sol·licitud d'acompanyament<br />"                          
         "<br />"
@@ -218,7 +244,9 @@ CONSTANCE_CONFIG_FIELDSETS = {
     'Configuració': ('CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG', 'EMAIL_TO', 'EMAIL_FROM'),
     'Correus': ('EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT', 'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT',
                 'EMAIL_ENROLLMENT_CONFIRMATION', 'EMAIL_ENROLLMENT_REMINDER_SUBJECT', 'EMAIL_ENROLLMENT_REMINDER',),
-    'Textos de la web': ('INTRODUCTION_TEXT',),
+    'Textos de la web': ('INTRODUCTION_TEXT', 'CONTENT_PROJECT_TITLE', 'CONTENT_PROJECT_INFO', 'CONTENT_PROJECT_NEW',
+                         'CONTENT_HOME_COURSES_TITLE', 'CONTENT_HOME_COURSES_TEXT', 'CONTENT_HOME_PROJECTS_TITLE',
+                         "CONTENT_HOME_PROJECTS_TEXT", 'CONTENT_HOME_TITLE'),
 }
 
 # CC Courses
@@ -244,9 +272,6 @@ STATIC_ROOT = 'static'
 SIGNUP_FORM = 'coopolis.forms.MySignUpForm'
 
 # Static texts
-PROJECT_INFO_DESCRIPTION = "TEXT QUE EXPLICA DE QUÈ VA L'ACOMPANYAMENT DE PROJECTES BREUMENT"
-PROJECT_INFO_SUPPORT_PETITION = "Per sol·licitar acompanyament per al teu projecte, accedeix amb el teu compte o " \
-    "crea'n un amb els formularis que hi ha a continuació."
 ADMIN_HEADER = 'Back-office de Coòpolis'
 ADMIN_SITE_TITLE = ''
 ADMIN_INDEX_TITLE = ''

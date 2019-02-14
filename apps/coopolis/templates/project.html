@@ -4,8 +4,10 @@
 
 <div class="page-content">
     <div class="generic-content">
-        <p>{{ description }}</p>
-        <span><a href="https://bcn.coop/suport/">[botó]Més informació a la web de Coòpolis</a></span>
+        <h1>{{ config.CONTENT_PROJECT_TITLE }}</h1>
+        {% if show_new_project_info %}
+            {{ config.CONTENT_PROJECT_NEW|safe }}
+        {% endif %}
     </div>
     <div class="generated-form">
         {% if messages %}

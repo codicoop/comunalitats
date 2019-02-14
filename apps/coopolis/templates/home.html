@@ -3,10 +3,10 @@
 {% block content %}
 <div class="page-content">
     <div class="generic-content">
-        <h1>Extranet de Coòpolis per gestionar cursos i projectes</h1>
+        <h1>{{ config.CONTENT_HOME_TITLE }}</h1>
         <div class="flex-h margin-block">
-            <span><h2>{{ courses_title }}</h2><p>{{ courses_text }}</p></span>
-            <span><h2>{{ projects_title }}</h2><p>{{ projects_text }}</p></span>
+            <span><h2>{{ config.CONTENT_HOME_COURSES_TITLE }}</h2><p>{{ config.CONTENT_HOME_COURSES_TEXT }}</p></span>
+            <span><h2>{{ config.CONTENT_HOME_PROJECTS_TITLE }}</h2><p>{{ config.CONTENT_HOME_PROJECTS_TEXT }}</p></span>
         </div>
     </div>
     {% if not user.is_authenticated %}
