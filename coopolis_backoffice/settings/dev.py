@@ -39,11 +39,11 @@ INSTALLED_APPS = [
     'apps.coopolis.apps.CoopolisConfig',
     'apps.cc_users.apps.UsersConfig',
     'apps.cc_courses.apps.CoursesConfig',
+    'constance.backends.database',
+    'constance',
     'grappelli.dashboard',
     'grappelli',
     'django.contrib.admin',
-    'constance.backends.database',
-    'constance',
     'django_summernote',
     'storages'
 ]
