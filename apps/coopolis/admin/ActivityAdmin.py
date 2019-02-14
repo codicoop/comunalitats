@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from django.contrib import admin
 from django.utils.html import format_html
 from django.http import HttpResponse
 from django.urls import path, reverse
 from cc_courses.models import Activity
 from django.utils.safestring import mark_safe
 from django_summernote.admin import SummernoteModelAdmin
+from simple_history.admin import SimpleHistoryAdmin
 
 
-class ActivityAdmin(SummernoteModelAdmin):
+class ActivityAdmin(SummernoteModelAdmin, SimpleHistoryAdmin):
     list_display = ('date_start', 'spots', 'remaining_spots', 'name', 'attendee_list_field',)
     readonly_fields = ('attendee_list_field',)
     summernote_fields = ('objectives',)

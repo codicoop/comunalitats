@@ -10,6 +10,7 @@ from .CourseAdmin import CourseAdmin
 from .ProjectAdmin import ProjectAdmin
 from .UserAdmin import UserAdmin
 from .CoursePlaceAdmin import CoursePlaceAdmin
+from simple_history.admin import SimpleHistoryAdmin
 
 
 admin.site.register(User, UserAdmin)
@@ -17,7 +18,7 @@ admin.site.register(Project, ProjectAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Activity, ActivityAdmin)
 admin.site.register(CoursePlace, CoursePlaceAdmin)
-admin.site.register(Entity)
+admin.site.register(Entity, SimpleHistoryAdmin)
 
 admin.site.site_header = settings.ADMIN_HEADER
 admin.site.site_title = settings.ADMIN_SITE_TITLE

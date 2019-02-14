@@ -17,6 +17,7 @@ django-storages = "*"
 django-grappelli = "==2.12.2"
 gunicorn = "*"
 factory-boy = "*"
+django-simple-history = "==2.7.0"
 
 [dev-packages]
 

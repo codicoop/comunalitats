@@ -3,6 +3,7 @@
 
 from django.contrib import admin
 from coopolis.models import User
+from simple_history.admin import SimpleHistoryAdmin
 
 
 class UserInline(admin.StackedInline):
@@ -11,7 +12,7 @@ class UserInline(admin.StackedInline):
     extra = 0
 
 
-class ProjectAdmin(admin.ModelAdmin):
+class ProjectAdmin(SimpleHistoryAdmin):
     # TODO: Pulir això.
     '''inlines = [
         UserInline,
