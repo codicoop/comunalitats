@@ -17,6 +17,6 @@ class UserAdmin(admin.ModelAdmin):
     readonly_fields = ('last_login', 'date_joined')
 
     def get_fields(self, request, obj=None):
-        if request.user.is_superuser:
+        if request.user.is_superuser and "is_superuser" not in self.fields:
             self.fields.append('is_superuser')
         return super().get_fields(self, request)
