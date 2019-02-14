@@ -1,5 +1,8 @@
 {% extends "generic.html" %}
 
+{% block loginbox %}
+{% endblock %}
+
 {% block generic %}
   <h1>Sessió tancada!</h1>
   <p><a href="{% url 'loginsignup'%}">Clica aquí per tornar a iniciar la sessió</a>, o torna a la <a href="{% url 'home' %}">portada</a>.</p>
