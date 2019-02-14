@@ -162,9 +162,13 @@ MEDIA_FILE_OVERWRITE = True
 CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
-    'INTRODUCTION_TEXT': ("""
-Des de Coòpolis disposem d’una oferta regular de formació en economia social i cooperativisme per a tots els públics, tant per a aquelles persones que tenen ganes d’apropar-se a l’economia social i solidària, com per a aquelles persones o col·lectius que estan pensant en constituir el seu propi projecte econòmic. A més de les activitats a l’espai Coòpolis de Can Batlló, també oferim formacions descentralitzades en altres espais comunitaris i seus de l’economia social i solidària barcelonina.
-""", 'Text de presentació'),
+    'INTRODUCTION_TEXT': (
+        "Des de Coòpolis disposem d’una oferta regular de formació en economia social i cooperativisme per a tots els "
+        "públics, tant per a aquelles persones que tenen ganes d’apropar-se a l’economia social i solidària, com per "
+        "a aquelles persones o col·lectius que estan pensant en constituir el seu propi projecte econòmic. A més de "
+        "les activitats a l’espai Coòpolis de Can Batlló, també oferim formacions descentralitzades en altres espais "
+        "comunitaris i seus de l’economia social i solidària barcelonina.",
+        'Text de presentació'),
     'EMAIL_NEW_PROJECT': (
         "Nova sol·licitud d'acompanyament<br />"                          
         "<br />"
