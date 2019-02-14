@@ -159,23 +159,54 @@ EXTERNAL_MEDIA_PATH = 'coopolis/media'
 MEDIA_FILE_OVERWRITE = True
 
 # Constance
+CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     'INTRODUCTION_TEXT': ("""
 Des de Coòpolis disposem d’una oferta regular de formació en economia social i cooperativisme per a tots els públics, tant per a aquelles persones que tenen ganes d’apropar-se a l’economia social i solidària, com per a aquelles persones o col·lectius que estan pensant en constituir el seu propi projecte econòmic. A més de les activitats a l’espai Coòpolis de Can Batlló, també oferim formacions descentralitzades en altres espais comunitaris i seus de l’economia social i solidària barcelonina.
 """, 'Text de presentació'),
-    'EMAIL_NEW_PROJECT': ("Nova sol·licitud d'acompanyament<br />"
-                          
-                          "<br />"
-                          "Nom del projecte: {} <br />"
-                          "Telèfon de contacte: {} <br />"
-                          "Correu electrònic de contacte del projecte: {} <br />"
-                          "Correu electrònic de l'usuari que l'ha creat: {} <br />",
-                          "Cos del correu que s'envia quan algú sol·licita un acompanyament."),
-    'EMAIL_NEW_PROJECT_SUBJECT': ("Nova sol·licitud d'acompanyament: {}",
-                                  "Assumpte del correu que s'envia quan algú sol·licita un acompanyament."),
+    'EMAIL_NEW_PROJECT': (
+        "Nova sol·licitud d'acompanyament<br />"                          
+        "<br />"
+        "Nom del projecte: {} <br />"
+        "Telèfon de contacte: {} <br />"
+        "Correu electrònic de contacte del projecte: {} <br />"
+        "Correu electrònic de l'usuari que l'ha creat: {} <br />",
+        "Cos del correu que s'envia quan algú sol·licita un acompanyament."),
+    'EMAIL_NEW_PROJECT_SUBJECT': (
+        "Nova sol·licitud d'acompanyament: {}",
+        "Assumpte del correu que s'envia quan algú sol·licita un acompanyament."),
+    'EMAIL_ENROLLMENT_CONFIRMATION': (
+        "Inscripció a l'activitat: {} <br />"
+        "<br />Dades de l'activitat:<br />"
+        "Data: {}<br />"
+        "Horari: de {} a {}<br />"
+        "Lloc: {}<br />"
+        "<br />"
+        "Les places son limitades. Si finalment no pots assistir-hi, si us plau anul·la la "
+        "teva inscripció. Per fer-ho, pots gestionar les teves inscripcions accedint al "
+        "back-office de Coòpolis amb el teu correu i contrassenya <a href=\"{}\">aquí</a> "
+        "o bé contactar-nos al correu electrònic {}, o trucar-nos al {}.",
+        "Cos del correu que s'envia quan algú s'inscriu a una activitat"),
+    'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT': (
+        "Confirmació d'inscripció a l'activitat: {}",
+        "Assumpte del correu que s'envia quan algú s'inscriu a una activitat"),
+    'EMAIL_ENROLLMENT_REMINDER': (
+        "",
+        "Cos del correu de recordatori que s'envia a tothom que s'ha inscrit"
+        "a una activitat mitjançant el botó per enviar el recordatori a tothom."),
+    'EMAIL_ENROLLMENT_REMINDER_SUBJECT': (
+        "",
+        "Assumpte del correu de recordatori que s'envia a tothom que s'ha inscrit"
+        "a una activitat mitjançant el botó per enviar el recordatori a tothom."),
+    'EMAIL_FROM': ('hola@codi.coop', 'Remitent dels correus electrònics'),
+    'EMAIL_TO_DEBUG': ('p.picornell@gmail.com', 'Correu per fer tests del codi.'),
+    'EMAIL_TO': ('coopolis.laie@gmail.com', "Correu on s'envien les notificacions generals (p.ex. nous projectes)"),
+    'CONTACT_PHONE_NUMBER': ("93 432 00 63", "Número de telèfon que voleu indicar per si algú té dubtes o gestions."),
+    'CONTACT_EMAIL': (
+        "coopolis.laie@gmail.com",
+        "Correu electrònic que voleu indicar per si algú té dubtes o gestions."),
 }
-CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 
 # CC Courses
 
