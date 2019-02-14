@@ -36,7 +36,7 @@ class MyDashboard(Dashboard):
                     title="Gestió d'usuàries",
                     column=1,
                     collapsible=False,
-                    models=('coopolis.models.User',),
+                    models=('coopolis.models.User', 'django.contrib.auth.models.Group',),
                 ),
                 modules.ModelList(
                     title="Gestió de dades",
