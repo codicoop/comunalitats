@@ -496,9 +496,20 @@ h3 {
   font-size: 1.1rem;
 }
 
+.content {
+  min-height: initial;
+}
+
+.page-content {
+  min-height: initial;
+}
 .page-content img {
   width: fit-content;
   align-self: center;
+}
+
+.generic-content {
+  min-height: initial;
 }
 
 .flex-h {
