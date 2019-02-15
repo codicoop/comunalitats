@@ -68,6 +68,7 @@ class Project(models.Model):
     project_origins = models.TextField("Orígens del projecte", blank=True, null=True)
     solves_necessities = models.TextField("Quines necessitats resol el vostre projecte?", blank=True, null=True)
     social_base = models.TextField("Compta el vostre projecte amb una base social?", blank=True, null=True)
+    constitution_date = models.DateField("Data de constitució", blank=True, null=True)
     estatuts = models.FileField("Estatuts", blank=True, null=True, upload_to=estatuts_upload_path, max_length=250)
     viability = models.FileField("Pla de viabilitat", blank=True, null=True,
                                  upload_to=estatuts_upload_path, max_length=250)
