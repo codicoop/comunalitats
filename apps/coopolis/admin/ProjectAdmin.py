@@ -6,17 +6,12 @@ from coopolis.models import User
 from simple_history.admin import SimpleHistoryAdmin
 
 
-class UserInline(admin.StackedInline):
-    model = User
-    fields = ('first_name',)
-    extra = 0
-
-
 class ProjectAdmin(SimpleHistoryAdmin):
-    # TODO: Pulir això.
-    '''inlines = [
-        UserInline,
-    ]'''
+    list_display = ('name', 'web', 'mail', 'phone', 'project_responsible', 'registration_date', 'subsidy_period')
+    search_fields = ('name', 'web', 'mail', 'phone', 'project_responsible', 'registration_date', 'subsidy_period',
+                     'object_finality', 'project_origins', 'solves_necessities', 'social_base', 'sector')
+    list_filter = (('project_responsible', admin.RelatedOnlyFieldListFilter), 'registration_date', 'subsidy_period',
+                   'sector')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "project_responsible":
