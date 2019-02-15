@@ -56,13 +56,18 @@
   <table cellspacing="0" cellpadding="0">
     <tbody>
       <tr>
-        <td class="table-header-caption">EXPEDIENT</td><td class="content""></td><td class="table-header-caption">PROJECTE</td><td class="table-header-content""></td>
+        <td class="table-header-caption">EXPEDIENT</td><td class="content""></td>
+        <td class="table-header-caption">PROJECTE</td><td class="table-header-content"">{{ activity.course }}</td>
       </tr>
       <tr>
-        <td class="table-header-caption">ENTITAT</td><td colspan="3"></td>
+        <td class="table-header-caption">ENTITAT</td>
+        <td colspan="3">{{ activity.entity }}</td>
       </tr>
       <tr>
-        <td class="table-header-caption">NOM DE L'ACTIVITAT</td><td></td><td class="table-header-caption">DATA</td><td></td>
+        <td class="table-header-caption">NOM DE L'ACTIVITAT</td>
+        <td>{{ activity.name }}</td>
+        <td class="table-header-caption">DATA</td>
+        <td>{{ activity.date_start }}</td>
       </tr>
     </tbody>
   </table>
@@ -76,7 +81,9 @@
     <tbody style="height: auto;">
       {% for assistant in assistants %}
       <tr>
-        <td></td><td>{{ assistant.full_name }}</td><td></td>
+        <td>{{ assistant.id_number }}</td>
+        <td>{{ assistant.full_name }}</td>
+        <td></td>
       </tr>
       {% endfor %}
     </tbody>

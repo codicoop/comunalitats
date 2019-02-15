@@ -88,7 +88,12 @@ class ActivityAdmin(SummernoteModelAdmin, SimpleHistoryAdmin):
         import weasyprint
         import django.template.loader as loader
         temp = loader.get_template('admin/attendee_list.html')
-        content = temp.render({'assistants': Activity.objects.get(pk=_id).enrolled.all()})
+        content = temp.render(
+            {
+                'assistants': Activity.objects.get(pk=_id).enrolled.all(),
+                'activity': Activity.objects.get(pk=_id)
+            }
+        )
         pdf = weasyprint.HTML(string=content.encode('utf-8'))
         response = HttpResponse(pdf.write_pdf(), content_type='application/pdf')
         response['Content-Disposition'] = 'filename="llista_assistencia.pdf"'
