@@ -11,7 +11,7 @@ from simple_history.admin import SimpleHistoryAdmin
 
 
 class ActivityAdmin(SummernoteModelAdmin, SimpleHistoryAdmin):
-    list_display = ('date_start', 'spots', 'remaining_spots', 'name', 'attendee_list_field',)
+    list_display = ('date_start', 'spots', 'remaining_spots', 'name', 'attendee_filter_field', 'attendee_list_field',)
     readonly_fields = ('attendee_list_field',)
     summernote_fields = ('objectives',)
     search_fields = ('date_start', 'name', 'objectives',)
@@ -75,18 +75,12 @@ class ActivityAdmin(SummernoteModelAdmin, SimpleHistoryAdmin):
                 self.admin_site.admin_view(self.attendee_list),
                 name='attendee-list',
             ),
-            path(
-                r'<_id>/attendee-management/',
-                self.admin_site.admin_view(self.attendee_management),
-                name='attendee-management',
-            ),
         ]
         return custom_urls + urls
 
     def attendee_list_field(self, obj):
         return format_html('<a href="%s" target="_new">Llista d\'assistencia</a>' % reverse('admin:attendee-list',
                                                                                             kwargs={'_id': obj.id}))
-
     attendee_list_field.allow_tags = True
     attendee_list_field.short_description = 'Exportar'
 
@@ -100,15 +94,11 @@ class ActivityAdmin(SummernoteModelAdmin, SimpleHistoryAdmin):
         response['Content-Disposition'] = 'filename="llista_assistencia.pdf"'
         return response
 
-    def attendee_management_field(self, obj):
-        return format_html('<a href="%s">Gestionar inscripcions</a>' % reverse('admin:attendee-management',
-                                                                               kwargs={'_id': obj.id}))
+    def attendee_filter_field(self, obj):
+        return mark_safe(u'<a href="../../%s/%s?enrolled_activities__exact=%d">Inscrites</a>' % (
+            'coopolis', 'user', obj.id))
 
-    attendee_management_field.allow_tags = True
-    attendee_management_field.short_description = 'Gestió'
-
-    def attendee_management(self, request, _id):
-        return True
+    attendee_filter_field.short_description = 'Llistat'
 
     # define the raw_id_fields
     raw_id_fields = ('enrolled',)
