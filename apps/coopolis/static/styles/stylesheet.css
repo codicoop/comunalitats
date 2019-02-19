@@ -13,7 +13,7 @@ body {
 }
 
 a {
-  color: #2C3C61;
+  color: #c1c1c1;
   font-weight: bold;
 }
 
@@ -92,12 +92,12 @@ header div {
 }
 header div h1 {
   font-family: "Raleway", sans-serif;
-  color: #2C3C61;
+  color: #e94e1b;
   font-size: 2rem;
 }
 header div h2 {
   font-family: "Raleway", sans-serif;
-  color: #2C3C61;
+  color: #e94e1b;
   font-size: 1.5rem;
 }
 header .logo {
@@ -161,7 +161,7 @@ header ul {
   font-weight: bolder;
   display: flex;
   flex-direction: row-reverse;
-  background-color: #BE9D7A;
+  background-color: #e94e1b;
   padding: 10px 0;
 }
 header ul li {
@@ -178,7 +178,7 @@ header ul a:hover {
 }
 
 .introduction {
-  background-color: #2C3C61;
+  background-color: #c1c1c1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -186,7 +186,7 @@ header ul a:hover {
   flex-wrap: wrap;
 }
 .introduction p {
-  color: white;
+  color: #242424;
   width: 60%;
   text-align: center;
   display: inline-block;
@@ -211,8 +211,9 @@ header ul a:hover {
 
 .subtitle {
   width: 100%;
-  background-color: #BE9D7A;
+  background-color: #e94e1b;
   padding: 5px;
+  color: white;
 }
 
 .courses-container {
@@ -224,7 +225,7 @@ header ul a:hover {
 .courses-container .course {
   display: flex;
   width: 100%;
-  border: 1px solid #BE9D7A;
+  border: 1px solid #e94e1b;
   margin-top: 20px;
   padding: 25px;
 }
@@ -276,18 +277,21 @@ header ul a:hover {
 footer {
   display: flex;
   min-height: 100px;
-  background-color: #2C3C61;
+  background-color: #c1c1c1;
   align-content: center;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 footer a {
-  color: #BE9D7A;
+  color: #e94e1b;
+}
+footer .link-codi-cooperatiu {
+  color: #242424;
 }
 footer p {
-  display: flex;
-  color: #F0F0F0;
+  display: initial;
+  color: #242424;
   font-size: 0.8rem;
   margin-bottom: 10px;
 }
@@ -521,6 +525,10 @@ h3 {
 
 .margin-block {
   margin-top: 20px;
+}
+
+header ul a {
+  color: white;
 }
 
 /*# sourceMappingURL=stylesheet.css.map */

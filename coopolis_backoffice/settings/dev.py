@@ -256,7 +256,7 @@ CONSTANCE_CONFIG = {
         "Assumpte del correu de recordatori que s'envia a tothom que s'ha inscrit"
         "a una activitat mitjançant el botó per enviar el recordatori a tothom."),
     # Configuration
-    'EMAIL_FROM': ('coopolis@bcn.coop', 'Remitent dels correus electrònics'),
+    'EMAIL_FROM': ('Coòpolis, Ateneu Cooperatiu <coopolis@bcn.coop>', 'Remitent dels correus electrònics'),
     'EMAIL_TO_DEBUG': ('p.picornell@gmail.com', 'Correu per fer tests del codi.'),
     'EMAIL_TO': ('coopolis.laie@gmail.com', "Correu on s'envien les notificacions generals (p.ex. nous projectes)"),
     'CONTACT_PHONE_NUMBER': ("93 432 00 63", "Número de telèfon que voleu indicar per si algú té dubtes o gestions."),

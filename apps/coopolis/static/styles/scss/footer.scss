@@ -9,11 +9,16 @@ footer {
 
     a {
         color: $color-1;
+
+        .link-codi-cooperatiu {
+            color: $color-3;
+        }
     }
 
+
     p {
-        display: flex;
-        color: $color-4;
+        display: initial;
+        color: $color-3;
         font-size: 0.8rem;
         margin-bottom: 10px;
 
