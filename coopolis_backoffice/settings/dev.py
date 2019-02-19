@@ -166,15 +166,23 @@ CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 CONSTANCE_SUPERUSER_ONLY = False
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
-    'INTRODUCTION_TEXT': (
+    # Courses
+    'CONTENT_COURSES_INTRODUCTION': (
         "Des de Coòpolis disposem d’una oferta regular de formació en economia social i cooperativisme per a tots els "
         "públics, tant per a aquelles persones que tenen ganes d’apropar-se a l’economia social i solidària, com per "
         "a aquelles persones o col·lectius que estan pensant en constituir el seu propi projecte econòmic. A més de "
         "les activitats a l’espai Coòpolis de Can Batlló, també oferim formacions descentralitzades en altres espais "
         "comunitaris i seus de l’economia social i solidària barcelonina.",
-        'Text de presentació'),
+        "Formació: text d'introducció a la franja blava"),
+    # Project
+    'CONTENT_PROJECT_INTRODUCTION': (
+        "<p>Des de Coòpolis acompanyem projectes en la seva posada en marxa i constitució com a cooperatives, en aquells "
+        "aspectes centrals per a la seva activitat i facilitem eines i recursos per a la seva consolidació i "
+        "creixement. També dissenyem itineraris per a la transformació d’associacions i altres formes d’empreses a "
+        "cooperatives.</p>",
+        "Apartat Projecte: text d'introducció a la franja blava."),
     'CONTENT_PROJECT_TITLE': (
-        "Acompanyament de projectes",
+        "Assessorament",
         "Apartat Projecte: text d'encapçalament"),
     'CONTENT_PROJECT_INFO': (
         "<p>Per sol·licitar acompanyament per al teu projecte, accedeix amb el teu compte o crea'n un amb els "
@@ -183,21 +191,36 @@ CONSTANCE_CONFIG = {
     'CONTENT_PROJECT_NEW': (
         "<p>Omple el següent formulari per sol·licitar un acompanyament.</p>",
         "Apartat Projecte: Text que es mostra al formulari per sol·licitar un acompanyament"),
+    # Home
     'CONTENT_HOME_COURSES_TITLE': (
         "Formació i activitats",
         "Portada, títol del bloc que informa sobre la formació."),
     'CONTENT_HOME_COURSES_TEXT': (
-        "Text explicant la oferta formativa.",
-        "Portada, bloc que informa sobre la formació."),
+        "Disposem d’una oferta regular de formació en economia solidària i cooperativisme per a tots els públics, tant "
+        "per a aquelles persones que tenen ganes d’apropar-se a l’ESS per primera vegada, els col·lectius que estan "
+        "engegant un projecte, i cooperatives que volen consolidar la seva activitat incorporant nous coneixements "
+        "especialitzats.",
+        "Portada, títol del bloc que informa sobre la formació."),
+    'CONTENT_HOME_INTRODUCTION': (
+        "<p>Benvingudes a la web de gestió d’inscripcions i acompanyaments de Coòpolis!</p>"
+        "<p>Podreu realitzar les inscripcions de les formacions, i sol·licitar assessorament per a la creació de "
+        "projectes cooperatius.</p>"
+        "<p>Si encara no formeu part, registreu-vos!</p>"
+        "<p>Si ja en formeu part, entreu al vostre perfil per a poder gestionar inscripcions i projectes.</p>",
+        "Portada, text d'introducció a la franja blava."),
     "CONTENT_HOME_PROJECTS_TITLE": (
         "Acompanyament de projectes",
         "Portada: títol del bloc que informa sobre l'acompanyament de projectes."),
     "CONTENT_HOME_PROJECTS_TEXT": (
-        "Text explicant el servei d'acompanyament en la creació i consolidació de projectes.",
+        "Des de Coòpolis acompanyem projectes en la seva posada en marxa i constitució com a cooperatives, en aquells "
+        "aspectes centrals per a la seva activitat i facilitem eines i recursos per a la seva consolidació i "
+        "creixement. També dissenyem itineraris per a la transformació d’associacions i altres formes d’empreses a "
+        "cooperatives.",
         "Portada: bloc que informa sobre l'acompanyament de projectes."),
     'CONTENT_HOME_TITLE': (
         "Extranet de Coòpolis per gestionar cursos i projectes",
         'Portada: títol.'),
+    # E-mails
     'EMAIL_NEW_PROJECT': (
         "Nova sol·licitud d'acompanyament<br />"                          
         "<br />"
@@ -232,21 +255,24 @@ CONSTANCE_CONFIG = {
         "",
         "Assumpte del correu de recordatori que s'envia a tothom que s'ha inscrit"
         "a una activitat mitjançant el botó per enviar el recordatori a tothom."),
-    'EMAIL_FROM': ('hola@codi.coop', 'Remitent dels correus electrònics'),
+    # Configuration
+    'EMAIL_FROM': ('coopolis@bcn.coop', 'Remitent dels correus electrònics'),
     'EMAIL_TO_DEBUG': ('p.picornell@gmail.com', 'Correu per fer tests del codi.'),
     'EMAIL_TO': ('coopolis.laie@gmail.com', "Correu on s'envien les notificacions generals (p.ex. nous projectes)"),
     'CONTACT_PHONE_NUMBER': ("93 432 00 63", "Número de telèfon que voleu indicar per si algú té dubtes o gestions."),
     'CONTACT_EMAIL': (
-        "coopolis.laie@gmail.com",
+        "coopolis@bcn.coop",
         "Correu electrònic que voleu indicar per si algú té dubtes o gestions."),
 }
 CONSTANCE_CONFIG_FIELDSETS = {
     'Configuració': ('CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG', 'EMAIL_TO', 'EMAIL_FROM'),
     'Correus': ('EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT', 'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT',
                 'EMAIL_ENROLLMENT_CONFIRMATION', 'EMAIL_ENROLLMENT_REMINDER_SUBJECT', 'EMAIL_ENROLLMENT_REMINDER',),
-    'Textos de la web': ('INTRODUCTION_TEXT', 'CONTENT_PROJECT_TITLE', 'CONTENT_PROJECT_INFO', 'CONTENT_PROJECT_NEW',
-                         'CONTENT_HOME_COURSES_TITLE', 'CONTENT_HOME_COURSES_TEXT', 'CONTENT_HOME_PROJECTS_TITLE',
-                         "CONTENT_HOME_PROJECTS_TEXT", 'CONTENT_HOME_TITLE'),
+    "Apartat Portada": ('CONTENT_HOME_COURSES_TITLE', 'CONTENT_HOME_COURSES_TEXT', 'CONTENT_HOME_PROJECTS_TITLE',
+                        "CONTENT_HOME_PROJECTS_TEXT", 'CONTENT_HOME_TITLE', 'CONTENT_HOME_INTRODUCTION'),
+    'Apartat Projectes': ('CONTENT_PROJECT_INTRODUCTION', 'CONTENT_PROJECT_TITLE', 'CONTENT_PROJECT_INFO',
+                          'CONTENT_PROJECT_NEW'),
+    "Apartat Formació": ('CONTENT_COURSES_INTRODUCTION',),
 }
 
 # CC Courses

@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="introduction">
+    {{ config.CONTENT_HOME_INTRODUCTION|safe }}
+</div>
 <div class="page-content">
     <div class="generic-content">
         <h1>{{ config.CONTENT_HOME_TITLE }}</h1>
