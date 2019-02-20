@@ -112,6 +112,11 @@ header {
             &:hover {
                 text-decoration: underline;
             }
+
         }
     }
+}
+
+.logout-link {
+    color: $color-1;
 }

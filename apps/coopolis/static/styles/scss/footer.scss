@@ -9,10 +9,6 @@ footer {
 
     a {
         color: $color-1;
-
-        .link-codi-cooperatiu {
-            color: $color-3;
-        }
     }
 
 
@@ -26,4 +22,8 @@ footer {
             margin-right: 50px;
         }
     }
+}
+
+.link-codi-cooperatiu {
+    color: $color-3;
 }

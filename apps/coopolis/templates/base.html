@@ -60,7 +60,7 @@
                 {% else %}
                 <div class="secondary-menu">
                 <ul>
-                    <li>{{ user.email }} ─ <a href="{% url 'logout' %}">Sortir</a></li>
+                    <li>{{ user.email }} ─ <a class="logout-link" href="{% url 'logout' %}">Sortir</a></li>
                 </ul>
                 </div>
                 {% endif %}

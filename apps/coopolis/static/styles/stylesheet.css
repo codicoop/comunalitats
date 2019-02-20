@@ -177,6 +177,10 @@ header ul a:hover {
   text-decoration: underline;
 }
 
+.logout-link {
+  color: #e94e1b;
+}
+
 .introduction {
   background-color: #c1c1c1;
   display: flex;
@@ -286,9 +290,6 @@ footer {
 footer a {
   color: #e94e1b;
 }
-footer .link-codi-cooperatiu {
-  color: #242424;
-}
 footer p {
   display: initial;
   color: #242424;
@@ -297,6 +298,10 @@ footer p {
 }
 footer p span {
   margin-right: 50px;
+}
+
+.link-codi-cooperatiu {
+  color: #242424;
 }
 
 .modal-background {
