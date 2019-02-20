@@ -175,6 +175,7 @@ class User(BaseUser):
         ('GR', 'Gràcia')
     )
     residence_district = models.TextField("Barri", blank=True, null=True, choices=DISTRICTS)
+    address = models.CharField("Adreça", max_length=50, blank=True, null=True)
     phone_number = models.CharField("Telèfon", max_length=25, blank=True, null=True)
     STUDY_LEVELS = (
         ('MP', 'Màster / Postgrau'),
@@ -203,12 +204,6 @@ class User(BaseUser):
                                                help_text="Tens coneixements / formació / experiència en "
                                                          "cooperativisme? Quina? Cursos realitzats?",
                                                blank=True, null=True)
-    adreca_tipus_via = models.CharField("Tipus de via", max_length=50, blank=True, null=True)
-    adreca_nom_via = models.CharField("Nom de la via", max_length=150, blank=True, null=True)
-    adreca_numero = models.CharField("Número", max_length=50, blank=True, null=True)
-    adreca_bloc = models.CharField("Bloc / Escala", max_length=50, blank=True, null=True)
-    adreca_planta = models.CharField("Planta", max_length=50, blank=True, null=True)
-    adreca_porta = models.CharField("Porta", max_length=50, blank=True, null=True)
     project = models.ForeignKey(Project, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Projecte")
     history = HistoricalRecords()
 
