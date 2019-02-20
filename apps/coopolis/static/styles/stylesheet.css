@@ -7,9 +7,15 @@
   font-size: 0.9rem;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
-  min-height: 100vh;
   background-color: white;
+  display: flex;
+  flex-direction: column;
 }
 
 a {
@@ -26,9 +32,7 @@ h2 {
 }
 
 .content {
-  min-height: 100vh;
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,8 +40,6 @@ h2 {
 }
 
 .page-content {
-  min-height: 100%;
-  height: 100%;
   width: 70%;
   display: flex;
   flex-direction: column;
@@ -46,8 +48,6 @@ h2 {
 }
 
 .generic-content {
-  min-height: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -296,6 +296,7 @@ footer {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-top: auto;
 }
 footer a {
   color: #e94e1b;
@@ -312,6 +313,7 @@ footer p span {
 
 .link-codi-cooperatiu {
   color: #242424;
+  font-size: 0.8rem;
 }
 
 .modal-background {
@@ -555,6 +557,10 @@ label.required {
 }
 label.required:after {
   content: "*";
+}
+
+.block-width {
+  min-width: 700px;
 }
 
 /*# sourceMappingURL=stylesheet.css.map */

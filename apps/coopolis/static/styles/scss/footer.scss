@@ -6,6 +6,7 @@ footer {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin-top: auto;
 
     a {
         color: $color-1;
@@ -26,4 +27,5 @@ footer {
 
 .link-codi-cooperatiu {
     color: $color-3;
+    font-size: 0.8rem;
 }
