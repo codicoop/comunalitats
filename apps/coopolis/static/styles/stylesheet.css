@@ -80,6 +80,15 @@ h2 {
   text-decoration: none;
 }
 
+.breadcrumb {
+  display: flex;
+  justify-self: center;
+  width: 60%;
+}
+.breadcrumb a {
+  color: #242424;
+}
+
 header {
   display: flex;
   flex-direction: column;

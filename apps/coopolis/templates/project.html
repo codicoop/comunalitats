@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="breadcrumb">
+    <span><a href="{% url 'home' %}">Inici</a> > Projecte</span>
+</div>
 <div class="introduction">
     {{ config.CONTENT_PROJECT_INTRODUCTION|safe }}
 </div>

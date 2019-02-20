@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <div class="breadcrumb">
+        <span><a href="{% url 'home' %}">Inici</a> > Formacions</span>
+    </div>
     <div class="introduction">
         <p>
             {{ config.CONTENT_COURSES_INTRODUCTION }}

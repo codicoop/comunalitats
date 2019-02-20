@@ -81,3 +81,12 @@ h2 {
         text-decoration: none;
     }
 }
+
+.breadcrumb {
+    display: flex;
+    justify-self: center;
+    width: 60%;
+    a {
+        color: $color-3;
+    }
+}

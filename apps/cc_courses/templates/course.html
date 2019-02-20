@@ -7,6 +7,9 @@
 
 {% block content %}
 {% load enrollable %}
+<div class="breadcrumb">
+    <span><a href="{% url 'home' %}">Inici</a> > <a href="{% url 'courses' %}">Formacions</a> > {{ course.title }}</span>
+</div>
 <div class="page-content">
 
     <img src="{{ course.banner.url }}" />
