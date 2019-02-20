@@ -8,17 +8,18 @@ from coopolis.widgets import XDSoftDatePickerInput
 
 
 class ProjectForm(forms.ModelForm):
-    registration_date = forms.DateField(label="Data d'entrada a registre", widget=XDSoftDatePickerInput(), required=False)
+    required_css_class = "required"
 
     class Meta:
         model = Project
         fields = '__all__'
-        exclude = ['project_responsible', 'nif', 'subsidy_period']
+        exclude = ['project_responsible', 'cif', 'subsidy_period', 'registration_date', 'constitution_date']
 
 
 class MySignUpForm(UserCreationForm):
+    required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)
-    last_name = forms.CharField(label="Cognom", max_length=30, required=False, help_text='Opcional.')
+    last_name = forms.CharField(label="Cognom", max_length=30, required=False)
     email = forms.EmailField(label="Correu electrònic", max_length=254, help_text='Requerit, ha de ser una adreça vàlida.')
     birthdate = forms.DateField(label="Data de naixement", required=False, widget=XDSoftDatePickerInput())
 
