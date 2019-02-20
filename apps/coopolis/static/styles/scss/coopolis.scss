@@ -70,10 +70,6 @@ h3 {
     margin-top: 20px;
 }
 
-header ul a {
-    color: $color-0;
-}
-
 input:required, textarea:required {
     border-color: $color-4 !important;
 }
@@ -90,4 +86,10 @@ label {
 // Per apartats que encara no s'han fet responsive:
 .block-width {
     min-width: 700px;
+}
+
+.top-wrapper {
+    width: 100%;
+    background-color: $color-4;
+    justify-content: center;
 }

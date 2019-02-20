@@ -2,11 +2,9 @@ header {
     display: flex;
     flex-direction: column;
 
-    div {
-        display: flex;
-        flex-direction: row;
-        align-items: stretch;
-        background-color: $color-4;
+    .content .top-wrapper {
+        width: 70%;
+        justify-content: space-between;
 
         h1 {
             font-family: $menu-font;
@@ -30,7 +28,6 @@ header {
         display: inline-block;
         text-decoration: none;
         margin-bottom: 20px;
-        width: 50%;
     }
 
     .title {
@@ -42,7 +39,6 @@ header {
 
     .secondary-menu {
         // background-image: linear-gradient(90deg,$color-0,lightgray);
-        width: 50%;
         display: flex;
         flex-direction: row-reverse;
         align-content: flex-end;
@@ -92,22 +88,28 @@ header {
         }
     }
     
-    ul {
-        font-weight: bolder;
-        display: flex;
-        flex-direction: row-reverse;
+    .menu {
         background-color: $color-1;
-        padding: 10px 0;
-        
-        li {
-            list-style: none;
-            margin: 0 50px;
+
+        ul {
+            font-weight: bolder;
+            display: flex;
+            flex-direction: row-reverse;
+            padding: 10px 0;
+            justify-self: center;
+            justify-content: space-between;
+            width: 70%;
+
+            li {
+                list-style: none;
+            }
         }
+
         
         a {
             font-family: $menu-font;
             text-decoration: none;
-            color: $color-3;
+            color: $color-0;
 
             &:hover {
                 text-decoration: underline;
@@ -115,8 +117,4 @@ header {
 
         }
     }
-}
-
-.logout-link {
-    color: $color-1;
 }

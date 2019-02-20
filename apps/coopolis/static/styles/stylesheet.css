@@ -19,7 +19,7 @@ body {
 }
 
 a {
-  color: #c1c1c1;
+  color: #e94e1b;
   font-weight: bold;
 }
 
@@ -29,6 +29,10 @@ h1 {
 
 h2 {
   font-size: 1.4rem;
+}
+
+div {
+  display: flex;
 }
 
 .content {
@@ -83,7 +87,7 @@ h2 {
 .breadcrumb {
   display: flex;
   justify-self: center;
-  width: 60%;
+  width: 70%;
 }
 .breadcrumb a {
   color: #242424;
@@ -93,18 +97,16 @@ header {
   display: flex;
   flex-direction: column;
 }
-header div {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  background-color: #F0F0F0;
+header .content .top-wrapper {
+  width: 70%;
+  justify-content: space-between;
 }
-header div h1 {
+header .content .top-wrapper h1 {
   font-family: "Raleway", sans-serif;
   color: #e94e1b;
   font-size: 2rem;
 }
-header div h2 {
+header .content .top-wrapper h2 {
   font-family: "Raleway", sans-serif;
   color: #e94e1b;
   font-size: 1.5rem;
@@ -117,7 +119,6 @@ header .title-link {
   display: inline-block;
   text-decoration: none;
   margin-bottom: 20px;
-  width: 50%;
 }
 header .title {
   display: flex;
@@ -126,7 +127,6 @@ header .title {
   margin-left: 20px;
 }
 header .secondary-menu {
-  width: 50%;
   display: flex;
   flex-direction: row-reverse;
   align-content: flex-end;
@@ -166,28 +166,28 @@ header .secondary-menu ul {
   background-color: #F0F0F0;
   flex-direction: column;
 }
-header ul {
+header .menu {
+  background-color: #e94e1b;
+}
+header .menu ul {
   font-weight: bolder;
   display: flex;
   flex-direction: row-reverse;
-  background-color: #e94e1b;
   padding: 10px 0;
+  justify-self: center;
+  justify-content: space-between;
+  width: 70%;
 }
-header ul li {
+header .menu ul li {
   list-style: none;
-  margin: 0 50px;
 }
-header ul a {
+header .menu a {
   font-family: "Raleway", sans-serif;
   text-decoration: none;
-  color: #242424;
+  color: white;
 }
-header ul a:hover {
+header .menu a:hover {
   text-decoration: underline;
-}
-
-.logout-link {
-  color: #e94e1b;
 }
 
 .introduction {
@@ -544,10 +544,6 @@ h3 {
   margin-top: 20px;
 }
 
-header ul a {
-  color: white;
-}
-
 input:required, textarea:required {
   border-color: #F0F0F0 !important;
 }
@@ -561,6 +557,12 @@ label.required:after {
 
 .block-width {
   min-width: 700px;
+}
+
+.top-wrapper {
+  width: 100%;
+  background-color: #F0F0F0;
+  justify-content: center;
 }
 
 /*# sourceMappingURL=stylesheet.css.map */

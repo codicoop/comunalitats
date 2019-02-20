@@ -24,63 +24,63 @@
   <body>
 
     <header>
-        <div>
-            {% load staticfiles %}
-            <a href="{% url 'home' %}" class="title-link">
-            <div class="logo">
-                <img src="{% static 'images/logo.png' %}" />
-                <div class="title">
-                    <h1>Coòpolis</h1>
-                    <h2>Gestió de projectes i inscripcions</h2>
+        <div class="content">
+            <div class="top-wrapper">
+                {% load staticfiles %}
+                <div>
+                    <a href="{% url 'home' %}" class="title-link">
+                        <div class="logo">
+                            <img src="{% static 'images/logo.png' %}" />
+                            <div class="title">
+                                <h1>Coòpolis</h1>
+                                <h2>Gestió de projectes i inscripcions</h2>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </div>
-            </a>
                 {% if not user.is_authenticated %}
                 {% block loginbox %}
                 <div class="secondary-menu">
-                <form action="{% url 'login_post' %}" method="POST">
-                    {% csrf_token %}
-                    <div class="div-row">
+                    <form action="{% url 'login_post' %}" method="POST">
+                        {% csrf_token %}
                         <div class="div-column">
                             <div class="div-row">
                                 <input type="text" name="username" placeholder="Adreça d'e-mail">
                                 <input type="password" name="password" placeholder="Contrasenya">
                             </div>
                             <div class="div-row-reverse">
-                            <input type="checkbox" name="remember_me"> <label>Mantenir la sessió oberta</label>
+                                <input type="checkbox" name="remember_me"> <label>Mantenir la sessió oberta</label>
+                                <input type='submit' value='Accedir'>
                             </div>
                         </div>
-                        <div class="div-column">
-                            <input type='submit' value='Accedir'>
-                        </div>
-                    </div>
-                </form>
+                    </form>
                 </div>
                 {% endblock %}
                 {% else %}
                 <div class="secondary-menu">
-                <ul>
-                    <li>{{ user.email }} ─ <a class="logout-link" href="{% url 'logout' %}">Sortir</a></li>
-                </ul>
+                    <span>{{ user.email }} ─ <a href="{% url 'logout' %}">Sortir</a></span>
                 </div>
                 {% endif %}
-
+            </div>
         </div>
-        <ul>
-            <li><a href="https://bcn.coop/">Web de Coòpolis</a></li>
-        {% if user.is_anonymous %}
-            <li><a href="{% url 'password_reset' %}">Recuperar contrasenya</a></li>
-            <li><a href="{% url 'loginsignup' %}">Crear compte</a></li>
-        {% else %}
-            <li><a href="{% url 'user_profile' %}">Les meves dades</a></li>
-            <li><a href="{% url 'my_activities' %}">Els meus cursos</a></li>
-        {% endif %}
-            <li><a href="{% url 'courses' %}">Inscripcions</a></li>
-            <li><a href="{% url 'project_info' %}">Projecte</a></li>
-        {% if user.is_superuser or user.is_staff %}
-            <li><a href="{% url 'admin:index'%}">Backoffice</a></li>
-        {% endif %}
-        </ul>
+        <div class="content menu">
+            <ul>
+                <li><a href="https://bcn.coop/">Web de Coòpolis</a></li>
+            {% if user.is_anonymous %}
+                <li><a href="{% url 'password_reset' %}">Recuperar contrasenya</a></li>
+                <li><a href="{% url 'loginsignup' %}">Crear compte</a></li>
+            {% else %}
+                <li><a href="{% url 'user_profile' %}">Les meves dades</a></li>
+                <li><a href="{% url 'my_activities' %}">Els meus cursos</a></li>
+            {% endif %}
+                <li><a href="{% url 'courses' %}">Inscripcions</a></li>
+                <li><a href="{% url 'project_info' %}">Projecte</a></li>
+            {% if user.is_superuser or user.is_staff %}
+                <li><a href="{% url 'admin:index'%}">Backoffice</a></li>
+            {% endif %}
+            </ul>
+        </div>
+
     </header>
 
     <div class="content">

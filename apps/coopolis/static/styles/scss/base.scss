@@ -18,7 +18,7 @@ body {
 }
 
 a {
-    color: $color-2;
+    color: $color-1;
     font-weight: bold;
 }
 
@@ -30,6 +30,9 @@ h2 {
     font-size: $h2-font-size;
 }
 
+div {
+    display: flex;
+}
 .content {
     width: 100%;
     display: flex;
@@ -85,7 +88,7 @@ h2 {
 .breadcrumb {
     display: flex;
     justify-self: center;
-    width: 60%;
+    width: 70%;
     a {
         color: $color-3;
     }
