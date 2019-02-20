@@ -39,6 +39,23 @@ class Project(models.Model):
     name = models.CharField("Nom", max_length=200, blank=False, unique=True)
     sector = models.CharField(max_length=2, choices=SECTORS)
     web = models.CharField("Web", max_length=200, blank=True)
+    PROJECT_STATUS_OPTIONS = (
+        ("IN_MEDITATION_PROCESS", "En proces de debat/reflexió"),
+        ("IN_CONSTITUTION_PROCESS", "En constitució"),
+        ("RUNNING", "En funcionament")
+    )
+    project_status = models.CharField("Estat del projecte", max_length=50, blank=True, null=True,
+                                      choices=PROJECT_STATUS_OPTIONS)
+    MOTIVATION_OPTIONS = (
+        ('COOPERATIVISM_EDUCATION', 'Formació en cooperativimse'),
+        ('COOPERATIVE_CREATION', "Constitució d'una cooperativa"),
+        ('TRANSFORM_FROM_ASSOCIATION', "Transformació d'associació a coopetiva"),
+        ('TRANSFORM_FROM_SCP', "Transformació de SCP a coopertiva"),
+        ('ENTERPRISE_RELIEF', "Relleu empresarial"),
+        ('CONSOLIDATION', "Consolidació"),
+        ('OTHER', "Altres"),
+    )
+    motivation = models.CharField("Petició inicial", max_length=50, blank=True, null=True, choices=MOTIVATION_OPTIONS)
     mail = models.EmailField("Correu electrònic")
     phone = models.CharField("Telèfon", max_length=25)
     DISTRICTS = (
