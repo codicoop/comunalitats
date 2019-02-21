@@ -67,44 +67,9 @@
             flex-wrap: wrap;
             flex-direction: column;
         }
-    }
-}
 
-.old-courses-container {
-    margin-top: 50px;
-    display: flex;
-    align-content: center;
-
-    a {
-        text-decoration: none;
-        font-weight: normal;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
-    
-    .container {
-        padding: 0px;
-        width: 100%;
-        margin: auto;
-
-        ul {
-            width: 100%;
-            
-            li {
-                list-style: none;
-                padding: 10px;
-                margin-left: 20px;
-
-                .title {
-                    font-weight: bold;
-                }
-
-                &:nth-child(even) {
-                    background-color:$color-5;
-                }
-            }
+        a {
+            color: initial;
         }
     }
 }

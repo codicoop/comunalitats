@@ -255,37 +255,8 @@ header .menu a:hover {
   flex-wrap: wrap;
   flex-direction: column;
 }
-
-.old-courses-container {
-  margin-top: 50px;
-  display: flex;
-  align-content: center;
-}
-.old-courses-container a {
-  text-decoration: none;
-  font-weight: normal;
-}
-.old-courses-container a:hover {
-  text-decoration: underline;
-}
-.old-courses-container .container {
-  padding: 0px;
-  width: 100%;
-  margin: auto;
-}
-.old-courses-container .container ul {
-  width: 100%;
-}
-.old-courses-container .container ul li {
-  list-style: none;
-  padding: 10px;
-  margin-left: 20px;
-}
-.old-courses-container .container ul li .title {
-  font-weight: bold;
-}
-.old-courses-container .container ul li:nth-child(even) {
-  background-color: #D8C4A4;
+.courses-container .course a {
+  color: initial;
 }
 
 footer {
