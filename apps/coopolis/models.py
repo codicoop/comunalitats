@@ -34,7 +34,10 @@ class Project(models.Model):
         ('L', 'Logística'),
         ('E', 'Educació'),
         ('C', 'Cultura'),
-        ('S', 'Assessorament')
+        ('S', 'Assessorament'),
+        ('M', 'Alimentació'),
+        ('U', 'Cures'),
+        ('R', 'Roba')
     )
     name = models.CharField("Nom", max_length=200, blank=False, unique=True)
     sector = models.CharField(max_length=2, choices=SECTORS)
