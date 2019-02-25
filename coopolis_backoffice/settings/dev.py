@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django_summernote',
     'storages',
-    'simple_history',
 ]
 
 
@@ -58,7 +57,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'coopolis_backoffice.urls'
@@ -93,6 +91,14 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'mysecretpassword',
         'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
+    },
+    'old': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'coopolis_old',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 

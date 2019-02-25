@@ -4,10 +4,9 @@
 
 from django_summernote.admin import SummernoteModelAdmin
 from django.utils.safestring import mark_safe
-from simple_history.admin import SimpleHistoryAdmin
 
 
-class CourseAdmin(SummernoteModelAdmin, SimpleHistoryAdmin):
+class CourseAdmin(SummernoteModelAdmin):
     list_display = ('date_start', 'title', 'hours', 'activities_list_field', 'copy_clipboard_list_field',)
     summernote_fields = ('description',)
     readonly_fields = ('copy_clipboard_field',)

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from simple_history.admin import SimpleHistoryAdmin
+from django.contrib import admin
 
 
-class CoursePlaceAdmin(SimpleHistoryAdmin):
+class CoursePlaceAdmin(admin.ModelAdmin):
     pass

@@ -3,12 +3,11 @@
 
 from django.contrib import admin
 from coopolis.models import User, Project
-from simple_history.admin import SimpleHistoryAdmin
 from django.utils.safestring import mark_safe
 from coopolis.mixins import ExportCsvMixin
 
 
-class ProjectAdmin(SimpleHistoryAdmin, ExportCsvMixin):
+class ProjectAdmin(admin.ModelAdmin, ExportCsvMixin):
     list_display = ('name', 'web', 'mail', 'phone', 'project_responsible', 'registration_date', 'subsidy_period',
                     'partners_field')
     search_fields = ('name', 'web', 'mail', 'phone', 'registration_date', 'object_finality', 'project_origins',

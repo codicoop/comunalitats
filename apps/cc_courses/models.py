@@ -6,7 +6,6 @@ from django.db.models.signals import pre_save
 from uuid import uuid4
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 from datetime import date
-from simple_history.models import HistoricalRecords
 
 
 def upload_path(instance, filename):
@@ -20,7 +19,6 @@ class CoursePlace(models.Model):
 
     name = models.CharField("Nom", max_length=200, blank=False, unique=True)
     address = models.CharField("Adreça", max_length=200)
-    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -33,7 +31,6 @@ class Entity(models.Model):
     name = models.CharField("Nom", max_length=200, blank=False, unique=True)
     legal_id = models.CharField("C.I.F.", max_length=9)
     # TODO: Validate CIF format.
-    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -55,7 +52,6 @@ class Course(models.Model):
     published = models.BooleanField("Publicat")
     created = models.DateTimeField(null=True, blank=True)
     banner = models.ImageField(null=True, upload_to=upload_path, max_length=250)
-    history = HistoricalRecords()
 
     # Fields currently not needed:
     # spots = models.IntegerField('Places totals', default=0)
@@ -113,7 +109,6 @@ class Activity(models.Model):
     )
     axis = models.TextField("Eix", help_text="Eix de la convocatòria on es justificarà.", choices=AXIS_OPTIONS)
     published = models.BooleanField("Publicada", default=True)
-    history = HistoricalRecords()
 
     @property
     def remaining_spots(self):

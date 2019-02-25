@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from simple_history.admin import SimpleHistoryAdmin
+from django.contrib import admin
 
 
-class UserAdmin(SimpleHistoryAdmin):
+class UserAdmin(admin.ModelAdmin):
     list_display = ('id_number', 'last_name', 'first_name', 'email', 'project')
     search_fields = ('id_number', 'last_name', 'first_name', 'email', 'phone_number', 'cooperativism_knowledge')
     list_filter = ('gender', 'project', 'residence_town', 'residence_district', 'is_staff')

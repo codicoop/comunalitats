@@ -2,7 +2,6 @@ from cc_users.models import BaseUser
 from django.db import models
 from uuid import uuid4
 from cc_users.managers import CCUserManager
-from simple_history.models import HistoricalRecords
 
 
 def estatuts_upload_path(instance, filename):
@@ -94,7 +93,6 @@ class Project(models.Model):
                                  upload_to=estatuts_upload_path, max_length=250)
     sostenibility = models.FileField("Pla de sostenibilitat", blank=True, null=True,
                                      upload_to=estatuts_upload_path, max_length=250)
-    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -181,7 +179,6 @@ class User(BaseUser):
                                                          "cooperativisme? Quina? Cursos realitzats?",
                                                blank=True, null=True)
     project = models.ForeignKey(Project, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Projecte")
-    history = HistoricalRecords()
 
     @property
     def full_name(self):
