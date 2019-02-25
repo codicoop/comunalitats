@@ -97,6 +97,17 @@ class Project(models.Model):
         return self.name
 
 
+class Town(models.Model):
+    class Meta:
+        verbose_name = "Població"
+        verbose_name_plural = "Poblacions"
+
+    name = models.CharField("Nom", max_length=250)
+
+    def __str__(self):
+        return self.name
+
+
 class User(BaseUser):
     class Meta:
         verbose_name = "Persona"
@@ -106,62 +117,24 @@ class User(BaseUser):
     REQUIRED_FIELDS = []
     objects = CCUserManager()
 
-    username = models.CharField(unique=False, max_length=150, verbose_name="Nom d'usuari/a")
+    username = models.CharField(unique=False, null=True, max_length=150, verbose_name="Nom d'usuari/a")
     surname2 = models.CharField("Segon cognom", max_length=50, blank=True, null=True)
-    id_number = models.CharField("DNI o NIE", max_length=11)
+    id_number = models.CharField("DNI o NIE", null=True, max_length=11)
     GENDERS = (
         ('A', 'Altre'),
         ('D', 'Dona'),
         ('H', 'Home')
     )
+    gender = models.TextField("Gènere", blank=True, null=True, choices=GENDERS)
     BIRTH_PLACES = (
         ("B", "Barcelona"),
         ("C", "Catalunya"),
         ("E", "Espanya"),
         ("A", "Altre")
     )
-    gender = models.TextField("Gènere", blank=True, null=True, choices=GENDERS)
-    birthdate = models.DateField("Data de naixement", blank=True, null=True)
     birth_place = models.TextField("Lloc de naixement", blank=True, null=True, choices=BIRTH_PLACES)
-    CITIES = (
-        ('78', 'Badalona'),
-        ('79', 'Badia del Vallès'),
-        ('89', 'Barberà del vallès'),
-        ('90', 'Barcelona'),
-        ('96', 'Begues'),
-        ('200', 'Castellbisbal'),
-        ('203', 'Castelldefels'),
-        ('226', 'Cerdanyola del Vallès'),
-        ('227', 'Cervelló'),
-        ('246', 'Corbera de Llobregat'),
-        ('250', 'Cornellà de Llobregat'),
-        ('527', 'El Papiol'),
-        ('581', 'El Prat de Llobregat'),
-        ('269', 'Esplugues de Llobregat'),
-        ('323', 'Gavà'),
-        ('356', "L'Hospitalet de Llobregat"),
-        ('523', 'La Palma de Cervelló'),
-        ('441', 'Molins de Rei'),
-        ('452', 'Montcada i Reixac '),
-        ('459', 'Montgat'),
-        ('522', 'Pallejà'),
-        ('621', 'Ripollet'),
-        ('653', 'Sant Adrià de Besòs'),
-        ('655', 'Sant Andreu de la barca'),
-        ('661', 'Sant Boi de Llobregat'),
-        ('666', 'Sant Climent de Llobregat'),
-        ('668', 'Sant Cugat del Valles'),
-        ('676', 'Sant Feliu de Llobregat'),
-        ('695', 'Sant Joan Despí'),
-        ('702', 'Sant Just Desvern'),
-        ('738', 'Sant Vicenç dels Horts'),
-        ('743', 'Santa Coloma de Gramenet'),
-        ('818', 'Tiana'),
-        ('841', 'Torrelles de Llobregat'),
-        ('899', 'Viladencans'),
-        ('0', 'Altres')
-    )
-    residence_town = models.CharField("Municipi de residència", max_length=150, blank=True, null=True, choices=CITIES)
+    birthdate = models.DateField("Data de naixement", blank=True, null=True)
+    residence_town = models.ForeignKey(Town, on_delete=models.SET_NULL, null=True)
     DISTRICTS = (
         ('CV', 'Ciutat Vella'),
         ('EX', 'Eixample'),
@@ -175,7 +148,7 @@ class User(BaseUser):
         ('GR', 'Gràcia')
     )
     residence_district = models.TextField("Barri", blank=True, null=True, choices=DISTRICTS)
-    address = models.CharField("Adreça", max_length=50, blank=True, null=True)
+    address = models.CharField("Adreça", max_length=250, blank=True, null=True)
     phone_number = models.CharField("Telèfon", max_length=25, blank=True, null=True)
     STUDY_LEVELS = (
         ('MP', 'Màster / Postgrau'),
