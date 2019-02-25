@@ -91,14 +91,6 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'mysecretpassword',
         'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
-    },
-    'old': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'coopolis_old',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
     }
 }
 
