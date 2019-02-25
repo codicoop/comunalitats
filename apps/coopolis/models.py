@@ -25,6 +25,7 @@ class Project(models.Model):
         verbose_name_plural = "Projectes"
         verbose_name = "Projecte"
 
+    name = models.CharField("Nom", max_length=200, blank=False, unique=True)
     SECTORS = (
         ('A', 'Altres'),
         ('C', 'Comunicació i tecnologia'),
@@ -39,7 +40,6 @@ class Project(models.Model):
         ('U', 'Cures'),
         ('R', 'Roba')
     )
-    name = models.CharField("Nom", max_length=200, blank=False, unique=True)
     sector = models.CharField(max_length=2, choices=SECTORS)
     web = models.CharField("Web", max_length=200, blank=True)
     PROJECT_STATUS_OPTIONS = (
