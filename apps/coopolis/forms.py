@@ -29,7 +29,7 @@ class MySignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
-                  'birth_place', 'residence_town', 'residence_district', 'address', 'gender', 'educational_level',
+                  'birth_place', 'town', 'residence_district', 'address', 'gender', 'educational_level',
                   'employment_situation', 'discovered_us', 'password1', 'password2']
 
     def __init__(self, *args, **kwargs):

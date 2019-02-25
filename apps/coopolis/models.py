@@ -135,7 +135,7 @@ class User(BaseUser):
     )
     birth_place = models.TextField("Lloc de naixement", blank=True, null=True, choices=BIRTH_PLACES)
     birthdate = models.DateField("Data de naixement", blank=True, null=True)
-    residence_town = models.ForeignKey(Town, on_delete=models.SET_NULL, null=True)
+    town = models.ForeignKey(Town, on_delete=models.SET_NULL, null=True)
     DISTRICTS = (
         ('CV', 'Ciutat Vella'),
         ('EX', 'Eixample'),
