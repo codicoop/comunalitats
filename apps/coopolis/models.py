@@ -130,10 +130,10 @@ class User(BaseUser):
     )
     gender = models.CharField("Gènere", blank=True, null=True, choices=GENDERS, max_length=10)
     BIRTH_PLACES = (
-        ("B", "Barcelona"),
-        ("C", "Catalunya"),
-        ("E", "Espanya"),
-        ("A", "Altre")
+        ("BARCELONA", "Barcelona"),
+        ("CATALUNYA", "Catalunya"),
+        ("ESPANYA", "Espanya"),
+        ("OTHER", "Altre")
     )
     birth_place = models.TextField("Lloc de naixement", blank=True, null=True, choices=BIRTH_PLACES)
     birthdate = models.DateField("Data de naixement", blank=True, null=True)
@@ -154,26 +154,26 @@ class User(BaseUser):
     address = models.CharField("Adreça", max_length=250, blank=True, null=True)
     phone_number = models.CharField("Telèfon", max_length=25, blank=True, null=True)
     STUDY_LEVELS = (
-        ('MP', 'Màster / Postgrau'),
-        ('SD', 'Secundària'),
-        ('SE', 'Sense estudis'),
+        ('MASTER', 'Màster / Postgrau'),
+        ('HIGH_SCHOOL', 'Secundària'),
+        ('WITHOUT_STUDIES', 'Sense estudis'),
         ('FP', 'Formació professional'),
-        ('FU', 'Estudis universitaris'),
-        ('PR', 'Primària')
+        ('UNIVERSITY', 'Estudis universitaris'),
+        ('ELEMENTARY_SCHOOL', 'Primària')
     )
     educational_level = models.TextField("Nivell d'estudis", blank=True, null=True, choices=STUDY_LEVELS)
     EMPLOYMENT_OPTIONS = (
-        ('AP', 'En actiu per compte propi'),
-        ('PS', 'Perceptora de prestacions socials'),
-        ('DO', "Demandant d'ocupació"),
-        ('AA', 'En actiu per compte aliè')
+        ('SELF_EMPLOYED', 'En actiu per compte propi'),
+        ('UNEMPLOYMENT_BENEFIT_RECEIVER', 'Perceptora de prestacions socials'),
+        ('UNEMPLOYMENT_BENEFIT_REQUESTED', "Demandant d'ocupació"),
+        ('EMPLOYED_WORKER', 'En actiu per compte aliè')
     )
     employment_situation = models.TextField("Situació laboral", blank=True, null=True, choices=EMPLOYMENT_OPTIONS)
     DISCOVERED_US_OPTIONS = (
-        ('IN', 'Per internet i xarxes socials'),
-        ('CO', "A través d'un conegut"),
-        ('AC', "Per una activitat de Coòpolis"),
-        ('AL', 'Altres')
+        ('INTERNET', 'Per internet i xarxes socials'),
+        ('FRIEND', "A través d'un conegut"),
+        ('PREVIOUS_ACTIVITY', "Per una activitat de Coòpolis"),
+        ('OTHER', 'Altres')
     )
     discovered_us = models.TextField("Com ens has conegut", blank=True, null=True, choices=DISCOVERED_US_OPTIONS)
     cooperativism_knowledge = models.TextField("Coneixements previs",
