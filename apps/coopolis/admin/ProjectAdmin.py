@@ -11,8 +11,8 @@ from coopolis.mixins import ExportCsvMixin
 class ProjectAdmin(SimpleHistoryAdmin, ExportCsvMixin):
     list_display = ('name', 'web', 'mail', 'phone', 'project_responsible', 'registration_date', 'subsidy_period',
                     'partners_field')
-    search_fields = ('name', 'web', 'mail', 'phone', 'project_responsible', 'registration_date', 'subsidy_period',
-                     'object_finality', 'project_origins', 'solves_necessities', 'social_base', 'sector')
+    search_fields = ('name', 'web', 'mail', 'phone', 'registration_date', 'object_finality', 'project_origins',
+                     'solves_necessities', 'social_base', 'sector')
     list_filter = (('project_responsible', admin.RelatedOnlyFieldListFilter), 'registration_date', 'subsidy_period',
                    'sector')
     actions = ["export_as_csv"]
