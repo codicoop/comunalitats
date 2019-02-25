@@ -6,8 +6,7 @@ from simple_history.admin import SimpleHistoryAdmin
 
 class UserAdmin(SimpleHistoryAdmin):
     list_display = ('id_number', 'last_name', 'first_name', 'email', 'project')
-    search_fields = ('id_number', 'last_name', 'first_name', 'email', 'residence_town',
-                     'residence_district', 'phone_number', 'cooperativism_knowledge', 'adreca_nom_via')
+    search_fields = ('id_number', 'last_name', 'first_name', 'email', 'phone_number', 'cooperativism_knowledge')
     list_filter = ('gender', 'project', 'residence_town', 'residence_district', 'is_staff')
     fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'birthdate', 'birth_place',
               'residence_town', 'residence_district', 'address', 'phone_number', 'educational_level',

@@ -124,11 +124,11 @@ class User(BaseUser):
     surname2 = models.CharField("Segon cognom", max_length=50, blank=True, null=True)
     id_number = models.CharField("DNI o NIE", null=True, max_length=11)
     GENDERS = (
-        ('A', 'Altre'),
-        ('D', 'Dona'),
-        ('H', 'Home')
+        ('OTHER', 'Altre'),
+        ('FEMALE', 'Dona'),
+        ('MALE', 'Home')
     )
-    gender = models.TextField("Gènere", blank=True, null=True, choices=GENDERS)
+    gender = models.CharField("Gènere", blank=True, null=True, choices=GENDERS, max_length=10)
     BIRTH_PLACES = (
         ("B", "Barcelona"),
         ("C", "Catalunya"),
