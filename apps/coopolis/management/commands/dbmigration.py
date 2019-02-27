@@ -4,12 +4,131 @@ from django.db import connections
 from django.core.management.base import BaseCommand
 from collections import namedtuple
 from coopolis.models import Project, User, Town
+from cc_courses.models import Course, Activity, CoursePlace
 from django.forms.models import model_to_dict
 from django.core.management.commands.flush import Command as Flush
 import re
+from datetime import datetime
+
 
 class Command(BaseCommand):
     help = 'Queries the information from the old Coòpolis backoffice to import it to the new one.'
+
+    def handle(self, *args, **options):
+        print("PROTECTED!")
+        return
+        Flush().handle(interactive=False, database="default", **options)
+        tuples = manual_tuple()
+        self.importprojects(tuples)
+        self.importtowns()
+        self.importusers(tuples)
+        self.importplaces()
+        self.importcourses()
+        self.importactivities()
+        self.importenrollments()
+
+    def importenrollments(self):
+        with connections['old'].cursor() as cursor:
+            cursor.execute("SELECT * FROM WORKSHOPPERSON ORDER BY ID")
+            results = namedtuplefetchall(cursor)
+            for result in results:
+                # TODO: BÀSICAMENT, volcar les IDs dels 2 camps a la taula de enrolled.
+                # Ho podem fer objecte per objecte i que generi la seva auto id.
+                with connections['default'].cursor() as insert:
+                    insert.execute("INSERT INTO "
+                                   "cc_courses_activity_enrolled(activity_id, user_id) "
+                                   "VALUES ("+str(result.workshopId)+", "+str(result.personId)+") "
+                                   "ON CONFLICT DO NOTHING")
+                print("Enrollment inserted. Old DB ID: "+str(result.ID))
+            print("Imported: Inscripcions")
+
+    def importcourses(self):
+        with connections['old'].cursor() as cursor:
+            cursor.execute("SELECT * FROM EDUCATION ORDER BY ID")
+            results = namedtuplefetchall(cursor)
+            for result in results:
+                print("Importing course, old database ID: "+str(result.ID))
+
+                date_start = self.get_first_activity_date(result.ID)
+                if date_start is None:
+                    date_start = result.ORDINATIONDATE
+                if date_start is None:
+                    print("No starting day nor activities with a starting date, SKIPPING!")
+                    continue
+
+                row = Course(
+                    id=result.ID,
+                    title=result.TITLE,
+                    slug=result.SLUG,
+                    date_start=date_start,
+                    date_end=None,
+                    hours=result.SCHEDULESUMMARY,
+                    description=result.SHORTOBJECTIVES,
+                    published=True,
+                    # Banner: pending to import!
+                )
+                row.save()
+            self.synchronize_last_sequence(Course)
+            print("Imported: Courses")
+
+    def importplaces(self):
+        with connections['old'].cursor() as cursor:
+            cursor.execute("SELECT * FROM GEOLOCATION ORDER BY ID")
+            results = namedtuplefetchall(cursor)
+            for result in results:
+                print("Importing Place, old database ID: "+str(result.ID))
+
+                row = CoursePlace(
+                    id=result.ID,
+                    name=result.NAME,
+                    address=result.ADDRESS
+                )
+                row.save()
+            self.synchronize_last_sequence(CoursePlace)
+            print("Imported: Places")
+
+    def importactivities(self):
+        with connections['old'].cursor() as cursor:
+            cursor.execute("SELECT * FROM WORKSHOP ORDER BY ID")
+            results = namedtuplefetchall(cursor)
+            for result in results:
+                to_skip = False
+                print("Importing Activity, old database ID: "+str(result.ID))
+
+                starting_time = self.parse_time(result.STARTTIME)
+                if starting_time is None:
+                    starting_time = datetime.strptime("11:00", "%H:%M")
+                    print("Activity without Starting Time, set to 11:00. Title: "+result.TITLE)
+                ending_time = self.parse_time(result.ENDTIME)
+                if ending_time is None and starting_time is not None:
+                    ending_time = self.create_ending_time(starting_time)
+
+                course_id = result.education_id
+                if course_id is None:
+                    print("Activity without Course, CREATING COURSE. Title: "+result.TITLE)
+                    new_course = self.create_course(result)
+                    course_id = new_course.pk
+                    print("New course ID: "+str(course_id))
+
+                row = Activity(
+                    id=result.ID,
+                    course_id=course_id,
+                    name=result.TITLE,
+                    objectives=result.SHORTOBJECTIVES,
+                    place_id=result.GEOLOCATION_ID,
+                    date_start=result.DATE,
+                    starting_time=starting_time,
+                    ending_time=ending_time,
+                    spots=result.PLACES,
+                    # TODO: omplir el m2m dels ENROLLEDS, en una altra funció
+                    organizer="AT",
+                    entity=None,
+                    axis=None,
+                    published=True
+                )
+                row.save()
+            self.synchronize_last_sequence(Activity)
+            print("Imported: Activities")
 
     def importprojects(self, tuples):
         with connections['old'].cursor() as cursor:
@@ -142,13 +261,6 @@ class Command(BaseCommand):
             results = namedtuplefetchall(cursor)
             print(results[0].STREETNAME)
 
-    def handle(self, *args, **options):
-        Flush().handle(interactive=False, database="default", **options)
-        tuples = manual_tuple()
-        self.importprojects(tuples)
-        self.importtowns()
-        self.importusers(tuples)
-
     def resolve_address(self, personID):
         with connections['old'].cursor() as cursor:
             cursor.execute("SELECT * FROM ADDRESS WHERE person_id="+str(personID)+" ORDER BY ID LIMIT 1")
@@ -184,6 +296,46 @@ class Command(BaseCommand):
                 model._meta.db_table + "))"
             )
         print("Last auto-incremental number for sequence "+sequence_name+" synchronized.")
+
+    def get_first_activity_date(self, course_id):
+        print("Resolving first activity date for Course ID: "+str(course_id))
+        with connections['old'].cursor() as cursor:
+            cursor.execute("SELECT * FROM WORKSHOP WHERE education_id=" + str(course_id) + " ORDER BY DATE LIMIT 1")
+            results = namedtuplefetchall(cursor)
+            if len(results) == 0:
+                print("0 results, returning None")
+                return None
+            for result in results:
+                print("Activity found, returning: "+str(result.DATE))
+                return result.DATE
+
+    def parse_time(self, time_string):
+        if not time_string:
+            return None
+        clean_time_string = time_string.replace(".", ":").replace("h", "")
+        if len(clean_time_string) < 3:
+            clean_time_string = clean_time_string+":00"
+        return datetime.strptime(clean_time_string, "%H:%M")
+
+    def create_ending_time(self, starting_time):
+        ending_time = datetime.strptime(str(starting_time.hour + 1) + ":" + str(starting_time.minute), "%H:%M")
+        print(
+            "Ending time None. Using starting time (" +
+            str(starting_time.time()) + ") +1 hour (" +
+            str(ending_time.time()) + ")")
+        return ending_time
+
+    def create_course(self, result):
+        row = Course(
+            title=result.TITLE,
+            date_start=result.DATE,
+            date_end=None,
+            hours="De " + result.STARTTIME + " a " + result.ENDTIME,
+            description=result.SHORTOBJECTIVES,
+            published=True,
+        )
+        row.save()
+        return row
 
 
 def manual_tuple():

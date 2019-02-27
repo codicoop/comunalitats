@@ -42,10 +42,10 @@ class Course(models.Model):
         verbose_name_plural = "Formacions"
         ordering = ["date_start"]
 
-    title = models.CharField("Títol", max_length=200, blank=False)
-    slug = models.CharField(max_length=100, unique=True)
+    title = models.CharField("Títol", max_length=250, blank=False)
+    slug = models.CharField(max_length=250, unique=True)
     date_start = models.DateField("Dia inici")
-    date_end = models.DateField("Dia finalització")
+    date_end = models.DateField("Dia finalització", null=True, blank=True)
     hours = models.CharField("Horaris", blank=False, max_length=200,
                              help_text="Indica només els horaris, sense els dies.")
     description = models.TextField("Descripció", null=True)
@@ -107,7 +107,8 @@ class Activity(models.Model):
         ('C', "Eix C"),
         ('D', 'Eix D')
     )
-    axis = models.TextField("Eix", help_text="Eix de la convocatòria on es justificarà.", choices=AXIS_OPTIONS)
+    axis = models.TextField("Eix", help_text="Eix de la convocatòria on es justificarà.", choices=AXIS_OPTIONS,
+                            null=True, blank=True)
     published = models.BooleanField("Publicada", default=True)
 
     @property
