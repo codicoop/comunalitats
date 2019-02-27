@@ -23,7 +23,7 @@
                         <br />
                         <p>Horaris: {{ course.hours }}</p>
                         <br />
-                        <p>{{ course.description }}</p>
+                        <p>{{ course.description|safe }}</p>
                     </div>
                 </div>
             {% endfor %}
@@ -43,7 +43,7 @@
                         <br />
                         <p>Horaris: {{ course.hours }}</p>
                         <br />
-                        <p>{{ course.description }}</p>
+                        <p>{{ course.description|safe }}</p>
                     </div>
                 </div>
             {% endfor %}
