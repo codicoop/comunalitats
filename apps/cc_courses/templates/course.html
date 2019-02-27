@@ -12,7 +12,9 @@
 </div>
 <div class="page-content">
 
+{% if course.banner %}
     <img src="{{ course.banner.url }}" />
+{% endif %}
     <h1>{{ course.title }}</h1><br />
 
     <h2>Activitats en aquesta formació:</h2>
