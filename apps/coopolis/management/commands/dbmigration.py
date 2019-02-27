@@ -235,7 +235,7 @@ class Command(BaseCommand):
                     discovered_us=discovered_us,
                     cooperativism_knowledge=result.coneixementsPrevis,
                 )
-                row.residence_town_id = result.idCiutat
+                row.town_id = result.idCiutat
                 row.project_id = result.idProjecte
                 row.save()
             self.synchronize_last_sequence(User)
