@@ -11,7 +11,7 @@
                 <a
                     id="actButton{{activity.id}}"
                     href="#"
-                    onclick="javascript:onOptoutButtonClick('{{activity.name}}', '{% url 'activity_optout' id=activity.id %}');"
+                    onclick="javascript:onOptoutButtonClick('{{ activity.name|escapejs }}', '{% url 'activity_optout' id=activity.id %}');"
                     class="enroll-button"
                 >
                     <div>

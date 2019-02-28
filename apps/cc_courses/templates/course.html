@@ -33,7 +33,7 @@
                 <a
                         id="actButton{{activity.id}}"
                         href="#"
-                        onclick="javascript:onInscriptionButtonClick('{{activity.name}}', '{% url 'enroll_course' id=activity.id %}', '{% url 'loginsignup' %}?next={{ request.get_full_path }}&act={{activity.id}}');"
+                        onclick="javascript:onInscriptionButtonClick('{{ activity.name|escapejs }}', '{% url 'enroll_course' id=activity.id %}', '{% url 'loginsignup' %}?next={{ request.get_full_path }}&act={{activity.id}}');"
                         class="enroll-button"
                 >
                 <div>
