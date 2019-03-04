@@ -58,13 +58,12 @@
             Confirmació
         </div>
         <div class="modal-content">
-            Ets a punt d'inscriure't a l'activitat:
-            <p><strong id="modal-title-text"></strong></p>
-            <br>
+            <p>Ets a punt d'inscriure't a l'activitat:</p>
+            <p id="modal-title-text"></p>
             {% if user.is_anonymous %}
-            Però per fer-ho has d'accedir al teu compte o bé registrar-te.
+            <p>Però per fer-ho has d'accedir al teu compte o bé registrar-te.</p>
             {% else %}
-            Segur que vols inscriure't-hi?
+            <p>Segur que vols inscriure't-hi?</p>
             {% endif %}
         </div>
         <div class="modal-buttons">
