@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django_summernote',
     'storages',
+    'easy_thumbnails',
 ]
 
 
@@ -305,3 +306,9 @@ GRAPPELLI_ADMIN_TITLE = "Back-office de Coòpolis"
 GRAPPELLI_SWITCH_USER = False
 GRAPPELLI_INDEX_DASHBOARD = 'coopolis.dashboard.MyDashboard'
 
+THUMBNAIL_ALIASES = {
+    '': {
+        'course_list': {'size': (150, 200), 'scale-crop': True},
+    },
+}
+THUMBNAIL_DEFAULT_STORAGE = 'cc_lib.storages.MediaStorage'

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load thumbnail %}
 
 {% block content %}
     <div class="breadcrumb">
@@ -15,7 +16,7 @@
             {% for course in future_courses %}
                 <div class="course">
                     {% if course.banner %}
-                    <a href="{{ course.absolute_url }}"><div class="course-image" style="background-image: url('{{ course.banner.url }}')"></div></a>
+                    <a href="{{ course.absolute_url }}"><div class="course-image" style="background-image: url('{{ course.banner.course_list.url }}')"></div></a>
                     {% endif %}
                     <div class="course-data">
                         <a href="{{ course.absolute_url }}"><h3>{{ course.title }}</h3></a>
@@ -35,7 +36,7 @@
             {% for course in past_courses %}
                 <div class="course">
                     {% if course.banner %}
-                    <a href="{{ course.absolute_url }}"><div class="course-image" style="background-image: url('{{ course.banner.url }}')"></div></a>
+                    <a href="{{ course.absolute_url }}"><div class="course-image" style="background-image: url('{{ course.banner.course_list.url }}')"></div></a>
                     {% endif %}
                     <div class="course-data">
                         <a href="{{ course.absolute_url }}"><h3>{{ course.title }}</h3></a>

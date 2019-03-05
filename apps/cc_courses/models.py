@@ -6,6 +6,7 @@ from django.db.models.signals import pre_save
 from uuid import uuid4
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 from datetime import date
+from easy_thumbnails.fields import ThumbnailerImageField
 
 
 def upload_path(instance, filename):
@@ -51,7 +52,7 @@ class Course(models.Model):
     description = models.TextField("Descripció", null=True)
     published = models.BooleanField("Publicat")
     created = models.DateTimeField(null=True, blank=True)
-    banner = models.ImageField(null=True, upload_to=upload_path, max_length=250)
+    banner = ThumbnailerImageField(null=True, upload_to=upload_path, max_length=250)
 
     # Fields currently not needed:
     # spots = models.IntegerField('Places totals', default=0)

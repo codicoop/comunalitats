@@ -249,6 +249,7 @@ header .menu a:hover {
   height: 100%;
   background-size: contain;
   margin-right: 20px;
+  background-repeat: no-repeat;
 }
 .courses-container .course .course-data {
   display: flex;
