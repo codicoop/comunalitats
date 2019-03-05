@@ -29,26 +29,5 @@
                 </div>
             {% endfor %}
         </div>
-
-        {% if past_courses %}
-        <h2 class="subtitle">Cursos passats</h2>
-        <div class="courses-container">
-            {% for course in past_courses %}
-                <div class="course">
-                    {% if course.banner %}
-                    <a href="{{ course.absolute_url }}"><div class="course-image" style="background-image: url('{{ course.banner.course_list.url }}')"></div></a>
-                    {% endif %}
-                    <div class="course-data">
-                        <a href="{{ course.absolute_url }}"><h3>{{ course.title }}</h3></a>
-                        <p>Inici de les activitats: {{ course.date_start }}</p>
-                        <br />
-                        <p>Horaris: {{ course.hours }}</p>
-                        <br />
-                        <p>{{ course.description|safe }}</p>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-        {% endif %}
     </div>
 {% endblock %}
