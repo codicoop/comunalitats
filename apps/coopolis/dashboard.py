@@ -30,7 +30,7 @@ class MyDashboard(Dashboard):
                     title='Acompanyament de projectes',
                     column=1,
                     collapsible=False,
-                    models=('coopolis.models.Project',),
+                    models=('coopolis.models.Project', 'coopolis.models.ProjectStage'),
                 ),
                 modules.ModelList(
                     title="Gestió d'usuàries",

@@ -296,10 +296,22 @@ STATIC_ROOT = 'static'
 
 SIGNUP_FORM = 'coopolis.forms.MySignUpForm'
 
-# Static texts
+# Static texts and option fields
 ADMIN_HEADER = 'Back-office de Coòpolis'
 ADMIN_SITE_TITLE = ''
 ADMIN_INDEX_TITLE = ''
+AXIS_OPTIONS = (
+    ('B', 'Eix B'),
+    ('C', "Eix C"),
+    ('D', 'Eix D')
+)
+ORGANIZER_OTIONS = (
+    ('AT', 'Ateneu'),
+    ('CM', 'Cercle Migracions'),
+    ('CI', "Cercle Incubació"),
+    ('CC', 'Cercle Consum')
+)
+SUBSIDY_PERIOD_OPTIONS = (("2018", "2017-2018"), ("2019", "2018-2019"))
 
 # Grappeli (https://django-grappelli.readthedocs.io/en/latest/customization.html)
 GRAPPELLI_ADMIN_TITLE = "Back-office de Coòpolis"

@@ -3,6 +3,7 @@ from cc_lib.utils import slugify_model
 from .utils import get_enrollable_class
 from django.shortcuts import reverse
 from django.db.models.signals import pre_save
+from django.conf import settings
 from uuid import uuid4
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 from datetime import date
@@ -94,22 +95,10 @@ class Activity(models.Model):
     spots = models.IntegerField('Places totals', default=0)
     enrolled = models.ManyToManyField(get_enrollable_class(), blank=True, related_name='enrolled_activities',
                                       verbose_name="Inscrites")
-    ORGANIZER_OTIONS = (
-        ('AT', 'Ateneu'),
-        ('CM', 'Cercle Migracions'),
-        ('CI', "Cercle Incubació"),
-        ('CC', 'Cercle Consum')
-    )
-    organizer = models.TextField("Qui ho organitza", choices=ORGANIZER_OTIONS)
+    organizer = models.CharField("Qui ho fa", choices=settings.ORGANIZER_OTIONS, max_length=2)
     entity = models.ForeignKey(Entity, on_delete=models.SET_NULL, null=True)
-    AXIS_OPTIONS = (
-        ('A', 'Eix A'),
-        ('B', 'Eix B'),
-        ('C', "Eix C"),
-        ('D', 'Eix D')
-    )
-    axis = models.TextField("Eix", help_text="Eix de la convocatòria on es justificarà.", choices=AXIS_OPTIONS,
-                            null=True, blank=True)
+    axis = models.CharField("Eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
+                            null=True, blank=True, max_length=1)
     published = models.BooleanField("Publicada", default=True)
 
     @property

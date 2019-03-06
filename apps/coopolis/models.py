@@ -1,7 +1,13 @@
 from cc_users.models import BaseUser
 from django.db import models
+from django.conf import settings
 from uuid import uuid4
 from cc_users.managers import CCUserManager
+
+
+def stage_signatures_upload_path(instance, filename):
+    if isinstance(instance, Project):
+        return 'course.stage_signatures/{0}/{1}'.format(str(uuid4()), filename)
 
 
 def estatuts_upload_path(instance, filename):
@@ -49,7 +55,7 @@ class Project(models.Model):
     project_status = models.CharField("Estat del projecte", max_length=50, blank=True, null=True,
                                       choices=PROJECT_STATUS_OPTIONS)
     MOTIVATION_OPTIONS = (
-        ('COOPERATIVISM_EDUCATION', 'Formació en cooperativimse'),
+        ('COOPERATIVISM_EDUCATION', 'Formació en cooperativisme'),
         ('COOPERATIVE_CREATION', "Constitució d'una cooperativa"),
         ('TRANSFORM_FROM_ASSOCIATION', "Transformació d'associació a coopetiva"),
         ('TRANSFORM_FROM_SCP', "Transformació de SCP a coopertiva"),
@@ -73,6 +79,7 @@ class Project(models.Model):
         ('GR', 'Gràcia')
     )
     district = models.TextField("Districte", blank=True, null=True, choices=DISTRICTS)
+    # TODO: Eliminar?
     project_responsible = models.ForeignKey("User", verbose_name="Persona responsable", blank=True, null=True,
                                             on_delete=models.SET_NULL, related_name='project_responsible',
                                             help_text="Persona de l'equip al càrrec de l'acompanyament. Per aparèixer "
@@ -81,8 +88,9 @@ class Project(models.Model):
     number_people = models.IntegerField("Número de persones", blank=True, null=True)
     registration_date = models.DateField("Data de registre", blank=True, null=True)
     cif = models.CharField("NIF", max_length=11, blank=True, null=True)
-    subsidy_period = models.TextField("Convocatòria", blank=True, null=True,
-                                      choices=(("2018", "2018"), ("2019", "2019")))
+    # TODO: Eliminar?
+    subsidy_period = models.CharField("Convocatòria", blank=True, null=True, max_length=4,
+                                      choices=settings.SUBSIDY_PERIOD_OPTIONS)
     object_finality = models.TextField("Objecte i finalitat", blank=True, null=True)
     project_origins = models.TextField("Orígens del projecte", blank=True, null=True)
     solves_necessities = models.TextField("Quines necessitats resol el vostre projecte?", blank=True, null=True)
@@ -180,6 +188,47 @@ class User(BaseUser):
                                                blank=True, null=True)
     project = models.ForeignKey(Project, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Projecte")
 
-    @property
-    def full_name(self):
-        return self.get_full_name() if self.get_full_name() else self.username
+    def get_full_name(self):
+        name = self.first_name
+        if self.last_name:
+            name = name + " " + self.last_name
+        if self.surname2:
+            name = name + " " + self.surname2
+        return name
+
+    def __str__(self):
+        return self.get_full_name()
+
+
+class ProjectStage(models.Model):
+    class Meta:
+        verbose_name = "Fase"
+        verbose_name_plural = "Fases"
+        ordering = ["-date_start"]
+
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="Projecte")
+    STAGE_OPTIONS = (
+        ("REQUESTED", "Acompanyament sol·licitat"),
+        ("CONSTITUTION", "Constitució"),
+        ("CONSOLIDATION", "Consolidació")
+    )
+    stage = models.CharField("Fase de l'acompanyament", max_length=50, choices=STAGE_OPTIONS,
+                                      default="REQUESTED")
+    subsidy_period = models.CharField("Convocatòria", blank=True, null=True, max_length=4,
+                                      choices=settings.SUBSIDY_PERIOD_OPTIONS)
+    date_start = models.DateField("Data d'inici", null=True, blank=True)
+    date_end = models.DateField("Data de finalització", null=True, blank=True)
+    follow_up = models.TextField("Seguiment", null=True, blank=True)
+    axis = models.CharField("Eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
+                            null=True, blank=True, max_length=1)
+    organizer = models.CharField("Qui ho fa", choices=settings.ORGANIZER_OTIONS, max_length=2)
+    stage_responsible = models.ForeignKey(
+        "User", verbose_name="Persona responsable", blank=True, null=True, on_delete=models.SET_NULL,
+        related_name='stage_responsible', help_text="Persona de l'equip al càrrec de l'acompanyament. Per aparèixer "
+        "al desplegable, cal que la persona tingui activada la opció 'Membre del personal'.")
+    scanned_signatures = models.FileField("Document amb signatures", blank=True, null=True,
+                                          upload_to=stage_signatures_upload_path, max_length=250)
+    involved_partners = models.ManyToManyField(User, related_name='stage_involved_partners')
+
+    def __str__(self):
+        return str(self.project) + " - " + self.get_stage_display()
