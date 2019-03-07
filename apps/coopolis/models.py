@@ -177,7 +177,14 @@ class User(BaseUser):
                                                help_text="Tens coneixements / formació / experiència en "
                                                          "cooperativisme? Quina? Cursos realitzats?",
                                                blank=True, null=True)
-    project = models.ForeignKey(Project, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Projecte")
+
+    @property
+    def project(self):
+        try:
+            r_stage = ProjectStage.objects.filter(involved_partners__id=self.id)[0:1].get()
+            return r_stage.project
+        except ProjectStage.DoesNotExist:
+            return None
 
     def get_full_name(self):
         name = self.first_name
