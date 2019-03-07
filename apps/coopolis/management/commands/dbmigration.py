@@ -3,7 +3,7 @@
 from django.db import connections
 from django.core.management.base import BaseCommand
 from collections import namedtuple
-from coopolis.models import Project, User, Town
+from coopolis.models import Project, ProjectStage, User, Town
 from cc_courses.models import Course, Activity, CoursePlace
 from django.forms.models import model_to_dict
 from django.core.management.commands.flush import Command as Flush
@@ -15,8 +15,8 @@ class Command(BaseCommand):
     help = 'Queries the information from the old Coòpolis backoffice to import it to the new one.'
 
     def handle(self, *args, **options):
-        print("PROTECTED!")
-        return
+        # print("PROTECTED!")
+        # return
         Flush().handle(interactive=False, database="default", **options)
         tuples = manual_tuple()
         self.importprojects(tuples)
@@ -26,6 +26,8 @@ class Command(BaseCommand):
         self.importcourses()
         self.importactivities()
         self.importenrollments()
+        User.objects.create_superuser(password='test', email='hola@codi.coop',
+                                      first_name='Admin', last_name="Surname 1", surname2="Surname 2")
 
     def importenrollments(self):
         with connections['old'].cursor() as cursor:
@@ -163,11 +165,9 @@ class Command(BaseCommand):
                     mail=result.EMAIL,
                     phone=result.PHONE[:25],
                     district=district,
-                    # project_responsible=None,  # D'entrada serà sempre el mateix, falta saber l'ID de l'user.
                     number_people=result.NUMPEOPLE,
                     registration_date=result.REGISTRATIONDATE,
                     cif=cif,
-                    # subsidy_period=2018,
                     object_finality=result.PURPOSE,
                     project_origins=result.ORIGIN,
                     solves_necessities=result.RESOLVEDNEEDS,
@@ -236,8 +236,9 @@ class Command(BaseCommand):
                     cooperativism_knowledge=result.coneixementsPrevis,
                 )
                 row.town_id = result.idCiutat
-                row.project_id = result.idProjecte
                 row.save()
+                if result.idProjecte:
+                    self.create_projectstage(row, result.idProjecte)
             self.synchronize_last_sequence(User)
             print("Imported: Users")
 
@@ -336,6 +337,22 @@ class Command(BaseCommand):
         )
         row.save()
         return row
+
+    def create_projectstage(self, user, idProjecte):
+        project = Project.objects.get(id=idProjecte)
+        try:
+            stage = ProjectStage.objects.filter(project=project).get()
+        except ProjectStage.DoesNotExist:
+            print("No Stage for project, Creating! Project ID: " + str(idProjecte))
+            stage = ProjectStage(
+                date_start=project.registration_date,
+                subsidy_period=2018
+            )
+            stage.project = project
+            stage.save()
+        else:
+            print("Stage EXISTS, adding user to it.")
+        stage.involved_partners.add(user)
 
 
 def manual_tuple():
