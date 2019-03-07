@@ -4,7 +4,7 @@
 from django.views import generic
 from django import urls
 from django.http import HttpResponseRedirect
-from coopolis.models import Project
+from coopolis.models import Project, ProjectStage
 from coopolis.forms import ProjectForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
@@ -24,7 +24,7 @@ class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
         return urls.reverse('edit_project')
 
     def get_object(self, queryset=None):
-        return self.model.objects.get(user=self.request.user)
+        return self.request.user.project
 
     def get(self, request):
         if self.request.user.project is None:
@@ -43,19 +43,20 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
 
     def form_valid(self, form):
         newproject = form.save()
-        self.request.user.project = newproject
-        self.request.user.save()
+        newstage = ProjectStage(project=newproject)
+        newstage.save()
+        newstage.involved_partners.add(self.request.user)
         mail_to = {config.EMAIL_TO_DEBUG}
         if settings.DEBUG is not True:
             mail_to.add(config.EMAIL_TO)
         message = config.EMAIL_NEW_PROJECT.format(
-                        self.request.user.project.name,
-                        self.request.user.project.phone,
-                        self.request.user.project.mail,
+                        newproject.name,
+                        newproject.phone,
+                        newproject.mail,
                         self.request.user.email
             )
         send_mail(
-            subject=config.EMAIL_NEW_PROJECT_SUBJECT.format(self.request.user.project.name),
+            subject=config.EMAIL_NEW_PROJECT_SUBJECT.format(newproject.name),
             message=message,
             html_message=message,
             recipient_list=mail_to,

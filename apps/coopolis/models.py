@@ -3,7 +3,7 @@ from django.db import models
 from django.conf import settings
 from uuid import uuid4
 from cc_users.managers import CCUserManager
-
+import datetime
 
 def stage_signatures_upload_path(instance, filename):
     if isinstance(instance, Project):
@@ -80,7 +80,7 @@ class Project(models.Model):
     )
     district = models.TextField("Districte", blank=True, null=True, choices=DISTRICTS)
     number_people = models.IntegerField("Número de persones", blank=True, null=True)
-    registration_date = models.DateField("Data de registre", blank=True, null=True)
+    registration_date = models.DateField("Data de registre", blank=True, null=True, default=datetime.date.today)
     cif = models.CharField("NIF", max_length=11, blank=True, null=True)
     object_finality = models.TextField("Objecte i finalitat", blank=True, null=True)
     project_origins = models.TextField("Orígens del projecte", blank=True, null=True)
@@ -212,14 +212,14 @@ class ProjectStage(models.Model):
     )
     stage = models.CharField("Fase de l'acompanyament", max_length=50, choices=STAGE_OPTIONS,
                                       default="REQUESTED")
-    subsidy_period = models.CharField("Convocatòria", blank=True, null=True, max_length=4,
+    subsidy_period = models.CharField("Convocatòria", blank=True, null=True, max_length=4, default=2019,
                                       choices=settings.SUBSIDY_PERIOD_OPTIONS)
-    date_start = models.DateField("Data d'inici", null=True, blank=True)
+    date_start = models.DateField("Data d'inici", null=True, blank=True, default=datetime.date.today)
     date_end = models.DateField("Data de finalització", null=True, blank=True)
     follow_up = models.TextField("Seguiment", null=True, blank=True)
     axis = models.CharField("Eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
                             null=True, blank=True, max_length=1)
-    organizer = models.CharField("Qui ho fa", choices=settings.ORGANIZER_OTIONS, max_length=2)
+    organizer = models.CharField("Qui ho fa", choices=settings.ORGANIZER_OTIONS, max_length=2, null=True, blank=True)
     stage_responsible = models.ForeignKey(
         "User", verbose_name="Persona responsable", blank=True, null=True, on_delete=models.SET_NULL,
         related_name='stage_responsible', help_text="Persona de l'equip al càrrec de l'acompanyament. Per aparèixer "
