@@ -79,18 +79,9 @@ class Project(models.Model):
         ('GR', 'Gràcia')
     )
     district = models.TextField("Districte", blank=True, null=True, choices=DISTRICTS)
-    # TODO: Eliminar?
-    project_responsible = models.ForeignKey("User", verbose_name="Persona responsable", blank=True, null=True,
-                                            on_delete=models.SET_NULL, related_name='project_responsible',
-                                            help_text="Persona de l'equip al càrrec de l'acompanyament. Per aparèixer "
-                                            "al desplegable, cal que la persona tingui activada la opció 'Membre del "
-                                            "personal'.")
     number_people = models.IntegerField("Número de persones", blank=True, null=True)
     registration_date = models.DateField("Data de registre", blank=True, null=True)
     cif = models.CharField("NIF", max_length=11, blank=True, null=True)
-    # TODO: Eliminar?
-    subsidy_period = models.CharField("Convocatòria", blank=True, null=True, max_length=4,
-                                      choices=settings.SUBSIDY_PERIOD_OPTIONS)
     object_finality = models.TextField("Objecte i finalitat", blank=True, null=True)
     project_origins = models.TextField("Orígens del projecte", blank=True, null=True)
     solves_necessities = models.TextField("Quines necessitats resol el vostre projecte?", blank=True, null=True)

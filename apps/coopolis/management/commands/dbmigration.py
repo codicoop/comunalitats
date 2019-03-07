@@ -163,11 +163,11 @@ class Command(BaseCommand):
                     mail=result.EMAIL,
                     phone=result.PHONE[:25],
                     district=district,
-                    project_responsible=None,  # D'entrada serà sempre el mateix, falta saber l'ID de l'user.
+                    # project_responsible=None,  # D'entrada serà sempre el mateix, falta saber l'ID de l'user.
                     number_people=result.NUMPEOPLE,
                     registration_date=result.REGISTRATIONDATE,
                     cif=cif,
-                    subsidy_period=2018,
+                    # subsidy_period=2018,
                     object_finality=result.PURPOSE,
                     project_origins=result.ORIGIN,
                     solves_necessities=result.RESOLVEDNEEDS,

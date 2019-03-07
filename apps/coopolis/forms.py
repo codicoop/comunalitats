@@ -7,13 +7,14 @@ from django.contrib.auth.forms import UserCreationForm
 from coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
 
+
 class ProjectForm(forms.ModelForm):
     required_css_class = "required"
 
     class Meta:
         model = Project
         fields = '__all__'
-        exclude = ['project_responsible', 'cif', 'subsidy_period', 'registration_date', 'constitution_date']
+        exclude = ['project_responsible', 'cif', 'registration_date', 'constitution_date']
 
 
 class MySignUpForm(UserCreationForm):
