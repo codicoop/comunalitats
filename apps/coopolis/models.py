@@ -134,7 +134,7 @@ class User(BaseUser):
     )
     birth_place = models.TextField("Lloc de naixement", blank=True, null=True, choices=BIRTH_PLACES)
     birthdate = models.DateField("Data de naixement", blank=True, null=True)
-    town = models.ForeignKey(Town, on_delete=models.SET_NULL, null=True)
+    town = models.ForeignKey(Town, on_delete=models.SET_NULL, null=True, blank=True)
     DISTRICTS = (
         ('CV', 'Ciutat Vella'),
         ('EX', 'Eixample'),
@@ -193,6 +193,10 @@ class User(BaseUser):
         if self.surname2:
             name = name + " " + self.surname2
         return name
+
+    @property
+    def full_name(self):
+        return self.get_full_name()
 
     def __str__(self):
         return self.get_full_name()
