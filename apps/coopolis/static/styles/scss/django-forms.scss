@@ -25,7 +25,7 @@ $django-form-button-hover-background-color: #9fc1f8 !default;
     padding-top: 100px;
     align-self: center;
     height: 100%;
-    min-width: 50%;
+    min-width: 45%;
 
     display: flex;
     flex-direction: column;
@@ -44,7 +44,7 @@ $django-form-button-hover-background-color: #9fc1f8 !default;
     }
 
     form {
-        width: 100%;
+        width: 95%;
         position: static;
         padding-left: 20px;
 
