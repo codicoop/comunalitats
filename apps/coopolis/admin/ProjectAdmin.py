@@ -38,7 +38,7 @@ class ProjectStageAdmin(admin.ModelAdmin, ExportCsvMixin):
         return mark_safe(u'<a href="../../%s/%s/%d/change">%s</a>' % (
             'coopolis', 'project', obj.project.id, 'Veure'))
 
-    project_field.short_description = 'Fitxa projecte'
+    project_field.short_description = 'Fitxa'
 
     # define the raw_id_fields
     raw_id_fields = ('involved_partners',)

@@ -230,7 +230,8 @@ class ProjectStage(models.Model):
         "al desplegable, cal que la persona tingui activada la opció 'Membre del personal'.")
     scanned_signatures = models.FileField("Document amb signatures", blank=True, null=True,
                                           upload_to=stage_signatures_upload_path, max_length=250)
-    involved_partners = models.ManyToManyField(User, related_name='stage_involved_partners')
+    involved_partners = models.ManyToManyField(User, verbose_name="Persones involucrades",
+                                               related_name='stage_involved_partners')
 
     def __str__(self):
         return str(self.project) + " - " + self.get_stage_display()

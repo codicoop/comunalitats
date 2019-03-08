@@ -15,8 +15,8 @@ class Command(BaseCommand):
     help = 'Queries the information from the old Coòpolis backoffice to import it to the new one.'
 
     def handle(self, *args, **options):
-        # print("PROTECTED!")
-        # return
+        print("PROTECTED!")
+        return
         Flush().handle(interactive=False, database="default", **options)
         tuples = manual_tuple()
         self.importprojects(tuples)
@@ -346,13 +346,29 @@ class Command(BaseCommand):
             print("No Stage for project, Creating! Project ID: " + str(idProjecte))
             stage = ProjectStage(
                 date_start=project.registration_date,
-                subsidy_period=2018
+                subsidy_period=2018,
+                axis=self.get_stage_axis(idProjecte)
             )
             stage.project = project
             stage.save()
         else:
             print("Stage EXISTS, adding user to it.")
         stage.involved_partners.add(user)
+
+    def get_stage_axis(self, idProjecte):
+        print("Resolving project axis")
+        with connections['old'].cursor() as cursor:
+            cursor.execute("SELECT * FROM PROJECT WHERE ID=" + str(idProjecte))
+            results = namedtuplefetchall(cursor)
+            if len(results) == 0:
+                print("0 results, returning None")
+                return None
+            for result in results:
+                print("Axis found, returning: "+str(result.AXIS))
+                tuples = manual_tuple()
+                if not result.AXIS:
+                    return None
+                return tuples["axis"][result.AXIS]
 
 
 def manual_tuple():
@@ -436,6 +452,11 @@ def manual_tuple():
             ('Sants-Montjuïc', 'ST'),
             ('Sarrià-Sant Gervasi', 'SS'),
             ('Gràcia', 'GR')
+        ),
+        "axis": (
+            'B',
+            'C',
+            'D',
         )
     }
 
