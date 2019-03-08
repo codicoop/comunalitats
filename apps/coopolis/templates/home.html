@@ -8,8 +8,16 @@
     <div class="generic-content">
         <h1>{{ config.CONTENT_HOME_TITLE }}</h1>
         <div class="flex-h margin-block">
-            <span><h2>{{ config.CONTENT_HOME_COURSES_TITLE }}</h2><p>{{ config.CONTENT_HOME_COURSES_TEXT }}</p></span>
-            <span><h2>{{ config.CONTENT_HOME_PROJECTS_TITLE }}</h2><p>{{ config.CONTENT_HOME_PROJECTS_TEXT }}</p></span>
+            <span><h2>{{ config.CONTENT_HOME_COURSES_TITLE }}</h2><p>{{ config.CONTENT_HOME_COURSES_TEXT }}</p>
+                <a href="{% url 'courses' %}" class="enroll-button">
+                    <div>Veure oferta formativa</div>
+                </a>
+            </span>
+            <span><h2>{{ config.CONTENT_HOME_PROJECTS_TITLE }}</h2><p>{{ config.CONTENT_HOME_PROJECTS_TEXT }}</p>
+                <a href="{% url 'project_info' %}" class="enroll-button">
+                    <div>Sol·licitar acompanyament</div>
+                </a>
+            </span>
         </div>
     </div>
     {% if not user.is_authenticated %}
