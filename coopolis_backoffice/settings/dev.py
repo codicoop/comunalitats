@@ -305,12 +305,6 @@ AXIS_OPTIONS = (
     ('C', "Eix C"),
     ('D', 'Eix D')
 )
-ORGANIZER_OTIONS = (
-    ('AT', 'Ateneu'),
-    ('CM', 'Cercle Migracions'),
-    ('CI', "Cercle Incubació"),
-    ('CC', 'Cercle Consum')
-)
 SUBSIDY_PERIOD_OPTIONS = (("2018", "2017-2018"), ("2019", "2018-2019"))
 
 # Grappeli (https://django-grappelli.readthedocs.io/en/latest/customization.html)

@@ -3,8 +3,8 @@
 from django.db import connections
 from django.core.management.base import BaseCommand
 from collections import namedtuple
-from coopolis.models import Project, ProjectStage, User, Town
-from cc_courses.models import Course, Activity, CoursePlace
+from coopolis.models import Project, ProjectStage, User, Town, ProjectStageType
+from cc_courses.models import Course, Activity, CoursePlace, Entity
 from django.forms.models import model_to_dict
 from django.core.management.commands.flush import Command as Flush
 import re
@@ -15,9 +15,11 @@ class Command(BaseCommand):
     help = 'Queries the information from the old Coòpolis backoffice to import it to the new one.'
 
     def handle(self, *args, **options):
-        print("PROTECTED!")
-        return
+        # print("PROTECTED!")
+        # return
         Flush().handle(interactive=False, database="default", **options)
+        create_entities()
+        create_stage_types()
         tuples = manual_tuple()
         self.importprojects(tuples)
         self.importtowns()
@@ -122,9 +124,7 @@ class Command(BaseCommand):
                     starting_time=starting_time,
                     ending_time=ending_time,
                     spots=result.PLACES,
-                    # TODO: omplir el m2m dels ENROLLEDS, en una altra funció
-                    organizer="AT",
-                    entity=None,
+                    entity_id=1,
                     axis=None,
                     published=True
                 )
@@ -347,7 +347,8 @@ class Command(BaseCommand):
             stage = ProjectStage(
                 date_start=project.registration_date,
                 subsidy_period=2018,
-                axis=self.get_stage_axis(idProjecte)
+                axis=self.get_stage_axis(idProjecte),
+                organizer_id=1
             )
             stage.project = project
             stage.save()
@@ -466,3 +467,28 @@ def namedtuplefetchall(cursor):
     desc = cursor.description
     nt_result = namedtuple('Result', [col[0] for col in desc])
     return [nt_result(*row) for row in cursor.fetchall()]
+
+
+def create_entities():
+    model = Entity
+    if model.objects.count() > 0:
+        print("Entities already populated, skipping migration.")
+        return
+    model.objects.bulk_create([
+        model(name='Ateneu'),
+        model(name='Cercle Migracions'),
+        model(name='Cercle Incubació'),
+        model(name='Cercle Consum')
+    ])
+
+
+def create_stage_types():
+    model = ProjectStageType
+    if model.objects.count() > 0:
+        print("Stage Types already populated, skipping migration.")
+        return
+    model.objects.bulk_create([
+        model(name="Acompanyament sol·licitat"),
+        model(name="Constitució"),
+        model(name="Consolidació")
+    ])
