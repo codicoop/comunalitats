@@ -15,8 +15,8 @@ class Command(BaseCommand):
     help = 'Queries the information from the old Coòpolis backoffice to import it to the new one.'
 
     def handle(self, *args, **options):
-        # print("PROTECTED!")
-        # return
+        print("PROTECTED!")
+        return
         Flush().handle(interactive=False, database="default", **options)
         create_entities()
         create_stage_types()
