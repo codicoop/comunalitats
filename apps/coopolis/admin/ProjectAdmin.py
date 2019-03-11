@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from coopolis.models import User, ProjectStage
+from coopolis.models import User
 from django.utils.safestring import mark_safe
 from coopolis.mixins import ExportCsvMixin
 
@@ -18,16 +18,22 @@ class ProjectAdmin(admin.ModelAdmin, ExportCsvMixin):
         return mark_safe(u'<a href="../../%s/%s?project__exact=%d">Veure</a>' % (
             'coopolis', 'projectstage', obj.id))
 
-    stages_field.short_description = 'Fases'
+    stages_field.short_description = 'Acompanyaments'
 
 
 class ProjectStageAdmin(admin.ModelAdmin, ExportCsvMixin):
-    list_display = ('project', 'date_start', 'stage_responsible', 'stage', 'axis', 'organizer', 'subsidy_period',
+    empty_value_display = '(cap)'
+    list_display = ('project', 'date_start', 'stage_responsible', 'stage_type', 'axis', 'organizer', 'subsidy_period',
                     'project_field')
     list_filter = ('subsidy_period', ('stage_responsible', admin.RelatedOnlyFieldListFilter), 'date_start',
                    'axis', 'organizer', 'project__sector')
     actions = ["export_as_csv"]
     search_fields = ['project__name']
+
+    def project_field_ellipsis(self, obj):
+        if len(obj.__str__()) > 100:
+            return "%s..." % obj.__str__()[:100]
+        return obj.__str__()
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "stage_responsible":
@@ -38,11 +44,9 @@ class ProjectStageAdmin(admin.ModelAdmin, ExportCsvMixin):
         return mark_safe(u'<a href="../../%s/%s/%d/change">%s</a>' % (
             'coopolis', 'project', obj.project.id, 'Veure'))
 
-    project_field.short_description = 'Fitxa'
+    project_field.short_description = 'Projecte'
 
-    # define the raw_id_fields
     raw_id_fields = ('involved_partners',)
-    # define the autocomplete_lookup_fields
     autocomplete_lookup_fields = {
         'm2m': ['involved_partners'],
     }

@@ -5,6 +5,7 @@ from uuid import uuid4
 from cc_users.managers import CCUserManager
 import datetime
 
+
 def stage_signatures_upload_path(instance, filename):
     if isinstance(instance, Project):
         return 'course.stage_signatures/{0}/{1}'.format(str(uuid4()), filename)
@@ -202,36 +203,45 @@ class User(BaseUser):
         return self.get_full_name()
 
 
+class ProjectStageType(models.Model):
+    class Meta:
+        verbose_name = "tipus d'acompanyament"
+        verbose_name_plural = "tipus d'acompanyaments"
+        ordering = ["name"]
+
+    name = models.CharField("nom", unique=True, max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
 class ProjectStage(models.Model):
     class Meta:
-        verbose_name = "Fase"
-        verbose_name_plural = "Fases"
+        verbose_name = "acompanyament"
+        verbose_name_plural = "acompanyaments"
         ordering = ["-date_start"]
 
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="Projecte")
-    STAGE_OPTIONS = (
-        ("REQUESTED", "Acompanyament sol·licitat"),
-        ("CONSTITUTION", "Constitució"),
-        ("CONSOLIDATION", "Consolidació")
-    )
-    stage = models.CharField("Fase de l'acompanyament", max_length=50, choices=STAGE_OPTIONS,
-                                      default="REQUESTED")
-    subsidy_period = models.CharField("Convocatòria", blank=True, null=True, max_length=4, default=2019,
+    DEFAULT_STAGE_TYPE = 1
+
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="acompanyament")
+    stage_type = models.ForeignKey(ProjectStageType, verbose_name="tipus d'acompanyament", default=DEFAULT_STAGE_TYPE,
+                                   on_delete=models.SET_DEFAULT)
+    subsidy_period = models.CharField("convocatòria", blank=True, null=True, max_length=4, default=2019,
                                       choices=settings.SUBSIDY_PERIOD_OPTIONS)
-    date_start = models.DateField("Data d'inici", null=True, blank=True, default=datetime.date.today)
-    date_end = models.DateField("Data de finalització", null=True, blank=True)
-    follow_up = models.TextField("Seguiment", null=True, blank=True)
-    axis = models.CharField("Eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
+    date_start = models.DateField("data d'inici", null=True, blank=True, default=datetime.date.today)
+    date_end = models.DateField("data de finalització", null=True, blank=True)
+    follow_up = models.TextField("seguiment", null=True, blank=True)
+    axis = models.CharField("eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
                             null=True, blank=True, max_length=1)
-    organizer = models.CharField("Qui ho fa", choices=settings.ORGANIZER_OTIONS, max_length=2, null=True, blank=True)
+    organizer = models.CharField("qui ho fa", choices=settings.ORGANIZER_OTIONS, max_length=2, null=True, blank=True)
     stage_responsible = models.ForeignKey(
-        "User", verbose_name="Persona responsable", blank=True, null=True, on_delete=models.SET_NULL,
+        "User", verbose_name="persona responsable", blank=True, null=True, on_delete=models.SET_NULL,
         related_name='stage_responsible', help_text="Persona de l'equip al càrrec de l'acompanyament. Per aparèixer "
         "al desplegable, cal que la persona tingui activada la opció 'Membre del personal'.")
-    scanned_signatures = models.FileField("Document amb signatures", blank=True, null=True,
+    scanned_signatures = models.FileField("document amb signatures", blank=True, null=True,
                                           upload_to=stage_signatures_upload_path, max_length=250)
-    involved_partners = models.ManyToManyField(User, verbose_name="Persones involucrades",
+    involved_partners = models.ManyToManyField(User, verbose_name="persones involucrades", blank=True,
                                                related_name='stage_involved_partners')
 
     def __str__(self):
-        return str(self.project) + " - " + self.get_stage_display()
+        return str(self.project)
