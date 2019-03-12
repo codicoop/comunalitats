@@ -305,7 +305,7 @@ AXIS_OPTIONS = (
     ('C', "Eix C"),
     ('D', 'Eix D')
 )
-SUBSIDY_PERIOD_OPTIONS = (("2018", "2017-2018"), ("2019", "2018-2019"))
+SUBSIDY_PERIOD_OPTIONS = (("2017", "2016-2017"), ("2018", "2017-2018"), ("2019", "2018-2019"))
 
 # Grappeli (https://django-grappelli.readthedocs.io/en/latest/customization.html)
 GRAPPELLI_ADMIN_TITLE = "Back-office de Coòpolis"
