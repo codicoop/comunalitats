@@ -180,6 +180,7 @@ header .menu ul {
 }
 header .menu ul li {
   list-style: none;
+  white-space: nowrap;
 }
 header .menu a {
   font-family: "Raleway", sans-serif;
@@ -541,6 +542,45 @@ label.required:after {
   width: 100%;
   background-color: #F0F0F0;
   justify-content: center;
+}
+
+@media only screen and (max-width: 600px) {
+  header .menu ul {
+    flex-direction: column;
+  }
+  header .menu ul li + li {
+    padding-top: 5px;
+  }
+  header .content .top-wrapper {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .page-content {
+    width: 95%;
+  }
+
+  .flex-h {
+    flex-direction: column;
+  }
+
+  .introduction p {
+    width: 90%;
+  }
+
+  .modal {
+    width: 80%;
+  }
+
+  .enroll-button div {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+}
+@media only screen and (max-width: 790px) {
+  header .menu ul {
+    width: 90%;
+  }
 }
 
 /*# sourceMappingURL=stylesheet.css.map */

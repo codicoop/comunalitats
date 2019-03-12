@@ -93,3 +93,49 @@ label {
     background-color: $color-4;
     justify-content: center;
 }
+
+@media only screen and (max-width: 600px) {
+    header {
+        .menu ul {
+           flex-direction: column;
+
+           li+li {
+                padding-top: 5px;
+           }
+        }
+
+        .content .top-wrapper {
+            width: 100%;
+            flex-direction: column;
+        }
+    }
+
+    .page-content {
+        width: 95%;
+    }
+
+    .flex-h {
+        flex-direction: column;
+    }
+
+    .introduction p {
+        width: 90%;
+    }
+
+    .modal {
+        width: 80%;
+    }
+
+    .enroll-button div {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+}
+
+@media only screen and (max-width: 790px) {
+    header {
+        .menu ul {
+           width: 90%;
+        }
+    }
+}
