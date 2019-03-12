@@ -114,6 +114,7 @@ class User(BaseUser):
     class Meta:
         verbose_name = "persona"
         verbose_name_plural = "persones"
+        ordering = ["first_name"]
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
