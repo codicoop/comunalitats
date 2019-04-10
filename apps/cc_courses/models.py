@@ -53,7 +53,7 @@ class Course(models.Model):
     description = models.TextField("descripció", null=True)
     published = models.BooleanField("publicat")
     created = models.DateTimeField(null=True, blank=True)
-    banner = ThumbnailerImageField(null=True, upload_to=upload_path, max_length=250)
+    banner = ThumbnailerImageField(null=True, upload_to=upload_path, max_length=250, blank=True)
 
     @classmethod
     def pre_save(cls, sender, instance, **kwargs):
