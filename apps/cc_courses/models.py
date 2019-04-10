@@ -54,6 +54,8 @@ class Course(models.Model):
     published = models.BooleanField("publicat")
     created = models.DateTimeField(null=True, blank=True)
     banner = ThumbnailerImageField(null=True, upload_to=upload_path, max_length=250, blank=True)
+    place = models.ForeignKey(CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc", blank=True,
+                              help_text="Aquesta dada de moment és d'ús intern i no es publica.")
 
     @classmethod
     def pre_save(cls, sender, instance, **kwargs):
@@ -78,8 +80,7 @@ class Activity(models.Model):
                                related_name="activities")
     name = models.CharField("títol", max_length=200, blank=False, null=False)
     objectives = models.TextField("descripció", null=True)
-    place = models.ForeignKey(CoursePlace, on_delete=models.SET_NULL, null=True,
-                              verbose_name="lloc")
+    place = models.ForeignKey(CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc")
     date_start = models.DateField("dia inici")
     date_end = models.DateField("dia finalització", blank=True, null=True)
     starting_time = models.TimeField("hora d'inici")
