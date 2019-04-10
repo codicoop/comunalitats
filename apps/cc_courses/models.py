@@ -74,7 +74,8 @@ class Activity(models.Model):
         verbose_name = "activitat"
         ordering = ["-date_start"]
 
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="formació / programa")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="formació / programa",
+                               related_name="activities")
     name = models.CharField("títol", max_length=200, blank=False, null=False)
     objectives = models.TextField("descripció", null=True)
     place = models.ForeignKey(CoursePlace, on_delete=models.SET_NULL, null=True,
