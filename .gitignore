@@ -6,3 +6,4 @@ venv
 **.css.map
 node_modules
 Pipfile.lock
+/*/settings/local_*.py
