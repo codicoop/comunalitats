@@ -41,7 +41,7 @@ class CourseFactory(factory.django.DjangoModelFactory):
     date_end = fuzzy.FuzzyDate(datetime.date(2019, 6, 27), datetime.date(2019, 12, 26))
     hours = factory.Faker('text', max_nb_chars=15, ext_word_list=None)
     description = fake.paragraph(nb_sentences=5, variable_nb_sentences=True, ext_word_list=None)
-    published = True
+    publish = True
     created = timezone.now()
     banner = fuzzy.FuzzyChoice(
         storage_files(
@@ -59,6 +59,6 @@ class ActivityFactory(factory.django.DjangoModelFactory):
     objectives = fake.paragraph(nb_sentences=5, variable_nb_sentences=True, ext_word_list=None)
     starting_time = "10:00"
     ending_time = "14:00"
-    published = True
+    publish = True
 
 

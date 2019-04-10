@@ -68,7 +68,7 @@ class Command(BaseCommand):
                     date_end=None,
                     hours=result.SCHEDULESUMMARY,
                     description=result.SHORTOBJECTIVES,
-                    published=True,
+                    publish=True,
                     # Banner: pending to import!
                 )
                 row.save()
@@ -126,7 +126,7 @@ class Command(BaseCommand):
                     spots=result.PLACES,
                     entity_id=1,
                     axis=None,
-                    published=True
+                    publish=True
                 )
                 row.save()
             self.synchronize_last_sequence(Activity)
@@ -333,7 +333,7 @@ class Command(BaseCommand):
             date_end=None,
             hours="De " + result.STARTTIME + " a " + result.ENDTIME,
             description=result.SHORTOBJECTIVES,
-            published=True,
+            publish=True,
         )
         row.save()
         return row

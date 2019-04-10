@@ -20,7 +20,7 @@
     <h2>Activitats en aquesta formació:</h2>
 
     <div class="courses-container">
-        {% for activity in course.activity_set.all %}
+        {% for activity in activities %}
         <div class="course">
             <div class="course-data">
                 <h3>{{ activity.name }}</h3>

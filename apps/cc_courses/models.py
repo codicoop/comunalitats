@@ -1,6 +1,5 @@
 from django.db import models
 from cc_lib.utils import slugify_model
-from .utils import get_enrollable_class
 from django.shortcuts import reverse
 from django.db.models.signals import pre_save
 from django.conf import settings
@@ -8,6 +7,7 @@ from uuid import uuid4
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 from datetime import date
 from easy_thumbnails.fields import ThumbnailerImageField
+from coopolis.managers import Published
 
 
 def upload_path(instance, filename):
@@ -51,11 +51,14 @@ class Course(models.Model):
     hours = models.CharField("horaris", blank=False, max_length=200,
                              help_text="Indica només els horaris, sense els dies.")
     description = models.TextField("descripció", null=True)
-    published = models.BooleanField("publicat")
+    publish = models.BooleanField("publicat")
     created = models.DateTimeField(null=True, blank=True)
     banner = ThumbnailerImageField(null=True, upload_to=upload_path, max_length=250, blank=True)
     place = models.ForeignKey(CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc", blank=True,
                               help_text="Aquesta dada de moment és d'ús intern i no es publica.")
+
+    objects = models.Manager()
+    published = Published()
 
     @classmethod
     def pre_save(cls, sender, instance, **kwargs):
@@ -91,7 +94,10 @@ class Activity(models.Model):
     entity = models.ForeignKey(Entity, on_delete=models.SET_NULL, null=True)
     axis = models.CharField("eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
                             null=True, blank=True, max_length=1)
-    published = models.BooleanField("publicada", default=True)
+    publish = models.BooleanField("publicada", default=True)
+
+    objects = models.Manager()
+    published = Published()
 
     @property
     def remaining_spots(self):
