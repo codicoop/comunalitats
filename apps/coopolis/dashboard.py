@@ -21,7 +21,7 @@ class MyDashboard(Dashboard):
             collapsible=True,
             children=[
                 modules.ModelList(
-                    title='Formacions i activitats',
+                    title='Accions i sessions',
                     column=1,
                     collapsible=False,
                     models=('cc_courses.models.Course', 'cc_courses.models.Activity',),

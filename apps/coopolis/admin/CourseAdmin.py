@@ -20,10 +20,10 @@ class CourseAdmin(SummernoteModelAdmin):
         return qs
 
     def activities_list_field(self, obj):
-        return mark_safe(u'<a href="../../%s/%s?course_id__exact=%d">Activitats</a>' % (
+        return mark_safe(u'<a href="../../%s/%s?course_id__exact=%d">Sessions</a>' % (
             obj._meta.app_label, 'activity', obj.id))
 
-    activities_list_field.short_description = 'Activitats'
+    activities_list_field.short_description = 'Sessions'
 
     def copy_clipboard_field(self, obj):
         if obj.absolute_url:
@@ -46,7 +46,7 @@ class CourseAdmin(SummernoteModelAdmin):
         else:
             return "(estarà disponible un cop creat)"
 
-    copy_clipboard_field.short_description = 'Link al curs'
+    copy_clipboard_field.short_description = "Link a l'acció"
 
     def copy_clipboard_list_field(self, obj):
         abs_url = self.request.build_absolute_uri(obj.absolute_url)
@@ -66,4 +66,4 @@ class CourseAdmin(SummernoteModelAdmin):
     </script>
     """.format(abs_url))
 
-    copy_clipboard_list_field.short_description = 'Link al curs'
+    copy_clipboard_list_field.short_description = "Link a l'acció"

@@ -40,8 +40,8 @@ class Entity(models.Model):
 
 class Course(models.Model):
     class Meta:
-        verbose_name = "formació"
-        verbose_name_plural = "formacions"
+        verbose_name = "acció"
+        verbose_name_plural = "accions"
         ordering = ["-date_start"]
 
     title = models.CharField("títol", max_length=250, blank=False)
@@ -76,10 +76,11 @@ class Course(models.Model):
 
 class Activity(models.Model):
     class Meta:
-        verbose_name = "activitat"
+        verbose_name = "sessió"
+        verbose_name_plural = "sessions"
         ordering = ["-date_start"]
 
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="formació / programa",
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="acció",
                                related_name="activities")
     name = models.CharField("títol", max_length=200, blank=False, null=False)
     objectives = models.TextField("descripció", null=True)

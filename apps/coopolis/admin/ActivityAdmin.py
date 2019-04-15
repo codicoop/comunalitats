@@ -44,7 +44,7 @@ class ActivityAdmin(SummernoteModelAdmin):
     </script>
     """.format(abs_url))
 
-    copy_clipboard_field.short_description = 'Link a l\'activitat'
+    copy_clipboard_field.short_description = 'Link a la sessió'
 
     def copy_clipboard_list_field(self, obj):
         abs_url = self.request.build_absolute_uri(obj.absolute_url)
@@ -64,7 +64,7 @@ class ActivityAdmin(SummernoteModelAdmin):
     </script>
     """.format(abs_url))
 
-    copy_clipboard_list_field.short_description = 'Link a l\'activitat'
+    copy_clipboard_list_field.short_description = 'Link a la sessió'
 
     def get_urls(self):
         urls = super().get_urls()
