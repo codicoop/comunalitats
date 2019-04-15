@@ -15,6 +15,11 @@ def upload_path(instance, filename):
         return 'course.banner/{0}/banner.png'.format(str(uuid4()), filename)
 
 
+def activity_signatures_upload_path(instance, filename):
+    if isinstance(instance, Activity):
+        return 'course.activity_signatures/{0}/{1}'.format(str(uuid4()), filename)
+
+
 class CoursePlace(models.Model):
     class Meta:
         verbose_name = "lloc"
@@ -95,6 +100,8 @@ class Activity(models.Model):
     entity = models.ForeignKey(Entity, on_delete=models.SET_NULL, null=True)
     axis = models.CharField("eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
                             null=True, blank=True, max_length=1)
+    scanned_signatures = models.FileField("document amb signatures", blank=True, null=True,
+                                          upload_to=activity_signatures_upload_path, max_length=250)
     publish = models.BooleanField("publicada", default=True)
 
     objects = models.Manager()
