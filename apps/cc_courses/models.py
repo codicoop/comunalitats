@@ -20,6 +20,16 @@ def activity_signatures_upload_path(instance, filename):
         return 'course.activity_signatures/{0}/{1}'.format(str(uuid4()), filename)
 
 
+def photo1_signatures_upload_path(instance, filename):
+    if isinstance(instance, Activity):
+        return 'course.activity_photo1/{0}/{1}'.format(str(uuid4()), filename)
+
+
+def photo2_signatures_upload_path(instance, filename):
+    if isinstance(instance, Activity):
+        return 'course.activity_photo2/{0}/{1}'.format(str(uuid4()), filename)
+
+
 class CoursePlace(models.Model):
     class Meta:
         verbose_name = "lloc"
@@ -102,6 +112,10 @@ class Activity(models.Model):
                             null=True, blank=True, max_length=1)
     scanned_signatures = models.FileField("document amb signatures", blank=True, null=True,
                                           upload_to=activity_signatures_upload_path, max_length=250)
+    photo1 = models.FileField("fotografia 1", blank=True, null=True,
+                                          upload_to=photo1_signatures_upload_path, max_length=250)
+    photo2 = models.FileField("fotografia 2", blank=True, null=True,
+                                          upload_to=photo2_signatures_upload_path, max_length=250)
     publish = models.BooleanField("publicada", default=True)
 
     objects = models.Manager()
