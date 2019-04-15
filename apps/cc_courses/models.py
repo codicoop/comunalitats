@@ -107,7 +107,14 @@ class Activity(models.Model):
     spots = models.IntegerField('places totals', default=0)
     enrolled = models.ManyToManyField("coopolis.User", blank=True, related_name='enrolled_activities',
                                       verbose_name="inscrites")
-    entity = models.ForeignKey(Entity, on_delete=models.SET_NULL, null=True)
+    entity = models.ForeignKey(Entity, verbose_name="entitat", on_delete=models.SET_NULL, null=True)
+    JUSTIFICATION_CHOICES = (
+        ('A', "Ateneus Cooperatius"),
+        ('J', "Ajuntament"),
+        ('2', "Les 2 - cofinançat")
+    )
+    justification = models.CharField("justificació", max_length=1, null=True, blank=True, choices=JUSTIFICATION_CHOICES,
+                                     default='A')
     axis = models.CharField("eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
                             null=True, blank=True, max_length=1)
     scanned_signatures = models.FileField("document amb signatures", blank=True, null=True,

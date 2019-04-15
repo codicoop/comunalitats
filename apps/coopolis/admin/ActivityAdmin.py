@@ -14,7 +14,7 @@ class ActivityAdmin(SummernoteModelAdmin):
     readonly_fields = ('attendee_list_field',)
     summernote_fields = ('objectives',)
     search_fields = ('date_start', 'name', 'objectives',)
-    list_filter = ('course', 'date_start', 'entity', 'axis', 'place')
+    list_filter = ('course', 'date_start', 'justification', 'entity', 'axis', 'place')
 
     def remaining_spots(self, obj):
         return obj.remaining_spots
