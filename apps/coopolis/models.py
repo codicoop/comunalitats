@@ -220,13 +220,13 @@ class ProjectStageType(models.Model):
 
 class ProjectStage(models.Model):
     class Meta:
-        verbose_name = "acompanyament"
-        verbose_name_plural = "acompanyaments"
+        verbose_name = "justificació d'acompanyament"
+        verbose_name_plural = "justificacions d'acompanyaments"
         ordering = ["-date_start"]
 
     DEFAULT_STAGE_TYPE = 1
 
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="acompanyament")
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat")
     stage_type = models.ForeignKey(ProjectStageType, verbose_name="tipus d'acompanyament", default=DEFAULT_STAGE_TYPE,
                                    on_delete=models.SET_DEFAULT)
     subsidy_period = models.CharField("convocatòria", blank=True, null=True, max_length=4, default=2019,
