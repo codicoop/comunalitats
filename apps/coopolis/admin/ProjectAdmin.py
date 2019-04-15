@@ -11,7 +11,7 @@ class ProjectAdmin(admin.ModelAdmin, ExportCsvMixin):
     list_display = ('name', 'web', 'mail', 'phone', 'registration_date', 'stages_field')
     search_fields = ('name', 'web', 'mail', 'phone', 'registration_date', 'object_finality', 'project_origins',
                      'solves_necessities', 'social_base', 'sector')
-    list_filter = ('registration_date', 'sector')
+    list_filter = ('registration_date', 'sector', 'project_status')
     actions = ["export_as_csv"]
 
     def stages_field(self, obj):
