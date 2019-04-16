@@ -59,6 +59,12 @@ class Course(models.Model):
         verbose_name_plural = "accions"
         ordering = ["-date_start"]
 
+    TYPE_CHOICES = (
+        ('F', "Accions educatives"),
+        ('A', "Altres accions")
+    )
+    type = models.CharField("tipus d'acció", help_text="Determina el tipus de justificació", max_length=1,
+                            choices=TYPE_CHOICES, default='F')
     title = models.CharField("títol", max_length=250, blank=False)
     slug = models.CharField(max_length=250, unique=True)
     date_start = models.DateField("dia inici")
