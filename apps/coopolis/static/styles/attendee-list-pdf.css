@@ -1,0 +1,64 @@
+body, html{
+    font: normal 12px/150% Arial, Helvetica, sans-serif;
+}
+
+#page td {
+    padding:0;
+    margin:0;
+}
+
+#page {
+    border-collapse: collapse;
+}
+
+table {
+    width: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+td {
+    border: 1px solid black;
+    padding: 5px;
+    height:100%;
+}
+
+.llista {
+    height: 100%;
+}
+
+.llista td {
+    height: 50px;
+}
+
+.table-header-caption {
+    width: 20%;
+    font-weight: bold;
+}
+
+.table-header-content {
+    width: 30%;
+}
+
+@page {
+    margin: 10px 10px 80px 10px;
+    size: A4 landscape;
+    @bottom-left {
+        height: 100%;
+        width: 100%;
+        content: " ";
+        background: url('../../static/images/attendee-list-pdf/coopolis.png') no-repeat 0 0;
+        background-size: 6%;
+        background-position: 1% 0%;
+    }
+    @bottom-right {
+        height: 100%;
+        width: 100%;
+        content: " ";
+        background: url('../../static/images/attendee-list-pdf/logos_dreta.png') no-repeat 0 0;
+        background-size: 50%;
+        background-position: 100% 0%;
+    }
+
+ }

@@ -86,6 +86,9 @@ class ActivityAdmin(SummernoteModelAdmin):
     def attendee_list(self, request, _id):
         import weasyprint
         import django.template.loader as loader
+        from django.templatetags.static import static
+        from django.conf import settings
+        import os
         temp = loader.get_template('admin/attendee_list.html')
         content = temp.render(
             {
@@ -93,8 +96,11 @@ class ActivityAdmin(SummernoteModelAdmin):
                 'activity': Activity.objects.get(pk=_id)
             }
         )
+
         pdf = weasyprint.HTML(string=content.encode('utf-8'))
-        response = HttpResponse(pdf.write_pdf(), content_type='application/pdf')
+        css = weasyprint.CSS(
+            filename=os.path.join(settings.BASE_DIR, '../apps/coopolis/static/styles/attendee-list-pdf.css'))
+        response = HttpResponse(pdf.write_pdf(stylesheets=[css]), content_type='application/pdf')
         response['Content-Disposition'] = 'filename="llista_assistencia.pdf"'
         return response
 
