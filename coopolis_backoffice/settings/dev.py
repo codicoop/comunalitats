@@ -201,12 +201,12 @@ CONSTANCE_CONFIG = {
         "especialitzats.",
         "Portada, títol del bloc que informa sobre la formació."),
     'CONTENT_HOME_INTRODUCTION': (
-        "<p>Benvingudes a la web de gestió d’inscripcions i acompanyaments de Coòpolis!</p>"
-        "<p>Podreu realitzar les inscripcions de les formacions, i sol·licitar assessorament per a la creació de "
-        "projectes cooperatius.</p>"
-        "<p>Si encara no formeu part, registreu-vos!</p>"
-        "<p>Si ja en formeu part, entreu al vostre perfil per a poder gestionar inscripcions i projectes.</p>",
-        "Portada, text d'introducció a la franja blava."),
+        "<p><strong>Benvingudes a la web de gestió d’inscripcions i acompanyaments de Coòpolis!</strong></p>"
+        "<p>Cal que us doneu d’alta amb les vostres dades personals, i podreu realitzar les inscripcions de les "
+        "formacions, i sol·licitar assessorament per a la creació de projectes cooperatius.</p>"
+        "<p><em>(*Si teniu dificultats, podeu escriure un correu a <a href=\"mailto:inscripcions@bcn.coop\">"
+        "inscripcions@bcn.coop</a> o trucar a Coòpolis)</em></p>",
+        "Text d'introducció de la home."),
     "CONTENT_HOME_PROJECTS_TITLE": (
         "Acompanyament de projectes",
         "Portada: títol del bloc que informa sobre l'acompanyament de projectes."),
@@ -216,9 +216,18 @@ CONSTANCE_CONFIG = {
         "creixement. També dissenyem itineraris per a la transformació d’associacions i altres formes d’empreses a "
         "cooperatives.",
         "Portada: bloc que informa sobre l'acompanyament de projectes."),
-    'CONTENT_HOME_TITLE': (
-        "Extranet de Coòpolis per gestionar cursos i projectes",
-        'Portada: títol.'),
+    # Sign up
+    'CONTENT_SIGNUP_LEGAL1': (
+        "La participació en les activitats de Coòpolis, Ateneu Cooperatiu de Barcelona, està subjecta a un seguit de "
+        "condicions que entre altres aspectes recullen el tractament que es farà de les vostres dades segons la nova "
+        "Llei del RGPT i el permís per utilitzar la vostra imatge per a arxiu i difusió de l'activitat, i mai amb cap "
+        "ús comercial.",
+        'Casella per acceptar #1.'),
+    'CONTENT_SIGNUP_LEGAL2': (
+        "Sóc coneixedor/a del caràcter de subvenció pública amb la qual es finança l’actuació en la qual vull "
+        "participar, mitjançant el cofinançament del Ministeri d’Ocupació i Seguretat Social, i l’Ajuntament de "
+        "Barcelona.",
+        'Casella per acceptar #2.'),
     # E-mails
     'EMAIL_NEW_PROJECT': (
         "Nova sol·licitud d'acompanyament<br />"                          
@@ -268,10 +277,11 @@ CONSTANCE_CONFIG_FIELDSETS = {
     'Correus': ('EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT', 'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT',
                 'EMAIL_ENROLLMENT_CONFIRMATION', 'EMAIL_ENROLLMENT_REMINDER_SUBJECT', 'EMAIL_ENROLLMENT_REMINDER',),
     "Apartat Portada": ('CONTENT_HOME_COURSES_TITLE', 'CONTENT_HOME_COURSES_TEXT', 'CONTENT_HOME_PROJECTS_TITLE',
-                        "CONTENT_HOME_PROJECTS_TEXT", 'CONTENT_HOME_TITLE', 'CONTENT_HOME_INTRODUCTION'),
+                        "CONTENT_HOME_PROJECTS_TEXT", 'CONTENT_HOME_INTRODUCTION'),
     'Apartat Projectes': ('CONTENT_PROJECT_INTRODUCTION', 'CONTENT_PROJECT_TITLE', 'CONTENT_PROJECT_INFO',
                           'CONTENT_PROJECT_NEW'),
     "Apartat Formació": ('CONTENT_COURSES_INTRODUCTION',),
+    "Formulari d'alta": ('CONTENT_SIGNUP_LEGAL1', 'CONTENT_SIGNUP_LEGAL2',),
 }
 
 # CC Courses

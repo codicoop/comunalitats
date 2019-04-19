@@ -6,6 +6,7 @@ from coopolis.models import Project, User
 from django.contrib.auth.forms import UserCreationForm
 from coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
+from constance import config
 
 
 class ProjectForm(forms.ModelForm):
@@ -24,8 +25,9 @@ class MySignUpForm(UserCreationForm):
     email = forms.EmailField(label="Correu electrònic", max_length=254, help_text='Requerit, ha de ser una adreça vàlida.')
     birthdate = forms.DateField(label="Data de naixement", required=False, widget=XDSoftDatePickerInput())
     accept_conditions = forms.BooleanField(
-        label=mark_safe('Accepto les <a href="https://bcn.coop/avis-legal-i-proteccio-de-dades/" target="_blank">condicions legals</a>'),
-        required=True)
+        label="He llegit i accepto", help_text=mark_safe(config.CONTENT_SIGNUP_LEGAL1), required=True)
+    accept_conditions2 = forms.BooleanField(
+        label="He llegit i accepto", help_text=mark_safe(config.CONTENT_SIGNUP_LEGAL2), required=True)
 
     class Meta(UserCreationForm.Meta):
         model = User
