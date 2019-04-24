@@ -1,0 +1,28 @@
+version: "3.3"
+
+services:
+  coopolis:
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    environment:
+      - DB_HOST=db
+    volumes:
+      - ./Coopolis.back-office:/srv
+    depends_on:
+      - db
+  db:
+    image: postgres
+    volumes:
+      - /srv/postgres-data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d
+      - ./Coopolis.back-office:/srv
+    ports:
+      - 8000:80
+    depends_on:
+      - coopolis
