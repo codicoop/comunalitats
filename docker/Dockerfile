@@ -1,5 +1,5 @@
 FROM python:3.6-alpine
-COPY requirements.txt /srv/requirements.txt
+COPY docker/requirements.txt /srv/requirements.txt
 
 WORKDIR /srv
 
