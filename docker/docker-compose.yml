@@ -9,7 +9,7 @@ services:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.server_develop
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
     depends_on:
