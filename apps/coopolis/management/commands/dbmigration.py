@@ -1,6 +1,6 @@
 # From: https://docs.djangoproject.com/en/2.1/howto/custom-management-commands/
 
-from django.db import connections
+from django.db import connections, IntegrityError
 from django.core.management.base import BaseCommand
 from collections import namedtuple
 from coopolis.models import Project, ProjectStage, User, Town, ProjectStageType
@@ -39,10 +39,14 @@ class Command(BaseCommand):
                 # TODO: BÀSICAMENT, volcar les IDs dels 2 camps a la taula de enrolled.
                 # Ho podem fer objecte per objecte i que generi la seva auto id.
                 with connections['default'].cursor() as insert:
-                    insert.execute("INSERT INTO "
+                    try:
+                        insert.execute("INSERT INTO "
                                    "cc_courses_activity_enrolled(activity_id, user_id) "
                                    "VALUES ("+str(result.workshopId)+", "+str(result.personId)+") "
                                    "ON CONFLICT DO NOTHING")
+                    except IntegrityError as e:
+                        print("Skipping because IntergityError, the Activity must've been skipped.")
+                        continue
                 print("Enrollment inserted. Old DB ID: "+str(result.ID))
             print("Imported: Inscripcions")
 
@@ -98,6 +102,10 @@ class Command(BaseCommand):
             for result in results:
                 to_skip = False
                 print("Importing Activity, old database ID: "+str(result.ID))
+
+                if not result.DATE:
+                    print("Activity without starting date, SKIPPING.")
+                    continue
 
                 starting_time = self.parse_time(result.STARTTIME)
                 if starting_time is None:
@@ -310,13 +318,16 @@ class Command(BaseCommand):
                 print("Activity found, returning: "+str(result.DATE))
                 return result.DATE
 
-    def parse_time(self, time_string):
+    def parse_time(self, time_string, return_string=False):
         if not time_string:
             return None
-        clean_time_string = time_string.replace(".", ":").replace("h", "")
+        clean_time_string = time_string.replace(".", ":").replace("h", "").replace(" ", "")
         if len(clean_time_string) < 3:
             clean_time_string = clean_time_string+":00"
-        return datetime.strptime(clean_time_string, "%H:%M")
+        if return_string:
+            return clean_time_string
+        else:
+            return datetime.strptime(clean_time_string, "%H:%M")
 
     def create_ending_time(self, starting_time):
         ending_time = datetime.strptime(str(starting_time.hour + 1) + ":" + str(starting_time.minute), "%H:%M")
@@ -327,11 +338,17 @@ class Command(BaseCommand):
         return ending_time
 
     def create_course(self, result):
+        starttime = "11:00"
+        endtime = "12:00"
+        if result.STARTTIME:
+            starttime = result.STARTTIME
+        if result.ENDTIME:
+            endtime = result.ENDTIME
         row = Course(
             title=result.TITLE,
             date_start=result.DATE,
             date_end=None,
-            hours="De " + result.STARTTIME + " a " + result.ENDTIME,
+            hours="De " + str(self.parse_time(starttime, True)) + " a " + str(self.parse_time(endtime, True)),
             description=result.SHORTOBJECTIVES,
             publish=True,
         )
