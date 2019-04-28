@@ -5,3 +5,4 @@ from .CoopolisCoursesListView import CoopolisCoursesListView
 from .LoginSignupContainerView import LoginSignupContainerView, CoopolisSignUpView, CoopolisLoginView
 from .HomeView import HomeView
 from .ProjectFormView import ProjectFormView, ProjectCreateFormView, ProjectInfoView
+from .HowItWorksView import HowItWorksView

@@ -4,7 +4,7 @@
 from django.urls import path, include
 from django.contrib import admin
 from .views import ProjectFormView, ProjectCreateFormView, ProjectInfoView, LoginSignupContainerView,\
-    CoopolisSignUpView, CoopolisLoginView, HomeView
+    CoopolisSignUpView, CoopolisLoginView, HomeView, HowItWorksView
 from django.conf.urls import url
 from django.conf import settings
 from django.views.generic.base import RedirectView
@@ -28,4 +28,5 @@ urlpatterns += [
     path('project/edit/', login_required(ProjectFormView.as_view()), name='edit_project'),
     path('project/new/', login_required(ProjectCreateFormView.as_view()), name='new_project'),
     path('project/info/', ProjectInfoView.as_view(), name='project_info'),
+    path('how_it_works/', HowItWorksView.as_view(), name='how_it_works'),
 ]

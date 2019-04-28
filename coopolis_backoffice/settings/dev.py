@@ -216,6 +216,10 @@ CONSTANCE_CONFIG = {
         "creixement. També dissenyem itineraris per a la transformació d’associacions i altres formes d’empreses a "
         "cooperatives.",
         "Portada: bloc que informa sobre l'acompanyament de projectes."),
+    # How it works
+    'CONTENT_HOW_IT_WORKS': (
+        "HTML DE L'APARTAT.",
+        "Contingut de l'apartat Com funciona?"),
     # Sign up
     'CONTENT_SIGNUP_LEGAL1': (
         "La participació en les activitats de Coòpolis, Ateneu Cooperatiu de Barcelona, està subjecta a un seguit de "
@@ -280,6 +284,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
                         "CONTENT_HOME_PROJECTS_TEXT", 'CONTENT_HOME_INTRODUCTION'),
     'Apartat Projectes': ('CONTENT_PROJECT_INTRODUCTION', 'CONTENT_PROJECT_TITLE', 'CONTENT_PROJECT_INFO',
                           'CONTENT_PROJECT_NEW'),
+    'Apartat "Com funciona?"': ('CONTENT_HOW_IT_WORKS',),
     "Apartat Formació": ('CONTENT_COURSES_INTRODUCTION',),
     "Formulari d'alta": ('CONTENT_SIGNUP_LEGAL1', 'CONTENT_SIGNUP_LEGAL2',),
 }

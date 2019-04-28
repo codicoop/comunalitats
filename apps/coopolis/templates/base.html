@@ -66,6 +66,7 @@
         <div class="content menu">
             <ul>
                 <li><a href="https://bcn.coop/">Web de Coòpolis</a></li>
+                <li><a href="{% url 'how_it_works' %}">Com funciona?</a></li>
             {% if user.is_anonymous %}
                 <li><a href="{% url 'password_reset' %}">Recuperar contrasenya</a></li>
                 <li><a href="{% url 'loginsignup' %}">Crear compte</a></li>
