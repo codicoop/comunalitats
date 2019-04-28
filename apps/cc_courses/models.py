@@ -57,7 +57,7 @@ class Course(models.Model):
     class Meta:
         verbose_name = "acció"
         verbose_name_plural = "accions"
-        ordering = ["-date_start"]
+        ordering = ["date_start"]
 
     TYPE_CHOICES = (
         ('F', "Accions educatives"),
@@ -99,7 +99,7 @@ class Activity(models.Model):
     class Meta:
         verbose_name = "sessió"
         verbose_name_plural = "sessions"
-        ordering = ["-date_start"]
+        ordering = ["date_start"]
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="acció",
                                related_name="activities")
