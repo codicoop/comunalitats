@@ -124,12 +124,12 @@ header .content .top-wrapper {
   justify-content: space-between;
 }
 header .content .top-wrapper h1 {
-  font-family: "Raleway", sans-serif;
+  font-family: "Comfortaa", cursive, sans-serif;
   color: #e94e1b;
   font-size: 2rem;
 }
 header .content .top-wrapper h2 {
-  font-family: "Raleway", sans-serif;
+  font-family: "Comfortaa", cursive, sans-serif;
   color: #e94e1b;
   font-size: 1.5rem;
 }
@@ -205,7 +205,7 @@ header .menu ul li {
   white-space: nowrap;
 }
 header .menu a {
-  font-family: "Raleway", sans-serif;
+  font-family: "Comfortaa", cursive, sans-serif;
   text-decoration: none;
   color: white;
 }
