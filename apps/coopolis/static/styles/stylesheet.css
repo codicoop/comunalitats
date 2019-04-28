@@ -97,6 +97,24 @@ div {
   color: #242424;
 }
 
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-space-between {
+  justify-content: space-between;
+}
+
+.flex-justiy-center {
+  justify-content: center;
+}
+
 header {
   display: flex;
   flex-direction: column;
@@ -476,6 +494,7 @@ footer p span {
   align-self: flex-start;
   justify-content: initial;
   padding-top: 30px;
+  width: 100%;
 }
 .generated-form form .errorlist {
   position: inherit;

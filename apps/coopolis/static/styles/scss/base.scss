@@ -97,3 +97,21 @@ div {
         color: $color-3;
     }
 }
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-space-between {
+    justify-content: space-between;
+}
+
+.flex-justiy-center {
+    justify-content: center;
+}

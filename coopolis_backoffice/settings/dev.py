@@ -181,7 +181,7 @@ CONSTANCE_CONFIG = {
         "cooperatives.</p>",
         "Apartat Projecte: text d'introducció a la franja blava."),
     'CONTENT_PROJECT_TITLE': (
-        "Assessorament",
+        "Assessorament de projectes",
         "Apartat Projecte: text d'encapçalament"),
     'CONTENT_PROJECT_INFO': (
         "<p>Per sol·licitar acompanyament per al teu projecte, accedeix amb el teu compte o crea'n un amb els "
