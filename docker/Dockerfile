@@ -11,3 +11,7 @@ RUN apk add jpeg-dev zlib-dev py-pillow
 RUN apk add postgresql-dev
 RUN apk add --no-cache libffi-dev
 RUN pip install -r /srv/requirements.txt
+# Weasyprint installation for Alpine:
+RUN apk --update --upgrade add gcc musl-dev jpeg-dev zlib-dev libffi-dev cairo-dev pango-dev gdk-pixbuf-dev
+# Installing font for PDFs:
+RUN apk --update add fontconfig ttf-liberation
