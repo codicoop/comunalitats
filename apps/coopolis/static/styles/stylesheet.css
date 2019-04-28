@@ -7,8 +7,12 @@
   font-size: 0.9rem;
 }
 
-html, body {
+html {
   height: 100%;
+  margin: 0;
+}
+
+body {
   margin: 0;
 }
 
