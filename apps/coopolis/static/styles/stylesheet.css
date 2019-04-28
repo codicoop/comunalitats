@@ -210,6 +210,10 @@ header .menu a:hover {
   display: inline-block;
 }
 
+.introduction * {
+  font-size: initial;
+}
+
 .enroll-button {
   align-self: center;
 }
