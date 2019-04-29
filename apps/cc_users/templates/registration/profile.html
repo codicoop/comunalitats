@@ -14,8 +14,8 @@
     <form method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
        {% csrf_token %}
        {{ form.as_p }}
-        <p>Contrassenya:</p>
-        <p>Accedeix <a href="{% url 'user_password' %}">aquí</a> per modificar la contrassenya.</p>
+        <p>Contrasenya:</p>
+        <p>Accedeix <a href="{% url 'user_password' %}">aquí</a> per modificar la contrasenya.</p>
     <button type="submit">Guardar els canvis</button>
     </form>
 </div>

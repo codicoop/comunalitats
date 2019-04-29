@@ -253,7 +253,7 @@ CONSTANCE_CONFIG = {
         "<br />"
         "Les places son limitades. Si finalment no pots assistir-hi, si us plau anul·la la "
         "teva inscripció. Per fer-ho, pots gestionar les teves inscripcions accedint al "
-        "back-office de Coòpolis amb el teu correu i contrassenya <a href=\"{}\">aquí</a> "
+        "back-office de Coòpolis amb el teu correu i contrasenya <a href=\"{}\">aquí</a> "
         "o bé contactar-nos al correu electrònic {}, o trucar-nos al {}.",
         "Cos del correu que s'envia quan algú s'inscriu a una activitat"),
     'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT': (

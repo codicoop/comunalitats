@@ -98,7 +98,7 @@ def change_password_view(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            messages.success(request, 'Contrassenya modificada correctament!')
+            messages.success(request, 'Contrasenya modificada correctament!')
             return redirect('user_password')
         else:
             messages.error(request, 'Si us plau revisa els errors.')
