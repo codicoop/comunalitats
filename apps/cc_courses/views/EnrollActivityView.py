@@ -17,7 +17,7 @@ class EnrollActivityView(generic.RedirectView):
             activity = Activity.objects.get(id=kwargs['id'])
             request.user.enrolled_activities.add(activity)
             self.url = activity.course.absolute_url
-            self._send_confirmation_email(activity)
+            # self._send_confirmation_email(activity)
         return super().get(request, *args, **kwargs)
 
     def _send_confirmation_email(self, activity):
