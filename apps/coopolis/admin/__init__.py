@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from coopolis_backoffice import settings
+from django.conf import settings
 from coopolis.models import User, Project, ProjectStage, ProjectStageType
 from cc_courses.models import Course, Activity, CoursePlace, Entity
 from .ActivityAdmin import ActivityAdmin

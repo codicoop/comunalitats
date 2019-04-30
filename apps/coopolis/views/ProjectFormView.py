@@ -9,7 +9,7 @@ from coopolis.forms import ProjectForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.core.mail import send_mail
-from coopolis_backoffice import settings
+from django.conf import settings
 from coopolis.views import LoginSignupContainerView
 from constance import config
 
@@ -60,7 +60,7 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
             message=message,
             html_message=message,
             recipient_list=mail_to,
-            from_email=config.EMAIL_FROM
+            from_email=settings.DEFAULT_FROM_EMAIL
         )
         messages.success(self.request, "S'ha enviat una sol·licitud d'acompanyament del projecte. En els propers dies "
                                        "et contactarà una persona de Coòpolis per concertar una primera reunió.")

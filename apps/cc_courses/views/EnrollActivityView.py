@@ -6,7 +6,7 @@ from django.shortcuts import reverse
 from cc_courses.models import Activity
 from constance import config
 from django.core.mail import send_mail
-from coopolis_backoffice import settings
+from django.conf import settings
 
 
 class EnrollActivityView(generic.RedirectView):
@@ -39,5 +39,5 @@ class EnrollActivityView(generic.RedirectView):
             message=message,
             html_message=message,
             recipient_list=mail_to,
-            from_email=config.EMAIL_FROM
+            from_email=settings.DEFAULT_FROM_EMAIL
         )
