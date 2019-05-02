@@ -43,8 +43,8 @@ class CoursePlace(models.Model):
 
 class Entity(models.Model):
     class Meta:
-        verbose_name = "ateneu / entitat"
-        verbose_name_plural = "ateneus o entitats"
+        verbose_name = "entitat"
+        verbose_name_plural = "entitats"
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     legal_id = models.CharField("N.I.F.", max_length=9, blank=True, null=True)
@@ -124,7 +124,7 @@ class Activity(models.Model):
     spots = models.IntegerField('places totals', default=0)
     enrolled = models.ManyToManyField("coopolis.User", blank=True, related_name='enrolled_activities',
                                       verbose_name="inscrites")
-    entity = models.ForeignKey(Entity, verbose_name="ateneu / entitat", on_delete=models.SET_NULL, null=True)
+    entity = models.ForeignKey(Entity, verbose_name="entitat", on_delete=models.SET_NULL, null=True, blank=True)
     organizer = models.ForeignKey(Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL, null=True)
     JUSTIFICATION_CHOICES = (
         ('A', "Ateneus Cooperatius"),
