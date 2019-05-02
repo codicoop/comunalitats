@@ -1,5 +1,5 @@
 body, html{
-    font: ttf-liberation;
+    font: ttf-opensans, ttf-liberation;
 }
 
 #page td {
@@ -42,7 +42,7 @@ td {
 }
 
 @page {
-    margin: 10px 10px 80px 10px;
+    margin: 30px 20px 80px 20px;
     size: A4 landscape;
     @bottom-left {
         height: 100%;

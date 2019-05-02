@@ -14,4 +14,4 @@ RUN pip install -r /srv/requirements.txt
 # Weasyprint installation for Alpine:
 RUN apk --update --upgrade add gcc musl-dev jpeg-dev zlib-dev libffi-dev cairo-dev pango-dev gdk-pixbuf-dev
 # Installing font for PDFs:
-RUN apk --update add fontconfig ttf-liberation
+RUN apk --update add fontconfig ttf-opensans
