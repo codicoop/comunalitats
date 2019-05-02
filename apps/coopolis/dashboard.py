@@ -42,7 +42,7 @@ class MyDashboard(Dashboard):
                     title="Gestió de dades",
                     column=1,
                     collapsible=False,
-                    models=('cc_courses.models.Entity', 'cc_courses.models.CoursePlace'),
+                    models=('cc_courses.models.Organizer', 'cc_courses.models.Entity', 'cc_courses.models.CoursePlace'),
                 )
             ]
         ))

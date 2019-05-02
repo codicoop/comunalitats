@@ -8,14 +8,17 @@
   <table cellspacing="0" cellpadding="0">
     <tbody>
       <tr>
-        <td class="table-header-caption">EXPEDIENT</td><td class="content""></td>
-        <td class="table-header-caption">ENTITAT</td><td class="table-header-content"">{{ activity.entity }}</td>
+        <td class="table-header-caption">EXPEDIENT</td>
+        <td class="content">TSF014/18/00007</td>
+        <td class="table-header-caption">PROJECTE</td>
+        <td class="table-header-content">{{ activity.organizer|default_if_none:"" }}</td>
       </tr>
       <tr>
-        <td class="table-header-caption">NOM DE L'ACTIVITAT</td><td colspan="3">{{ activity.name }}</td>
+        <td class="table-header-caption">ENTITAT</td>
+        <td colspan="3">{{ activity.entity|default_if_none:"" }}</td>
       </tr>
       <tr>
-        <td class="table-header-caption">PROJECTE</td><td>{{ activity.course }}</td>
+        <td class="table-header-caption">NOM DE L'ACTIVITAT</td><td>{{ activity }}</td>
         <td class="table-header-caption">DATA</td><td>{{ activity.date_start }}</td>
       </tr>
     </tbody>
