@@ -26,8 +26,8 @@
                 <h3>{{ activity.name }}</h3>
                 <p><strong>Data:</strong> {{ activity.date_start }}</p>
                 <p><strong>Horari:</strong> de {{ activity.starting_time }} a {{ activity.ending_time }}</p>
-                <p><strong>Lloc:</strong> {{ activity.place }}</p>
-                <p><strong>Descripció:</strong> {{ activity.objectives }}</p>
+                <p><strong>Lloc:</strong> {{ activity.place|default_if_none:"" }}</p>
+                <p><strong>Descripció:</strong> {{ activity.objectives|safe }}</p>
                 {% if activity.is_past_due is False %}
                     {% if activity|can_enroll:user %}
                 <a

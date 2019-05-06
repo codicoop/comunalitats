@@ -125,7 +125,8 @@ class Activity(models.Model):
     enrolled = models.ManyToManyField("coopolis.User", blank=True, related_name='enrolled_activities',
                                       verbose_name="inscrites")
     entity = models.ForeignKey(Entity, verbose_name="entitat", on_delete=models.SET_NULL, null=True, blank=True)
-    organizer = models.ForeignKey(Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL, null=True)
+    organizer = models.ForeignKey(Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL, null=True,
+                                  blank=True)
     JUSTIFICATION_CHOICES = (
         ('A', "Ateneus Cooperatius"),
         ('J', "Ajuntament"),
