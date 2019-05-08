@@ -7,24 +7,24 @@ from django.http import HttpResponse
 
 class UserAdmin(admin.ModelAdmin):
     empty_value_display = '(cap)'
-    list_display = ( 'first_name', 'last_name', 'id_number', 'email', 'project')
+    list_display = ('first_name', 'last_name', 'id_number', 'email', 'project')
     search_fields = ('id_number', 'last_name', 'first_name', 'email', 'phone_number', 'cooperativism_knowledge')
     list_filter = ('gender', 'town', 'residence_district', 'is_staff')
     fields = ['id', 'first_name', 'last_name', 'surname2', 'id_number', 'email', 'birthdate', 'birth_place',
               'town', 'residence_district', 'address', 'phone_number', 'educational_level',
               'employment_situation', 'discovered_us', 'cooperativism_knowledge', 'project', 'is_staff', 'groups',
               'is_active', 'date_joined', 'last_login']
-    readonly_fields = ('id', 'last_login', 'date_joined', 'project')
+    readonly_fields = ['id', 'last_login', 'date_joined', 'project']
     actions = ['copy_emails', ]
 
     def get_fields(self, request, obj=None):
         if request.user.is_superuser and "is_superuser" not in self.fields:
             self.fields.append('is_superuser')
-        return super().get_fields(self, request)
-
-    def project(self, obj):
-        return obj.project
-    project.short_description = "Projecte"
+        if obj is None and 'project' in self.fields:
+            self.fields.remove('project')
+            self.fields.remove('id')
+            self.fields.remove('last_login')
+        return super().get_fields(request, obj)
 
     def copy_emails(self, request, queryset):
         emails = []
