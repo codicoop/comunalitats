@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
+from django.http import HttpResponse
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -14,6 +15,7 @@ class UserAdmin(admin.ModelAdmin):
               'employment_situation', 'discovered_us', 'cooperativism_knowledge', 'project', 'is_staff', 'groups',
               'is_active', 'date_joined', 'last_login']
     readonly_fields = ('id', 'last_login', 'date_joined', 'project')
+    actions = ['copy_emails', ]
 
     def get_fields(self, request, obj=None):
         if request.user.is_superuser and "is_superuser" not in self.fields:
@@ -23,3 +25,13 @@ class UserAdmin(admin.ModelAdmin):
     def project(self, obj):
         return obj.project
     project.short_description = "Projecte"
+
+    def copy_emails(self, request, queryset):
+        emails = []
+        for user in queryset:
+            emails.append(user.email)
+        print(emails)
+        # self.message_user(request, "%s successfully marked as published." % message_bit)
+        return HttpResponse(", ".join(emails))
+
+    copy_emails.short_description = 'Copiar tots els e-mails'
