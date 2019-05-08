@@ -30,7 +30,7 @@ class EnrollActivityView(generic.RedirectView):
             activity.starting_time,
             activity.ending_time,
             activity.place,
-            reverse('my_activities'),
+            self.request.build_absolute_uri(reverse('my_activities')),
             config.CONTACT_EMAIL,
             config.CONTACT_PHONE_NUMBER
         )
