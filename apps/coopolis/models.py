@@ -182,13 +182,13 @@ class User(BaseUser):
                                                          "cooperativisme? Quina? Cursos realitzats?",
                                                blank=True, null=True)
 
+    @property
     def project(self):
         try:
             r_stage = ProjectStage.objects.filter(involved_partners__id=self.id)[0:1].get()
             return r_stage.project
         except ProjectStage.DoesNotExist:
             return None
-    project.short_description = "projecte"
 
     def get_full_name(self):
         name = self.first_name
