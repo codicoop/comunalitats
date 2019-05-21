@@ -30,7 +30,6 @@ class UserAdmin(admin.ModelAdmin):
         emails = []
         for user in queryset:
             emails.append(user.email)
-        print(emails)
         # self.message_user(request, "%s successfully marked as published." % message_bit)
         return HttpResponse(", ".join(emails))
 
