@@ -62,7 +62,7 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
             message=message,
             html_message=message,
             recipient_list=mail_to,
-            from_email=settings.DEFAULT_FROM_EMAIL
+            from_email=config.EMAIL_FROM_PROJECTS
         )
         messages.success(self.request, "S'ha enviat una sol·licitud d'acompanyament del projecte. En els propers dies "
                                        "et contactarà una persona de Coòpolis per concertar una primera reunió.")

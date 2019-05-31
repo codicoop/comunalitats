@@ -39,5 +39,5 @@ class EnrollActivityView(generic.RedirectView):
             message=message,
             html_message=message,
             recipient_list=mail_to,
-            from_email=settings.DEFAULT_FROM_EMAIL
+            from_email=config.EMAIL_FROM_ENROLLMENTS
         )

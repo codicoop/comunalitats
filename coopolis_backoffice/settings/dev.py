@@ -268,7 +268,9 @@ CONSTANCE_CONFIG = {
         "Assumpte del correu de recordatori que s'envia a tothom que s'ha inscrit"
         "a una activitat mitjançant el botó per enviar el recordatori a tothom."),
     # Configuration
-    'EMAIL_FROM': ('Coòpolis, Ateneu Cooperatiu <coopolis@bcn.coop>', 'Remitent dels correus electrònics'),
+    'EMAIL_FROM': ('Coòpolis, Ateneu Cooperatiu <coopolis@bcn.coop>', 'Remitent dels correus electrònics.'),
+    'EMAIL_FROM_ENROLLMENTS': ('formacio@bcn.coop', "Remitent del correu de notificació quan t'inscrius a una sessió."),
+    'EMAIL_FROM_PROJECTS': ('suport@bcn.coop', "Remitent del correu de notificació de projectes nous."),
     'EMAIL_TO_DEBUG': ('p.picornell@gmail.com', 'Correu per fer tests del codi.'),
     'EMAIL_TO': ('coopolis.laie@gmail.com', "Correu on s'envien les notificacions generals (p.ex. nous projectes)"),
     'CONTACT_PHONE_NUMBER': ("93 432 00 63", "Número de telèfon que voleu indicar per si algú té dubtes o gestions."),
@@ -277,7 +279,8 @@ CONSTANCE_CONFIG = {
         "Correu electrònic que voleu indicar per si algú té dubtes o gestions."),
 }
 CONSTANCE_CONFIG_FIELDSETS = {
-    'Configuració': ('CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG', 'EMAIL_TO', 'EMAIL_FROM'),
+    'Configuració': ('CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG', 'EMAIL_TO', 'EMAIL_FROM',
+                     'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS'),
     'Correus': ('EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT', 'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT',
                 'EMAIL_ENROLLMENT_CONFIRMATION', 'EMAIL_ENROLLMENT_REMINDER_SUBJECT', 'EMAIL_ENROLLMENT_REMINDER',),
     "Apartat Portada": ('CONTENT_HOME_COURSES_TITLE', 'CONTENT_HOME_COURSES_TEXT', 'CONTENT_HOME_PROJECTS_TITLE',
