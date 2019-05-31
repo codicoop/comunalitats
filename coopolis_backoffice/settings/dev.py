@@ -319,9 +319,12 @@ ADMIN_HEADER = 'Back-office de Coòpolis'
 ADMIN_SITE_TITLE = ''
 ADMIN_INDEX_TITLE = ''
 AXIS_OPTIONS = (
+    ('A', 'Eix A'),
     ('B', 'Eix B'),
     ('C', "Eix C"),
-    ('D', 'Eix D')
+    ('D', 'Eix D'),
+    ('E', 'Eix E'),
+    ('F', 'Eix F'),
 )
 SUBSIDY_PERIOD_OPTIONS = (("2017", "2016-2017"), ("2018", "2017-2018"), ("2019", "2018-2019"))
 
