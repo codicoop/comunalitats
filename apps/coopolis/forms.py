@@ -15,7 +15,7 @@ class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = '__all__'
-        exclude = ['cif', 'registration_date', 'constitution_date']
+        exclude = ['cif', 'registration_date', 'constitution_date', 'partners']
 
 
 class MySignUpForm(UserCreationForm):

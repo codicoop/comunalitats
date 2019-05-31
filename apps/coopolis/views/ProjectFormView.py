@@ -43,9 +43,7 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
 
     def form_valid(self, form):
         newproject = form.save()
-        newstage = ProjectStage(project=newproject)
-        newstage.save()
-        newstage.involved_partners.add(self.request.user)
+        newproject.partners.add(self.request.user)
         mail_to = {config.EMAIL_TO_DEBUG}
         if settings.DEBUG is not True:
             mail_to.add(config.EMAIL_TO)

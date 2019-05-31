@@ -185,11 +185,9 @@ class User(BaseUser):
 
     @property
     def project(self):
-        try:
-            r_stage = ProjectStage.objects.filter(involved_partners__id=self.id)[0:1].get()
-            return r_stage.project
-        except ProjectStage.DoesNotExist:
-            return None
+        if self.projects.count() > 0:
+            return self.projects.all()[0]
+        return None
 
     def get_full_name(self):
         name = self.first_name
