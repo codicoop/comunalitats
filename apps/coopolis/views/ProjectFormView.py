@@ -44,9 +44,13 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
     def form_valid(self, form):
         newproject = form.save()
         newproject.partners.add(self.request.user)
-        mail_to = {config.EMAIL_TO_DEBUG}
-        if settings.DEBUG is not True:
-            mail_to.add(config.EMAIL_TO)
+
+        # TODO: Helper que encapsuli el sistema d'enviar mails segons debug i string separada per comes.
+        mail_to = set()
+        if settings.DEBUG:
+            mail_to.add(config.EMAIL_TO_DEBUG)
+        else:
+            recipients = [mail_to.add(r.strip()) for r in config.EMAIL_TO.split(',')]
         message = config.EMAIL_NEW_PROJECT.format(
                         newproject.name,
                         newproject.phone,
