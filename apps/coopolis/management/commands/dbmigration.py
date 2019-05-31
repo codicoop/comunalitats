@@ -17,11 +17,13 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print("PROTECTED!")
         return
+        '''
         Flush().handle(interactive=False, database="default", **options)
         create_entities()
         create_stage_types()
         tuples = manual_tuple()
         self.importprojects(tuples)
+        self.copy_partners_form_stage_to_project()
         self.importtowns()
         self.importusers(tuples)
         self.importplaces()
@@ -30,6 +32,15 @@ class Command(BaseCommand):
         self.importenrollments()
         User.objects.create_superuser(password='test', email='hola@codi.coop',
                                       first_name='Admin', last_name="Surname 1", surname2="Surname 2")
+        '''
+
+
+    def copy_partners_form_stage_to_project(self):
+        for project_stage in ProjectStage.objects.all():
+            project = project_stage.project
+            for partner in project_stage.involved_partners.all():
+                project.partners.add(partner)
+                print("Projecte "+project.name+", afegint partner: "+partner.first_name)
 
     def importenrollments(self):
         with connections['old'].cursor() as cursor:

@@ -20,6 +20,11 @@ class ProjectAdmin(admin.ModelAdmin, ExportCsvMixin):
 
     stages_field.short_description = 'Acompanyaments'
 
+    raw_id_fields = ('partners',)
+    autocomplete_lookup_fields = {
+        'm2m': ['partners'],
+    }
+
 
 class ProjectStageAdmin(admin.ModelAdmin, ExportCsvMixin):
     empty_value_display = '(cap)'

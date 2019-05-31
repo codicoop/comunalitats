@@ -32,6 +32,7 @@ class Project(models.Model):
         verbose_name_plural = "projectes"
         verbose_name = "projecte"
 
+    partners = models.ManyToManyField('User', verbose_name="sòcies", blank=True, related_name='projects')
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     SECTORS = (
         ('A', 'Altres'),
