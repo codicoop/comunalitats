@@ -12,7 +12,7 @@ class CourseAdmin(SummernoteModelAdmin):
     readonly_fields = ('copy_clipboard_field',)
     exclude = ('slug',)
     search_fields = ('date_start', 'title', 'description',)
-    list_filter = ('date_start',)
+    list_filter = ('date_start', 'for_minors',)
 
     def get_queryset(self, request):
         qs = super(CourseAdmin, self).get_queryset(request)

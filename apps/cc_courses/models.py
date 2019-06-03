@@ -74,8 +74,6 @@ class Course(models.Model):
         ('F', "Accions educatives"),
         ('A', "Altres accions")
     )
-    type = models.CharField("tipus d'acció", help_text="Determina el tipus de justificació", max_length=1,
-                            choices=TYPE_CHOICES, default='F')
     title = models.CharField("títol", max_length=250, blank=False)
     slug = models.CharField(max_length=250, unique=True)
     date_start = models.DateField("dia inici")
@@ -89,6 +87,9 @@ class Course(models.Model):
     place = models.ForeignKey(CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc", blank=True,
                               help_text="Aquesta dada de moment és d'ús intern i no es publica.")
 
+    for_minors = models.BooleanField("acció dirigida a menors", default=False,
+                                     help_text="Determina el tipus de justificació i en aquest cas, s'han d'omplir els "
+                                               "camps relatius a menors.")
     objects = models.Manager()
     published = Published()
 
