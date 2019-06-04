@@ -86,10 +86,6 @@ class Course(models.Model):
     banner = ThumbnailerImageField(null=True, upload_to=upload_path, max_length=250, blank=True)
     place = models.ForeignKey(CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc", blank=True,
                               help_text="Aquesta dada de moment és d'ús intern i no es publica.")
-
-    for_minors = models.BooleanField("acció dirigida a menors", default=False,
-                                     help_text="Determina el tipus de justificació i en aquest cas, s'han d'omplir els "
-                                               "camps relatius a menors.")
     objects = models.Manager()
     published = Published()
 
@@ -144,6 +140,23 @@ class Activity(models.Model):
     photo2 = models.FileField("fotografia 2", blank=True, null=True,
                                           upload_to=photo2_signatures_upload_path, max_length=250)
     publish = models.BooleanField("publicada", default=True)
+    # minors
+    for_minors = models.BooleanField(
+        "acció dirigida a menors", default=False,
+        help_text="Determina el tipus de justificació i en aquest cas, s'han d'omplir els camps relatius a menors.")
+    minors_school_name = models.CharField("nom del centre educatiu", blank=True, null=True, max_length=150)
+    minors_school_cif = models.CharField("CIF del centre educatiu", blank=True, null=True, max_length=12)
+    MINORS_GRADE_OPTIONS = (
+        ('PRIM', "Primària"),
+        ('ESO', "Secundària obligatòria"),
+        ('BATX', "Batxillerat"),
+        ('FPGM', "Formació professional grau mig"),
+        ('FPGS', "Formació professional grau superior")
+    )
+    minors_grade = models.CharField("grau d'estudis", blank=True, null=True, max_length=4, choices=MINORS_GRADE_OPTIONS)
+    minors_participants_number = models.IntegerField("número d'alumnes participants", blank=True, null=True)
+    minors_teacher  = models.ForeignKey("coopolis.User", on_delete=models.SET_NULL, verbose_name="docent", null=True,
+                                        blank=True)
 
     objects = models.Manager()
     published = Published()
