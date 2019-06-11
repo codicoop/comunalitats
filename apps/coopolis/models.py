@@ -8,12 +8,12 @@ from cc_courses.models import Entity
 
 
 def stage_certificate_upload_path(instance, filename):
-    if isinstance(instance, Project):
+    if isinstance(instance, ProjectStage):
         return 'course.stage_certificate/{0}/{1}'.format(str(uuid4()), filename)
 
 
 def stage_signatures_upload_path(instance, filename):
-    if isinstance(instance, Project):
+    if isinstance(instance, ProjectStage):
         return 'course.stage_signatures/{0}/{1}'.format(str(uuid4()), filename)
 
 
