@@ -14,12 +14,11 @@
         <td class="table-header-content">{{ activity.organizer|default_if_none:"" }}</td>
       </tr>
       <tr>
-        <td class="table-header-caption">ENTITAT</td>
-        <td colspan="3">{{ activity.entity|default_if_none:"" }}</td>
+        <td class="table-header-caption">ENTITAT</td><td>{{ activity.entity|default_if_none:"" }}</td>
+        <td class="table-header-caption">DATA</td><td>{{ activity.date_start }}</td>
       </tr>
       <tr>
-        <td class="table-header-caption">NOM DE L'ACTIVITAT</td><td>{{ activity }}</td>
-        <td class="table-header-caption">DATA</td><td>{{ activity.date_start }}</td>
+        <td class="table-header-caption">NOM DE L'ACTIVITAT</td><td colspan="3">{{ activity }}</td>
       </tr>
     </tbody>
   </table>
