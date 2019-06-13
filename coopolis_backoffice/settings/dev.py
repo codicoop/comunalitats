@@ -267,6 +267,9 @@ CONSTANCE_CONFIG = {
         "",
         "Assumpte del correu de recordatori que s'envia a tothom que s'ha inscrit"
         "a una activitat mitjançant el botó per enviar el recordatori a tothom."),
+    'EMAIL_SIGNUP_WELCOME_SUBJECT': (
+        "Nou compte creat a Coòpolis",
+        "Assumpte del missatge de benvinguda que s'envia al crear un compte nou."),
     'EMAIL_SIGNUP_WELCOME': (
         "Benvingut/da a Coòpolis!<br />"
         "<br />"
@@ -285,9 +288,22 @@ CONSTANCE_CONFIG = {
         "L'equip de Coòpolis.<br />"
         "<a href=\"http://bcn.coop\">bcn.coop</a>",
         "Missatge de benvinguda que s'envia quan algú crea un compte."),
-    'EMAIL_SIGNUP_WELCOME_SUBJECT': (
-        "Nou compte creat a Coòpolis",
-        "Assumpte del missatge de benvinguda que s'envia al crear un compte nou."),
+    'EMAIL_ADDED_TO_PROJECT_SUBJECT': (
+        "Has estat afegit com a participant del projecte {}",
+        "Assumpte del missatge de notificació d'haver estat afegit a un projecte."),
+    'EMAIL_ADDED_TO_PROJECT': (
+        "Has estat afegit com a participant al projecte acompanyat per Coòpolis:<br />"
+        "{}<br />"
+        "<br />"
+        "Per veure i modificar la fitxa del vostre projecte, accedeix a "
+        "<a href=\"http://serveis.bcn.coop/project/info/\">l'apartat Projectes</a> de la plataforma de Coòpolis amb el"
+        "teu e-mail i contrasenya.<br />"
+        "Si necessites la contrasenya, trobaràs l'opció per fer-ho a "
+        "<a href=\"http://serveis.bcn.coop\">serveis.bcn.coop</a>.<br />"
+        "<br />"
+        "L'equip de Coòpolis.<br />"
+        "<a href=\"http://bcn.coop\">bcn.coop</a>",
+        "Missatge de notificació d'haver estat afegit a un projecte."),
     # Configuration
     'EMAIL_FROM': ('Coòpolis, Ateneu Cooperatiu <coopolis@bcn.coop>', 'Remitent dels correus electrònics.'),
     'EMAIL_FROM_ENROLLMENTS': ('formacio@bcn.coop', "Remitent del correu de notificació quan t'inscrius a una sessió."),
@@ -304,7 +320,8 @@ CONSTANCE_CONFIG_FIELDSETS = {
                      'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS'),
     'Correus': ('EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT', 'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT',
                 'EMAIL_ENROLLMENT_CONFIRMATION', 'EMAIL_ENROLLMENT_REMINDER_SUBJECT', 'EMAIL_ENROLLMENT_REMINDER',
-                'EMAIL_SIGNUP_WELCOME_SUBJECT', 'EMAIL_SIGNUP_WELCOME'),
+                'EMAIL_SIGNUP_WELCOME_SUBJECT', 'EMAIL_SIGNUP_WELCOME', 'EMAIL_ADDED_TO_PROJECT_SUBJECT',
+                'EMAIL_ADDED_TO_PROJECT'),
     "Apartat Portada": ('CONTENT_HOME_COURSES_TITLE', 'CONTENT_HOME_COURSES_TEXT', 'CONTENT_HOME_PROJECTS_TITLE',
                         "CONTENT_HOME_PROJECTS_TEXT", 'CONTENT_HOME_INTRODUCTION'),
     'Apartat Projectes': ('CONTENT_PROJECT_INTRODUCTION', 'CONTENT_PROJECT_TITLE', 'CONTENT_PROJECT_INFO',
