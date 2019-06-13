@@ -10,6 +10,9 @@ from cc_users.forms import LogInForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django import urls
+from django.core.mail import send_mail
+from django.conf import settings
+from constance import config
 
 
 class LoginSignupContainerView(TemplateView):
@@ -47,6 +50,7 @@ class CoopolisSignUpView(SignUpView):
 
     def form_valid(self, form):
         form.save()
+        self.send_welcome_email()
         username = self.request.POST['email']
         password = self.request.POST['password1']
         user = authenticate(username=username, password=password)
@@ -55,6 +59,18 @@ class CoopolisSignUpView(SignUpView):
 
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect(urls.reverse('loginsignup'))
+
+    def send_welcome_email(self):
+        mail_to = {self.request.POST['email']}
+        if settings.DEBUG:
+            mail_to.add(config.EMAIL_TO_DEBUG)
+        send_mail(
+            subject=config.EMAIL_SIGNUP_WELCOME_SUBJECT,
+            message=config.EMAIL_SIGNUP_WELCOME,
+            html_message=config.EMAIL_SIGNUP_WELCOME,
+            recipient_list=mail_to,
+            from_email=settings.DEFAULT_FROM_EMAIL
+        )
 
 
 class CoopolisLoginView(LoginView):

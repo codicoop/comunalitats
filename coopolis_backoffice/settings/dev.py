@@ -267,6 +267,27 @@ CONSTANCE_CONFIG = {
         "",
         "Assumpte del correu de recordatori que s'envia a tothom que s'ha inscrit"
         "a una activitat mitjançant el botó per enviar el recordatori a tothom."),
+    'EMAIL_SIGNUP_WELCOME': (
+        "Benvingut/da a Coòpolis!<br />"
+        "<br />"
+        "<em>Estàs rebent aquest correu perquè s'ha completat un registre a la plataforma serveis.bcn.coop.<br />"
+        "Si aquest registre no l'has fet tu o cap altra persona amb qui comparteixis aquest compte, ignora aquest"
+        "correu o avisa'ns per tal que l'eliminem de la base de dades.</em><br />"
+        "<br />"
+        "Amb el teu compte pots:<br />"
+        "- Inscriure't a les sessions formatives, que trobaràs "
+        "<a href=\"http://serveis.bcn.coop/program/\">aquí</a>.<br />"
+        "- Si esteu iniciant o teniu en marxa un projecte cooperatiu, podeu "
+        "<a href=\"http://serveis.bcn.coop/project/new/\">sol·licitar un acompanyament</a>.<br />"
+        "- Consultar o editar les dades del teu perfil i recuperar la contrassenya. Més informació a "
+        "<a href=\"http://serveis.bcn.coop\">serveis.bcn.coop</a>.<br />"
+        "<br />"
+        "L'equip de Coòpolis.<br />"
+        "<a href=\"http://bcn.coop\">bcn.coop</a>",
+        "Missatge de benvinguda que s'envia quan algú crea un compte."),
+    'EMAIL_SIGNUP_WELCOME_SUBJECT': (
+        "Nou compte creat a Coòpolis",
+        "Assumpte del missatge de benvinguda que s'envia al crear un compte nou."),
     # Configuration
     'EMAIL_FROM': ('Coòpolis, Ateneu Cooperatiu <coopolis@bcn.coop>', 'Remitent dels correus electrònics.'),
     'EMAIL_FROM_ENROLLMENTS': ('formacio@bcn.coop', "Remitent del correu de notificació quan t'inscrius a una sessió."),
@@ -282,7 +303,8 @@ CONSTANCE_CONFIG_FIELDSETS = {
     'Configuració': ('CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG', 'EMAIL_TO', 'EMAIL_FROM',
                      'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS'),
     'Correus': ('EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT', 'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT',
-                'EMAIL_ENROLLMENT_CONFIRMATION', 'EMAIL_ENROLLMENT_REMINDER_SUBJECT', 'EMAIL_ENROLLMENT_REMINDER',),
+                'EMAIL_ENROLLMENT_CONFIRMATION', 'EMAIL_ENROLLMENT_REMINDER_SUBJECT', 'EMAIL_ENROLLMENT_REMINDER',
+                'EMAIL_SIGNUP_WELCOME_SUBJECT', 'EMAIL_SIGNUP_WELCOME'),
     "Apartat Portada": ('CONTENT_HOME_COURSES_TITLE', 'CONTENT_HOME_COURSES_TEXT', 'CONTENT_HOME_PROJECTS_TITLE',
                         "CONTENT_HOME_PROJECTS_TEXT", 'CONTENT_HOME_INTRODUCTION'),
     'Apartat Projectes': ('CONTENT_PROJECT_INTRODUCTION', 'CONTENT_PROJECT_TITLE', 'CONTENT_PROJECT_INFO',
