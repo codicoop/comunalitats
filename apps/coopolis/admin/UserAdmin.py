@@ -3,7 +3,9 @@
 
 from django.contrib import admin
 from django.http import HttpResponse
-
+from django.core.mail import send_mail
+from django.conf import settings
+from constance import config
 
 class UserAdmin(admin.ModelAdmin):
     empty_value_display = '(cap)'
@@ -34,3 +36,19 @@ class UserAdmin(admin.ModelAdmin):
         return HttpResponse(", ".join(emails))
 
     copy_emails.short_description = 'Copiar tots els e-mails'
+
+    def save_model(self, request, obj, form, change):
+        self.send_welcome_email(request.POST['email'])
+        super().save_model(request, obj, form, change)
+
+    def send_welcome_email(self, mail_to):
+        mail_to = {mail_to}
+        if settings.DEBUG:
+            mail_to.add(config.EMAIL_TO_DEBUG)
+        send_mail(
+            subject=config.EMAIL_SIGNUP_WELCOME_SUBJECT,
+            message=config.EMAIL_SIGNUP_WELCOME,
+            html_message=config.EMAIL_SIGNUP_WELCOME,
+            recipient_list=mail_to,
+            from_email=settings.DEFAULT_FROM_EMAIL
+        )

@@ -50,7 +50,7 @@ class CoopolisSignUpView(SignUpView):
 
     def form_valid(self, form):
         form.save()
-        self.send_welcome_email()
+        self.send_welcome_email(self.request.POST['email'])
         username = self.request.POST['email']
         password = self.request.POST['password1']
         user = authenticate(username=username, password=password)
@@ -60,8 +60,9 @@ class CoopolisSignUpView(SignUpView):
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect(urls.reverse('loginsignup'))
 
-    def send_welcome_email(self):
-        mail_to = {self.request.POST['email']}
+    # TODO: Aquesta funció està duplicada a UserAdmin. Decidir si ficar-la com a helper? O fitxer de funcions de mail?
+    def send_welcome_email(self, mail_to):
+        mail_to = {mail_to}
         if settings.DEBUG:
             mail_to.add(config.EMAIL_TO_DEBUG)
         send_mail(
