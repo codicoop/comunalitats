@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from coopolis.models import User
+from coopolis.models import User, Project
 from django.utils.safestring import mark_safe
 from coopolis.mixins import ExportCsvMixin
 from django.core.mail import send_mail
@@ -78,6 +78,8 @@ class ProjectStageAdmin(admin.ModelAdmin, ExportCsvMixin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "stage_responsible":
             kwargs["queryset"] = User.objects.filter(is_staff=True)
+        if db_field.name == "project":
+            kwargs["queryset"] = Project.objects.order_by('name')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def project_field(self, obj):
