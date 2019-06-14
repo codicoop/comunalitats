@@ -9,7 +9,7 @@ from constance import config
 
 class UserAdmin(admin.ModelAdmin):
     empty_value_display = '(cap)'
-    list_display = ('first_name', 'last_name', 'id_number', 'email', 'project')
+    list_display = ('first_name', 'last_name', 'id_number', 'email', 'project', 'enrolled_activities_count')
     search_fields = ('id_number', 'last_name', 'first_name', 'email', 'phone_number', 'cooperativism_knowledge')
     list_filter = ('gender', 'town', 'residence_district', 'is_staff')
     fields = ['id', 'first_name', 'last_name', 'surname2', 'id_number', 'email', 'birthdate', 'birth_place',

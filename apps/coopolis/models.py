@@ -188,6 +188,11 @@ class User(BaseUser):
                                                          "cooperativisme? Quina? Cursos realitzats?",
                                                blank=True, null=True)
 
+    def enrolled_activities_count(self):
+        return self.enrolled_activities.all().count()
+
+    enrolled_activities_count.short_description = "Sessions"
+
     @property
     def project(self):
         if self.projects.count() > 0:
