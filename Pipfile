@@ -18,6 +18,7 @@ django-grappelli = "==2.12.2"
 gunicorn = "*"
 factory-boy = "*"
 easy-thumbnails = "*"
+django-modelclone = "*"
 
 [dev-packages]
 

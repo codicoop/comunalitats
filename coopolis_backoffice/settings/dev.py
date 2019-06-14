@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django_summernote',
     'storages',
     'easy_thumbnails',
+    'modelclone',
 ]
 
 

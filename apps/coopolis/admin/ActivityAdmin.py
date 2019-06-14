@@ -6,12 +6,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import path, reverse
 from cc_courses.models import Activity
 from django.utils.safestring import mark_safe
-from django_summernote.admin import SummernoteModelAdmin
+from django_summernote.admin import SummernoteModelAdminMixin
 from constance import config
 from django.core.mail import send_mail
 from django.conf import settings
+import modelclone
 
-class ActivityAdmin(SummernoteModelAdmin):
+
+class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     list_display = ('date_start', 'spots', 'remaining_spots', 'name', 'attendee_filter_field', 'attendee_list_field',
                     'send_reminder_field')
     readonly_fields = ('attendee_list_field', 'attendee_filter_field', 'send_reminder_field')
@@ -60,6 +62,15 @@ class ActivityAdmin(SummernoteModelAdmin):
             ),
         ]
         return custom_urls + urls
+
+    def tweak_cloned_fields(self, fields):
+        fields['enrolled'] = None
+        return fields
+
+    # modelclone not showing Save button because of a bug. This workarounds it:
+    def render_change_form(self, request, context, *args, **kwargs):
+        kwargs['add'] = True
+        return super().render_change_form(request, context, *args, **kwargs)
 
     def remaining_spots(self, obj):
         return obj.remaining_spots
