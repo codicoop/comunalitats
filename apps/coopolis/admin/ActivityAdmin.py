@@ -33,11 +33,12 @@ class ActivityAdmin(SummernoteModelAdmin):
             'fields': ('attendee_list_field', 'attendee_filter_field', 'send_reminder_field'),
         })
     )
-
-    def remaining_spots(self, obj):
-        return obj.remaining_spots
-
-    remaining_spots.short_description = "Places disponibles"
+    # define the raw_id_fields
+    raw_id_fields = ('enrolled',)
+    # define the autocomplete_lookup_fields
+    autocomplete_lookup_fields = {
+        'm2m': ['enrolled'],
+    }
 
     def get_queryset(self, request):
         qs = super(ActivityAdmin, self).get_queryset(request)
@@ -59,6 +60,11 @@ class ActivityAdmin(SummernoteModelAdmin):
             ),
         ]
         return custom_urls + urls
+
+    def remaining_spots(self, obj):
+        return obj.remaining_spots
+
+    remaining_spots.short_description = "Places disponibles"
 
     def attendee_list_field(self, obj):
         if obj.id is None:
@@ -96,13 +102,6 @@ class ActivityAdmin(SummernoteModelAdmin):
             'coopolis', 'user', obj.id))
 
     attendee_filter_field.short_description = 'Llistat'
-
-    # define the raw_id_fields
-    raw_id_fields = ('enrolled',)
-    # define the autocomplete_lookup_fields
-    autocomplete_lookup_fields = {
-        'm2m': ['enrolled'],
-    }
 
     def send_reminder_field(self, obj):
         if obj.id is None:
