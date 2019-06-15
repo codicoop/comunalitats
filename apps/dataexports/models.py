@@ -20,11 +20,11 @@ class DataExports(models.Model):
         return self.name
 
 
-class DataExportsCorrelations(models.Model):
+class DataExportsCorrelation(models.Model):
     class Meta:
         verbose_name = "correlació"
         verbose_name_plural = "correlacions"
-        ordering = ["-subsidy_period"]
+        ordering = ["-subsidy_period", "correlated_field", "original_data"]
 
     created = models.DateTimeField(verbose_name="creació", auto_now_add=True)
     subsidy_period = models.CharField(

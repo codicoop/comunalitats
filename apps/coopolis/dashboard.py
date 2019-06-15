@@ -42,7 +42,7 @@ class MyDashboard(Dashboard):
                     title="Exportació de dades per justificacions",
                     column=1,
                     collapsible=False,
-                    models=('dataexports.models.DataExports',),
+                    models=('dataexports.models.DataExports', 'dataexports.models.DataExportsCorrelation',),
                 ),
                 modules.ModelList(
                     title="Gestió de dades",

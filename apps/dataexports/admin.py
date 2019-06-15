@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, reverse
 from django.utils.html import format_html
-from dataexports.models import DataExports
+from dataexports.models import DataExports, DataExportsCorrelation
 
 
 @admin.register(DataExports)
@@ -32,3 +32,9 @@ class DataExportsAdmin(admin.ModelAdmin):
         from dataexports.export_functions import ExportFunctions
         obj = DataExports.objects.get(id=_id)
         return ExportFunctions.callmethod(obj.function_name)
+
+
+@admin.register(DataExportsCorrelation)
+class DataExportsCorrelationAdmin(admin.ModelAdmin):
+    list_display = ('correlated_field', 'subsidy_period', 'original_data', 'correlated_data',)
+    readonly_fields = ('created',)
