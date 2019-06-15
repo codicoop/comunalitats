@@ -19,6 +19,7 @@ gunicorn = "*"
 factory-boy = "*"
 easy-thumbnails = "*"
 django-modelclone = "*"
+openpyxl = "*"
 
 [dev-packages]
 
