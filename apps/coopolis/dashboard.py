@@ -39,6 +39,12 @@ class MyDashboard(Dashboard):
                     models=('coopolis.models.User', 'django.contrib.auth.models.Group',),
                 ),
                 modules.ModelList(
+                    title="Exportació de dades per justificacions",
+                    column=1,
+                    collapsible=False,
+                    models=('dataexports.models.DataExports',),
+                ),
+                modules.ModelList(
                     title="Gestió de dades",
                     column=1,
                     collapsible=False,
