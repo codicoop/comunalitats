@@ -21,7 +21,6 @@ class ExportFunctions:
         worksheet.title = "Actuacions"
 
         columns = [
-            'Referència',
             "Eix",
             "Tipus d'actuació",
             "Nom de l'actuació",
@@ -41,10 +40,13 @@ class ExportFunctions:
         obj = Activity.objects.filter(justification="A", date_start__range=["2018-10-01", "2019-09-30"])
         for item in obj:
             row_num += 1
+            # Hem de recordar que segons aquest ordre es defineixen els números de referència autoincrementals.
+            # Per tant realment hauria de ser un sol excel amb diferents tabs per evitar problemes d'inconsistència
+            # de dades.
+            # Ojo que comença pel nº 2, perquè la 1a fila son els títols!!!
 
             # Define the data for each cell in the row
             row = [
-                "",
                 "A) Diagnosi i visibilització",  # s'ha de calcular l'Eix real
                 "A) Reunions de la taula territorial",  # idem
                 item.name,
@@ -54,8 +56,6 @@ class ExportFunctions:
                 "No",
                 ""
             ]
-
-            # Assign the data for each cell of the row
             for col_num, cell_value in enumerate(row, 1):
                 cell = worksheet.cell(row=row_num, column=col_num)
                 cell.value = cell_value
