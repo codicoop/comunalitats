@@ -1,5 +1,5 @@
-from coopolis.models import Project, ProjectStage, User
-from cc_courses.models import Course, Activity
+from coopolis.models import ProjectStage
+from cc_courses.models import Activity
 from dataexports.models import DataExportsCorrelation
 from django.http import HttpResponseNotFound, HttpResponse
 from openpyxl import Workbook
@@ -8,6 +8,22 @@ from openpyxl.utils import get_column_letter
 
 
 class ExportFunctions:
+    """ExportFunctions
+
+    This is the generation of excel-like data (in .xlsx) made to fit
+    the official formats required for the justification of the
+    subsidies.
+
+    Given that each year it changes, and we might need different
+    documents, or even each Ateneu might need a specific document
+    for subsidies that are not the 'conveni', we created a simple
+    system to create different functions, 'register' them in the
+    admin, and launch them from there.
+
+    This class holds the functions that generate this .xlsx.
+
+    To use them, call ExportFunctions.callmethod('function_name')
+    """
     workbook = Workbook()
     worksheet = workbook.active
     subsidy_period_range = None
