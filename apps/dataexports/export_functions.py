@@ -14,7 +14,7 @@ class ExportFunctions:
     the official formats required for the justification of the
     subsidies.
 
-    Given that each year it changes, and we might need different
+    Given that each year it changes, and we might need multiple
     documents, or even each Ateneu might need a specific document
     for subsidies that are not the 'conveni', we created a simple
     system to create different functions, 'register' them in the
