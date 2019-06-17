@@ -6,6 +6,7 @@ from openpyxl import Workbook
 from datetime import datetime
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Border, Side
+from django.db.models import Count
 
 
 class ExportFunctions:
@@ -27,9 +28,12 @@ class ExportFunctions:
     """
     workbook = Workbook()
     worksheet = workbook.active
+    stages_obj = ProjectStage.objects.filter(subsidy_period=2019).annotate(dcount=Count('project'))
     subsidy_period_range = None
     row_number = 1
     error_message = set()
+    number_of_activities = 0
+    number_of_stages = 0
 
     @classmethod
     def callmethod(cls, name):
@@ -91,33 +95,16 @@ class ExportFunctions:
         return new_data
 
     @classmethod
-    def export_actuacions_2018_2019(cls):
-        # Tutorial: https://djangotricks.blogspot.com/2019/02/how-to-export-data-to-xlsx-files.html
-        # Docs: https://openpyxl.readthedocs.io/en/stable/tutorial.html#create-a-workbook
-        cls.worksheet.title = "Actuacions"
-        cls.subsidy_period_range = ["2018-10-01", "2019-09-30"]
+    def create_columns(cls, columns):
+        """ create_columns
 
-        cls.actuacions_2018_2019_columns()
-        cls.actuacions_2018_2019_rows_activities()
-        # Total Activities: cls.row_number-1
-        cls.actuacions_2018_2019_rows_stages()
-        # Total Stages: cls.row_number-Total Activities-1
-        return cls.return_document("actuacions")
-
-    @classmethod
-    def actuacions_2018_2019_columns(cls):
+        Expects an iterable containing tuples with the name and the
+        width of each column, like this:
         columns = [
-            ("Eix", 40),
-            ("Tipus d'actuació", 70),
-            ("Nom de l'actuació", 70),
-            ("Data inici d'actuació", 16),
-            ("Municipi", 30),
-            ("Nombre de participants", 20),
-            ("Material de difusió (S/N)", 21),
-            ("Incidències", 20)
+            ("First", 40),
+            ("Second", 70),
         ]
-
-        # Assign the titles for each cell of the header
+        """
         for col_num, (column_title, column_width) in enumerate(columns, 1):
             cell = cls.worksheet.cell(row=1, column=col_num)
             column_letter = get_column_letter(col_num)
@@ -128,10 +115,56 @@ class ExportFunctions:
             cell.border = Border(bottom=Side(border_style="thin", color='000000'))
             cell.value = column_title
 
+    @classmethod
+    def fill_row_data(cls, row):
+        """ fill_row_data
+
+        Populates the columns of a given row with each of the values.
+        Expects an iterable with the data for each row:
+        row = [
+            "first value",
+            "second value",
+        ]
+        """
+        for col_num, cell_value in enumerate(row, 1):
+            cell = cls.worksheet.cell(row=cls.row_number, column=col_num)
+            cell.value = cell_value
+
+    @classmethod
+    def export_2018_2019(cls):
+        """ Each function here called handles the creation of one of the worksheets."""
+        cls.subsidy_period_range = ["2018-10-01", "2019-09-30"]
+
+        cls.export_actuacions_2018_2019()
+        cls.export_stages_2018_2019()
+
+        return cls.return_document("actuacions")
+
+    @classmethod
+    def export_actuacions_2018_2019(cls):
+        # Tutorial: https://djangotricks.blogspot.com/2019/02/how-to-export-data-to-xlsx-files.html
+        # Docs: https://openpyxl.readthedocs.io/en/stable/tutorial.html#create-a-workbook
+        cls.worksheet.title = "Actuacions"
+
+        columns = [
+            ("Eix", 40),
+            ("Tipus d'actuació", 70),
+            ("Nom de l'actuació", 70),
+            ("Data inici d'actuació", 16),
+            ("Municipi", 30),
+            ("Nombre de participants", 20),
+            ("Material de difusió (S/N)", 21),
+            ("Incidències", 20)
+        ]
+        cls.create_columns(columns)
+        cls.actuacions_2018_2019_rows_activities()
+        cls.actuacions_2018_2019_rows_stages()
+        # Total Stages: cls.row_number-Total Activities-1
 
     @classmethod
     def actuacions_2018_2019_rows_activities(cls):
         obj = Activity.objects.filter(justification="A", date_start__range=cls.subsidy_period_range)
+        cls.number_of_activities = len(obj)
         for item in obj:
             cls.row_number += 1
 
@@ -148,14 +181,11 @@ class ExportFunctions:
                 "No",
                 ""
             ]
-            for col_num, cell_value in enumerate(row, 1):
-                cell = cls.worksheet.cell(row=cls.row_number, column=col_num)
-                cell.value = cell_value
+            cls.fill_row_data(row)
 
     @classmethod
     def actuacions_2018_2019_rows_stages(cls):
-        obj = ProjectStage.objects.filter(subsidy_period=2019)
-        for item in obj:
+        for item in cls.stages_obj:
             cls.row_number += 1
 
             # Define the data for each cell in the row
@@ -171,6 +201,47 @@ class ExportFunctions:
                 "No",
                 ""
             ]
-            for col_num, cell_value in enumerate(row, 1):
-                cell = cls.worksheet.cell(row=cls.row_number, column=col_num)
-                cell.value = cell_value
+            cls.fill_row_data(row)
+
+    @classmethod
+    def export_stages_2018_2019(cls):
+        cls.worksheet = cls.workbook.create_sheet("Acompanyaments")
+        cls.row_number = 1
+
+        columns = [
+            ("Referència", 10),
+            ("Nom actuació", 40),
+            ("Destinatari de l'acompanyament", 28),
+            ("En cas d'entitat (nom de l'entitat)", 40),
+            ("En cas d'entitat", 16),
+            ("Creació/consolidació", 18),
+            ("Data d'inici", 13),
+            ("Localitat", 20),
+            ("Breu descripció del projecte", 50),
+            ("Total hores d'acompanyament", 10),
+        ]
+        cls.create_columns(columns)
+
+        cls.stages_2018_2019_rows()
+
+    @classmethod
+    def stages_2018_2019_rows(cls):
+        reference_number = cls.number_of_activities
+        for item in cls.stages_obj:
+            cls.row_number += 1
+            reference_number += 1
+            if not item.axis:
+                item.axis = "B"
+            row = [
+                reference_number,  # Referència.
+                item.project.name,  # "Nom de l'actuació". Això és el nom del projecte?
+                "destinatari?",  # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat <- d'on trec aquesta dada?
+                item.project.name,  # "En cas d'entitat (Nom de l'entitat)" <- aquí repetim el nom del projecte?
+                "Constituida",  # "En cas d'entitat" Opcions: Constituida/En procés/No finalitzat. Dada que ve del camp Estat del projecte.
+                "Nova creació",  # "Creació/consolidació". Opcions: Nova creació/Creixement. Ve del camp Tipus d'acompanyament.
+                item.date_start,
+                "BARCELONA",
+                item.project.object_finality,  # Breu descripció. Hi he posat el camp d'Objecte i finalitat. És OK?
+                0  # Total hores d'acompanyament. <- aquí què hi va? no tenim aquesta dada.
+            ]
+            cls.fill_row_data(row)
