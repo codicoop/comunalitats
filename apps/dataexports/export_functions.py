@@ -5,6 +5,7 @@ from django.http import HttpResponseNotFound, HttpResponse
 from openpyxl import Workbook
 from datetime import datetime
 from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font, Border, Side
 
 
 class ExportFunctions:
@@ -119,10 +120,14 @@ class ExportFunctions:
         # Assign the titles for each cell of the header
         for col_num, (column_title, column_width) in enumerate(columns, 1):
             cell = cls.worksheet.cell(row=1, column=col_num)
-            cell.value = column_title
             column_letter = get_column_letter(col_num)
             column_dimensions = cls.worksheet.column_dimensions[column_letter]
+            column_dimensions.font = Font(name="ttf-opensans", size=9)
             column_dimensions.width = column_width
+            cell.font = Font(bold=True, name="ttf-opensans", size=9)
+            cell.border = Border(bottom=Side(border_style="thin", color='000000'))
+            cell.value = column_title
+
 
     @classmethod
     def actuacions_2018_2019_rows_activities(cls):
