@@ -1,4 +1,4 @@
-from coopolis.models import ProjectStage
+from coopolis.models import ProjectStage, Project
 from cc_courses.models import Activity
 from dataexports.models import DataExportsCorrelation
 from django.http import HttpResponseNotFound, HttpResponse
@@ -137,8 +137,9 @@ class ExportFunctions:
 
         cls.export_actuacions_2018_2019()
         cls.export_stages_2018_2019()
+        cls.export_founded_projects_2018_2019()
 
-        return cls.return_document("actuacions")
+        return cls.return_document("justificació2018-2019")
 
     @classmethod
     def export_actuacions_2018_2019(cls):
@@ -234,7 +235,7 @@ class ExportFunctions:
                 item.axis = "B"
             row = [
                 reference_number,  # Referència.
-                item.project.name,  # "Nom de l'actuació". Això és el nom del projecte?
+                "",  # Camp no editable, l'ha d'omplir l'excel automàticament.
                 "destinatari?",  # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat <- d'on trec aquesta dada?
                 item.project.name,  # "En cas d'entitat (Nom de l'entitat)" <- aquí repetim el nom del projecte?
                 "Constituida",  # "En cas d'entitat" Opcions: Constituida/En procés/No finalitzat. Dada que ve del camp Estat del projecte.
@@ -243,5 +244,46 @@ class ExportFunctions:
                 "BARCELONA",
                 item.project.object_finality,  # Breu descripció. Hi he posat el camp d'Objecte i finalitat. És OK?
                 0  # Total hores d'acompanyament. <- aquí què hi va? no tenim aquesta dada.
+            ]
+            cls.fill_row_data(row)
+
+    @classmethod
+    def export_founded_projects_2018_2019(cls):
+        cls.worksheet = cls.workbook.create_sheet("EntitatCreada")
+        cls.row_number = 1
+
+        columns = [
+            ("Referència", 10),
+            ("Nom actuació", 40),
+            ("Nom de l'entitat", 40),
+            ("NIF de l'entitat", 12),
+            ("Nom i cognoms persona de contacte", 30),
+            ("Correu electrònic", 12),
+            ("Telèfon", 10),
+            ("Economia solidària (S/N)", 10),
+        ]
+        cls.create_columns(columns)
+
+        cls.founded_projects_2018_2019_rows()
+
+    @classmethod
+    def founded_projects_2018_2019_rows(cls):
+        obj = Project.objects.filter(constitution_date__range=cls.subsidy_period_range)
+        for item in obj:
+            cls.row_number += 1
+            print("CIF: "+item.cif)
+            if item.cif is None:
+                cls.error_message.add("<p><strong>Error: falta NIF</strong>. L'entitat '{}' apareix com a EntitatCreada"
+                                      " perquè té una Data de constitució dins de la convocatòria, però si no té NIF, "
+                                      "no pot ser inclosa a l'excel.</p>".format(item.name))
+            row = [
+                "",  # Referència. En aquest full no cal que tinguin relació amb Actuacions.
+                "",  # Nom de l'actuació. Camp automàtic de l'excel.
+                item.name,
+                item.cif,
+                item.partners.all()[0].full_name,
+                item.mail,
+                item.phone,
+                "Sí"
             ]
             cls.fill_row_data(row)
