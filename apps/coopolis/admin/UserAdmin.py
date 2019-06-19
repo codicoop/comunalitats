@@ -13,7 +13,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'id_number', 'email', 'project', 'enrolled_activities_count')
     search_fields = ('id_number', 'last_name', 'first_name', 'email', 'phone_number', 'cooperativism_knowledge')
     list_filter = ('gender', ('town', admin.RelatedOnlyFieldListFilter), 'residence_district', 'is_staff')
-    fields = ['id', 'first_name', 'last_name', 'surname2', 'id_number', 'email', 'birthdate', 'birth_place',
+    fields = ['id', 'first_name', 'last_name', 'surname2', 'gender', 'id_number', 'email', 'birthdate', 'birth_place',
               'town', 'residence_district', 'address', 'phone_number', 'educational_level',
               'employment_situation', 'discovered_us', 'cooperativism_knowledge', 'project', 'is_staff', 'groups',
               'is_active', 'date_joined', 'last_login']
