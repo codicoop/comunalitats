@@ -201,15 +201,22 @@ class User(BaseUser):
 
     def get_full_name(self):
         name = self.first_name
-        if self.last_name:
-            name = name + " " + self.last_name
-        if self.surname2:
-            name = name + " " + self.surname2
+        if self.surname:
+            name = name + " " + self.surname
         return name
 
     @property
     def full_name(self):
         return self.get_full_name()
+
+    @property
+    def surname(self):
+        surname = ""
+        if self.last_name:
+            surname = surname + " " + self.last_name
+        if self.surname2:
+            surname = surname + " " + self.surname2
+        return surname
 
     def __str__(self):
         return self.get_full_name()
