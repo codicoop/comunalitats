@@ -7,11 +7,12 @@ from django.core.mail import send_mail
 from django.conf import settings
 from constance import config
 
+
 class UserAdmin(admin.ModelAdmin):
     empty_value_display = '(cap)'
     list_display = ('first_name', 'last_name', 'id_number', 'email', 'project', 'enrolled_activities_count')
     search_fields = ('id_number', 'last_name', 'first_name', 'email', 'phone_number', 'cooperativism_knowledge')
-    list_filter = ('gender', 'town', 'residence_district', 'is_staff')
+    list_filter = ('gender', ('town', admin.RelatedOnlyFieldListFilter), 'residence_district', 'is_staff')
     fields = ['id', 'first_name', 'last_name', 'surname2', 'id_number', 'email', 'birthdate', 'birth_place',
               'town', 'residence_district', 'address', 'phone_number', 'educational_level',
               'employment_situation', 'discovered_us', 'cooperativism_knowledge', 'project', 'is_staff', 'groups',
