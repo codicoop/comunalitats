@@ -31,7 +31,8 @@ class DataExportsCorrelation(models.Model):
         "convocatòria", max_length=4, default=2019, choices=settings.SUBSIDY_PERIOD_OPTIONS)
     CORRELATED_FIELD_OPTIONS = (
         ('axis', 'Eix'),
-        ('stage_type', "Tipus d'acompanyament")
+        ('stage_type', "Tipus d'acompanyament"),
+        ('gender', "Gènere")
     )
     correlated_field = models.CharField("camp", max_length=100, choices=CORRELATED_FIELD_OPTIONS)
     original_data = models.CharField("dada original", max_length=200, help_text="Valor del camp al back-office.")

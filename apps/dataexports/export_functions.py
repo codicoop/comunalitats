@@ -1,4 +1,4 @@
-from coopolis.models import ProjectStage, Project
+from coopolis.models import ProjectStage, Project, User
 from cc_courses.models import Activity
 from dataexports.models import DataExportsCorrelation
 from django.http import HttpResponseNotFound, HttpResponse
@@ -67,6 +67,10 @@ class ExportFunctions:
             cls.error_message.add(message)
         message = "<h1>Error al generar el document</h1>" + " ".join(cls.error_message)
         return HttpResponseNotFound(message)
+    
+    @classmethod
+    def get_sessions_obj(cls, justification="A"):
+        return Activity.objects.filter(justification=justification, date_start__range=cls.subsidy_period_range)
 
     @classmethod
     def get_correlation(cls, correlated_field, original_data, subsidy_period=2019):
@@ -164,7 +168,7 @@ class ExportFunctions:
 
     @classmethod
     def actuacions_2018_2019_rows_activities(cls):
-        obj = Activity.objects.filter(justification="A", date_start__range=cls.subsidy_period_range)
+        obj = cls.get_sessions_obj()
         cls.number_of_activities = len(obj)
         for item in obj:
             cls.row_number += 1
@@ -271,7 +275,6 @@ class ExportFunctions:
         obj = Project.objects.filter(constitution_date__range=cls.subsidy_period_range)
         for item in obj:
             cls.row_number += 1
-            print("CIF: "+item.cif)
             if item.cif is None:
                 cls.error_message.add("<p><strong>Error: falta NIF</strong>. L'entitat '{}' apareix com a EntitatCreada"
                                       " perquè té una Data de constitució dins de la convocatòria, però si no té NIF, "
@@ -287,3 +290,50 @@ class ExportFunctions:
                 "Sí"
             ]
             cls.fill_row_data(row)
+
+    @classmethod
+    def export_participants_2018_2019(cls):
+        cls.worksheet = cls.workbook.create_sheet("Participants")
+        cls.row_number = 1
+
+        columns = [
+            ("Referència", 10),
+            ("Nom actuació", 40),
+            ("Cognoms", 20),
+            ("Nom", 10),
+            ("Doc. identificatiu", 12),
+            ("Gènere", 10),
+            ("Data naixement", 10),
+            ("Municipi del participant", 20),
+        ]
+        cls.create_columns(columns)
+
+        cls.participants_2018_2019_rows()
+
+    @classmethod
+    def participants_2018_2019_rows(cls):
+        #obj = User.objects.filter(constitution_date__range=cls.subsidy_period_range)
+        # Calen tots els participants de totes les sessions, tantes vegades com sessions hagin fet.
+        # Una idea és fer el loop per sessions, a demés, mantindrà l'ordre en el nº de registre.
+        activity_reference_number = 0
+        obj = cls.get_sessions_obj()
+        cls.number_of_activities = len(obj)
+        for activity in obj:
+            activity_reference_number += 1  # We know that activities where generated first, so it starts at 1.
+            for participant in activity.enrolled:
+                gender = cls.get_correlation('gender', participant.gender)
+                if gender is None:
+                    cls.error_message.add("<p><strong>Error: la persona {} ha seleccionat un gènere que no és Home o Dona. "
+                                      "però la Generalitat només accepta que introduïm una d'aquestes dues opcions."
+                                      "".format(participant.full_name))
+                row = [
+                    activity_reference_number,  # Referència.
+                    "",  # Nom de l'actuació. Camp automàtic de l'excel.
+                    participant.surname,
+                    participant.name,
+                    participant.cif,
+                    gender,
+                    participant.birthdata,
+                    participant.town
+                ]
+                cls.fill_row_data(row)
