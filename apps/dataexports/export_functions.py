@@ -26,6 +26,7 @@ class ExportFunctions:
 
     To use them, call ExportFunctions.callmethod('function_name')
     """
+    ignore_errors = True  # For testing purposes.
     workbook = Workbook()
     worksheet = workbook.active
     stages_obj = ProjectStage.objects.filter(subsidy_period=2019).annotate(dcount=Count('project'))
@@ -44,7 +45,7 @@ class ExportFunctions:
 
     @classmethod
     def return_document(cls, name):
-        if len(cls.error_message) > 0:
+        if len(cls.error_message) > 0 and cls.ignore_errors is False:
             return cls.return_404()
 
         response = HttpResponse(
@@ -142,6 +143,7 @@ class ExportFunctions:
         cls.export_actuacions_2018_2019()
         cls.export_stages_2018_2019()
         cls.export_founded_projects_2018_2019()
+        cls.export_participants_2018_2019()
 
         return cls.return_document("justificació2018-2019")
 
@@ -312,28 +314,35 @@ class ExportFunctions:
 
     @classmethod
     def participants_2018_2019_rows(cls):
-        #obj = User.objects.filter(constitution_date__range=cls.subsidy_period_range)
-        # Calen tots els participants de totes les sessions, tantes vegades com sessions hagin fet.
-        # Una idea és fer el loop per sessions, a demés, mantindrà l'ordre en el nº de registre.
         activity_reference_number = 0
         obj = cls.get_sessions_obj()
         cls.number_of_activities = len(obj)
         for activity in obj:
             activity_reference_number += 1  # We know that activities where generated first, so it starts at 1.
-            for participant in activity.enrolled:
+            for participant in activity.enrolled.all():
+                cls.row_number += 1
                 gender = cls.get_correlation('gender', participant.gender)
                 if gender is None:
-                    cls.error_message.add("<p><strong>Error: la persona {} ha seleccionat un gènere que no és Home o Dona. "
-                                      "però la Generalitat només accepta que introduïm una d'aquestes dues opcions."
-                                      "".format(participant.full_name))
+                    cls.error_message.add(
+                        "<p><strong>Error: la persona {} ha seleccionat un gènere que no és Home o Dona. "
+                        "però la Generalitat només accepta que introduïm una d'aquestes dues opcions.".format(
+                            participant.full_name))
+                if participant.town is None:
+                    town = ""
+                    cls.error_message.add(
+                        "<p><strong>Error: la persona {} no té cap població especificada. No es poden inserir a "
+                        "l'excel de Participants cap persona que no inclogui la població.".format(
+                            participant.full_name))
+                else:
+                    town = participant.town.name
                 row = [
                     activity_reference_number,  # Referència.
                     "",  # Nom de l'actuació. Camp automàtic de l'excel.
                     participant.surname,
-                    participant.name,
-                    participant.cif,
+                    participant.first_name,
+                    participant.id_number,
                     gender,
-                    participant.birthdata,
-                    participant.town
+                    participant.birthdate,
+                    town
                 ]
                 cls.fill_row_data(row)
