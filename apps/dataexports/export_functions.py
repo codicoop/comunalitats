@@ -35,6 +35,7 @@ class ExportFunctions:
     error_message = set()
     number_of_activities = 0
     number_of_stages = 0
+    number_of_nouniversitaris = 0
 
     @classmethod
     def callmethod(cls, name):
@@ -70,8 +71,9 @@ class ExportFunctions:
         return HttpResponseNotFound(message)
     
     @classmethod
-    def get_sessions_obj(cls, justification="A"):
-        return Activity.objects.filter(justification=justification, date_start__range=cls.subsidy_period_range)
+    def get_sessions_obj(cls, justification="A", for_minors=False):
+        return Activity.objects.filter(justification=justification, date_start__range=cls.subsidy_period_range,
+                                       for_minors=for_minors)
 
     @classmethod
     def get_correlation(cls, correlated_field, original_data, subsidy_period=2019):
@@ -144,6 +146,7 @@ class ExportFunctions:
         cls.export_stages_2018_2019()
         cls.export_founded_projects_2018_2019()
         cls.export_participants_2018_2019()
+        cls.export_nouniversitaris_2018_2019()
 
         return cls.return_document("justificació2018-2019")
 
@@ -166,6 +169,7 @@ class ExportFunctions:
         cls.create_columns(columns)
         cls.actuacions_2018_2019_rows_activities()
         cls.actuacions_2018_2019_rows_stages()
+        cls.actuacions_2018_2019_rows_nouniversitaris()
         # Total Stages: cls.row_number-Total Activities-1
 
     @classmethod
@@ -192,6 +196,7 @@ class ExportFunctions:
 
     @classmethod
     def actuacions_2018_2019_rows_stages(cls):
+        cls.number_of_stages = len(cls.stages_obj)
         for item in cls.stages_obj:
             cls.row_number += 1
 
@@ -205,6 +210,27 @@ class ExportFunctions:
                 item.date_start,
                 "BARCELONA",
                 item.involved_partners.count(),
+                "No",
+                ""
+            ]
+            cls.fill_row_data(row)
+
+    @classmethod
+    def actuacions_2018_2019_rows_nouniversitaris(cls):
+        obj = cls.get_sessions_obj(for_minors=True)
+        cls.number_of_nouniversitaris = len(obj)
+        for item in obj:
+            cls.row_number += 1
+
+            if not item.axis:
+                item.axis = "E"
+            row = [
+                cls.get_correlation("axis", item.axis),
+                "E) Tallers a joves",  # idem
+                item.name,
+                item.date_start,
+                "BARCELONA",
+                item.minors_participants_number,
                 "No",
                 ""
             ]
@@ -315,8 +341,7 @@ class ExportFunctions:
     @classmethod
     def participants_2018_2019_rows(cls):
         activity_reference_number = 0
-        obj = cls.get_sessions_obj()
-        cls.number_of_activities = len(obj)
+        obj = cls.get_sessions_obj(for_minors=False)
         for activity in obj:
             activity_reference_number += 1  # We know that activities where generated first, so it starts at 1.
             for participant in activity.enrolled.all():
@@ -346,3 +371,33 @@ class ExportFunctions:
                     town
                 ]
                 cls.fill_row_data(row)
+
+    @classmethod
+    def export_nouniversitaris_2018_2019(cls):
+        cls.worksheet = cls.workbook.create_sheet("ParticipantsNoUniversitaris")
+        cls.row_number = 1
+
+        columns = [
+            ("Referència", 10),
+            ("Nom actuació", 40),
+            ("Grau d'estudis", 20),
+            ("Nom centre educatiu", 20),
+        ]
+        cls.create_columns(columns)
+
+        cls.nouniversitaris_2018_2019_rows()
+
+    @classmethod
+    def nouniversitaris_2018_2019_rows(cls):
+        nouniversitari_reference_number = cls.number_of_stages + cls.number_of_activities
+        obj = cls.get_sessions_obj(for_minors=True)
+        for activity in obj:
+            cls.row_number += 1
+            nouniversitari_reference_number += 1
+            row = [
+                nouniversitari_reference_number,  # Referència.
+                "",  # Nom de l'actuació. Camp automàtic de l'excel.
+                cls.get_correlation('minors_grade', activity.minors_grade),
+                activity.minors_school_name,
+            ]
+            cls.fill_row_data(row)

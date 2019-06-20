@@ -32,7 +32,8 @@ class DataExportsCorrelation(models.Model):
     CORRELATED_FIELD_OPTIONS = (
         ('axis', 'Eix'),
         ('stage_type', "Tipus d'acompanyament"),
-        ('gender', "Gènere")
+        ('gender', "Gènere"),
+        ('minors_grade', "Grau d'estudis")
     )
     correlated_field = models.CharField("camp", max_length=100, choices=CORRELATED_FIELD_OPTIONS)
     original_data = models.CharField("dada original", max_length=200, help_text="Valor del camp al back-office.")
