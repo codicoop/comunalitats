@@ -15,6 +15,10 @@ class DataExports(models.Model):
     notes = models.TextField("apunts", blank=True, null=True)
     function_name = models.CharField("nom de la funció", max_length=150, unique=True,
                                      help_text="No modifiqueu aquesta dada.")
+    ignore_errors = models.BooleanField(
+        "Ignorar errors", help_text="Si s'activa, es podràn generar els excels de justificació encara que hi hagi "
+                                    "errors a les dades. Els excels que es generin així NO es podran volcar a l'excel "
+                                    "real!", default=False)
 
     def __str__(self):
         return self.name

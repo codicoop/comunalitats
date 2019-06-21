@@ -1,6 +1,6 @@
 from coopolis.models import ProjectStage, Project, User
 from cc_courses.models import Activity
-from dataexports.models import DataExportsCorrelation
+from dataexports.models import DataExportsCorrelation, DataExports
 from django.http import HttpResponseNotFound, HttpResponse
 from openpyxl import Workbook
 from datetime import datetime
@@ -26,10 +26,14 @@ class ExportFunctions:
 
     To use them, call ExportFunctions.callmethod('function_name')
     """
-    ignore_errors = True  # For testing purposes.
+    ignore_errors = False
     workbook = Workbook()
     worksheet = workbook.active
-    stages_obj = ProjectStage.objects.filter(subsidy_period=2019).annotate(dcount=Count('project'))
+    subsidy_period = 2019
+
+    # TODO: Passar això a una funció get_stages_obj
+    stages_obj = ProjectStage.objects.filter(subsidy_period=subsidy_period).annotate(dcount=Count('project'))
+
     subsidy_period_range = None
     row_number = 1
     error_message = set()
@@ -40,6 +44,9 @@ class ExportFunctions:
     @classmethod
     def callmethod(cls, name):
         if hasattr(cls, name):
+            obj = DataExports.objects.get(function_name=name)
+            cls.ignore_errors = obj.ignore_errors
+            cls.subsidy_period = obj.subsidy_period
             return getattr(cls, name)()
         else:
             return cls.return_404("La funció especificada no existeix")
@@ -349,13 +356,13 @@ class ExportFunctions:
                 gender = cls.get_correlation('gender', participant.gender)
                 if gender is None:
                     cls.error_message.add(
-                        "<p><strong>Error: la persona {} ha seleccionat un gènere que no és Home o Dona. "
+                        "<p><strong>Error:</strong> la persona {} ha seleccionat un gènere que no és Home o Dona. "
                         "però la Generalitat només accepta que introduïm una d'aquestes dues opcions.".format(
                             participant.full_name))
                 if participant.town is None:
                     town = ""
                     cls.error_message.add(
-                        "<p><strong>Error: la persona {} no té cap població especificada. No es poden inserir a "
+                        "<p><strong>Error:</strong> la persona {} no té cap població especificada. No es poden inserir a "
                         "l'excel de Participants cap persona que no inclogui la població.".format(
                             participant.full_name))
                 else:
