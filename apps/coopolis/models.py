@@ -259,9 +259,9 @@ class ProjectStage(models.Model):
         related_name='stage_responsible', help_text="Persona de l'equip al càrrec de l'acompanyament. Per aparèixer "
         "al desplegable, cal que la persona tingui activada la opció 'Membre del personal'.")
     scanned_signatures = models.FileField("fitxa de projectes (document amb signatures)", blank=True, null=True,
-                                          upload_to=stage_certificate_upload_path, max_length=250)
-    scanned_certificate = models.FileField("certificat", blank=True, null=True,
                                           upload_to=stage_signatures_upload_path, max_length=250)
+    scanned_certificate = models.FileField("certificat", blank=True, null=True,
+                                           upload_to=stage_certificate_upload_path, max_length=250)
     involved_partners = models.ManyToManyField(User, verbose_name="persones involucrades", blank=True,
                                                related_name='stage_involved_partners')
 

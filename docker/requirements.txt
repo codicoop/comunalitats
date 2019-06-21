@@ -24,7 +24,7 @@ html5lib==1.0.1
 jdcal==1.4.1
 jmespath==0.9.4
 lorem==0.1.1
-mysqlclient==1.4.2.post1
+scanned_signaturesclient==1.4.2.post1
 odfpy==1.4.0
 openpyxl==2.6.2
 Pillow==6.0.0
