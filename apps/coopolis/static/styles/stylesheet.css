@@ -313,6 +313,15 @@ footer p {
 footer p span {
   margin-right: 50px;
 }
+footer .logos {
+  width: 70%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  justify-content: space-between;
+}
+footer .logos img {
+  height: 40px;
+}
 
 .link-codi-cooperatiu {
   color: #242424;
