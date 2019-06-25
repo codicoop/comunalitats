@@ -3,18 +3,20 @@
 from django.core.management.base import BaseCommand
 from coopolis.basedata import basedata_towns
 from coopolis.models import Town, User
+from django.core.management import call_command
 
 
 class Command(BaseCommand):
     help = 'Populates the database with the basic information that it needs after a new installation.'
 
     def handle(self, *args, **options):
-        self.create_towns()
         self.migrate_old_towns_ids()
+        self.create_towns()
+        self.populate_dataexports()
 
     @staticmethod
     def create_towns():
-        """ These 2 weird methodes it's because of the FK constraints in postgres.
+        """ These 2 weird methods are because of the FK constraints in postgres.
         Given that we have to be able to run this script anywhere, and the ways
         to disable the constraints are dangerous and unreliable, I chose for this
         more compatible way.
@@ -54,3 +56,14 @@ class Command(BaseCommand):
         for town in equivalences:
             User.objects.filter(town=town['town_id']).update(town=town['new_id'])
             print("Updated users that had town id {} for the new town id: {}".format(town['town_id'], town['new_id']))
+
+    @staticmethod
+    def populate_dataexports():
+        """ Data exports to excel are triggered through a registry which
+        indicates the function name to be executed.
+        Also, it requires the Correlation information to translate our
+        data into the format that is required in the excels.
+
+        This function loads these 2 pieces of data. """
+        print("Loading Correlations and Exports data.")
+        call_command('loaddata', 'basedata_dataexports.json', app_label='dataexports')
