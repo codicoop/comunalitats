@@ -1,5 +1,6 @@
 body, html{
     font: ttf-opensans, ttf-liberation;
+    font-size: 14px;
 }
 
 #page td {
@@ -33,7 +34,6 @@ td {
 }
 
 .table-header-caption {
-    width: 20%;
     font-weight: bold;
 }
 
@@ -43,7 +43,7 @@ td {
 
 @page {
     margin: 30px 20px 80px 20px;
-    size: A4 landscape;
+    size: A4 portrait;
     @bottom-left {
         height: 100%;
         width: 100%;
