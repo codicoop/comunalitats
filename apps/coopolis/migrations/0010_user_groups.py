@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group, Permission
 
 def add_group_permissions(apps, schema_editor):
     #base user
-    group, created = Group.objects.get_or_create(name='Permissos base')
+    group, created = Group.objects.get_or_create(name='Permisos base')
     if created:
         add_thing = Permission.objects.filter(
             codename__in=['add_logentry', 'change_logentry', 'view_logentry', 'delete_logentry', 'view_permission',
