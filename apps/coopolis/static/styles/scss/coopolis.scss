@@ -101,12 +101,22 @@ label {
 
 @media only screen and (max-width: 600px) {
     header {
-        .menu ul {
+        .menu .menu-ul {
            flex-direction: column;
 
            li+li {
                 padding-top: 5px;
            }
+        }
+
+        .menu .dropdown-content {
+            display: flex;
+            position: relative;
+            box-shadow: 0px 0px 0px 0px rgba(0,0,0,0);
+
+            li {
+                padding: 5px 10px;
+            }
         }
 
         .content .top-wrapper {
