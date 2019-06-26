@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'grappelli',
     'constance.backends.database',
     'constance',
+    'django_object_actions',
     'django.contrib.admin',
     'django_summernote',
     'storages',

@@ -1,21 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from django_object_actions import DjangoObjectActions
 from django.contrib import admin
 from coopolis.models import User, Project
 from django.utils.safestring import mark_safe
-from coopolis.mixins import ExportCsvMixin
 from django.core.mail import send_mail
 from django.conf import settings
 from constance import config
 
 
-class ProjectAdmin(admin.ModelAdmin, ExportCsvMixin):
+class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     list_display = ('name', 'web', 'mail', 'phone', 'registration_date', 'stages_field')
     search_fields = ('name', 'web', 'mail', 'phone', 'registration_date', 'object_finality', 'project_origins',
                      'solves_necessities', 'social_base', 'sector')
     list_filter = ('registration_date', 'sector', 'project_status')
     actions = ["export_as_csv"]
+    change_actions = ('print', )
+
+    def print(self, request, obj):
+        pass
+    print.label = "Imprimir"
+    print.short_description = "Visualitza la fitxa en un format imprimible"
 
     def stages_field(self, obj):
         return mark_safe(u'<a href="../../%s/%s?project__exact=%d">Veure</a>' % (
@@ -61,7 +67,7 @@ class ProjectAdmin(admin.ModelAdmin, ExportCsvMixin):
         )
 
 
-class ProjectStageAdmin(admin.ModelAdmin, ExportCsvMixin):
+class ProjectStageAdmin(admin.ModelAdmin):
     empty_value_display = '(cap)'
     list_display = ('project', 'date_start', 'stage_responsible', 'stage_type', 'axis', 'organizer', 'subsidy_period',
                     'project_field')

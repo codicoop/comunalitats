@@ -20,6 +20,7 @@ factory-boy = "*"
 easy-thumbnails = "*"
 django-modelclone = "*"
 openpyxl = "*"
+django-object-actions = "*"
 
 [dev-packages]
 
