@@ -8,6 +8,11 @@ from django.utils.safestring import mark_safe
 from django.core.mail import send_mail
 from django.conf import settings
 from constance import config
+from functools import update_wrapper
+from django.template import RequestContext
+from django.shortcuts import render_to_response
+from django.conf.urls import url
+from django.http import HttpResponse, HttpResponseRedirect
 
 
 class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
@@ -17,11 +22,42 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     list_filter = ('registration_date', 'sector', 'project_status')
     actions = ["export_as_csv"]
     change_actions = ('print', )
+    print_template = 'admin/my_test/myentry/review.html'
+
+    def get_urls(self):
+        def wrap(view):
+            def wrapper(*args, **kwargs):
+                return self.admin_site.admin_view(view)(*args, **kwargs)
+            wrapper.model_admin = self
+            return update_wrapper(wrapper, view)
+
+        urls = super().get_urls()
+
+        info = self.model._meta.app_label, self.model._meta.model_name
+
+        my_urls = [
+            url(r'(?P<id>\d+)/print/$', wrap(self.print), name='%s_%s_print' % info),
+        ]
+
+        return my_urls + urls
 
     def print(self, request, obj):
-        pass
+        # Confirmation page in admin inspired by: https://gist.github.com/rsarai/d475c766871f40e52b8b4d1b12dedea2
+        from django.template.response import TemplateResponse
+
+        context = {
+            **self.admin_site.each_context(request),
+            'obj': obj,
+            'opts': self.model._meta,
+        }
+        return TemplateResponse(
+            request, 'admin/project_print.html', context)
+
     print.label = "Imprimir"
     print.short_description = "Visualitza la fitxa en un format imprimible"
+    print.attrs = {
+        'target': '_blank',
+    }
 
     def stages_field(self, obj):
         return mark_safe(u'<a href="../../%s/%s?project__exact=%d">Veure</a>' % (

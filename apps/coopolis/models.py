@@ -102,6 +102,27 @@ class Project(models.Model):
     sostenibility = models.FileField("pla de sostenibilitat", blank=True, null=True,
                                      upload_to=estatuts_upload_path, max_length=250)
 
+    @property
+    def has_estatus(self):
+        if self.estatuts:
+            return True
+        else:
+            return False
+
+    @property
+    def has_viability(self):
+        if self.viability:
+            return True
+        else:
+            return False
+
+    @property
+    def has_sostenibility(self):
+        if self.sostenibility:
+            return True
+        else:
+            return False
+
     def __str__(self):
         return self.name
 

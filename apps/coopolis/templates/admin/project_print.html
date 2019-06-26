@@ -1,0 +1,110 @@
+{% extends "admin/base_site.html" %}
+{% load i18n l10n admin_urls %}
+
+{% block title %}Projecte: {{ obj.name }}{% endblock %}
+{% block navigation %}{% endblock %}
+{% block admin_title %}Projecte: {{ obj.name }}{% endblock %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    &rsaquo; {{ title }}
+  </div>
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ obj.name }}</h1>
+<div id="grp-content-container">
+
+    <div class="g-d-c grp-object-history">
+
+        <table id="grp-change-history" class="grp-table">
+            <tbody>
+
+                <tr>
+                    <th scope="grp-row">Sòcies:</th>
+                    <td colspan="3">{{ obj.partners.all|join:", " }}</td>
+                </tr>
+
+                <tr>
+                    <th scope="grp-row">Estat del projecte:</th>
+                    <td>{{ obj.get_project_status_display }}</td>
+                    <th scope="grp-row">Petició inicial:</th>
+                    <td>{{ obj.get_motivation_display }}</td>
+                </tr>
+
+                <tr>
+                    <th scope="grp-row">Web:</th>
+                    <td>{{ obj.web|default_if_none:"-" }}</td>
+                    <th scope="grp-row">E-mail:</th>
+                    <td>{{ obj.mail }}</td>
+                </tr>
+
+                <tr>
+                    <th scope="grp-row">Telèfon:</th>
+                    <td>{{ obj.phone }}</td>
+                    <th scope="grp-row">Districte:</th>
+                    <td>{{ obj.district|default_if_none:"-" }}</td>
+                </tr>
+
+                <tr>
+                    <th scope="grp-row">Número de persones:</th>
+                    <td>{{ obj.number_people }}</td>
+                    <th scope="grp-row">Data de registre:</th>
+                    <td>{{ obj.registration_date }}</td>
+                </tr>
+
+
+                <tr>
+                    <th scope="grp-row">N.I.F.:</th>
+                    <td>{{ obj.nif|default_if_none:"-" }}</td>
+                    <th scope="grp-row">Data de constitució:</th>
+                    <td>{{ obj.constitution_date|default_if_none:"-" }}</td>
+                </tr>
+
+                <tr>
+                  <th colspan="4">Objecte i finalitat</th>
+                </tr>
+                <tr>
+                  <td colspan="4">{{ obj.object_finality }}</td>
+                </tr>
+
+                <tr>
+                  <th colspan="4">Orígens del projecte</th>
+                </tr>
+                <tr>
+                  <td colspan="4">{{ obj.project_origins }}</td>
+                </tr>
+
+                <tr>
+                  <th colspan="4">Quines necessitats resol el vostre projecte?</th>
+                </tr>
+                <tr>
+                  <td colspan="4">{{ obj.solves_necessities }}</td>
+                </tr>
+
+                <tr>
+                  <th colspan="4">Compta el vostre projecte amb una base social?</th>
+                </tr>
+                <tr>
+                  <td colspan="4">{{ obj.social_base }}</td>
+                </tr>
+
+                <tr>
+                  <th>Adjunts:</th>
+                  <td colspan="3">Estatuts: {{ obj.has_estatuts|yesno:"Sí,No" }},
+                      Pla de viabilitat: {{ obj.has_viability|yesno:"Sí,No" }},
+                      Pla de sostenibilitat: {{ obj.has_sostenibility|yesno:"Sí,No" }}</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
