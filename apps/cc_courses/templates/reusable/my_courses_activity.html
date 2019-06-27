@@ -6,7 +6,7 @@
                 <p><strong>Data:</strong> {{ activity.date_start }}</p>
                 <p><strong>Horari:</strong> de {{ activity.starting_time }} a {{ activity.ending_time }}</p>
                 <p><strong>Lloc:</strong> {{ activity.place }}</p>
-                <p><strong>Descripció:</strong> {{ activity.objectives }}</p>
+                <p><strong>Descripció:</strong> {{ activity.objectives|safe }}</p>
                 {% if optout_button %}
                 <a
                     id="actButton{{activity.id}}"
