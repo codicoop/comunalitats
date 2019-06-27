@@ -21,23 +21,28 @@ class EnrollActivityView(generic.RedirectView):
         return super().get(request, *args, **kwargs)
 
     def _send_confirmation_email(self, activity):
+        from django.core.mail.message import EmailMultiAlternatives
+        from django.template.loader import render_to_string
+        from django.utils.html import strip_tags
+
+        context = {
+            'activity': activity,
+            'absolute_url': self.request.build_absolute_uri(reverse('my_activities')),
+            'contact_email': config.CONTACT_EMAIL,
+            'contact_number': config.CONTACT_PHONE_NUMBER
+        }
+        html_content = render_to_string('emails/base.html', context)  # render with dynamic value
+        text_content = strip_tags(html_content)  # Strip the html tag. So people can see the pure text at least.
+
         mail_to = {self.request.user.email}
         if settings.DEBUG:
             mail_to.add(config.EMAIL_TO_DEBUG)
-        message = config.EMAIL_ENROLLMENT_CONFIRMATION.format(
-            activity.name,
-            activity.date_start,
-            activity.starting_time,
-            activity.ending_time,
-            activity.place,
-            self.request.build_absolute_uri(reverse('my_activities')),
-            config.CONTACT_EMAIL,
-            config.CONTACT_PHONE_NUMBER
-        )
-        send_mail(
-            subject=config.EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT.format(activity.name),
-            message=message,
-            html_message=message,
-            recipient_list=mail_to,
-            from_email=config.EMAIL_FROM_ENROLLMENTS
-        )
+
+        # create the email, and attach the HTML version as well.
+        msg = EmailMultiAlternatives(
+            config.EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT.format(activity.name),
+            text_content,
+            config.EMAIL_FROM_ENROLLMENTS,
+            mail_to)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()

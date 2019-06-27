@@ -8,7 +8,6 @@ from cc_courses.models import Activity
 from django.utils.safestring import mark_safe
 from django_summernote.admin import SummernoteModelAdminMixin
 from constance import config
-from django.core.mail import send_mail
 from django.conf import settings
 import modelclone
 
@@ -146,25 +145,29 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     def _send_confirmation_email(self, mail_to_bcc, activity, request):
         # TODO: Funció molt similar a la que hi ha a EnrollActivityView, unificar-les.
         from django.core.mail.message import EmailMultiAlternatives
+        from django.template.loader import render_to_string
+        from django.utils.html import strip_tags
+
+        context = {
+            'activity': activity,
+            'absolute_url': self.request.build_absolute_uri(reverse('my_activities')),
+            'contact_email': config.CONTACT_EMAIL,
+            'contact_number': config.CONTACT_PHONE_NUMBER
+        }
+        html_content = render_to_string('emails/base.html', context)  # render with dynamic value
+        text_content = strip_tags(html_content)  # Strip the html tag. So people can see the pure text at least.
+
         mail_to = {config.EMAIL_FROM_ENROLLMENTS}
         if settings.DEBUG:
             mail_to.add(config.EMAIL_TO_DEBUG)
-        message = config.EMAIL_ENROLLMENT_CONFIRMATION.format(
-            activity.name,
-            activity.date_start,
-            activity.starting_time,
-            activity.ending_time,
-            activity.place,
-            request.build_absolute_uri(reverse('my_activities')),
-            config.CONTACT_EMAIL,
-            config.CONTACT_PHONE_NUMBER
+
+        # create the email, and attach the HTML version as well.
+        msg = EmailMultiAlternatives(
+            config.EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT.format(activity.name),
+            text_content,
+            config.EMAIL_FROM_ENROLLMENTS,
+            mail_to,
+            mail_to_bcc
         )
-        mail = EmailMultiAlternatives(
-            subject=config.EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT.format(activity.name),
-            body=message,
-            from_email=config.EMAIL_FROM_ENROLLMENTS,
-            to=mail_to,
-            bcc=mail_to_bcc
-        )
-        mail.attach_alternative(message, "text/html")
-        mail.send()
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
