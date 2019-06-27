@@ -29,7 +29,8 @@ class EnrollActivityView(generic.RedirectView):
             'activity': activity,
             'absolute_url': self.request.build_absolute_uri(reverse('my_activities')),
             'contact_email': config.CONTACT_EMAIL,
-            'contact_number': config.CONTACT_PHONE_NUMBER
+            'contact_number': config.CONTACT_PHONE_NUMBER,
+            'request': self.request
         }
         html_content = render_to_string('emails/base.html', context)  # render with dynamic value
         text_content = strip_tags(html_content)  # Strip the html tag. So people can see the pure text at least.

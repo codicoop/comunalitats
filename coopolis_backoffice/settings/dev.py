@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'storages',
     'easy_thumbnails',
     'modelclone',
+    'apps.coopolis.templatetags.my_tag_library',
 ]
 
 

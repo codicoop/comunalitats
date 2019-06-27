@@ -1,4 +1,4 @@
-{% load static %}
+{% load my_tag_library %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -83,7 +83,7 @@ p + p{
           <tr>
             <td valign="top" align="center" class="pad10">
               <img class="em_img" alt="Coòpolis" style="display:block; font-family:Arial, sans-serif; font-size:30px;
-              line-height:34px; color:#000000; max-width:700px;" src="{% static "images/logo.png" %}"
+              line-height:34px; color:#000000; max-width:700px;" src="{% fullstatic "images/logo.png" %}"
                    width="150" border="0">
             </td>
           </tr>
@@ -139,10 +139,10 @@ p + p{
         <tr>
           <td align="left" valign="top" width="50%" class="pad10">
             <a href="https://twitter.com/coopolis_bcn">
-              <img class="em_img" alt="Twitter" style="display:inline;" src="{% static "images/emails/twitter.png" %}" border="0">
+              <img class="em_img" alt="Twitter" style="display:inline;" src="{% fullstatic "images/emails/twitter.png" %}" border="0">
             </a>
             <a href="https://www.facebook.com/coopolisBCN/">
-              <img class="em_img" alt="Facebook" style="display:inline;" src="{% static "images/emails/facebook.png" %}" border="0">
+              <img class="em_img" alt="Facebook" style="display:inline;" src="{% fullstatic "images/emails/facebook.png" %}" border="0">
             </a>
           </td>
           <td align="right" width="50%" style="padding: 0px 20px 0px 0px;" class="em_text1">
