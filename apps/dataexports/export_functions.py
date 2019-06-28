@@ -4,6 +4,7 @@ from dataexports.models import DataExportsCorrelation, DataExports
 from django.http import HttpResponseNotFound, HttpResponse
 from openpyxl import Workbook
 from datetime import datetime
+from openpyxl.compat import unicode
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Border, Side
 from django.db.models import Count
@@ -127,7 +128,7 @@ class ExportFunctions:
             column_dimensions.width = column_width
             cell.font = Font(bold=True, name="ttf-opensans", size=9)
             cell.border = Border(bottom=Side(border_style="thin", color='000000'))
-            cell.value = column_title
+            cell.value = unicode(column_title)
 
     @classmethod
     def fill_row_data(cls, row):
@@ -142,7 +143,7 @@ class ExportFunctions:
         """
         for col_num, cell_value in enumerate(row, 1):
             cell = cls.worksheet.cell(row=cls.row_number, column=col_num)
-            cell.value = cell_value
+            cell.value = unicode(cell_value)
 
     @classmethod
     def export_2018_2019(cls):
