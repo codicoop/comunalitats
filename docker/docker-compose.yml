@@ -18,7 +18,7 @@ services:
   db:
     image: postgres
     volumes:
-      - /srv/postgres-data/coopolis-develop:/var/lib/postgresql/data/
+      - /srv/postgres-data/DATABASE_FOLDER_HERE:/var/lib/postgresql/data/
     environment:
       - POSTGRES_PASSWORD=mysecretpassword
   nginx:
@@ -27,6 +27,6 @@ services:
       - ./nginx.conf/default.conf:/etc/nginx/conf.d/default.conf
       - ../:/srv
     ports:
-      - 8001:80
+      - 8999:80
     depends_on:
       - app
