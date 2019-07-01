@@ -148,6 +148,10 @@ class User(BaseUser):
     REQUIRED_FIELDS = []
     objects = CCUserManager()
 
+    fake_email = models.BooleanField("e-mail inventat", default=False,
+                                     help_text="Marca aquesta casella si el correu és inventat, i desmarca-la si mai "
+                                               "el canvieu pel correu real. Ens ajudarà a mantenir la base de dades"
+                                               "neta.")
     username = models.CharField(unique=False, null=True, max_length=150, verbose_name="nom d'usuari/a")
     surname2 = models.CharField("segon cognom", max_length=50, blank=True, null=True)
     id_number = models.CharField("DNI o NIE", null=True, max_length=11)
@@ -208,6 +212,12 @@ class User(BaseUser):
                                                help_text="Tens coneixements / formació / experiència en "
                                                          "cooperativisme? Quina? Cursos realitzats?",
                                                blank=True, null=True)
+
+    @staticmethod
+    def autocomplete_search_fields():
+        filter_by = "id__iexact", "email__icontains", "first_name__icontains", "id_number__contains", \
+                    "last_name__icontains", "surname2__icontains"
+        return filter_by
 
     def enrolled_activities_count(self):
         return self.enrolled_activities.all().count()
