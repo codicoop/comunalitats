@@ -54,6 +54,10 @@ class ExportFunctions:
 
     @classmethod
     def return_document(cls, name):
+        """ Attention: non-ascii characters in the name will cause
+        an encoding error with gunicorn.
+        Haven't tried it with a proxy under apache, in theory should
+        work."""
         if len(cls.error_message) > 0 and cls.ignore_errors is False:
             return cls.return_404()
 
@@ -156,7 +160,7 @@ class ExportFunctions:
         cls.export_participants_2018_2019()
         cls.export_nouniversitaris_2018_2019()
 
-        return cls.return_document("justificació2018-2019")
+        return cls.return_document("justificacio2018-2019")
 
     @classmethod
     def export_actuacions_2018_2019(cls):
