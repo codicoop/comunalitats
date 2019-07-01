@@ -41,7 +41,7 @@ class DataExportsCorrelation(models.Model):
     )
     correlated_field = models.CharField("camp", max_length=100, choices=CORRELATED_FIELD_OPTIONS)
     original_data = models.CharField("dada original", max_length=200, help_text="Valor del camp al back-office.")
-    correlated_data = models.CharField("dada correlacionada", max_length=200,
+    correlated_data = models.CharField("dada correlacionada", max_length=200, null=True, blank=True,
                                        help_text="Com ha de quedar el valor quan l'exportem per la justificació.")
 
     def __str__(self):

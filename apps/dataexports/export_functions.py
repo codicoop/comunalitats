@@ -358,18 +358,12 @@ class ExportFunctions:
             activity_reference_number += 1  # We know that activities where generated first, so it starts at 1.
             for participant in activity.enrolled.all():
                 cls.row_number += 1
-                gender = cls.get_correlation('gender', participant.gender)
-                if gender is None:
-                    cls.error_message.add(
-                        "<p><strong>Error:</strong> la persona {} ha seleccionat un gènere que no és Home o Dona. "
-                        "però la Generalitat només accepta que introduïm una d'aquestes dues opcions.".format(
-                            participant.full_name))
+                if participant.gender is None:
+                    gender = ""
+                else:
+                    gender = cls.get_correlation('gender', participant.gender)
                 if participant.town is None:
                     town = ""
-                    cls.error_message.add(
-                        "<p><strong>Error:</strong> la persona {} no té cap població especificada. No es poden inserir a "
-                        "l'excel de Participants cap persona que no inclogui la població.".format(
-                            participant.full_name))
                 else:
                     town = participant.town.name
                 row = [
