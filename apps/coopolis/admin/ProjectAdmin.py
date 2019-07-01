@@ -9,17 +9,15 @@ from django.core.mail import send_mail
 from django.conf import settings
 from constance import config
 from functools import update_wrapper
-from django.template import RequestContext
-from django.shortcuts import render_to_response
 from django.conf.urls import url
-from django.http import HttpResponse, HttpResponseRedirect
 
 
 class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
-    list_display = ('name', 'web', 'mail', 'phone', 'registration_date', 'stages_field')
-    search_fields = ('name', 'web', 'mail', 'phone', 'registration_date', 'object_finality', 'project_origins',
+    list_display = ('id', 'name', 'web', 'mail', 'phone', 'registration_date', 'stages_field')
+    search_fields = ('id', 'name', 'web', 'mail', 'phone', 'registration_date', 'object_finality', 'project_origins',
                      'solves_necessities', 'social_base', 'sector')
     list_filter = ('registration_date', 'sector', 'project_status')
+    readonly_fields = ('id',)
     actions = ["export_as_csv"]
     change_actions = ('print', )
     print_template = 'admin/my_test/myentry/review.html'
@@ -73,6 +71,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         # partners = request.POST['partners']. És una string: '1594,98'
         if request.POST['partners']:
+            """ Sending a notification e-mail to newly added partners. """
             current_partners = obj.partners.all()
             current_partners_list = set()
             for partner in current_partners:
