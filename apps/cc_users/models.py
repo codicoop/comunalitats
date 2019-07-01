@@ -13,4 +13,6 @@ class BaseUser(AbstractUser):
 
     @staticmethod
     def autocomplete_search_fields():
-        return "id__iexact", "email__icontains", "first_name__icontains", "id_number__contains",
+        filter_by = "id__iexact", "email__icontains", "first_name__icontains", "id_number__contains", \
+                    "last_name__icontains", "surname2__icontains"
+        return filter_by
