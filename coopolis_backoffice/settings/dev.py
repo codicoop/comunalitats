@@ -311,7 +311,7 @@ CONSTANCE_CONFIG = {
     # Configuration
     'EMAIL_FROM': ('Coòpolis, Ateneu Cooperatiu <coopolis@bcn.coop>', 'Remitent dels correus electrònics.'),
     'EMAIL_FROM_ENROLLMENTS': ('formacio@bcn.coop', "Remitent del correu de notificació quan t'inscrius a una sessió."),
-    'EMAIL_FROM_PROJECTS': ('suport@bcn.coop', "Remitent del correu de notificació de projectes nous."),
+    'EMAIL_FROM_PROJECTS': ('suport@bcn.coop', "Remitent i destinatari del correu de notificació de projectes nous."),
     'EMAIL_TO_DEBUG': ('p.picornell@gmail.com', 'Correu per fer tests del codi.'),
     'EMAIL_TO': ('coopolis.laie@gmail.com', "Correu on s'envien les notificacions generals (p.ex. nous projectes)"),
     'CONTACT_PHONE_NUMBER': ("93 432 00 63", "Número de telèfon que voleu indicar per si algú té dubtes o gestions."),

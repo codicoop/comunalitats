@@ -50,7 +50,8 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
         if settings.DEBUG:
             mail_to.add(config.EMAIL_TO_DEBUG)
         else:
-            recipients = [mail_to.add(r.strip()) for r in config.EMAIL_TO.split(',')]
+            for r in config.EMAIL_FROM_PROJECTS.split(','):
+                mail_to.add(r.strip())
         message = config.EMAIL_NEW_PROJECT.format(
                         newproject.name,
                         newproject.phone,
