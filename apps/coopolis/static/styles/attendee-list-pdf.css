@@ -42,22 +42,15 @@ td {
 }
 
 @page {
-    margin: 30px 20px 80px 20px;
+    margin: 30px 20px 180px 20px;
     size: A4 portrait;
-    @bottom-left {
-        height: 100%;
-        width: 100%;
-        content: " ";
-        background: url('../../static/images/attendee-list-pdf/coopolis.png') no-repeat 0 0;
-        background-size: 20%;
-        background-position: 1% 0%;
-    }
+
     @bottom-right {
         height: 100%;
         width: 100%;
         content: " ";
-        background: url('../../static/images/attendee-list-pdf/logos_dreta.png') no-repeat 0 0;
-        background-size: 50%;
+        background: url('../../static/images/attendee-list-pdf/peu_signatures_pdf.png') no-repeat 0 0;
+        background-size: 100%;
         background-position: 100% 0%;
     }
 
