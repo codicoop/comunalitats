@@ -63,11 +63,12 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         return custom_urls + urls
 
     def tweak_cloned_fields(self, fields):
+        """ From ClonableModelAdmin. When cloning an Activity, we discard the enrolled people. """
         fields['enrolled'] = None
         return fields
 
-    # modelclone not showing Save button because of a bug. This workarounds it:
     def render_change_form(self, request, context, *args, **kwargs):
+        """ modelclone not showing Save button because of a bug. This workarounds it. """
         kwargs['add'] = True
         return super().render_change_form(request, context, *args, **kwargs)
 
@@ -87,7 +88,6 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     def attendee_list(self, request, _id):
         import weasyprint
         import django.template.loader as loader
-        from django.templatetags.static import static
         from django.conf import settings
         import os
         temp = loader.get_template('admin/attendee_list.html')
@@ -108,8 +108,9 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     def attendee_filter_field(self, obj):
         if obj.id is None:
             return '-'
-        return mark_safe(u'<a href="../../%s/%s?enrolled_activities__exact=%d">Inscrites</a>' % (
-            'coopolis', 'user', obj.id))
+        base_url = reverse('admin:coopolis_user_changelist')
+        return mark_safe(u'<a href="%s?enrolled_activities__exact=%d">Inscrites</a>' % (
+            base_url, obj.id))
 
     attendee_filter_field.short_description = 'Llistat'
 
