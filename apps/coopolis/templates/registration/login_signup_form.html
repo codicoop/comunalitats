@@ -51,3 +51,23 @@
             </form>
         </div>
     </div>
+
+<script>
+  $(document).ready(function() {
+    townChanged($("#id_town").val())
+  });
+
+  $("#id_town").change(function() {
+    townChanged($("#id_town").val());
+  });
+
+  function townChanged(value) {
+    // BARCELONA ID: 90
+    if (value==90) {
+      $('#id_residence_district').parent().show();
+    } else {
+      $('#id_residence_district').parent().hide();
+    }
+  }
+
+</script>
