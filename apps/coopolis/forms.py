@@ -22,7 +22,8 @@ class MySignUpForm(UserCreationForm):
     required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)
     last_name = forms.CharField(label="Cognom", max_length=30, required=False)
-    email = forms.EmailField(label="Correu electrònic", max_length=254, help_text='Requerit, ha de ser una adreça vàlida.')
+    email = forms.EmailField(
+        label="Correu electrònic", max_length=254, help_text='Requerit, ha de ser una adreça vàlida.')
     birthdate = forms.DateField(label="Data de naixement", required=False, widget=XDSoftDatePickerInput())
     accept_conditions = forms.BooleanField(
         label="He llegit i accepto", help_text=mark_safe(config.CONTENT_SIGNUP_LEGAL1), required=True)
@@ -46,6 +47,13 @@ class MySignUpForm(UserCreationForm):
         residence_district = cleaned_data.get("residence_district")
 
         if str(town) == "BARCELONA" and residence_district is None:
-            raise forms.ValidationError(
-                "Si la població és Barcelona, cal que omplis el camp Barri."
-            )
+            msg = "Si la població és Barcelona, cal que omplis el camp Barri."
+            self.add_error('residence_district', msg)
+
+
+class MySignUpAdminForm(MySignUpForm):
+    password = forms.CharField(required=False)
+    password1 = forms.CharField(required=False)
+    password2 = forms.CharField(required=False)
+    accept_conditions = forms.BooleanField(required=False)
+    accept_conditions2 = forms.BooleanField(required=False)

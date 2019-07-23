@@ -6,9 +6,11 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings
 from constance import config
+from coopolis.forms import MySignUpAdminForm
 
 
 class UserAdmin(admin.ModelAdmin):
+    form = MySignUpAdminForm
     empty_value_display = '(cap)'
     list_display = ('first_name', 'last_name', 'id_number', 'email', 'project', 'enrolled_activities_count')
     search_fields = ('id_number', 'last_name', 'first_name', 'email', 'phone_number', 'cooperativism_knowledge')
@@ -23,10 +25,13 @@ class UserAdmin(admin.ModelAdmin):
     def get_fields(self, request, obj=None):
         if request.user.is_superuser and "is_superuser" not in self.fields:
             self.fields.append('is_superuser')
+
+        # If we are adding a new user, don't show these fields:
         if obj is None and 'project' in self.fields:
             self.fields.remove('project')
             self.fields.remove('id')
             self.fields.remove('last_login')
+
         return super().get_fields(request, obj)
 
     def copy_emails(self, request, queryset):
