@@ -39,3 +39,13 @@ class MySignUpForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         if 'username' in self.fields:
             self.fields.pop('username')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        town = cleaned_data.get("town")
+        residence_district = cleaned_data.get("residence_district")
+
+        if str(town) == "BARCELONA" and residence_district is None:
+            raise forms.ValidationError(
+                "Si la població és Barcelona, cal que omplis el camp Barri."
+            )
