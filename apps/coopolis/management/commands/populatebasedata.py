@@ -10,8 +10,22 @@ class Command(BaseCommand):
     help = 'Populates the database with the basic information that it needs after a new installation.'
 
     def handle(self, *args, **options):
+
+        """ The IDs migration was needed only for Coòpolis, to update the database from the
+        original towns to the new one, generated using the Conveni spreadsheet towns list.
+        After putting that in production, Coòpolis no longer needs this, nor any new
+        installation.
+
         self.migrate_old_towns_ids()
+        """
+
+        """ The creation is very slow because is designed to merge the new towns data into
+        a database that is already in use and with the old towns system.
+        Although this is no longer needed because it's already applied to Coòpolis in 
+        production, and new installations are going to be clean, it's harmless and not worth
+        rewriting it at the moment."""
         self.create_towns()
+
         self.populate_dataexports()
 
     @staticmethod
