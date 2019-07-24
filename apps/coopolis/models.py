@@ -32,6 +32,17 @@ def sostenibility_upload_path(instance, filename):
         return 'course.pla_sostenibilitat/{0}/{1}'.format(str(uuid4()), filename)
 
 
+class Town(models.Model):
+    class Meta:
+        verbose_name = "població"
+        verbose_name_plural = "poblacions"
+
+    name = models.CharField("nom", max_length=250)
+
+    def __str__(self):
+        return self.name
+
+
 class Project(models.Model):
     class Meta:
         verbose_name_plural = "projectes"
@@ -75,6 +86,7 @@ class Project(models.Model):
     motivation = models.CharField("petició inicial", max_length=50, blank=True, null=True, choices=MOTIVATION_OPTIONS)
     mail = models.EmailField("correu electrònic")
     phone = models.CharField("telèfon", max_length=25)
+    town = models.ForeignKey(Town, verbose_name="població", on_delete=models.SET_NULL, null=True, blank=True)
     DISTRICTS = (
         ('CV', 'Ciutat Vella'),
         ('EX', 'Eixample'),
@@ -122,17 +134,6 @@ class Project(models.Model):
             return True
         else:
             return False
-
-    def __str__(self):
-        return self.name
-
-
-class Town(models.Model):
-    class Meta:
-        verbose_name = "població"
-        verbose_name_plural = "poblacions"
-
-    name = models.CharField("nom", max_length=250)
 
     def __str__(self):
         return self.name
