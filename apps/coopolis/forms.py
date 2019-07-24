@@ -7,9 +7,10 @@ from django.contrib.auth.forms import UserCreationForm
 from coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
 from constance import config
+from coopolis.mixins import FormDistrictValidationMixin
 
 
-class ProjectForm(forms.ModelForm):
+class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
     required_css_class = "required"
 
     class Meta:
@@ -18,7 +19,13 @@ class ProjectForm(forms.ModelForm):
         exclude = ['cif', 'registration_date', 'constitution_date', 'partners']
 
 
-class MySignUpForm(UserCreationForm):
+class ProjectFormAdmin(ProjectForm):
+    class Meta:
+        # Un-excluding the fields that we were hiding for the front-end.
+        exclude = None
+
+
+class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
     required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)
     last_name = forms.CharField(label="Cognom", max_length=30, required=False)
@@ -40,15 +47,6 @@ class MySignUpForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         if 'username' in self.fields:
             self.fields.pop('username')
-
-    def clean(self):
-        cleaned_data = super().clean()
-        town = cleaned_data.get("town")
-        district = cleaned_data.get("district")
-
-        if str(town) == "BARCELONA" and district is None:
-            msg = "Si la població és Barcelona, cal que omplis el camp Barri."
-            self.add_error('district', msg)
 
 
 class MySignUpAdminForm(MySignUpForm):

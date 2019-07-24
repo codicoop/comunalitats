@@ -10,9 +10,11 @@ from django.conf import settings
 from constance import config
 from functools import update_wrapper
 from django.conf.urls import url
+from coopolis.forms import ProjectFormAdmin
 
 
 class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
+    form = ProjectFormAdmin
     list_display = ('id', 'name', 'web', 'mail', 'phone', 'registration_date', 'stages_field')
     search_fields = ('id', 'name', 'web', 'mail', 'phone', 'registration_date', 'object_finality', 'project_origins',
                      'solves_necessities', 'social_base', 'sector')

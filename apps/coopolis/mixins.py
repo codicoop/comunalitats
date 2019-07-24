@@ -19,3 +19,14 @@ class ExportCsvMixin:
         return response
 
     export_as_csv.short_description = "Exportar la selecció a CSV"
+
+
+class FormDistrictValidationMixin:
+    def clean(self):
+        cleaned_data = super().clean()
+        town = cleaned_data.get("town")
+        district = cleaned_data.get("district")
+
+        if str(town) == "BARCELONA" and district is None:
+            msg = "Si la població és Barcelona, cal seleccionis un districte."
+            self.add_error('district', msg)
