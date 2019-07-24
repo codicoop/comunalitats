@@ -3,7 +3,7 @@
 
 from django.contrib import admin
 from django.conf import settings
-from coopolis.models import User, Project, ProjectStage, ProjectStageType
+from coopolis.models import User, Project, ProjectStage
 from cc_courses.models import Course, Activity, CoursePlace, Entity, Organizer
 from .ActivityAdmin import ActivityAdmin
 from .CourseAdmin import CourseAdmin
@@ -15,7 +15,6 @@ from .CoursePlaceAdmin import CoursePlaceAdmin
 admin.site.register(User, UserAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectStage, ProjectStageAdmin)
-admin.site.register(ProjectStageType)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Activity, ActivityAdmin)
 admin.site.register(CoursePlace, CoursePlaceAdmin)

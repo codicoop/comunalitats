@@ -253,18 +253,6 @@ class User(BaseUser):
         return self.get_full_name()
 
 
-class ProjectStageType(models.Model):
-    class Meta:
-        verbose_name = "tipus d'acompanyament"
-        verbose_name_plural = "tipus d'acompanyaments"
-        ordering = ["name"]
-
-    name = models.CharField("nom", unique=True, max_length=100)
-
-    def __str__(self):
-        return self.name
-
-
 class ProjectStage(models.Model):
     class Meta:
         verbose_name = "justificació d'acompanyament"
@@ -274,8 +262,15 @@ class ProjectStage(models.Model):
     DEFAULT_STAGE_TYPE = 1
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat")
-    stage_type = models.ForeignKey(ProjectStageType, verbose_name="tipus d'acompanyament", default=DEFAULT_STAGE_TYPE,
-                                   on_delete=models.SET_DEFAULT)
+    STAGE_TYPE_OPTIONS = (
+        ('1', "00 Acollida"),
+        ('2', "01 Procés"),
+        ('6', "02 Constitució"),
+        ('7', "03 Consolidació - 1a acollida"),
+        ('8', "04 Consolidació - acompanyament")
+    )
+    stage_type = models.CharField("tipus d'acompanyament", max_length=2, default=DEFAULT_STAGE_TYPE,
+                                  choices=STAGE_TYPE_OPTIONS)
     subsidy_period = models.CharField("convocatòria", blank=True, null=True, max_length=4, default=2019,
                                       choices=settings.SUBSIDY_PERIOD_OPTIONS)
     date_start = models.DateField("data d'inici", null=True, blank=True, default=datetime.date.today)
