@@ -22,6 +22,12 @@
             {% endfor %}
         </ul>
         {% endif %}
+        {% if form.errors %}
+        <div class="message-container">
+            <p class="error-message">No s'ha pogut completar el registre, si us plau, revisa els errors del formulari.
+            </p>
+        </div>
+        {% endif %}
         <h1>Dades del vostre projecte</h1>
         <form method="post" action="{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"
               enctype="multipart/form-data" id="project-form">
@@ -56,6 +62,11 @@
                         {{ form.phone }}
                     </p>
                     <p>
+                        {{ form.town.label_tag }}
+                        {{ form.town }}
+                    </p>
+                    <p>
+                        {{ form.district.errors }}
                         {{ form.district.label_tag }}
                         {{ form.district }}
                     </p>
@@ -102,4 +113,7 @@
         </form>
     </div>
 </div>
+
+{% include 'reusable/town_district_validation_js.html' %}
+
 {% endblock %}
