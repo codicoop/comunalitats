@@ -14,9 +14,9 @@ class UserAdmin(admin.ModelAdmin):
     empty_value_display = '(cap)'
     list_display = ('first_name', 'last_name', 'id_number', 'email', 'project', 'enrolled_activities_count')
     search_fields = ('id_number', 'last_name', 'first_name', 'email', 'phone_number', 'cooperativism_knowledge')
-    list_filter = ('gender', ('town', admin.RelatedOnlyFieldListFilter), 'residence_district', 'is_staff', 'fake_email')
+    list_filter = ('gender', ('town', admin.RelatedOnlyFieldListFilter), 'district', 'is_staff', 'fake_email')
     fields = ['id', 'first_name', 'last_name', 'surname2', 'gender', 'id_number', 'email', 'fake_email', 'birthdate',
-              'birth_place', 'town', 'residence_district', 'address', 'phone_number', 'educational_level',
+              'birth_place', 'town', 'district', 'address', 'phone_number', 'educational_level',
               'employment_situation', 'discovered_us', 'cooperativism_knowledge', 'project', 'is_staff', 'groups',
               'is_active', 'date_joined', 'last_login']
     readonly_fields = ['id', 'last_login', 'date_joined', 'project']

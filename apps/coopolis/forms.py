@@ -33,7 +33,7 @@ class MySignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
-                  'birth_place', 'town', 'residence_district', 'address', 'gender', 'educational_level',
+                  'birth_place', 'town', 'district', 'address', 'gender', 'educational_level',
                   'employment_situation', 'discovered_us', 'password1', 'password2']
 
     def __init__(self, *args, **kwargs):
@@ -44,11 +44,11 @@ class MySignUpForm(UserCreationForm):
     def clean(self):
         cleaned_data = super().clean()
         town = cleaned_data.get("town")
-        residence_district = cleaned_data.get("residence_district")
+        district = cleaned_data.get("district")
 
-        if str(town) == "BARCELONA" and residence_district is None:
+        if str(town) == "BARCELONA" and district is None:
             msg = "Si la població és Barcelona, cal que omplis el camp Barri."
-            self.add_error('residence_district', msg)
+            self.add_error('district', msg)
 
 
 class MySignUpAdminForm(MySignUpForm):
