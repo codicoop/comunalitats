@@ -156,12 +156,12 @@ FIXTURES_PATH_TO_COURSE_IMAGES = 'test-images/coopolis-courses'
 
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
-AWS_STORAGE_BUCKET_NAME = 'codi.coop.test'
-AWS_S3_CUSTOM_DOMAIN = f's3.wasabisys.com/{AWS_STORAGE_BUCKET_NAME}'
-AWS_S3_ENDPOINT_URL = 'https://s3.wasabisys.com'
+AWS_STORAGE_BUCKET_NAME = ''
+AWS_S3_CUSTOM_DOMAIN = ''
+AWS_S3_ENDPOINT_URL = ''
 AWS_DEFAULT_ACL = 'public-read'
 DEFAULT_FILE_STORAGE = 'cc_lib.storages.MediaStorage'
-EXTERNAL_MEDIA_PATH = 'coopolis/media'
+EXTERNAL_MEDIA_PATH = ''
 MEDIA_FILE_OVERWRITE = True
 
 # Constance
