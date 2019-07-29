@@ -191,7 +191,6 @@ class ExportFunctions:
         for item in obj:
             cls.row_number += 1
 
-            # Define the data for each cell in the row
             if not item.axis:
                 item.axis = "B"
             row = [
@@ -199,7 +198,7 @@ class ExportFunctions:
                 "B) Tallers sensibilització o dinamització",  # idem
                 item.name,
                 item.date_start,
-                "BARCELONA",
+                item.place.town if item.place is not None else "",
                 item.enrolled.count(),
                 "No",
                 ""
@@ -220,7 +219,7 @@ class ExportFunctions:
                 "B) Acompanyament a empreses i entitats",  # Dada: stage_type. Pendent de saber correlacions.
                 item.project.name,
                 item.date_start,
-                "BARCELONA",
+                item.project.town,
                 item.involved_partners.count(),
                 "No",
                 ""
@@ -241,7 +240,7 @@ class ExportFunctions:
                 "E) Tallers a joves",  # idem
                 item.name,
                 item.date_start,
-                "BARCELONA",
+                item.town,
                 item.minors_participants_number,
                 "No",
                 ""
@@ -285,7 +284,7 @@ class ExportFunctions:
                 "Constituida",  # "En cas d'entitat" Opcions: Constituida/En procés/No finalitzat. Dada que ve del camp Estat del projecte.
                 "Nova creació",  # "Creació/consolidació". Opcions: Nova creació/Creixement. Ve del camp Tipus d'acompanyament.
                 item.date_start,
-                "BARCELONA",
+                item.project.town,
                 item.project.object_finality,  # Breu descripció. Hi he posat el camp d'Objecte i finalitat. És OK?
                 0  # Total hores d'acompanyament. <- aquí què hi va? no tenim aquesta dada.
             ]
