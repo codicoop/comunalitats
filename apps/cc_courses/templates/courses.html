@@ -28,6 +28,9 @@
                     </div>
                 </div>
             {% endfor %}
+            {% if not future_courses %}
+                <p class="margin-block">En aquests moments no hi ha cap formació programada.</p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
