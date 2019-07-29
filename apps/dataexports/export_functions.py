@@ -1,6 +1,6 @@
 from coopolis.models import ProjectStage, Project, User
 from cc_courses.models import Activity
-from dataexports.models import DataExportsCorrelation, DataExports
+from dataexports.models import DataExports
 from django.http import HttpResponseNotFound, HttpResponse
 from openpyxl import Workbook
 from datetime import datetime
@@ -8,6 +8,8 @@ from openpyxl.compat import unicode
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Border, Side
 from django.db.models import Count
+import json
+from django.conf import settings
 
 
 class ExportFunctions:
@@ -41,6 +43,8 @@ class ExportFunctions:
     number_of_activities = 0
     number_of_stages = 0
     number_of_nouniversitaris = 0
+
+    correlations = dict()
 
     @classmethod
     def callmethod(cls, name):
@@ -88,6 +92,14 @@ class ExportFunctions:
                                        for_minors=for_minors)
 
     @classmethod
+    def import_correlations(cls, file_path):
+        try:
+            file_object = open(file_path, 'r')
+            cls.correlations = json.load(file_object)
+        except FileNotFoundError:
+            print(file_path + " not found. ")
+
+    @classmethod
     def get_correlation(cls, correlated_field, original_data, subsidy_period=2019):
         """When exporting data, we might need to make the exported data
          fit specific requirements. For example, we store the field
@@ -95,17 +107,13 @@ class ExportFunctions:
          show are:
          'A) Diagnosi i visibilització', 'B) Creació i desenvolupament'
 
-         We use the DataExportsCorrelation model to store this correla-
-         tions.
+         We have these correlations in a json file and loaded at cls.correlations.
 
         This function is a wrapper to get those.
         """
-        # TODO: Que carregui els resultats en memòria per evitar mil queries?
         try:
-            new_data = DataExportsCorrelation.objects.get(
-                subsidy_period=subsidy_period, correlated_field=correlated_field,
-                original_data=original_data).correlated_data
-        except DataExportsCorrelation.DoesNotExist:
+            new_data = cls.correlations[correlated_field][original_data]
+        except KeyError:
             cls.error_message.add(
                 "<p>El document no s'ha pogut generar perquè s'ha intentat aplicar aquesta correlació:</p"
                 "<ul><li>Convocatòria: {}</li><li>Camp: {}</li><li>Dada original: {}</li></ul>"
@@ -151,9 +159,10 @@ class ExportFunctions:
 
     @classmethod
     def export_2018_2019(cls):
-        """ Each function here called handles the creation of one of the worksheets."""
+        cls.import_correlations(settings.BASE_DIR+"/../apps/dataexports/fixtures/correlations_2019.json")
         cls.subsidy_period_range = ["2018-10-01", "2019-09-30"]
 
+        """ Each function here called handles the creation of one of the worksheets."""
         cls.export_actuacions_2018_2019()
         cls.export_stages_2018_2019()
         cls.export_founded_projects_2018_2019()

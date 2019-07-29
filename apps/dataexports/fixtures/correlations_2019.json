@@ -1,0 +1,23 @@
+{
+  "subsidy_period": "2019",
+  "axis": {
+    "A": "A) Diagnosi i visibilitzaci\u00f3",
+    "B": "B) Creaci\u00f3 i desenvolupament",
+    "C": "C) Promoci\u00f3 a les associacions i empreses",
+    "D": "D) Promoci\u00f3 per a empreses properes al tancament",
+    "E": "E) M\u00f3n educatiu",
+    "F": "F) Suport a prescriptors i gestories"
+  },
+  "gender": {
+    "FEMALE": "D",
+    "MALE": "H",
+    "OTHER": null
+  },
+  "minors_grade": {
+    "PRIM": "Prim\u00e0ria",
+    "ESO": "Secund\u00e0ria obligat\u00f2ria",
+    "BATX": "Batxillerat",
+    "FPGM": "Formaci\u00f3 professional grau mig",
+    "FPGS": "Formaci\u00f3 professional grau superior"
+  }
+}
