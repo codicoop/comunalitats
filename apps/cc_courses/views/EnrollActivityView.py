@@ -15,9 +15,13 @@ class EnrollActivityView(generic.RedirectView):
             self.url = reverse('loginsignup')
         else:
             activity = Activity.objects.get(id=kwargs['id'])
-            request.user.enrolled_activities.add(activity)
-            self.url = activity.course.absolute_url
-            self._send_confirmation_email(activity)
+            if activity.remaining_spots > 0:
+                self.url = activity.course.absolute_url
+                request.user.enrolled_activities.add(activity)
+                self._send_confirmation_email(activity)
+            else:
+                request.session['enrollment_failed'] = True
+                self.url = activity.course.absolute_url
         return super().get(request, *args, **kwargs)
 
     def _send_confirmation_email(self, activity):

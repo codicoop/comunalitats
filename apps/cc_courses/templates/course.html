@@ -12,6 +12,16 @@
 </div>
 <div class="page-content">
 
+{% if enrollment_failed %}
+    <div class="generated-form">
+        <div class="message-container">
+            <p class="error-message">Atenció: el procés d'inscripció NO s'ha completat correctament degut a que no hi ha
+                places disponibles.
+            </p>
+        </div>
+    </div>
+{% endif %}
+
 {% if course.banner %}
     <img src="{{ course.banner.url }}" />
 {% endif %}
@@ -42,7 +52,10 @@
                 </a>
                     {% endif %}
                     {% if user in activity.enrolled.all %}
-                <p>Ja estàs inscrita a aquesta activitat. Pots veure i gestionar les teves inscripcions a <a href="{% url 'my_activities' %}">Les meves activitats</a>. </p>
+                <p class="margin-block">Ja estàs inscrita a aquesta activitat. Pots veure i gestionar les teves inscripcions a <a href="{% url 'my_activities' %}">Les meves activitats</a>. </p>
+                    {% endif %}
+                    {% if activity.remaining_spots < 1 %}
+                <p class="margin-block"><em>No queden places disponibles per aquesta sessió.</em></p>
                     {% endif %}
                 {% endif %}
             </div>
