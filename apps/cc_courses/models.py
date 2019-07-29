@@ -35,6 +35,7 @@ class CoursePlace(models.Model):
         verbose_name = "lloc"
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
+    town = models.ForeignKey("coopolis.Town", verbose_name="població", on_delete=models.SET_NULL, null=True, blank=True)
     address = models.CharField("adreça", max_length=200)
 
     def __str__(self):
