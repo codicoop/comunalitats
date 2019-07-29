@@ -74,10 +74,6 @@ class Command(BaseCommand):
     @staticmethod
     def populate_dataexports():
         """ Data exports to excel are triggered through a registry which
-        indicates the function name to be executed.
-        Also, it requires the Correlation information to translate our
-        data into the format that is required in the excels.
-
-        This function loads these 2 pieces of data. """
-        print("Loading Correlations and Exports data.")
+        indicates the function name to be executed."""
+        print("Loading Exports data.")
         call_command('loaddata', 'basedata_dataexports.json', app_label='dataexports')
