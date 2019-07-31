@@ -100,6 +100,15 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         # dynamic_css = loader.get_template('admin/attendee-list-pdf.css')
 
         pdf = weasyprint.HTML(string=content.encode('utf-8'))
+
+        """
+        About this way of generating the CSS:
+        Turns out that if you place the @page inside the HTML, or
+        through weasyprint.CSS(string="css contents"), it doesn't
+        apply the attribute at all.
+        Only using filename or url attributes worked, so far.
+        That's why even for a single variable we created a URL
+        to dynamically generate the CSS."""
         css = weasyprint.CSS(url=request.build_absolute_uri(reverse('attendee_list_pdf_css')))
         response = HttpResponse(pdf.write_pdf(stylesheets=[css]), content_type='application/pdf')
         response['Content-Disposition'] = 'filename="llista_assistencia.pdf"'
