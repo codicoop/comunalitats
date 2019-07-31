@@ -49,7 +49,7 @@ td {
         height: 100%;
         width: 100%;
         content: " ";
-        background: url('../../static/images/attendee-list-pdf/peu_signatures_pdf.png') no-repeat 0 0;
+        background: url('{{ config.ATTENDEE_LIST_FOOTER_IMG }}') no-repeat 0 0;
         background-size: 100%;
         background-position: 100% 0%;
     }

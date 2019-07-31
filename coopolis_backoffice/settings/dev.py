@@ -318,6 +318,9 @@ CONSTANCE_CONFIG = {
     'CONTACT_EMAIL': (
         "coopolis@bcn.coop",
         "Correu electrònic que voleu indicar per si algú té dubtes o gestions."),
+    'ATTENDEE_LIST_FOOTER_IMG': (
+        "https://s3.eu-central-1.wasabisys.com/ateneus-coopolis/local/peu_signatures_pdf.png",
+        "URL de l'imatge pel peu de pàgina del llistat d'assistència."),
 }
 CONSTANCE_CONFIG_FIELDSETS = {
     'Configuració': ('CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG', 'EMAIL_TO', 'EMAIL_FROM',
@@ -333,6 +336,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
     'Apartat "Com funciona?"': ('CONTENT_HOW_IT_WORKS',),
     "Apartat Formació": ('CONTENT_COURSES_INTRODUCTION',),
     "Formulari d'alta": ('CONTENT_SIGNUP_LEGAL1', 'CONTENT_SIGNUP_LEGAL2',),
+    "Llistat d'assistència": ('ATTENDEE_LIST_FOOTER_IMG',),
 }
 
 # CC Courses

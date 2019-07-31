@@ -97,10 +97,10 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
                 'activity': Activity.objects.get(pk=_id)
             }
         )
+        # dynamic_css = loader.get_template('admin/attendee-list-pdf.css')
 
         pdf = weasyprint.HTML(string=content.encode('utf-8'))
-        css = weasyprint.CSS(
-            filename=os.path.join(settings.BASE_DIR, '../apps/coopolis/static/styles/attendee-list-pdf.css'))
+        css = weasyprint.CSS(url=request.build_absolute_uri(reverse('attendee_list_pdf_css')))
         response = HttpResponse(pdf.write_pdf(stylesheets=[css]), content_type='application/pdf')
         response['Content-Disposition'] = 'filename="llista_assistencia.pdf"'
         return response
