@@ -6,7 +6,7 @@ from openpyxl import Workbook
 from datetime import datetime
 from openpyxl.compat import unicode
 from openpyxl.utils import get_column_letter
-from openpyxl.styles import Font, Border, Side
+from openpyxl.styles import Font, Border, Side, PatternFill, colors
 from django.db.models import Count
 import json
 from django.conf import settings
@@ -152,9 +152,21 @@ class ExportFunctions:
             "first value",
             "second value",
         ]
+
+        Optionally, values can be a tuple to mark the cell as error.
+        That will fill the cell with red.
+        row = [
+            "first value",
+            ("second value", True),
+        ]
         """
         for col_num, cell_value in enumerate(row, 1):
             cell = cls.worksheet.cell(row=cls.row_number, column=col_num)
+            if isinstance(cell_value, tuple):
+                error_mark = cell_value[1]
+                if error_mark:
+                    cell.fill = PatternFill(start_color='FFFF0000', end_color='FFFF0000', fill_type='solid')
+                cell_value = cell_value[0]
             cell.value = unicode(cell_value)
 
     @classmethod
@@ -200,14 +212,23 @@ class ExportFunctions:
         for item in obj:
             cls.row_number += 1
 
-            if not item.axis:
-                item.axis = "B"
+            axis = cls.get_correlation("axis", item.axis)
+            if axis is None:
+                axis = (axis, True)
+            subaxis = None
+            if subaxis is None:
+                subaxis = (subaxis, True)
+            town = None
+            if item.place is not None:
+                town = item.place.town
+            if town is None or town == "":
+                town = ("", True)
             row = [
-                cls.get_correlation("axis", item.axis),
-                "B) Tallers sensibilització o dinamització",  # idem
+                axis,
+                subaxis,
                 item.name,
                 item.date_start,
-                item.place.town if item.place is not None else "",
+                town,
                 item.enrolled.count(),
                 "No",
                 ""
@@ -220,15 +241,21 @@ class ExportFunctions:
         for item in cls.stages_obj:
             cls.row_number += 1
 
-            # Define the data for each cell in the row
-            if not item.axis:
-                item.axis = "B"
+            axis = cls.get_correlation("axis", item.axis)
+            if axis is None:
+                axis = (axis, True)
+            subaxis = None
+            if subaxis is None:
+                subaxis = (subaxis, True)
+            town = item.project.town
+            if town is None or town == "":
+                town = ("", True)
             row = [
-                cls.get_correlation("axis", item.axis),
-                "B) Acompanyament a empreses i entitats",  # Dada: stage_type. Pendent de saber correlacions.
+                axis,
+                subaxis,
                 item.project.name,
                 item.date_start,
-                item.project.town,
+                town,
                 item.involved_partners.count(),
                 "No",
                 ""
@@ -242,14 +269,21 @@ class ExportFunctions:
         for item in obj:
             cls.row_number += 1
 
-            if not item.axis:
-                item.axis = "E"
+            axis = cls.get_correlation("axis", item.axis)
+            if axis is None:
+                axis = (axis, True)
+            subaxis = None
+            if subaxis is None:
+                subaxis = (subaxis, True)
+            town = item.town
+            if town is None or town == "":
+                town = ("", True)
             row = [
-                cls.get_correlation("axis", item.axis),
-                "E) Tallers a joves",  # idem
+                axis,
+                subaxis,
                 item.name,
                 item.date_start,
-                item.town,
+                town,
                 item.minors_participants_number,
                 "No",
                 ""
