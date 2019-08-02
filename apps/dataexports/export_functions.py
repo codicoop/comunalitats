@@ -317,19 +317,19 @@ class ExportFunctions:
         for item in cls.stages_obj:
             cls.row_number += 1
             reference_number += 1
-            if not item.axis:
-                item.axis = "B"
+            hours = item.hours if item.hours is not None else ("", True)
+            town = item.project.town if item.project.town is not None else ("", True)
             row = [
                 reference_number,  # Referència.
                 "",  # Camp no editable, l'ha d'omplir l'excel automàticament.
-                ("Entitat", True),  # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat <- d'on trec aquesta dada?
-                item.project.name,  # "En cas d'entitat (Nom de l'entitat)" <- aquí repetim el nom del projecte?
-                ("Constituida", True),  # "En cas d'entitat" Opcions: Constituida/En procés/No finalitzat. Dada que ve del camp Estat del projecte.
+                ("Entitat", True),  # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat PENDENT.
+                item.project.name,  # "En cas d'entitat (Nom de l'entitat)"
+                ("Constituida", True),  # "En cas d'entitat" Opcions: Constituida/En procés/No finalitzat. PENDENT.
                 cls.get_correlation("stage_type", item.stage_type),  # "Creació/consolidació".
                 item.date_start,
-                item.project.town,
-                item.project.object_finality,  # Breu descripció. Hi he posat el camp d'Objecte i finalitat. És OK?
-                0  # Total hores d'acompanyament. <- aquí què hi va? no tenim aquesta dada.
+                town,
+                item.project.object_finality,  # Breu descripció.
+                hours  # Total hores d'acompanyament.
             ]
             cls.fill_row_data(row)
 
