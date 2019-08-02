@@ -3,6 +3,7 @@
 
 from django import forms
 from coopolis.models import Project, User, ProjectStage
+from cc_courses.models import Activity
 from django.contrib.auth.forms import UserCreationForm
 from coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
@@ -81,6 +82,27 @@ class ProjectStageForm(forms.ModelForm):
             'subaxis': DynamicChoicesWidget(
                 depends_field='axis',
                 model=ProjectStage,  # This is supposed to be the model of a FK, but our subaxis field is not a FK
+                                     # but a dictionary in the settings. Turns out that it only wants the model to
+                                     # take its name and use it as identifier when rendering the HTML, so now that
+                                     # get_item_choices() is not using the model to return the values, we can put here
+                                     # any model, as a workaround.
+                                     # Best quality solution would be modify the library to make it model-optional.
+                callback=get_item_choices,
+                no_value_disable=True,
+                include_empty_choice=True,
+                empty_choice_label="Selecciona un sub-eix",
+            )
+        }
+
+
+class ActivityForm(forms.ModelForm):
+    class Meta:
+        model = Activity
+        fields = '__all__'
+        widgets = {
+            'subaxis': DynamicChoicesWidget(
+                depends_field='axis',
+                model=Activity,  # This is supposed to be the model of a FK, but our subaxis field is not a FK
                                      # but a dictionary in the settings. Turns out that it only wants the model to
                                      # take its name and use it as identifier when rendering the HTML, so now that
                                      # get_item_choices() is not using the model to return the values, we can put here

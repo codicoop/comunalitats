@@ -10,9 +10,11 @@ from django_summernote.admin import SummernoteModelAdminMixin
 from constance import config
 from django.conf import settings
 import modelclone
+from coopolis.forms import ActivityForm
 
 
 class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
+    form = ActivityForm
     list_display = ('date_start', 'spots', 'remaining_spots', 'name', 'attendee_filter_field', 'attendee_list_field',
                     'send_reminder_field')
     readonly_fields = ('attendee_list_field', 'attendee_filter_field', 'send_reminder_field')
@@ -22,7 +24,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('course', 'name', 'objectives', 'place', 'date_start', 'date_end', 'starting_time',
-                       'ending_time', 'spots', 'enrolled', 'axis', 'entity', 'organizer')
+                       'ending_time', 'spots', 'enrolled', 'axis', 'subaxis', 'entity', 'organizer')
         }),
         ('Dades relatives a activitats per menors', {
             'classes': ('grp-collapse grp-closed',),

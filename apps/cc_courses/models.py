@@ -134,6 +134,8 @@ class Activity(models.Model):
                                      default='A')
     axis = models.CharField("eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
                             null=True, blank=True, max_length=1)
+    subaxis = models.CharField("sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
+                               null=True, blank=True, max_length=2)
     scanned_signatures = models.FileField("document amb signatures", blank=True, null=True,
                                           upload_to=activity_signatures_upload_path, max_length=250)
     photo1 = models.FileField("fotografia 1", blank=True, null=True,
