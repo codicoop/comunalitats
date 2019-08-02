@@ -21,6 +21,7 @@ easy-thumbnails = "*"
 django-modelclone = "*"
 openpyxl = "*"
 django-object-actions = "*"
+django-dynamic-form-fields = "*"
 
 [dev-packages]
 

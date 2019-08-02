@@ -11,6 +11,7 @@ from constance import config
 from functools import update_wrapper
 from django.conf.urls import url
 from coopolis.forms import ProjectFormAdmin
+from coopolis.forms import ProjectStageForm
 
 
 class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
@@ -105,6 +106,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
 
 
 class ProjectStageAdmin(admin.ModelAdmin):
+    form = ProjectStageForm
     empty_value_display = '(cap)'
     list_display = ('project', 'date_start', 'stage_responsible', 'stage_type', 'axis', 'organizer', 'subsidy_period',
                     'project_field')
