@@ -240,9 +240,9 @@ class ProjectStage(models.Model):
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat")
     STAGE_TYPE_OPTIONS = (
-        ('1', "00 Acollida"),
-        ('2', "01 Procés"),
-        ('6', "02 Constitució"),
+        ('1', "00 Nova creació - acollida"),
+        ('2', "01 Nova creació - procés"),
+        ('6', "02 Nova creació - constitució"),
         ('7', "03 Consolidació - 1a acollida"),
         ('8', "04 Consolidació - acompanyament")
     )
@@ -267,6 +267,8 @@ class ProjectStage(models.Model):
                                           upload_to=stage_signatures_upload_path, max_length=250)
     scanned_certificate = models.FileField("certificat", blank=True, null=True,
                                            upload_to=stage_certificate_upload_path, max_length=250)
+    hours = models.IntegerField("número d'hores", help_text="Camp necessari per la justificació.", null=True,
+                                blank=True)
     involved_partners = models.ManyToManyField(User, verbose_name="persones involucrades", blank=True,
                                                related_name='stage_involved_partners')
 
