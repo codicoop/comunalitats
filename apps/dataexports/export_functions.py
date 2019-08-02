@@ -172,7 +172,7 @@ class ExportFunctions:
     @classmethod
     def export_2018_2019(cls):
         cls.import_correlations(settings.BASE_DIR+"/../apps/dataexports/fixtures/correlations_2019.json")
-        cls.subsidy_period_range = ["2018-10-01", "2019-09-31"]
+        cls.subsidy_period_range = ["2018-11-01", "2019-10-31"]
 
         """ Each function here called handles the creation of one of the worksheets."""
         cls.export_actuacions_2018_2019()
@@ -322,9 +322,9 @@ class ExportFunctions:
             row = [
                 reference_number,  # Referència.
                 "",  # Camp no editable, l'ha d'omplir l'excel automàticament.
-                "destinatari?",  # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat <- d'on trec aquesta dada?
+                ("Entitat", True),  # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat <- d'on trec aquesta dada?
                 item.project.name,  # "En cas d'entitat (Nom de l'entitat)" <- aquí repetim el nom del projecte?
-                "Constituida",  # "En cas d'entitat" Opcions: Constituida/En procés/No finalitzat. Dada que ve del camp Estat del projecte.
+                ("Constituida", True),  # "En cas d'entitat" Opcions: Constituida/En procés/No finalitzat. Dada que ve del camp Estat del projecte.
                 cls.get_correlation("stage_type", item.stage_type),  # "Creació/consolidació".
                 item.date_start,
                 item.project.town,
