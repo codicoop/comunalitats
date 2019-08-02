@@ -46,5 +46,12 @@
     "BATX": "Batxillerat",
     "FPGM": "Formaci\u00f3 professional grau mig",
     "FPGS": "Formaci\u00f3 professional grau superior"
+  },
+  "stage_type": {
+    "1": "Nova creació",
+    "2": "Nova creació",
+    "6": "Nova creació",
+    "7": "Creixement",
+    "8": "Creixement"
   }
 }
