@@ -214,10 +214,10 @@ class ExportFunctions:
 
             axis = cls.get_correlation("axis", item.axis)
             if axis is None:
-                axis = (axis, True)
-            subaxis = None
+                axis = ("", True)
+            subaxis = cls.get_correlation("subaxis", item.subaxis)
             if subaxis is None:
-                subaxis = (subaxis, True)
+                subaxis = ("", True)
             town = None
             if item.place is not None:
                 town = item.place.town
@@ -243,10 +243,10 @@ class ExportFunctions:
 
             axis = cls.get_correlation("axis", item.axis)
             if axis is None:
-                axis = (axis, True)
-            subaxis = None
+                axis = ("", True)
+            subaxis = cls.get_correlation("subaxis", item.subaxis)
             if subaxis is None:
-                subaxis = (subaxis, True)
+                subaxis = ("", True)
             town = item.project.town
             if town is None or town == "":
                 town = ("", True)
@@ -271,10 +271,10 @@ class ExportFunctions:
 
             axis = cls.get_correlation("axis", item.axis)
             if axis is None:
-                axis = (axis, True)
-            subaxis = None
+                axis = ("", True)
+            subaxis = cls.get_correlation("subaxis", item.subaxis)
             if subaxis is None:
-                subaxis = (subaxis, True)
+                subaxis = ("", True)
             town = item.town
             if town is None or town == "":
                 town = ("", True)
