@@ -172,7 +172,7 @@ class ExportFunctions:
     @classmethod
     def export_2018_2019(cls):
         cls.import_correlations(settings.BASE_DIR+"/../apps/dataexports/fixtures/correlations_2019.json")
-        cls.subsidy_period_range = ["2018-10-01", "2019-09-30"]
+        cls.subsidy_period_range = ["2018-10-01", "2019-09-31"]
 
         """ Each function here called handles the creation of one of the worksheets."""
         cls.export_actuacions_2018_2019()
