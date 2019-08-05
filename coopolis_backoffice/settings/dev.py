@@ -309,6 +309,20 @@ CONSTANCE_CONFIG = {
         "L'equip de Coòpolis.<br />"
         "<a href=\"http://bcn.coop\">bcn.coop</a>",
         "Missatge de notificació d'haver estat afegit a un projecte."),
+    'MAIL_PASSWORD_RESET_SUBJECT': (
+        "Reinici de contrasenya a serveis.bcn.coop",
+        "Mail enviat quan es reinicia la contrassenya: assumpte."),
+    'MAIL_PASSWORD_RESET': (
+        "Has rebut aquest correu perquè hi ha hagut una sol·licitud de reinici de contrasenya del teu compte a "
+        "serveis.bcn.coop.<br /><br />"
+        "Si has fet tu la sol·licitud, si us plau obre el següent enllaç i escull una contrasenya nova: "
+        "(password_reset_url)<br />"
+        "Si no has fet tu la sol·licitud, senzillament ignora aquest correu.<br /><br />"
+        "El teu nom d'usuari, en cas que l'hagis oblidat: (username)<br /><br />"
+        "Gràcies per fer servir la nostra plataforma,<br />"
+        "L'equip de Coòpolis",
+        "Mail enviat quan es reinicia la contrassenya: cos. Ha d'incloure en algun lloc (username) i "
+        "(password_reset_url) per poder mostrar el link i el nom d'usuari."),
     # Configuration
     'EMAIL_FROM': ('Coòpolis, Ateneu Cooperatiu <coopolis@bcn.coop>', 'Remitent dels correus electrònics.'),
     'EMAIL_FROM_ENROLLMENTS': ('formacio@bcn.coop', "Remitent del correu de notificació quan t'inscrius a una sessió."),
@@ -329,7 +343,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
     'Correus': ('EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT', 'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT',
                 'EMAIL_ENROLLMENT_CONFIRMATION', 'EMAIL_ENROLLMENT_REMINDER_SUBJECT', 'EMAIL_ENROLLMENT_REMINDER',
                 'EMAIL_SIGNUP_WELCOME_SUBJECT', 'EMAIL_SIGNUP_WELCOME', 'EMAIL_ADDED_TO_PROJECT_SUBJECT',
-                'EMAIL_ADDED_TO_PROJECT'),
+                'EMAIL_ADDED_TO_PROJECT', 'MAIL_PASSWORD_RESET_SUBJECT', 'MAIL_PASSWORD_RESET'),
     "Apartat Portada": ('CONTENT_HOME_COURSES_TITLE', 'CONTENT_HOME_COURSES_TEXT', 'CONTENT_HOME_PROJECTS_TITLE',
                         "CONTENT_HOME_PROJECTS_TEXT", 'CONTENT_HOME_INTRODUCTION'),
     'Apartat Projectes': ('CONTENT_PROJECT_INTRODUCTION', 'CONTENT_PROJECT_TITLE', 'CONTENT_PROJECT_INFO',

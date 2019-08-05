@@ -4,13 +4,14 @@
 from django.urls import path, include
 from django.contrib import admin
 from .views import ProjectFormView, ProjectCreateFormView, ProjectInfoView, LoginSignupContainerView,\
-    CoopolisSignUpView, CoopolisLoginView, HomeView, HowItWorksView
+    CoopolisSignUpView, CoopolisLoginView, HomeView, HowItWorksView, CustomPasswordResetView
 from django.conf.urls import url
 from django.conf import settings
 from django.views.generic.base import RedirectView
 from django.contrib.auth.decorators import login_required
 from cc_users.decorators import anonymous_required
 from django.views.generic import TemplateView
+
 
 urlpatterns = [
     url('admin/login', RedirectView.as_view(pattern_name=settings.LOGIN_URL, permanent=True, query_string=True)),
@@ -33,4 +34,5 @@ urlpatterns += [
     path('email_template_test/', TemplateView.as_view(template_name="emails/base.html"), name='email_template_test'),
     path('attendee-list-pdf.css',
          TemplateView.as_view(template_name="admin/attendee-list-pdf.css"), name='attendee_list_pdf_css'),
+    path('users/password_reset/', CustomPasswordResetView.as_view(), name='password_reset'),
 ]
