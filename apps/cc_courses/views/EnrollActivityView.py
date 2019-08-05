@@ -5,8 +5,8 @@ from django.views import generic
 from django.shortcuts import reverse
 from cc_courses.models import Activity
 from constance import config
-from django.core.mail import send_mail
 from django.conf import settings
+from django.template import Template, Context
 
 
 class EnrollActivityView(generic.RedirectView):
@@ -26,17 +26,17 @@ class EnrollActivityView(generic.RedirectView):
 
     def _send_confirmation_email(self, activity):
         from django.core.mail.message import EmailMultiAlternatives
-        from django.template.loader import render_to_string
         from django.utils.html import strip_tags
 
-        context = {
+        context = Context({
             'activity': activity,
             'absolute_url': self.request.build_absolute_uri(reverse('my_activities')),
             'contact_email': config.CONTACT_EMAIL,
             'contact_number': config.CONTACT_PHONE_NUMBER,
-            'request': self.request
-        }
-        html_content = render_to_string('emails/base.html', context)  # render with dynamic value
+            'request': self.request,
+        })
+        template = Template(config.EMAIL_ENROLLMENT_CONFIRMATION)
+        html_content = template.render(context)  # render with dynamic value
         text_content = strip_tags(html_content)  # Strip the html tag. So people can see the pure text at least.
 
         mail_to = {self.request.user.email}
