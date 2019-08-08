@@ -79,6 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'coopolis.context_processors.settings_values',
             ],
         },
     },
@@ -315,6 +316,10 @@ CONSTANCE_CONFIG = {
     'EMAIL_FROM_PROJECTS': ('suport@bcn.coop', "Remitent i destinatari del correu de notificació de projectes nous."),
     'EMAIL_TO_DEBUG': ('p.picornell@gmail.com', 'Correu per fer tests del codi.'),
     'EMAIL_TO': ('coopolis.laie@gmail.com', "Correu on s'envien les notificacions generals (p.ex. nous projectes)"),
+    'PROJECT_CONTACT_URL': ("https://bcn.coop/contacte/", "Enllaç a la pàgina de contacte del projecte."),
+    'PROJECT_LEGAL_URL': ("https://bcn.coop/avis-legal-i-proteccio-de-dades/",
+                          "Enllaç a la pàgina de les condicions legals del projecte."),
+    'PROJECT_WEBSITE_URL': ("https://bcn.coop", "Enllaç a la pàgina principal del projecte."),
     'CONTACT_PHONE_NUMBER': ("93 432 00 63", "Número de telèfon que voleu indicar per si algú té dubtes o gestions."),
     'CONTACT_EMAIL': (
         "coopolis@bcn.coop",
@@ -324,7 +329,8 @@ CONSTANCE_CONFIG = {
         "URL de l'imatge pel peu de pàgina del llistat d'assistència."),
 }
 CONSTANCE_CONFIG_FIELDSETS = {
-    'Configuració': ('CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG', 'EMAIL_TO', 'EMAIL_FROM',
+    'Configuració': ('PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL', 'PROJECT_CONTACT_URL', 'CONTACT_PHONE_NUMBER',
+                     'CONTACT_EMAIL', 'EMAIL_TO_DEBUG', 'EMAIL_TO', 'EMAIL_FROM',
                      'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS'),
     'Correus': ('EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT', 'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT',
                 'EMAIL_ENROLLMENT_CONFIRMATION', 'EMAIL_ENROLLMENT_REMINDER_SUBJECT', 'EMAIL_ENROLLMENT_REMINDER',
@@ -363,7 +369,6 @@ STATIC_ROOT = 'static'
 SIGNUP_FORM = 'coopolis.forms.MySignUpForm'
 
 # Static texts and option fields
-ADMIN_HEADER = 'Back-office de Coòpolis'
 ADMIN_SITE_TITLE = ''
 ADMIN_INDEX_TITLE = ''
 AXIS_OPTIONS = (
@@ -431,7 +436,6 @@ DISTRICTS = (
 )
 
 # Grappeli (https://django-grappelli.readthedocs.io/en/latest/customization.html)
-GRAPPELLI_ADMIN_TITLE = "Back-office de Coòpolis"
 GRAPPELLI_SWITCH_USER = False
 GRAPPELLI_INDEX_DASHBOARD = 'coopolis.dashboard.MyDashboard'
 

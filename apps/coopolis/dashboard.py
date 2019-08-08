@@ -7,16 +7,17 @@ To activate your index dashboard add the following to your settings.py::
 """
 
 from grappelli.dashboard import modules, Dashboard
+from django.conf import settings
 
 
 class MyDashboard(Dashboard):
-    title = "Back-office de Coòpolis"  # Aquest títol no l'està mostrant enlloc.
+    title = "Back-office de "+settings.PROJECT_NAME  # Aquest títol no l'està mostrant enlloc.
 
     def __init__(self, **kwargs):
         Dashboard.__init__(self, **kwargs)
 
         self.children.append(modules.Group(
-            title="Coòpolis",
+            title=settings.PROJECT_NAME,
             column=1,
             collapsible=True,
             children=[

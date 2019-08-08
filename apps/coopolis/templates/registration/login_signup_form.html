@@ -45,7 +45,7 @@
                 <p>Si encara no en formeu part, registreu-vos!</p>
                 {% csrf_token %}
                 {{ signup_form.as_p }}
-                <p>Consulta el <a href="https://bcn.coop/avis-legal-i-proteccio-de-dades/" target="_blank">text
+                <p>Consulta el <a href="{{ config.PROJECT_LEGAL_URL }}" target="_blank">text
                     complet</a> de l'avís legal i de protecció de dades.</p>
                 <button type="submit">Crear compte</button>
             </form>

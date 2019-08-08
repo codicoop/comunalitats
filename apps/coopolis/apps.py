@@ -1,6 +1,7 @@
 from django.apps import AppConfig
+from django.conf import settings
 
 
 class CoopolisConfig(AppConfig):
     name = 'coopolis'
-    verbose_name = 'Coòpolis'
+    verbose_name = settings.PROJECT_NAME
