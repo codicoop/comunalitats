@@ -13,6 +13,15 @@ You need to install Weasyprint in your system following the [official website's 
 
 For the file and image uploads to work, set a `DJANGO_SETTINGS_MODULE` environment variable pointing to a config.
 
+Because is made for multi-tenancy, you'll see that database settings are not in dev.py, but are expected to be placed
+in a local settings file.
+You can just put them in dev.py if you don't need multitenancy, but if you keep them in the local file
+and you run commands directly in PyCharm (or virtual environment) terminal, the execution is probably
+going to be missing the settings module environment variable and therefore fail.
+A trick I'm doing is to create a command alias (editing ~/.bash_profile) like:
+`alias pmc='DJANGO_SETTINGS_MODULE=path_to_.settings.local_settings python3 manage.py'`
+And now I can run `pmc check`, `pmc makemigrations`, etc. 
+
 ### Update requirements
 
 Make sure you have pipenv installed and to initiate it in the project's folder.

@@ -28,6 +28,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Local strings (creating vars here to avoid compilation problems if running in single-tenant mode)
+PROJECT_NAME = ""
+ADMIN_HEADER = ""
+GRAPPELLI_ADMIN_TITLE = ""
+# For single-tenant mode, you have to fill the database settings here or make sure that
+# the settings module environment variable is set to a file that does it:
+DATABASES = {}
 
 # Application definition
 INSTALLED_APPS = [
