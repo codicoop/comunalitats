@@ -181,7 +181,7 @@ class User(BaseUser):
     DISCOVERED_US_OPTIONS = (
         ('INTERNET', 'Per internet i xarxes socials'),
         ('FRIEND', "A través d'un conegut"),
-        ('PREVIOUS_ACTIVITY', "Per una activitat de "+settings.PROJECT_NAME),
+        ('PREVIOUS_ACTIVITY', "Per una activitat de l'ateneu"),
         ('OTHER', 'Altres')
     )
     discovered_us = models.TextField("com ens has conegut", blank=True, null=True, choices=DISCOVERED_US_OPTIONS)
