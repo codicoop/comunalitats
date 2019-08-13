@@ -7,3 +7,6 @@ venv
 node_modules
 Pipfile.lock
 /*/settings/local_*.py
+
+# Using this for pyenv in development environment.
+.python-version
