@@ -1,12 +1,14 @@
 [[source]]
+name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
-name = "pypi"
+
+[dev-packages]
 
 [packages]
+Django = "==2.0"
 "psycopg2-binary" = "==2.7.5"
 pytz = "==2018.7"
-Django = "==2.1.3"
 weasyprint = "*"
 arrow = "*"
 django-summernote = "*"
@@ -22,8 +24,7 @@ django-modelclone = "*"
 openpyxl = "*"
 django-object-actions = "*"
 django-dynamic-form-fields = "*"
-
-[dev-packages]
+django-maintenance-mode = "*"
 
 [requires]
 python_version = "3.6"
