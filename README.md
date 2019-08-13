@@ -22,6 +22,9 @@ A trick I'm doing is to create a command alias (editing ~/.bash_profile) like:
 `alias pmc='DJANGO_SETTINGS_MODULE=path_to_.settings.local_settings python3 manage.py'`
 And now I can run `pmc check`, `pmc makemigrations`, etc. 
 
+Another option to do this is with PyCharm settings, at Tools -> Terminal -> Environment Variables.
+(needs restarting to take effect)
+
 ### Update requirements
 
 Make sure you have pipenv installed and to initiate it in the project's folder.
