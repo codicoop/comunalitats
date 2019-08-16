@@ -280,14 +280,14 @@ CONSTANCE_CONFIG = {
         "<br />"
         "Amb el teu compte pots:<br />"
         "- Inscriure't a les sessions formatives, que trobaràs "
-        "<a href=\"http://serveis.bcn.coop/program/\">aquí</a>.<br />"
+        "<a href=\"https://serveis.bcn.coop/program/\">aquí</a>.<br />"
         "- Si esteu iniciant o teniu en marxa un projecte cooperatiu, podeu "
-        "<a href=\"http://serveis.bcn.coop/project/new/\">sol·licitar un acompanyament</a>.<br />"
+        "<a href=\"https://serveis.bcn.coop/project/new/\">sol·licitar un acompanyament</a>.<br />"
         "- Consultar o editar les dades del teu perfil i recuperar la contrassenya. Més informació a "
-        "<a href=\"http://serveis.bcn.coop\">serveis.bcn.coop</a>.<br />"
+        "<a href=\"https://serveis.bcn.coop\">serveis.bcn.coop</a>.<br />"
         "<br />"
         "L'equip de Coòpolis.<br />"
-        "<a href=\"http://bcn.coop\">bcn.coop</a>",
+        "<a href=\"https://bcn.coop\">bcn.coop</a>",
         "Missatge de benvinguda que s'envia quan algú crea un compte."),
     'EMAIL_ADDED_TO_PROJECT_SUBJECT': (
         "Has estat afegit com a participant del projecte {}",
@@ -297,13 +297,13 @@ CONSTANCE_CONFIG = {
         "{}<br />"
         "<br />"
         "Per veure i modificar la fitxa del vostre projecte, accedeix a "
-        "<a href=\"http://serveis.bcn.coop/project/info/\">l'apartat Projectes</a> de la plataforma de Coòpolis amb el"
+        "<a href=\"https://serveis.bcn.coop/project/info/\">l'apartat Projectes</a> de la plataforma de Coòpolis amb el"
         "teu e-mail i contrasenya.<br />"
         "Si necessites la contrasenya, trobaràs l'opció per fer-ho a "
-        "<a href=\"http://serveis.bcn.coop\">serveis.bcn.coop</a>.<br />"
+        "<a href=\"https://serveis.bcn.coop\">serveis.bcn.coop</a>.<br />"
         "<br />"
         "L'equip de Coòpolis.<br />"
-        "<a href=\"http://bcn.coop\">bcn.coop</a>",
+        "<a href=\"https://bcn.coop\">bcn.coop</a>",
         "Missatge de notificació d'haver estat afegit a un projecte."),
     'MAIL_PASSWORD_RESET_SUBJECT': (
         "Reinici de contrasenya a serveis.bcn.coop",

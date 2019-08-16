@@ -46,7 +46,7 @@ class CourseFactory(factory.django.DjangoModelFactory):
     banner = fuzzy.FuzzyChoice(
         storage_files(
             settings.FIXTURES_PATH_TO_COURSE_IMAGES,
-            f'http://{settings.AWS_S3_CUSTOM_DOMAIN}/{settings.AWS_STORAGE_BUCKET_NAME}'
+            f'https://{settings.AWS_S3_CUSTOM_DOMAIN}/{settings.AWS_STORAGE_BUCKET_NAME}'
         )
     )
 
