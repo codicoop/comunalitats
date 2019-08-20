@@ -36,9 +36,9 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
         label="Correu electrònic", max_length=254, help_text='Requerit, ha de ser una adreça vàlida.')
     birthdate = forms.DateField(label="Data de naixement", required=False, widget=XDSoftDatePickerInput())
     accept_conditions = forms.BooleanField(
-        label="He llegit i accepto", help_text=mark_safe(config.CONTENT_SIGNUP_LEGAL1), required=True)
+        label="He llegit i accepto", required=True)
     accept_conditions2 = forms.BooleanField(
-        label="He llegit i accepto", help_text=mark_safe(config.CONTENT_SIGNUP_LEGAL2), required=True)
+        label="He llegit i accepto", required=True)
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -50,6 +50,9 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
         super().__init__(*args, **kwargs)
         if 'username' in self.fields:
             self.fields.pop('username')
+
+        self.fields['accept_conditions'].help_text = mark_safe(config.CONTENT_SIGNUP_LEGAL1)
+        self.fields['accept_conditions2'].help_text = mark_safe(config.CONTENT_SIGNUP_LEGAL2)
 
 
 class MySignUpAdminForm(MySignUpForm):
