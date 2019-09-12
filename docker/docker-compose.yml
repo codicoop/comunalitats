@@ -21,7 +21,7 @@ services:
     #entrypoint: ["sh", "-c", "sleep 2073600"]
 
   # http://ateneu-demo.codi.coop
-  segon-ateneu:
+  segon_ateneu:
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -52,4 +52,5 @@ services:
     ports:
       - 8002:80
     depends_on:
-      - app
+      - coopolis
+      - segon_ateneu
