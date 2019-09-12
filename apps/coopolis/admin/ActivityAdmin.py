@@ -4,13 +4,15 @@
 from django.utils.html import format_html
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import path, reverse
-from cc_courses.models import Activity
 from django.utils.safestring import mark_safe
 from django_summernote.admin import SummernoteModelAdminMixin
 from constance import config
 from django.conf import settings
 import modelclone
+from django.template import Template, Context
+
 from coopolis.forms import ActivityForm
+from cc_courses.models import Activity
 
 
 class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
@@ -154,21 +156,22 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         return TemplateResponse(
             request, 'admin/reminder_confirmation.html', context)
 
-    def _send_confirmation_email(self, mail_to_bcc, activity, request):
+    @staticmethod
+    def _send_confirmation_email(mail_to_bcc, activity, request):
         # TODO: Funció molt similar a la que hi ha a EnrollActivityView, unificar-les.
         from django.core.mail.message import EmailMultiAlternatives
-        from django.template.loader import render_to_string
         from django.utils.html import strip_tags
 
-        context = {
+        context = Context({
             'activity': activity,
-            'absolute_url': self.request.build_absolute_uri(reverse('my_activities')),
+            'absolute_url': request.build_absolute_uri(reverse('my_activities')),
             'contact_email': config.CONTACT_EMAIL,
             'contact_number': config.CONTACT_PHONE_NUMBER,
-            'request': self.request
-        }
-        html_content = render_to_string('emails/base.html', context)  # render with dynamic value
-        text_content = strip_tags(html_content)  # Strip the html tag. So people can see the pure text at least.
+            'request': request,
+        })
+        template = Template(config.EMAIL_ENROLLMENT_CONFIRMATION)
+        html_content = template.render(context)
+        text_content = strip_tags(html_content)
 
         mail_to = {config.EMAIL_FROM_ENROLLMENTS}
         if settings.DEBUG:
