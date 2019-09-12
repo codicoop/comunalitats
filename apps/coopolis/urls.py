@@ -32,7 +32,7 @@ urlpatterns += [
     path('project/info/', ProjectInfoView.as_view(), name='project_info'),
     path('how_it_works/', HowItWorksView.as_view(), name='how_it_works'),
     path('email_template_test/', TemplateView.as_view(template_name="emails/base.html"), name='email_template_test'),
-    path('attendee-list-pdf.css',
-         TemplateView.as_view(template_name="admin/attendee-list-pdf.css"), name='attendee_list_pdf_css'),
+    # path('attendee-list-pdf.css',
+    #     TemplateView.as_view(template_name="admin/attendee-list-pdf.css"), name='attendee_list_pdf_css'),
     path('users/password_reset/', CustomPasswordResetView.as_view(), name='password_reset'),
 ]

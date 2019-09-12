@@ -101,9 +101,8 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
                 'activity': Activity.objects.get(pk=_id)
             }
         )
-        # dynamic_css = loader.get_template('admin/attendee-list-pdf.css')
 
-        pdf = weasyprint.HTML(string=content.encode('utf-8'))
+        pdf = weasyprint.HTML(string=content.encode('utf-8'), base_url=request.build_absolute_uri())
 
         """
         About this way of generating the CSS:
@@ -113,7 +112,26 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         Only using filename or url attributes worked, so far.
         That's why even for a single variable we created a URL
         to dynamically generate the CSS."""
-        css = weasyprint.CSS(url=request.build_absolute_uri(reverse('attendee_list_pdf_css')))
+
+        css = weasyprint.CSS(
+            filename=os.path.join(settings.BASE_DIR,
+                                  '../apps/coopolis/static/styles/attendee-list-pdf.css'))
+
+        """
+        Test que demostra que des de gunicorn + Docker no resol a URLs internes:
+        
+        import urllib
+        r = urllib.request.urlopen(url=request.build_absolute_uri(reverse('attendee_list_pdf_css')),
+                timeout=10)
+        print('status: '+str(r.status))
+        """
+
+        # Opció de fer-ho via STRING, però a mitges (retorna objecte Template, cal obtenir el resultat)
+        #dynamic_css = loader.get_template('admin/attendee-list-pdf.css')
+        #css = weasyprint.CSS(string=dynamic_css)
+
+        # Modo URL que falla pq no la resol:
+        #css = weasyprint.CSS(url=request.build_absolute_uri(reverse('attendee_list_pdf_css')))
         response = HttpResponse(pdf.write_pdf(stylesheets=[css]), content_type='application/pdf')
         response['Content-Disposition'] = 'filename="llista_assistencia.pdf"'
         return response
