@@ -89,50 +89,22 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     attendee_list_field.allow_tags = True
     attendee_list_field.short_description = 'Exportar'
 
-    def attendee_list(self, request, _id):
+    @staticmethod
+    def attendee_list(request, _id):
         import weasyprint
         import django.template.loader as loader
-        from django.conf import settings
-        import os
         temp = loader.get_template('admin/attendee_list.html')
         content = temp.render(
             {
                 'assistants': Activity.objects.get(pk=_id).enrolled.all(),
-                'activity': Activity.objects.get(pk=_id)
+                'activity': Activity.objects.get(pk=_id),
+                'footer_image': config.ATTENDEE_LIST_FOOTER_IMG
             }
         )
 
         pdf = weasyprint.HTML(string=content.encode('utf-8'), base_url=request.build_absolute_uri())
 
-        """
-        About this way of generating the CSS:
-        Turns out that if you place the @page inside the HTML, or
-        through weasyprint.CSS(string="css contents"), it doesn't
-        apply the attribute at all.
-        Only using filename or url attributes worked, so far.
-        That's why even for a single variable we created a URL
-        to dynamically generate the CSS."""
-
-        css = weasyprint.CSS(
-            filename=os.path.join(settings.BASE_DIR,
-                                  '../apps/coopolis/static/styles/attendee-list-pdf.css'))
-
-        """
-        Test que demostra que des de gunicorn + Docker no resol a URLs internes:
-        
-        import urllib
-        r = urllib.request.urlopen(url=request.build_absolute_uri(reverse('attendee_list_pdf_css')),
-                timeout=10)
-        print('status: '+str(r.status))
-        """
-
-        # Opció de fer-ho via STRING, però a mitges (retorna objecte Template, cal obtenir el resultat)
-        #dynamic_css = loader.get_template('admin/attendee-list-pdf.css')
-        #css = weasyprint.CSS(string=dynamic_css)
-
-        # Modo URL que falla pq no la resol:
-        #css = weasyprint.CSS(url=request.build_absolute_uri(reverse('attendee_list_pdf_css')))
-        response = HttpResponse(pdf.write_pdf(stylesheets=[css]), content_type='application/pdf')
+        response = HttpResponse(pdf.write_pdf(), content_type='application/pdf')
         response['Content-Disposition'] = 'filename="llista_assistencia.pdf"'
         return response
 
