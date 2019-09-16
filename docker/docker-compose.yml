@@ -14,8 +14,6 @@ services:
     command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
-    ports:
-      - 8000:8000
     depends_on:
       - db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
@@ -28,26 +26,24 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.segon-ateneu
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8001
+      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.segon_ateneu
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ../:/srv
-    ports:
-      - 8001:8001
     depends_on:
       - db
 
   db:
     image: postgres
     volumes:
-      - /srv/postgres-data/DATABASE_FOLDER_HERE:/var/lib/postgresql/data/
+      - /srv/postgres-data/coopolis-develop2:/var/lib/postgresql/data/
     environment:
       - POSTGRES_PASSWORD=mysecretpassword
 
   nginx:
     image: nginx
     volumes:
-      - ./nginx.conf/default.conf:/etc/nginx/conf.d
+      - ./nginx.conf:/etc/nginx/conf.d
       - ../:/srv
     ports:
       - 8002:80
