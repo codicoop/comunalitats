@@ -22,23 +22,20 @@ class AjaxCalendarFeed(View):
         # FullCalendar passes ISO8601 formatted date strings
         try:
             start = parse_datetime(request.GET['start'])
-        except:
-            return JsonResponse(data, safe=False)
-        try:
             end = parse_datetime(request.GET['end'])
         except:
             return JsonResponse(data, safe=False)
 
-        events = Reservation.objects.all()
-
+        events = Reservation.objects.filter(start__gte=start, end__lte=end)
         for event in events:
             event_data = {
-                    'title': event.title,
+                    'title': f"{event.title} [{event.responsible}]",
                     'start': date_to_tull_calendar_format(event.start),
                     'end': date_to_tull_calendar_format(event.end),
-                    'url': event.url,
                     'color': event.room.color
                 }
+            if event.url:
+                event_data['url'] = event.url
             data.append(event_data)
         return JsonResponse(data, safe=False)
 

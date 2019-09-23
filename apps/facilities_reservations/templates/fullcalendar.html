@@ -36,9 +36,9 @@
             selectMirror: true,
 
             // Time Grid:
-            defaultView: 'timeGridWeek',
             allDaySlot: false,
             maxTime: "22:00:00",
+            minTime: "08:00:00",
           }
         },
 
@@ -47,6 +47,8 @@
           alert('Periode seleccionat: ' + info.startStr + ' a ' + info.endStr);
         },
 
+        // Time Grid:
+        defaultView: 'timeGridWeek',
 
         // Date & Time Display:
         weekends: false,
@@ -54,7 +56,7 @@
         events: {
           url: '/reservations/ajax/calendar/',
           error: function() {
-              console.log("Error: no s'han pogut carregar les dades del calendari.");
+              alert("No s'han pogut carregar les reserves. Recarrega la pàgina i si d'aquí uns minuts segueix fallant, si us plau avisa'ns.");
           }
         }
       });
