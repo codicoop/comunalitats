@@ -33,4 +33,5 @@ urlpatterns += [
     path('how_it_works/', HowItWorksView.as_view(), name='how_it_works'),
     path('email_template_test/', TemplateView.as_view(template_name="emails/base.html"), name='email_template_test'),
     path('users/password_reset/', CustomPasswordResetView.as_view(), name='password_reset'),
+    path('reservations/', include('apps.facilities_reservations.urls')),
 ]

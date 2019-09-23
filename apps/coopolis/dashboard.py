@@ -34,6 +34,12 @@ class MyDashboard(Dashboard):
                     models=('coopolis.models.Project', 'coopolis.models.ProjectStage'),
                 ),
                 modules.ModelList(
+                    title="Reserva d'aules i sales",
+                    column=1,
+                    collapsible=False,
+                    models=('facilities_reservations.models.Reservation', 'facilities_reservations.models.Room'),
+                ),
+                modules.ModelList(
                     title="Gestió d'usuàries",
                     column=1,
                     collapsible=False,

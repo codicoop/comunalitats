@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apps.facilities_reservations.apps.FacilitiesReservationsConfig',
     'apps.dataexports.apps.DataexportsConfig',
     'apps.coopolis.apps.CoopolisConfig',
     'apps.cc_users.apps.UsersConfig',
