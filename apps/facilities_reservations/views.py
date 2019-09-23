@@ -2,56 +2,44 @@ from django.views.generic import TemplateView, View
 from django.http import JsonResponse
 from django.utils.dateparse import parse_datetime
 
+from facilities_reservations.models import Reservation, Room
+
 
 class ReservationsCalendarView(TemplateView):
     template_name = "fullcalendar.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        rooms = Room.objects.all()
+        context['rooms'] = rooms
         return context
 
 
 class AjaxCalendarFeed(View):
     def get(self, request, *args, **kwargs):
+        data = []
+
         # FullCalendar passes ISO8601 formatted date strings
         try:
             start = parse_datetime(request.GET['start'])
         except:
-            print('Retornar error, he de mirar com es fa. Potser només retornant null ja està.')
-            return
+            return JsonResponse(data, safe=False)
         try:
             end = parse_datetime(request.GET['end'])
         except:
-            print('Retornar error, he de mirar com es fa. Potser només retornant null ja està.')
-            return
+            return JsonResponse(data, safe=False)
 
-        event_start = parse_datetime(f'2019-09-{start.day}T10:00:00')
-        event_end = parse_datetime(f'2019-09-{start.day}T13:00:00')
-        # Here we will query the events where dates in between start and end…
-        events = [
-            {
-                start: event_start,
-                end: event_end
-            },
-            {
-                start: event_start,
-                end: event_end
-            },
-        ]
+        events = Reservation.objects.all()
 
-        data = []
         for event in events:
-            print('event: '+str(event))
-            data.append(
-                {
-                    'title': "Títol de la formació d'aquest dia, al clicar ens pot portar a la fitxa, p.ex.",
+            event_data = {
+                    'title': event.title,
                     'start': date_to_tull_calendar_format(event.start),
                     'end': date_to_tull_calendar_format(event.end),
-                    'url': 'http://codi.coop',
-                    'color': 'red'
+                    'url': event.url,
+                    'color': event.room.color
                 }
-            )
-        print(data)
+            data.append(event_data)
         return JsonResponse(data, safe=False)
 
 

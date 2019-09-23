@@ -26,13 +26,16 @@ class Reservation(models.Model):
         verbose_name_plural = "reserves"
 
     title = models.CharField("títol", max_length=250)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, verbose_name="sala")
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, verbose_name="sala", related_name='reservations')
     start = models.DateTimeField("data i hora d'inici")
     end = models.DateTimeField("data i hora de finalització")
     responsible = models.ForeignKey(
         User, verbose_name="persona responsable", blank=True, null=True, on_delete=models.SET_NULL,
         related_name='reservations', help_text="Persona de l'equip al càrrec de la reserva. Per aparèixer "
         "al desplegable, cal que la persona tingui activada la opció 'Membre del personal'.")
+    url = models.CharField('enllaç web', blank=True, null=True, max_length=250,
+                           help_text="En cas d'indicar-se, l'esdeveniment del calendari podrà clicar-se i "
+                                     "portarà cap a aquest enllaç.")
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="creat per…", null=True)
     created = models.DateTimeField(verbose_name="creació", auto_now_add=True)
 
