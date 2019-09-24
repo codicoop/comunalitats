@@ -13,6 +13,7 @@ from django.template import Template, Context
 
 from coopolis.forms import ActivityForm
 from cc_courses.models import Activity
+from facilities_reservations.models import Reservation
 
 
 class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
@@ -25,8 +26,8 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     list_filter = ('course', 'date_start', 'justification', 'entity', 'axis', 'place', 'for_minors',)
     fieldsets = (
         (None, {
-            'fields': ('course', 'name', 'objectives', 'place', 'date_start', 'date_end', 'starting_time',
-                       'ending_time', 'spots', 'enrolled', 'axis', 'subaxis', 'entity', 'organizer')
+            'fields': ['course', 'name', 'objectives', 'place', 'date_start', 'date_end', 'starting_time',
+                       'ending_time', 'spots', 'enrolled', 'axis', 'subaxis', 'entity', 'organizer']
         }),
         ('Dades relatives a activitats per menors', {
             'classes': ('grp-collapse grp-closed',),
@@ -44,6 +45,18 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     autocomplete_lookup_fields = {
         'm2m': ['enrolled'],
     }
+
+    def get_fieldsets(self, request, obj=None):
+        """
+        For ateneus using room reservations module:
+        Adding the room field.
+        """
+        if config.ENABLE_ROOM_RESERVATIONS_MODULE and 'room' not in self.fieldsets[0][1]['fields']:
+            index = 0
+            if 'place' in self.fieldsets[0][1]['fields']:
+                index = self.fieldsets[0][1]['fields'].index('place') + 1
+            self.fieldsets[0][1]['fields'].insert(index, 'room')
+        return self.fieldsets
 
     def get_queryset(self, request):
         qs = super(ActivityAdmin, self).get_queryset(request)
@@ -65,6 +78,17 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
             ),
         ]
         return custom_urls + urls
+
+    def save_model(self, request, obj, form, change):
+        """
+        If the Ateneu uses the rooms reservation module, the Activities have to:
+        - Show the dropdown of the available rooms.
+        - Show the link to the Calendar.
+        - Create the reservation if it doesn't exist.
+        - Update the reservation if it already exist.
+        """
+        # obj.created_by = request.user
+        obj.save()
 
     def tweak_cloned_fields(self, fields):
         """ From ClonableModelAdmin. When cloning an Activity, we discard the enrolled people. """
