@@ -41,3 +41,24 @@ class Reservation(models.Model):
 
     def __str__(self):
         return self.title
+
+    @staticmethod
+    def check_availability(start, end, room, exclude=None):
+        """
+        If any events of the given room are inside the time span, return false.
+
+        :param start:
+        :param end:
+        :param room: Room model object.
+        :param exclude: ID of a reservation.
+        :return:
+        """
+        q = Reservation.objects.filter(
+            models.Q(start__gte=start) | models.Q(end__lte=end)
+        )
+        q = q.filter(room=room)
+        if exclude:
+            q = q.exclude(id=exclude)
+        if q.count() > 0:
+            return False
+        return True
