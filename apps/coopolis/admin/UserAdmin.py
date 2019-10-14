@@ -6,11 +6,12 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings
 from constance import config
-from coopolis.forms import MySignUpAdminForm
+from coopolis.forms import MySignUpAdminForm, MyAdminUserChangeForm
 
 
 class UserAdmin(admin.ModelAdmin):
-    form = MySignUpAdminForm
+    form = MyAdminUserChangeForm
+    add_form = MySignUpAdminForm
     empty_value_display = '(cap)'
     list_display = ('first_name', 'last_name', 'id_number', 'email', 'project', 'enrolled_activities_count')
     search_fields = ('id_number', 'last_name', 'first_name', 'email', 'phone_number', 'cooperativism_knowledge')
@@ -18,7 +19,7 @@ class UserAdmin(admin.ModelAdmin):
     fields = ['id', 'first_name', 'last_name', 'surname2', 'gender', 'id_number', 'email', 'fake_email', 'birthdate',
               'birth_place', 'town', 'district', 'address', 'phone_number', 'educational_level',
               'employment_situation', 'discovered_us', 'cooperativism_knowledge', 'project', 'is_staff', 'groups',
-              'is_active', 'date_joined', 'last_login']
+              'is_active', 'date_joined', 'last_login', 'password', ]
     readonly_fields = ['id', 'last_login', 'date_joined', 'project']
     actions = ['copy_emails', ]
 
@@ -44,7 +45,10 @@ class UserAdmin(admin.ModelAdmin):
     copy_emails.short_description = 'Copiar tots els e-mails'
 
     def save_model(self, request, obj, form, change):
-        self.send_welcome_email(request.POST['email'])
+        # Sending welcome e-mail only if we're creating a new account.
+        if not change:
+            self.send_welcome_email(request.POST['email'])
+
         super().save_model(request, obj, form, change)
 
     def send_welcome_email(self, mail_to):

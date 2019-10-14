@@ -4,7 +4,7 @@
 from django import forms
 from coopolis.models import Project, User, ProjectStage
 from cc_courses.models import Activity
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, ReadOnlyPasswordHashField
 from coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
 from constance import config
@@ -56,11 +56,32 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
 
 
 class MySignUpAdminForm(MySignUpForm):
-    password = forms.CharField(required=False)
+    password = ReadOnlyPasswordHashField(
+        label="Contrasenya", help_text="Raw passwords are not stored, so there is no way to see this user's password.")
     password1 = forms.CharField(required=False)
     password2 = forms.CharField(required=False)
     accept_conditions = forms.BooleanField(required=False)
     accept_conditions2 = forms.BooleanField(required=False)
+
+
+class MyAdminUserChangeForm(forms.ModelForm):
+    """A form for updating users. Includes all the fields on
+    the user, but replaces the password field with admin's
+    password hash display field.
+    """
+    password = ReadOnlyPasswordHashField()
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
+                  'birth_place', 'town', 'district', 'address', 'gender', 'educational_level',
+                  'employment_situation', 'discovered_us', ]
+
+    def clean_password(self):
+        # Regardless of what the user provides, return the initial value.
+        # This is done here, rather than on the field, because the
+        # field does not have access to the initial value
+        return self.initial["password"]
 
 
 def get_item_choices(model, value):
