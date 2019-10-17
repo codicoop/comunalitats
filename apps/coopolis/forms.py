@@ -40,7 +40,7 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
     accept_conditions2 = forms.BooleanField(
         label="He llegit i accepto", required=True)
 
-    class Meta(UserCreationForm.Meta):
+    class Meta:
         model = User
         fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
                   'birth_place', 'town', 'district', 'address', 'gender', 'educational_level',
@@ -51,25 +51,20 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
         if 'username' in self.fields:
             self.fields.pop('username')
 
-        self.fields['accept_conditions'].help_text = mark_safe(config.CONTENT_SIGNUP_LEGAL1)
-        self.fields['accept_conditions2'].help_text = mark_safe(config.CONTENT_SIGNUP_LEGAL2)
+        if "accept_conditions" in self.fields:
+            self.fields['accept_conditions'].help_text = mark_safe(config.CONTENT_SIGNUP_LEGAL1)
+        if "accept_conditions2" in self.fields:
+            self.fields['accept_conditions2'].help_text = mark_safe(config.CONTENT_SIGNUP_LEGAL2)
 
 
-class MySignUpAdminForm(MySignUpForm):
-    password = ReadOnlyPasswordHashField(
-        label="Contrasenya", help_text="Raw passwords are not stored, so there is no way to see this user's password.")
-    password1 = forms.CharField(required=False)
-    password2 = forms.CharField(required=False)
-    accept_conditions = forms.BooleanField(required=False)
-    accept_conditions2 = forms.BooleanField(required=False)
-
-
-class MyAdminUserChangeForm(forms.ModelForm):
+class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
     """A form for updating users. Includes all the fields on
     the user, but replaces the password field with admin's
     password hash display field.
     """
     password = ReadOnlyPasswordHashField()
+    first_name = forms.CharField(label="Nom", max_length=30)
+    last_name = forms.CharField(label="Cognom", max_length=30, required=False)
 
     class Meta:
         model = User
@@ -81,7 +76,9 @@ class MyAdminUserChangeForm(forms.ModelForm):
         # Regardless of what the user provides, return the initial value.
         # This is done here, rather than on the field, because the
         # field does not have access to the initial value
-        return self.initial["password"]
+        if "password" in self.initial:
+            return self.initial["password"]
+        return None
 
 
 def get_item_choices(model, value):

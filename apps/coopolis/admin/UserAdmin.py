@@ -6,12 +6,11 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings
 from constance import config
-from coopolis.forms import MySignUpAdminForm, MyAdminUserChangeForm
+from coopolis.forms import MySignUpAdminForm
 
 
 class UserAdmin(admin.ModelAdmin):
-    form = MyAdminUserChangeForm
-    add_form = MySignUpAdminForm
+    form = MySignUpAdminForm
     empty_value_display = '(cap)'
     list_display = ('first_name', 'last_name', 'id_number', 'email', 'project', 'enrolled_activities_count')
     search_fields = ('id_number', 'last_name', 'first_name', 'email', 'phone_number', 'cooperativism_knowledge')
@@ -19,8 +18,8 @@ class UserAdmin(admin.ModelAdmin):
     fields = ['id', 'first_name', 'last_name', 'surname2', 'gender', 'id_number', 'email', 'fake_email', 'birthdate',
               'birth_place', 'town', 'district', 'address', 'phone_number', 'educational_level',
               'employment_situation', 'discovered_us', 'cooperativism_knowledge', 'project', 'is_staff', 'groups',
-              'is_active', 'date_joined', 'last_login', 'password', ]
-    readonly_fields = ['id', 'last_login', 'date_joined', 'project']
+              'is_active', 'date_joined', 'last_login', ]
+    readonly_fields = ['id', 'last_login', 'date_joined', 'project', ]
     actions = ['copy_emails', ]
 
     def get_fields(self, request, obj=None):
