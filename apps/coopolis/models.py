@@ -143,7 +143,7 @@ class User(BaseUser):
                                                "neta.")
     username = models.CharField(unique=False, null=True, max_length=150, verbose_name="nom d'usuari/a")
     surname2 = models.CharField("segon cognom", max_length=50, blank=True, null=True)
-    id_number = models.CharField("DNI o NIE", null=True, max_length=11)
+    id_number = models.CharField("DNI/NIE/Passaport", null=True, max_length=11)
     GENDERS = (
         ('OTHER', 'Altre'),
         ('FEMALE', 'Dona'),
