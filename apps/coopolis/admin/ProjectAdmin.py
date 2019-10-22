@@ -72,21 +72,28 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     }
 
     def save_model(self, request, obj, form, change):
-        # partners = request.POST['partners']. És una string: '1594,98'
         if request.POST['partners']:
             """ Sending a notification e-mail to newly added partners. """
-            current_partners = obj.partners.all()
-            current_partners_list = set()
-            for partner in current_partners:
-                current_partners_list.add(partner.pk)
-            current_partners_list = set(sorted(current_partners_list))
 
+            # request.POST['partners'] is a string: '1594,98'
+            # Transforming it to a list:
             post_partners_list = request.POST['partners'].split(',')
             post_partners_list = [int(i) for i in post_partners_list]
             post_partners_list = set(sorted(post_partners_list))
 
-            dif = post_partners_list.difference(current_partners_list)
-            new_partner_objects = User.objects.filter(pk__in=dif)
+            # Determine which are the newly added partners depending on editing or creating project.
+            if change:
+                current_partners = obj.partners.all()
+                current_partners_list = set()
+                for partner in current_partners:
+                    current_partners_list.add(partner.pk)
+                current_partners_list = set(sorted(current_partners_list))
+
+                new_partners_list = post_partners_list.difference(current_partners_list)
+            else:
+                new_partners_list = post_partners_list
+
+            new_partner_objects = User.objects.filter(pk__in=new_partners_list)
             for new_partner in new_partner_objects:
                 self.send_added_to_project_email(new_partner.email, request.POST['name'])
 
