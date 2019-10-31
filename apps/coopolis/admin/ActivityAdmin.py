@@ -98,7 +98,8 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
             {
                 'assistants': Activity.objects.get(pk=_id).enrolled.all(),
                 'activity': Activity.objects.get(pk=_id),
-                'footer_image': config.ATTENDEE_LIST_FOOTER_IMG
+                'footer_image': config.ATTENDEE_LIST_FOOTER_IMG,
+                'num_expedient': config.NUM_EXPEDIENT,
             }
         )
 

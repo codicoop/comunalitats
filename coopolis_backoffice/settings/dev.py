@@ -320,6 +320,7 @@ CONSTANCE_CONFIG = {
         "Mail enviat quan es reinicia la contrassenya: cos. Ha d'incloure en algun lloc (username) i "
         "(password_reset_url) per poder mostrar el link i el nom d'usuari."),
     # Configuration
+    'NUM_EXPEDIENT': ('-', "Número d'expedient que apareix al PDF del llistat de participants."),
     'EMAIL_FROM': ('Coòpolis, Ateneu Cooperatiu <coopolis@bcn.coop>', 'Remitent dels correus electrònics.'),
     'EMAIL_FROM_ENROLLMENTS': ('formacio@bcn.coop', "Remitent del correu de notificació quan t'inscrius a una sessió."),
     'EMAIL_FROM_PROJECTS': ('suport@bcn.coop', "Remitent i destinatari del correu de notificació de projectes nous."),
@@ -338,8 +339,8 @@ CONSTANCE_CONFIG = {
         "URL de l'imatge pel peu de pàgina del llistat d'assistència."),
 }
 CONSTANCE_CONFIG_FIELDSETS = {
-    'Configuració': ('PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL', 'PROJECT_CONTACT_URL', 'CONTACT_PHONE_NUMBER',
-                     'CONTACT_EMAIL', 'EMAIL_TO_DEBUG', 'EMAIL_TO', 'EMAIL_FROM',
+    'Configuració': ('NUM_EXPEDIENT', 'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL', 'PROJECT_CONTACT_URL',
+                     'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG', 'EMAIL_TO', 'EMAIL_FROM',
                      'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS'),
     'Correus': ('EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT', 'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT',
                 'EMAIL_ENROLLMENT_CONFIRMATION', 'EMAIL_ENROLLMENT_REMINDER_SUBJECT', 'EMAIL_ENROLLMENT_REMINDER',
@@ -430,7 +431,7 @@ SUBAXIS_OPTIONS = {
         ('F3', "F.3 Altres"),
     }
 }
-SUBSIDY_PERIOD_OPTIONS = (("2017", "2016-2017"), ("2018", "2017-2018"), ("2019", "2018-2019"))
+SUBSIDY_PERIOD_OPTIONS = (("2017", "2016-2017"), ("2018", "2017-2018"), ("2019", "2018-2019"), ("2020", "2019-2020"))
 DISTRICTS = (
     ('CV', 'Ciutat Vella'),
     ('EX', 'Eixample'),
