@@ -45,6 +45,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     autocomplete_lookup_fields = {
         'm2m': ['enrolled'],
     }
+    date_hierarchy = 'date_start'
 
     def get_fieldsets(self, request, obj=None):
         """
