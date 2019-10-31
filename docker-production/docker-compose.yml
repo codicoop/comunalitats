@@ -1,0 +1,96 @@
+version: "3.3"
+
+services:
+
+  # http://serveis.bcn.coop
+  coopolis:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    environment:
+      - DB_HOST=db
+      - "PYTHONUNBUFFERED=1"
+      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.server_production
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ../:/srv
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+
+  # http://ateneu-demo.codi.coop
+  ateneu-demo:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    environment:
+      - DB_HOST=db
+      - "PYTHONUNBUFFERED=1"
+      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-demo
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8001
+    volumes:
+      - ../:/srv
+    ports:
+      - 8001:8001
+    depends_on:
+      - db
+
+  # https://serveis.coopcamp.cat
+  ateneu-coopcamp:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    environment:
+      - DB_HOST=db
+      - "PYTHONUNBUFFERED=1"
+      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopcamp
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8002
+    volumes:
+      - ../:/srv
+    ports:
+      - 8002:8002
+    depends_on:
+      - db
+
+  # https://serveis.coopmaresme.cat
+  ateneu-coopmaresme:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    environment:
+      - DB_HOST=db
+      - "PYTHONUNBUFFERED=1"
+      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopmaresme
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8003
+    volumes:
+      - ../:/srv
+    ports:
+      - 8003:8003
+    depends_on:
+      - db
+
+  # https://serveis.ateneubnord.cat
+  ateneu-bnord:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    environment:
+      - DB_HOST=db
+      - "PYTHONUNBUFFERED=1"
+      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-bnord
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8004
+    volumes:
+      - ../:/srv
+    ports:
+      - 8004:8004
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    volumes:
+      - /srv/postgres-data/coopolis-production:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
