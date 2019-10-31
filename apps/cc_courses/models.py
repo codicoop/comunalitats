@@ -1,13 +1,16 @@
 from django.db import models
-from cc_lib.utils import slugify_model
 from django.shortcuts import reverse
 from django.db.models.signals import pre_save
 from django.conf import settings
 from uuid import uuid4
-from apps.cc_courses.exceptions import EnrollToActivityNotValidException
-from datetime import date
+from datetime import date, datetime, time
 from easy_thumbnails.fields import ThumbnailerImageField
+from django.apps import apps
+from django.core.validators import ValidationError
+
+from cc_lib.utils import slugify_model
 from coopolis.managers import Published
+from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 
 
 def upload_path(instance, filename):
@@ -139,9 +142,9 @@ class Activity(models.Model):
     scanned_signatures = models.FileField("document amb signatures", blank=True, null=True,
                                           upload_to=activity_signatures_upload_path, max_length=250)
     photo1 = models.FileField("fotografia 1", blank=True, null=True,
-                                          upload_to=photo1_signatures_upload_path, max_length=250)
+                              upload_to=photo1_signatures_upload_path, max_length=250)
     photo2 = models.FileField("fotografia 2", blank=True, null=True,
-                                          upload_to=photo2_signatures_upload_path, max_length=250)
+                              upload_to=photo2_signatures_upload_path, max_length=250)
     publish = models.BooleanField("publicada", default=True)
     # minors
     for_minors = models.BooleanField(
@@ -158,8 +161,16 @@ class Activity(models.Model):
     )
     minors_grade = models.CharField("grau d'estudis", blank=True, null=True, max_length=4, choices=MINORS_GRADE_OPTIONS)
     minors_participants_number = models.IntegerField("número d'alumnes participants", blank=True, null=True)
-    minors_teacher  = models.ForeignKey("coopolis.User", on_delete=models.SET_NULL, verbose_name="docent", null=True,
-                                        blank=True)
+    minors_teacher = models.ForeignKey("coopolis.User", on_delete=models.SET_NULL, verbose_name="docent", null=True,
+                                       blank=True)
+    # room reservations module
+    room_reservation = models.ForeignKey(apps.get_model("facilities_reservations", "Reservation", False),
+                                         on_delete=models.SET_NULL, null=True, blank=True)
+    room = models.ForeignKey(apps.get_model("facilities_reservations", "Room", False), on_delete=models.SET_NULL,
+                             verbose_name="sala", related_name='activities', null=True, blank=True,
+                             help_text="Si selecciones una sala, quan guardis quedarà reservada per la sessió. "
+                                       f"<br>Consulta el <a href=\"/reservations/calendar/\" target=\"_blank\">"
+                                       "CALENDARI DE RESERVES</a> per veure la disponibilitat.")
 
     objects = models.Manager()
     published = Published()
@@ -168,15 +179,6 @@ class Activity(models.Model):
     def remaining_spots(self):
         return self.spots - self.enrolled.count()
 
-    def enroll_user(self, user):
-        if user in self.enrolled.all():
-            raise EnrollToActivityNotValidException()
-        self.enrolled.add(user)
-        self.save()
-
-    def __str__(self):
-        return self.name
-
     @property
     def absolute_url(self):
         return self.course.absolute_url
@@ -184,6 +186,45 @@ class Activity(models.Model):
     @property
     def is_past_due(self):
         return date.today() > self.date_start
+
+    @property
+    def datetime_start(self):
+        if isinstance(self.date_start, date) and isinstance(self.starting_time, time):
+            return datetime.combine(self.date_start, self.starting_time)
+        return None
+
+    @property
+    def datetime_end(self):
+        if not isinstance(self.ending_time, time):
+            return None
+        if not isinstance(self.date_end, date):
+            if self.datetime_start:
+                return datetime.combine(self.date_start, self.ending_time)
+        return datetime.combine(self.date_end, self.ending_time)
+
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        """
+        For when the Ateneu uses the rooms reservation module.
+        Checking that the selected room and datetime are available.
+        """
+        reservation_model = apps.get_model("facilities_reservations", "Reservation")
+        if self.room:
+            if isinstance(self.datetime_start, datetime) \
+                    and isinstance(self.datetime_end, datetime):
+                available = reservation_model.check_availability(
+                    self.datetime_start, self.datetime_end, self.room, self.room_reservation)
+                print("Check: " + str(available))
+                if not available:
+                    raise ValidationError("La sala que has seleccionat no està disponible en aquest horari.")
+
+    def enroll_user(self, user):
+        if user in self.enrolled.all():
+            raise EnrollToActivityNotValidException()
+        self.enrolled.add(user)
+        self.save()
 
 
 pre_save.connect(Course.pre_save, sender=Course)

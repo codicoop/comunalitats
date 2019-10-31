@@ -45,9 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.dataexports.apps.DataexportsConfig',
-    'apps.coopolis.apps.CoopolisConfig',
     'apps.cc_users.apps.UsersConfig',
     'apps.cc_courses.apps.CoursesConfig',
+    'apps.facilities_reservations.apps.FacilitiesReservationsConfig',
+    'apps.coopolis.apps.CoopolisConfig',
     'grappelli.dashboard',
     'grappelli',
     'constance.backends.database',
@@ -166,6 +167,11 @@ CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 CONSTANCE_SUPERUSER_ONLY = False
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
+    # Configurable modules or features
+    'ENABLE_ROOM_RESERVATIONS_MODULE': (
+        False,
+        "Activar el mòdul de reserva d'espais",
+        bool),
     # Courses
     'CONTENT_COURSES_INTRODUCTION': (
         "Des de Coòpolis disposem d’una oferta regular de formació en economia social i cooperativisme per a tots els "
@@ -339,9 +345,9 @@ CONSTANCE_CONFIG = {
         "URL de l'imatge pel peu de pàgina del llistat d'assistència."),
 }
 CONSTANCE_CONFIG_FIELDSETS = {
-    'Configuració': ('NUM_EXPEDIENT', 'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL', 'PROJECT_CONTACT_URL',
-                     'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG', 'EMAIL_TO', 'EMAIL_FROM',
-                     'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS'),
+    'Configuració': ('NUM_EXPEDIENT', 'ENABLE_ROOM_RESERVATIONS_MODULE', 'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL',
+                     'PROJECT_CONTACT_URL', 'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG', 'EMAIL_TO',
+                     'EMAIL_FROM', 'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS'),
     'Correus': ('EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT', 'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT',
                 'EMAIL_ENROLLMENT_CONFIRMATION', 'EMAIL_ENROLLMENT_REMINDER_SUBJECT', 'EMAIL_ENROLLMENT_REMINDER',
                 'EMAIL_SIGNUP_WELCOME_SUBJECT', 'EMAIL_SIGNUP_WELCOME', 'EMAIL_ADDED_TO_PROJECT_SUBJECT',

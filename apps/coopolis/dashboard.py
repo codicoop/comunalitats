@@ -8,6 +8,8 @@ To activate your index dashboard add the following to your settings.py::
 
 from grappelli.dashboard import modules, Dashboard
 from django.conf import settings
+from django.urls import reverse
+from constance import config
 
 
 class MyDashboard(Dashboard):
@@ -15,6 +17,30 @@ class MyDashboard(Dashboard):
 
     def __init__(self, **kwargs):
         Dashboard.__init__(self, **kwargs)
+
+        # 'Disabling' reservations module by default, by assigning an empty link module:
+        reservations_module_app = modules.LinkList()
+        reservations_module_calendar = modules.LinkList()
+        if config.ENABLE_ROOM_RESERVATIONS_MODULE:
+            reservations_module_app = modules.ModelList(
+                    title="Gestió de reserves d'aules i sales",
+                    column=1,
+                    collapsible=False,
+                    models=('facilities_reservations.models.Reservation', 'facilities_reservations.models.Room'),
+                )
+            reservations_module_calendar = modules.LinkList(
+                    title="Calendari de reserves",
+                    column=1,
+                    collapsible=False,
+                    children=(
+                        {
+                            'title': 'Obrir el calendari (pestanya nova)',
+                            'url': reverse('fullcalendar'),
+                            'external': False,
+                            'target': True,
+                        },
+                    ),
+                )
 
         self.children.append(modules.Group(
             title=settings.PROJECT_NAME,
@@ -33,6 +59,8 @@ class MyDashboard(Dashboard):
                     collapsible=False,
                     models=('coopolis.models.Project', 'coopolis.models.ProjectStage'),
                 ),
+                reservations_module_app,
+                reservations_module_calendar,
                 modules.ModelList(
                     title="Gestió d'usuàries",
                     column=1,
