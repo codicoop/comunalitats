@@ -6,7 +6,6 @@ from uuid import uuid4
 from datetime import date, datetime, time
 from easy_thumbnails.fields import ThumbnailerImageField
 from django.apps import apps
-from django.core.validators import ValidationError
 
 from cc_lib.utils import slugify_model
 from coopolis.managers import Published
@@ -204,21 +203,6 @@ class Activity(models.Model):
 
     def __str__(self):
         return self.name
-
-    def clean(self):
-        """
-        For when the Ateneu uses the rooms reservation module.
-        Checking that the selected room and datetime are available.
-        """
-        reservation_model = apps.get_model("facilities_reservations", "Reservation")
-        if self.room:
-            if isinstance(self.datetime_start, datetime) \
-                    and isinstance(self.datetime_end, datetime):
-                available = reservation_model.check_availability(
-                    self.datetime_start, self.datetime_end, self.room, self.room_reservation)
-                print("Check: " + str(available))
-                if not available:
-                    raise ValidationError("La sala que has seleccionat no està disponible en aquest horari.")
 
     def enroll_user(self, user):
         if user in self.enrolled.all():
