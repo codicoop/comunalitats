@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView, View
 from django.http import JsonResponse
 from django.utils.dateparse import parse_datetime
+from django.utils import timezone
 
 from facilities_reservations.models import Reservation, Room
 
@@ -41,4 +42,5 @@ class AjaxCalendarFeed(View):
 
 
 def date_to_tull_calendar_format(date_obj):
-    return date_obj.strftime("%Y-%m-%dT%H:%M:%S")
+    aware_date = timezone.localtime(date_obj)
+    return aware_date.strftime("%Y-%m-%dT%H:%M:%S")
