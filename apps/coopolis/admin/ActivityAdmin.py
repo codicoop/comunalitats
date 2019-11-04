@@ -13,7 +13,6 @@ from django.template import Template, Context
 
 from coopolis.forms import ActivityForm
 from cc_courses.models import Activity
-from facilities_reservations.models import Reservation
 
 
 class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
@@ -47,6 +46,12 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     }
     date_hierarchy = 'date_start'
 
+    def get_form(self, request, obj=None, **kwargs):
+        # Hack to be able to use self.request at the form.
+        form = super(ActivityAdmin, self).get_form(request, obj=obj, **kwargs)
+        form.request = request
+        return form
+
     def get_fieldsets(self, request, obj=None):
         """
         For ateneus using room reservations module:
@@ -79,49 +84,6 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
             ),
         ]
         return custom_urls + urls
-
-    def save_model(self, request, obj, form, change):
-        """
-        If the Ateneu uses the rooms reservation module, the Activities have to:
-        - Show the dropdown of the available rooms.
-        - Show the link to the Calendar.
-        - Create the reservation if it doesn't exist.
-        - Update the reservation if it already exist.
-        """
-
-        """
-        # Si estem editant una sessió que ja tenia una rerserva però han deseleccionat la sala:
-        if self.id and self.room_reservation and not self.room:
-            # NO NEED TO CHECK
-            # delete self.room_reservation
-            pass
-
-        # Si estem editant una sessió que ja tenia reserva i que n'ha de continuar tenint:
-        if self.id and self.room_reservation and self.room:
-            print(reservation_model.check_availability(
-                self.datetime_start, self.datetime_end, self.room, self.room_reservation))
-            # update self.room_reservation
-            pass
-
-        # Si estem editant una sessió que no tenia una reserva, i ara sí que n'ha de tenir:
-        if self.id and self.room_reservation is None and self.room:
-            available = reservation_model.check_availability(
-                self.datetime_start, self.datetime_end, self.room)
-            print("# Si estem editant una sessió que no tenia una reserva, i ara sí que n'ha de tenir: " +
-                  str(available))
-            # create reserva
-            pass
-
-        # Si és una nova sessió i s'ha seleccionat self.room:
-        if self.id is None and self.room:
-            available = reservation_model.check_availability(
-                self.datetime_start, self.datetime_end, self.room)
-            print("# Si és una nova sessió i s'ha seleccionat self.room: " + str(available))
-            # create reserva
-            pass
-
-        """
-        obj.save()
 
     def tweak_cloned_fields(self, fields):
         """ From ClonableModelAdmin. When cloning an Activity, we discard the enrolled people. """

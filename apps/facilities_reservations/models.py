@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import ValidationError
 
 from cc_courses.models import CoursePlace
 from coopolis.models import User
@@ -42,8 +43,8 @@ class Reservation(models.Model):
     def __str__(self):
         return self.title
 
-    @staticmethod
-    def check_availability(start, end, room, exclude=None):
+    def clean(self):
+        super().clean()
         """
         If any events of the given room are inside the time span, return false.
 
@@ -53,12 +54,24 @@ class Reservation(models.Model):
         :param exclude: ID of a reservation.
         :return:
         """
+        print(f"{self.room}, {self.id}, {self.start}, {self.end}")
+        if not self.room:
+            pass
+
         q = Reservation.objects.filter(
-            models.Q(start__gte=start) | models.Q(end__lte=end)
+            models.Q(start__gte=self.start, start__lt=self.end)
+            | models.Q(end__gt=self.start, end__lte=self.end)
+            | models.Q(start__lte=self.start, end__gte=self.end)
         )
-        q = q.filter(room=room)
-        if exclude:
-            q = q.exclude(id=exclude)
+
+        q = q.filter(room=self.room)
+
+        if self.id:
+            q = q.exclude(id=self.id)
+
         if q.count() > 0:
-            return False
-        return True
+            raise ValidationError("La sala que has seleccionat no està disponible en aquest horari.")
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.full_clean()
+        return super(Reservation, self).save(force_insert, force_update, using, update_fields)

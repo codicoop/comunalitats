@@ -2,15 +2,19 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from coopolis.models import Project, User, ProjectStage
-from cc_courses.models import Activity
 from django.contrib.auth.forms import UserCreationForm, ReadOnlyPasswordHashField
 from coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
 from constance import config
+from django.conf import settings
+from datetime import datetime
+from django.utils.timezone import make_aware
+
+from coopolis.models import Project, User, ProjectStage
+from cc_courses.models import Activity
 from coopolis.mixins import FormDistrictValidationMixin
 from dynamic_fields.fields import DynamicChoicesWidget
-from django.conf import settings
+from facilities_reservations.models import Reservation
 
 
 class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
@@ -119,7 +123,10 @@ class ProjectStageForm(forms.ModelForm):
 class ActivityForm(forms.ModelForm):
     class Meta:
         model = Activity
-        fields = '__all__'
+        fields = ('course', 'name', 'objectives', 'place', 'date_start', 'date_end', 'starting_time', 'ending_time',
+                  'spots', 'enrolled', 'entity', 'organizer', 'justification', 'axis', 'subaxis', 'scanned_signatures',
+                  'photo1', 'photo2', 'publish', 'for_minors', 'minors_school_name', 'minors_school_cif',
+                  'minors_grade', 'minors_participants_number', 'minors_teacher', 'room', )
         widgets = {
             'subaxis': DynamicChoicesWidget(
                 depends_field='axis',
@@ -135,3 +142,49 @@ class ActivityForm(forms.ModelForm):
                 empty_choice_label="Selecciona un sub-eix",
             )
         }
+
+    def clean(self):
+        super(ActivityForm, self).clean()
+        if config.ENABLE_ROOM_RESERVATIONS_MODULE:
+            self.synchronize_with_reserved_room()
+
+    def synchronize_with_reserved_room(self):
+        change = True if self.instance.pk else False
+        obj = self.instance
+        # Si és una nova sessió i s'ha seleccionat self.room:
+        # Si estem editant una sessió que no tenia una reserva, i ara sí que n'ha de tenir:
+        if self.cleaned_data['room'] and (not change or
+                                          (change and not obj.room_reservation and self.cleaned_data['room'])):
+            # Activity.clean() already checked the availability.
+            reservation_obj = self.create_update_reservation()
+            obj.room_reservation = reservation_obj
+
+        # Si estem editant una sessió que ja tenia una reserva però han deseleccionat la sala:
+        if change and obj.room_reservation and not self.cleaned_data['room']:
+            if obj.room_reservation:
+                self.delete_reservation()
+
+        # Si estem editant una sessió que ja tenia reserva i que n'ha de continuar tenint:
+        if change and obj.room_reservation and self.cleaned_data['room']:
+            reservation_obj = self.create_update_reservation(obj.room_reservation)
+            obj.room_reservation = reservation_obj
+
+    def create_update_reservation(self, inst=None):
+        date_end = self.cleaned_data['date_end'] if self.cleaned_data['date_end'] else self.cleaned_data['date_start']
+        values = {
+            'title': self.cleaned_data['name'],
+            'start': make_aware(datetime.combine(self.cleaned_data['date_start'], self.cleaned_data['starting_time'])),
+            'end': make_aware(datetime.combine(date_end, self.cleaned_data['ending_time'])),
+            'room': self.cleaned_data['room'],
+            'responsible': self.request.user,
+            'created_by': self.request.user
+        }
+        pk = inst.id if inst else None
+        obj, created = Reservation.objects.update_or_create(id=pk, defaults=values)
+        return obj
+
+    def delete_reservation(self):
+        obj = Reservation.objects.filter(id=self.instance.room_reservation.id)
+        obj.delete()
+        self.instance.room_reservation = None
+        self.instance.save()
