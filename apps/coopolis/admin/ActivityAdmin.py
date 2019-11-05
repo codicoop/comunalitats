@@ -22,11 +22,12 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     readonly_fields = ('attendee_list_field', 'attendee_filter_field', 'send_reminder_field')
     summernote_fields = ('objectives',)
     search_fields = ('date_start', 'name', 'objectives',)
-    list_filter = ('course', 'date_start', 'justification', 'entity', 'axis', 'place', 'for_minors',)
+    list_filter = ('course', 'date_start', 'justification', 'room', 'entity', 'axis', 'place', 'for_minors',)
     fieldsets = (
         (None, {
             'fields': ['course', 'name', 'objectives', 'place', 'date_start', 'date_end', 'starting_time',
-                       'ending_time', 'spots', 'enrolled', 'axis', 'subaxis', 'entity', 'organizer']
+                       'ending_time', 'spots', 'enrolled', 'axis', 'subaxis', 'entity', 'organizer', 'photo1',
+                       'photo2', 'publish', ]
         }),
         ('Dades relatives a activitats per menors', {
             'classes': ('grp-collapse grp-closed',),
