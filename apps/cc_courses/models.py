@@ -164,7 +164,8 @@ class Activity(models.Model):
                                        blank=True)
     # room reservations module
     room_reservation = models.ForeignKey(apps.get_model("facilities_reservations", "Reservation", False),
-                                         on_delete=models.SET_NULL, null=True, blank=True)
+                                         on_delete=models.SET_NULL, null=True, blank=True,
+                                         related_name="related_activities")
     room = models.ForeignKey(apps.get_model("facilities_reservations", "Room", False), on_delete=models.SET_NULL,
                              verbose_name="sala", related_name='activities', null=True, blank=True,
                              help_text="Si selecciones una sala, quan guardis quedarà reservada per la sessió. "
