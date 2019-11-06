@@ -18,7 +18,7 @@ services:
       - db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
 
-  # http://ateneu-demo.codi.coop
+  # http://segon_ateneu-develop.codi.coop
   segon_ateneu:
     build:
       context: ..
