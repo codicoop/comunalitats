@@ -1,6 +1,5 @@
-root@vps001:/srv/Coopolis.back-office/docker-production# cat Dockerfile
 FROM python:3.6-alpine
-COPY docker/requirements.txt /srv/requirements.txt
+COPY docker-production/requirements.txt /srv/requirements.txt
 
 WORKDIR /srv
 

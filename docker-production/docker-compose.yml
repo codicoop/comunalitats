@@ -6,7 +6,7 @@ services:
   coopolis:
     build:
       context: ..
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker-production/Dockerfile
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
@@ -24,7 +24,7 @@ services:
   ateneu-demo:
     build:
       context: ..
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker-production/Dockerfile
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
@@ -41,7 +41,7 @@ services:
   ateneu-coopcamp:
     build:
       context: ..
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker-production/Dockerfile
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
@@ -58,7 +58,7 @@ services:
   ateneu-coopmaresme:
     build:
       context: ..
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker-production/Dockerfile
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
@@ -75,7 +75,7 @@ services:
   ateneu-bnord:
     build:
       context: ..
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker-production/Dockerfile
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
