@@ -19,7 +19,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         js = ('js/grappellihacks.js',)
 
     form = ProjectFormAdmin
-    list_display = ('id', 'name', 'web', 'mail', 'phone', 'registration_date', 'stages_field')
+    list_display = ('id', 'name', 'web', 'mail', 'phone', 'registration_date', 'stages_field', )
     search_fields = ('id', 'name', 'web', 'mail', 'phone', 'registration_date', 'object_finality', 'project_origins',
                      'solves_necessities', 'social_base', 'sector')
     list_filter = ('registration_date', 'sector', 'project_status')
@@ -64,8 +64,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     }
 
     def stages_field(self, obj):
-        return mark_safe(u'<a href="../../%s/%s?project__exact=%d">Veure</a>' % (
-            'coopolis', 'projectstage', obj.id))
+        return mark_safe(f"<a href=\"../../coopolis/projectstage?project__exact={ obj.id }\">{ obj.stages_list }</a>")
 
     stages_field.short_description = 'Acompanyaments'
 

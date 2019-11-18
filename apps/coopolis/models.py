@@ -123,6 +123,16 @@ class Project(models.Model):
         else:
             return False
 
+    @property
+    def stages_list(self):
+        if not self.stages:
+            return None
+        stages = []
+        for stage in self.stages.all():
+            stages.append(stage.get_stage_type_display())
+        stages.sort()
+        return "; ".join(stages)
+
     def __str__(self):
         return self.name
 
@@ -238,7 +248,8 @@ class ProjectStage(models.Model):
 
     DEFAULT_STAGE_TYPE = 1
 
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat")
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat",
+                                related_name="stages")
     STAGE_TYPE_OPTIONS = (
         ('1', "00 Nova creació - acollida"),
         ('2', "01 Nova creació - procés"),
