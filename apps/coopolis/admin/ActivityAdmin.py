@@ -16,6 +16,9 @@ from cc_courses.models import Activity
 
 
 class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
+    class Media:
+        js = ('js/grappellihacks.js',)
+
     form = ActivityForm
     list_display = ('date_start', 'spots', 'remaining_spots', 'name', 'attendee_filter_field', 'attendee_list_field',
                     'send_reminder_field')

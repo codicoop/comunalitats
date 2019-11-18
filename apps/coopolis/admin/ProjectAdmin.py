@@ -15,6 +15,9 @@ from coopolis.forms import ProjectStageForm
 
 
 class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
+    class Media:
+        js = ('js/grappellihacks.js',)
+
     form = ProjectFormAdmin
     list_display = ('id', 'name', 'web', 'mail', 'phone', 'registration_date', 'stages_field')
     search_fields = ('id', 'name', 'web', 'mail', 'phone', 'registration_date', 'object_finality', 'project_origins',
@@ -113,6 +116,9 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
 
 
 class ProjectStageAdmin(admin.ModelAdmin):
+    class Media:
+        js = ('js/grappellihacks.js',)
+
     form = ProjectStageForm
     empty_value_display = '(cap)'
     list_display = ('project', 'date_start', 'stage_responsible', 'stage_type', 'axis', 'organizer', 'subsidy_period',

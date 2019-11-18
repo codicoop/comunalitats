@@ -10,6 +10,9 @@ from coopolis.forms import MySignUpAdminForm
 
 
 class UserAdmin(admin.ModelAdmin):
+    class Media:
+        js = ('js/grappellihacks.js',)
+
     form = MySignUpAdminForm
     empty_value_display = '(cap)'
     list_display = ('first_name', 'last_name', 'id_number', 'email', 'project', 'enrolled_activities_count')

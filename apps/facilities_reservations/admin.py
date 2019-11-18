@@ -25,7 +25,7 @@ class ReservationAdmin(admin.ModelAdmin):
         # Grappelli was not even loading this file (maybe jquery did, internally?)
         # Adding it that way (and having the right order in INSTALLED_APPS injects the file,
         # and then the time pickers use it.
-        js = ("grappelli/js/jquery.grp_timepicker.js",)
+        js = ("grappelli/js/jquery.grp_timepicker.js", 'js/grappellihacks.js',)
 
     list_display = ('start', 'end', 'room', 'title', 'responsible',)
     form = ReservationForm
