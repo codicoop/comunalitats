@@ -125,13 +125,20 @@ class Project(models.Model):
 
     @property
     def stages_list(self):
-        if not self.stages:
+        if not self.stages or self.stages.count() < 1:
             return None
         stages = []
         for stage in self.stages.all():
             stages.append(stage.get_stage_type_display())
         stages.sort()
         return "; ".join(stages)
+
+    @property
+    def last_stage_responsible(self):
+        if not self.stages or self.stages.count() < 1:
+            return None
+        return self.stages.all()[0].stage_responsible
+    last_stage_responsible.fget.short_description = "Últim acompanyament"
 
     def __str__(self):
         return self.name
@@ -259,7 +266,7 @@ class ProjectStage(models.Model):
     )
     stage_type = models.CharField("tipus d'acompanyament", max_length=2, default=DEFAULT_STAGE_TYPE,
                                   choices=STAGE_TYPE_OPTIONS)
-    subsidy_period = models.CharField("convocatòria", blank=True, null=True, max_length=4, default=2019,
+    subsidy_period = models.CharField("convocatòria", blank=True, null=True, max_length=4, default=2020,
                                       choices=settings.SUBSIDY_PERIOD_OPTIONS)
     date_start = models.DateField("data d'inici", null=True, blank=True, default=datetime.date.today)
     date_end = models.DateField("data de finalització", null=True, blank=True)
@@ -284,4 +291,4 @@ class ProjectStage(models.Model):
                                                related_name='stage_involved_partners')
 
     def __str__(self):
-        return str(self.project)
+        return f"{str(self.project)}: {self.get_stage_type_display()}"
