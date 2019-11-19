@@ -14,6 +14,9 @@ from coopolis.forms import MySignUpAdminForm
 class UserAdmin(admin.ModelAdmin):
     class Media:
         js = ('js/grappellihacks.js',)
+        css = {
+            'all': ('styles/grappellihacks.css',)
+        }
 
     form = MySignUpAdminForm
     empty_value_display = '(cap)'
