@@ -6,6 +6,8 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings
 from constance import config
+from django.utils.safestring import mark_safe
+
 from coopolis.forms import MySignUpAdminForm
 
 
@@ -24,6 +26,10 @@ class UserAdmin(admin.ModelAdmin):
               'is_active', 'date_joined', 'last_login', ]
     readonly_fields = ['id', 'last_login', 'date_joined', 'project', ]
     actions = ['copy_emails', ]
+
+    def project(self, obj):
+        return mark_safe(f"<a href=\"../../../project/{ obj.project.id }/change/\">{ obj.project }</a>")
+    project.short_description = 'Projecte'
 
     def get_fields(self, request, obj=None):
         if request.user.is_superuser and "is_superuser" not in self.fields:
