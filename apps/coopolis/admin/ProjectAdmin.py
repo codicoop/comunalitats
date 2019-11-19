@@ -18,6 +18,9 @@ from coopolis.forms import ProjectStageForm
 class ProjectStageAdmin(admin.ModelAdmin):
     class Media:
         js = ('js/grappellihacks.js',)
+        css = {
+            'all': ('styles/grappellihacks.css',)
+        }
 
     form = ProjectStageForm
     empty_value_display = '(cap)'
@@ -171,3 +174,20 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
             recipient_list=mail_to,
             from_email=settings.DEFAULT_FROM_EMAIL
         )
+
+
+class DerivationAdmin(admin.ModelAdmin):
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_add_permission(self, request):
+        if request.user.is_superuser:
+            return True
+        return False

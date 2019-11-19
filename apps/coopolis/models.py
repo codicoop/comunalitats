@@ -43,6 +43,17 @@ class Town(models.Model):
         return self.name
 
 
+class Derivation(models.Model):
+    class Meta:
+        verbose_name = "derivació"
+        verbose_name_plural = "derivacions"
+
+    name = models.CharField("nom", max_length=250)
+
+    def __str__(self):
+        return self.name
+
+
 class Project(models.Model):
     class Meta:
         verbose_name_plural = "projectes"
@@ -101,6 +112,9 @@ class Project(models.Model):
                                  upload_to=estatuts_upload_path, max_length=250)
     sostenibility = models.FileField("pla de sostenibilitat", blank=True, null=True,
                                      upload_to=estatuts_upload_path, max_length=250)
+    derivation = models.ForeignKey(Derivation, verbose_name="derivat", on_delete=models.SET_NULL, blank=True, null=True)
+    derivation_date = models.DateField("data de derivació", blank=True, null=True)
+
 
     @property
     def has_estatus(self):
