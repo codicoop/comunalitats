@@ -10,7 +10,7 @@ from constance import config
 from functools import update_wrapper
 from django.conf.urls import url
 
-from coopolis.models import User, Project, ProjectStage
+from coopolis.models import User, Project, ProjectStage, EmploymentInsertion
 from coopolis.forms import ProjectFormAdmin
 from coopolis.forms import ProjectStageForm
 
@@ -72,6 +72,11 @@ class ProjectStagesInline(admin.StackedInline):
         return self.fields
 
 
+class EmploymentInsertionInline(admin.TabularInline):
+    model = EmploymentInsertion
+    extra = 0
+
+
 class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     class Media:
         js = ('js/grappellihacks.js',)
@@ -88,7 +93,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     actions = ["export_as_csv"]
     change_actions = ('print', )
     print_template = 'admin/my_test/myentry/review.html'
-    inlines = (ProjectStagesInline,)
+    inlines = (ProjectStagesInline, EmploymentInsertionInline,)
 
     def get_urls(self):
         def wrap(view):

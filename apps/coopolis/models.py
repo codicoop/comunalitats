@@ -306,3 +306,30 @@ class ProjectStage(models.Model):
 
     def __str__(self):
         return f"{str(self.project)}: {self.get_stage_type_display()}"
+
+
+class EmploymentInsertion(models.Model):
+    class Meta:
+        verbose_name = "inserció laboral"
+        verbose_name_plural = "insercions laborals"
+        ordering = ["-insertion_date"]
+
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat",
+                                related_name="employment_insertions")
+    user = models.ForeignKey(User, verbose_name="persona", blank=True, null=True, on_delete=models.PROTECT)
+    insertion_date = models.DateField("alta seguretat social")
+    CONTRACT_TYPE_CHOICES = (
+        ('autonom', "Autònom -RETA-"),
+        ('general_cpropi', "Règim general - compte propi"),
+        ('general_calie', "Règim general - compte aliè"),
+    )
+    contract_type = models.CharField("tipus de contracte", max_length=50, choices=CONTRACT_TYPE_CHOICES)
+    DURATION_CHOICES = (
+        ('indefinit', "Indefinit"),
+        ('obraservei', "Obra i servei"),
+        ('temporal', "Temporal"),
+    )
+    duration = models.CharField("durada", max_length=50, choices=DURATION_CHOICES)
+
+    def __str__(self):
+        return f"{ self.user.name }: { self.contract_type }"
