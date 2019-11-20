@@ -301,8 +301,9 @@ class ProjectStage(models.Model):
                                            upload_to=stage_certificate_upload_path, max_length=250)
     hours = models.IntegerField("número d'hores", help_text="Camp necessari per la justificació.", null=True,
                                 blank=True)
-    involved_partners = models.ManyToManyField(User, verbose_name="persones involucrades", blank=True,
-                                               related_name='stage_involved_partners')
+    involved_partners = models.ManyToManyField(
+        User, verbose_name="persones involucrades", blank=True, related_name='stage_involved_partners',
+        help_text="Persones que apareixeran a la justificació com a que han participat a l'acompanyament.")
 
     def __str__(self):
         return f"{str(self.project)}: {self.get_stage_type_display()}"
@@ -332,4 +333,4 @@ class EmploymentInsertion(models.Model):
     duration = models.CharField("durada", max_length=50, choices=DURATION_CHOICES)
 
     def __str__(self):
-        return f"{ self.user.name }: { self.contract_type }"
+        return f"{ self.user.full_name }: { self.contract_type }"

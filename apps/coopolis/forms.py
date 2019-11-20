@@ -99,6 +99,22 @@ def get_item_choices(model, value):
     return choices
 
 
+class ProjectStageInlineForm(forms.ModelForm):
+    class Meta:
+        model = ProjectStage
+        fields = '__all__'
+
+    # S'ha de processar això: settings.SUBAXIS_OPTIONS per convertir-ho en una llista, eliminant el 1r nivell
+
+    choices = []
+    for axis in sorted(settings.SUBAXIS_OPTIONS):
+        for subaxis in sorted(settings.SUBAXIS_OPTIONS[axis]):
+            choices.append(
+                (subaxis[0], subaxis[1])
+            )
+    subaxis = forms.ChoiceField(choices=choices, label="Sub-eix")
+
+
 class ProjectStageForm(forms.ModelForm):
     class Meta:
         model = ProjectStage

@@ -31,7 +31,9 @@ class UserAdmin(admin.ModelAdmin):
     actions = ['copy_emails', ]
 
     def project(self, obj):
-        return mark_safe(f"<a href=\"../../../project/{ obj.project.id }/change/\">{ obj.project }</a>")
+        if obj.project:
+            return mark_safe(f"<a href=\"../../../project/{ obj.project.id }/change/\">{ obj.project }</a>")
+        return None
     project.short_description = 'Projecte'
 
     def get_fields(self, request, obj=None):

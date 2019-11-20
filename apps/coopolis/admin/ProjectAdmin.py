@@ -11,8 +11,7 @@ from functools import update_wrapper
 from django.conf.urls import url
 
 from coopolis.models import User, Project, ProjectStage, EmploymentInsertion
-from coopolis.forms import ProjectFormAdmin
-from coopolis.forms import ProjectStageForm
+from coopolis.forms import ProjectFormAdmin, ProjectStageInlineForm, ProjectStageForm
 
 
 class ProjectStageAdmin(admin.ModelAdmin):
@@ -57,6 +56,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
 
 class ProjectStagesInline(admin.StackedInline):
     model = ProjectStage
+    form = ProjectStageInlineForm
     extra = 0
     min_num = 0
     show_change_link = True
@@ -65,16 +65,29 @@ class ProjectStagesInline(admin.StackedInline):
               'follow_up', 'organizer', 'scanned_signatures', 'scanned_certificate', 'hours', 'involved_partners')
     empty_value_display = '(cap)'
 
-    def has_add_permission(self, request):
-        return False
+    raw_id_fields = ('involved_partners',)
+    autocomplete_lookup_fields = {
+        'm2m': ['involved_partners'],
+    }
 
-    def get_readonly_fields(self, request, obj=None):
-        return self.fields
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "stage_responsible":
+            kwargs["queryset"] = User.objects.filter(is_staff=True)
+        if db_field.name == "project":
+            kwargs["queryset"] = Project.objects.order_by('name')
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class EmploymentInsertionInline(admin.TabularInline):
+    class Media:
+        js = ('js/grappellihacks.js',)
+
     model = EmploymentInsertion
     extra = 0
+    raw_id_fields = ('user',)
+    autocomplete_lookup_fields = {
+        'fk': ['user']
+    }
 
 
 class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
