@@ -23,8 +23,8 @@ easy-thumbnails = "*"
 django-modelclone = "*"
 openpyxl = "*"
 django-object-actions = "*"
-django-dynamic-form-fields = "*"
 django-maintenance-mode = "*"
+django-dynamic-form-fields = {path = "./local_packages/django-dynamic-form-fields-master"}
 
 [requires]
 python_version = "3.6"

@@ -1,0 +1,3 @@
+recursive-include dynamic_fields/static *
+recursive-include dynamic_fields/templates *
+
