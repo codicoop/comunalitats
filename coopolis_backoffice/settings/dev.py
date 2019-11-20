@@ -327,27 +327,39 @@ CONSTANCE_CONFIG = {
         "(password_reset_url) per poder mostrar el link i el nom d'usuari."),
     # Configuration
     'NUM_EXPEDIENT': ('-', "Número d'expedient que apareix al PDF del llistat de participants."),
-    'EMAIL_FROM': ('Coòpolis, Ateneu Cooperatiu <coopolis@bcn.coop>', 'Remitent dels correus electrònics.'),
-    'EMAIL_FROM_ENROLLMENTS': ('formacio@bcn.coop', "Remitent del correu de notificació quan t'inscrius a una sessió."),
-    'EMAIL_FROM_PROJECTS': ('suport@bcn.coop', "Remitent i destinatari del correu de notificació de projectes nous."),
+    'EMAIL_FROM_ENROLLMENTS': (
+        'formacio@bcn.coop', "És el remitent del correu que rep la gent a l'inscriure's a una sessió. Quan s'envia un "
+                             "recordatori a tothom inscrit a una sessió, s'envia a aquest compte i posa en còpia "
+                             "oculta els correus de la gent."),
+    'EMAIL_FROM_PROJECTS': (
+        'suport@bcn.coop', "Quan algú sol·licita un acompanyament es genera un correu per notificar-ho a l'equip, que "
+                           "s'envia a aquest compte. Aquest camp, a diferència dels altres, permet indicar diversos "
+                           "comptes, separant-los per comes."),
     'EMAIL_TO_DEBUG': ('p.picornell@gmail.com', 'Correu per fer tests del codi.'),
-    'EMAIL_TO': ('coopolis.laie@gmail.com', "Correu on s'envien les notificacions generals (p.ex. nous projectes)"),
-    'PROJECT_CONTACT_URL': ("https://bcn.coop/contacte/", "Enllaç a la pàgina de contacte del projecte."),
-    'PROJECT_LEGAL_URL': ("https://bcn.coop/avis-legal-i-proteccio-de-dades/",
-                          "Enllaç a la pàgina de les condicions legals del projecte."),
-    'PROJECT_WEBSITE_URL': ("https://bcn.coop", "Enllaç a la pàgina principal del projecte."),
-    'CONTACT_PHONE_NUMBER': ("93 432 00 63", "Número de telèfon que voleu indicar per si algú té dubtes o gestions."),
+    'PROJECT_CONTACT_URL': (
+        "https://bcn.coop/contacte/", "Enllaç a la pàgina de contacte de l'ateneu, apareix a peu de pàgina."),
+    'PROJECT_LEGAL_URL': (
+        "https://bcn.coop/avis-legal-i-proteccio-de-dades/",
+        "Enllaç a la pàgina de les condicions legals de l'ateneu. Apareix a: missatge d'acceptar cookies, peu de "
+        "pàgina, i al text d'acceptació de condicions legals del formulari d'alta."),
+    'PROJECT_WEBSITE_URL': (
+        "https://bcn.coop", "Enllaç a la pàgina principal de l'ateneu. Apareix al menú principal."),
+    'CONTACT_PHONE_NUMBER': (
+        "93 432 00 63", "Apareix al correu que s'envia a la gent que s'inscriu a activitats, perquè sàpiguen on "
+                        "contactar si tenen dubtes. De la mateixa manera apareix al correu que s'envia quan envieu "
+                        "un recordatori a tota la gent inscrita a una sessió."),
     'CONTACT_EMAIL': (
         "coopolis@bcn.coop",
-        "Correu electrònic que voleu indicar per si algú té dubtes o gestions."),
+        "Apareix al correu que s'envia a la persona que s'ha inscrit a una sessió (i al de recordatori que s'envia"
+        "massivament des de l'admin) per indicar que si tenen dubtes, escriguin a aquest correu."),
     'ATTENDEE_LIST_FOOTER_IMG': (
         "https://s3.eu-central-1.wasabisys.com/ateneus-coopolis/local/peu_signatures_pdf.png",
         "URL de l'imatge pel peu de pàgina del llistat d'assistència."),
 }
 CONSTANCE_CONFIG_FIELDSETS = {
     'Configuració': ('NUM_EXPEDIENT', 'ENABLE_ROOM_RESERVATIONS_MODULE', 'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL',
-                     'PROJECT_CONTACT_URL', 'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG', 'EMAIL_TO',
-                     'EMAIL_FROM', 'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS'),
+                     'PROJECT_CONTACT_URL', 'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG',
+                     'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS'),
     'Correus': ('EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT', 'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT',
                 'EMAIL_ENROLLMENT_CONFIRMATION', 'EMAIL_ENROLLMENT_REMINDER_SUBJECT', 'EMAIL_ENROLLMENT_REMINDER',
                 'EMAIL_SIGNUP_WELCOME_SUBJECT', 'EMAIL_SIGNUP_WELCOME', 'EMAIL_ADDED_TO_PROJECT_SUBJECT',
