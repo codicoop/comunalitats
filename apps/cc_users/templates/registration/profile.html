@@ -3,6 +3,12 @@
 {% block generic %}
 
 <div class="generated-form">
+    {% if form.errors %}
+    <div class="message-container">
+        <p class="error-message">No s'ha pogut completar el registre, si us plau, revisa els errors del
+            formulari.</p>
+    </div>
+    {% endif %}
     {% if messages %}
     <ul class="message-container">
        {% for message in messages %}
@@ -19,4 +25,7 @@
     <button type="submit">Guardar els canvis</button>
     </form>
 </div>
+
+{% include 'reusable/town_district_validation_js.html' %}
+
 {% endblock %}
