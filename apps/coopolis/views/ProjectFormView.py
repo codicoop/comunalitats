@@ -66,7 +66,7 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
             from_email=config.EMAIL_FROM_PROJECTS
         )
         messages.success(self.request, "S'ha enviat una sol·licitud d'acompanyament del projecte. En els propers dies "
-                                       "et contactarà una persona de Coòpolis per concertar una primera reunió.")
+                                       "et contactarà una persona de l'ateneu per concertar una primera reunió.")
         return HttpResponseRedirect(self.get_success_url())
 
     def get(self, request):
