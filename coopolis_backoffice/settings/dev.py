@@ -462,6 +462,7 @@ DISTRICTS = (
     ('SS', 'Sarrià-Sant Gervasi'),
     ('GR', 'Gràcia')
 )
+CALENDAR_COLOR_FOR_ACTIVITIES_OUTSIDE = '#808080'
 
 # Grappeli (https://django-grappelli.readthedocs.io/en/latest/customization.html)
 GRAPPELLI_SWITCH_USER = False

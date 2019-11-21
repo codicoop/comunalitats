@@ -43,9 +43,9 @@
         },
 
         // Date Clicking & Selecting (this cannot go inside views/timeGrid)
-        select: function(info) {
-          alert('Periode seleccionat: ' + info.startStr + ' a ' + info.endStr);
-        },
+        //select: function(info) {
+        //  alert('Periode seleccionat: ' + info.startStr + ' a ' + info.endStr);
+        //},
 
         // Time Grid:
         defaultView: 'timeGridWeek',
@@ -71,9 +71,10 @@
       {% if rooms %}
       <div id="legend-container">
         {% for room in rooms %}
-        <span class="bootstrap-badge"
-                style="background-color:{{ room.color }};">{{ room.name }}</span>
+        <span class="bootstrap-badge" style="background-color:{{ room.color }};">{{ room.name }}</span>
         {% endfor %}
+        <span class="bootstrap-badge" style="background-color:{{ legend_activities_outside_color }};">
+          Fora de l'ateneu</span>
       </div>
       {% endif %}
       <div id='calendar'></div>
