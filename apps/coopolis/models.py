@@ -1,10 +1,12 @@
-from cc_users.models import BaseUser
 from django.db import models
 from django.conf import settings
 from uuid import uuid4
-from cc_users.managers import CCUserManager
 import datetime
+from django.core.validators import ValidationError
+
+from cc_users.models import BaseUser
 from cc_courses.models import Entity
+from cc_users.managers import CCUserManager
 
 
 def stage_certificate_upload_path(instance, filename):
@@ -304,6 +306,17 @@ class ProjectStage(models.Model):
     involved_partners = models.ManyToManyField(
         User, verbose_name="persones involucrades", blank=True, related_name='stage_involved_partners',
         help_text="Persones que apareixeran a la justificació com a que han participat a l'acompanyament.")
+
+    def clean(self):
+        super().clean()
+        if not self.subaxis:
+            pass
+
+        if not self.axis:
+            raise ValidationError({'axis': "Si selecciones un sub-eix, cal indicar també l'eix corresponent."})
+
+        if self.axis not in self.subaxis:
+            raise ValidationError({'subaxis': f"El sub-eix { self.subaxis } no pertany a l'eix { self.axis }."})
 
     def __str__(self):
         return f"{str(self.project)}: {self.get_stage_type_display()}"
