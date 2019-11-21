@@ -40,6 +40,9 @@ class UserAdmin(admin.ModelAdmin):
         if request.user.is_superuser and "is_superuser" not in self.fields:
             self.fields.append('is_superuser')
 
+        if not request.user.is_superuser:
+            self.readonly_fields.append('groups')
+
         # If we are adding a new user, don't show these fields:
         if obj is None and 'project' in self.fields:
             self.fields.remove('project')
