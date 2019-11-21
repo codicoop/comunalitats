@@ -47,14 +47,7 @@ class Reservation(models.Model):
         super().clean()
         """
         If any events of the given room are inside the time span, return false.
-
-        :param start:
-        :param end:
-        :param room: Room model object.
-        :param exclude: ID of a reservation.
-        :return:
         """
-        print(f"{self.room}, {self.id}, {self.start}, {self.end}")
         if not self.room:
             pass
 
