@@ -106,13 +106,15 @@ class ProjectStageInlineForm(forms.ModelForm):
 
     # S'ha de processar això: settings.SUBAXIS_OPTIONS per convertir-ho en una llista, eliminant el 1r nivell
 
-    choices = []
+    choices = [
+        (None, '---------')
+    ]
     for axis in sorted(settings.SUBAXIS_OPTIONS):
         for subaxis in sorted(settings.SUBAXIS_OPTIONS[axis]):
             choices.append(
                 (subaxis[0], subaxis[1])
             )
-    subaxis = forms.ChoiceField(choices=choices, label="Sub-eix")
+    subaxis = forms.ChoiceField(choices=choices, label="Sub-eix", required=False)
 
 
 class ProjectStageForm(forms.ModelForm):
