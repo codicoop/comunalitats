@@ -65,7 +65,7 @@ class MyDashboard(Dashboard):
                     title="Gestió d'usuàries",
                     column=1,
                     collapsible=False,
-                    models=('coopolis.models.User', 'django.contrib.auth.models.Group',),
+                    models=('coopolis.models.User',),
                 ),
                 modules.ModelList(
                     title="Exportació de dades per justificacions",
