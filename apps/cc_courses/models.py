@@ -85,7 +85,7 @@ class Course(models.Model):
                              help_text="Indica només els horaris, sense els dies.")
     description = models.TextField("descripció", null=True)
     publish = models.BooleanField("publicat")
-    created = models.DateTimeField(null=True, blank=True)
+    created = models.DateTimeField("data de creació", null=True, blank=True, auto_now_add=True)
     banner = ThumbnailerImageField(null=True, upload_to=upload_path, max_length=250, blank=True)
     place = models.ForeignKey(CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc", blank=True,
                               help_text="Aquesta dada de moment és d'ús intern i no es publica.")
