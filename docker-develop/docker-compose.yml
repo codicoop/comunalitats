@@ -6,7 +6,7 @@ services:
   coopolis:
     build:
       context: ..
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker-develop/Dockerfile
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
@@ -22,7 +22,7 @@ services:
   segon_ateneu:
     build:
       context: ..
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker-develop/Dockerfile
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
