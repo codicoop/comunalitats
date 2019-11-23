@@ -6,7 +6,7 @@ with open('README.md', 'r') as f:
     long_description = f.read()
 
 setup(
-    name="django-dynamic-form-fields",
+    name="django-dynamic-form-fields-custom",
     version="0.2.0",
     url="https://gitlab.com/dannosaur/django-dynamic-form-fields",
     description="Dynamically update choice fields based on dependent fields in django",
