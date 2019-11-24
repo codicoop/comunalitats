@@ -4,6 +4,7 @@ services:
 
   # http://serveis.bcn.coop
   coopolis:
+    container_name: ateneu_coopolis
     build:
       context: ..
       dockerfile: ./docker-production/Dockerfile
@@ -22,6 +23,7 @@ services:
 
   # http://ateneu-demo.codi.coop
   ateneu-demo:
+    container_name: ateneu_demo
     build:
       context: ..
       dockerfile: ./docker-production/Dockerfile
@@ -39,6 +41,7 @@ services:
 
   # https://serveis.coopcamp.cat
   ateneu-coopcamp:
+    container_name: ateneu_coopcamp
     build:
       context: ..
       dockerfile: ./docker-production/Dockerfile
@@ -56,6 +59,7 @@ services:
 
   # https://serveis.coopmaresme.cat
   ateneu-coopmaresme:
+    container_name: ateneu_coopmaresme
     build:
       context: ..
       dockerfile: ./docker-production/Dockerfile
@@ -73,6 +77,7 @@ services:
 
   # https://serveis.ateneubnord.cat
   ateneu-bnord:
+    container_name: ateneu_bnord
     build:
       context: ..
       dockerfile: ./docker-production/Dockerfile
@@ -88,7 +93,27 @@ services:
     depends_on:
       - db
 
+  # https://serveis.ponentcoopera.cat
+  # Ens saltem el port 8005 perquè hi ha l'antic back-office (java) allà.
+  ateneu-ponentcoopera:
+    container_name: ateneu_ponentcoopera
+    build:
+      context: ..
+      dockerfile: ./docker-production/Dockerfile
+    environment:
+      - DB_HOST=db
+      - "PYTHONUNBUFFERED=1"
+      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-ponentcoopera
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8006
+    volumes:
+      - ../:/srv
+    ports:
+      - 8006:8006
+    depends_on:
+      - db
+
   db:
+    container_name: postgres
     image: postgres
     volumes:
       - /srv/postgres-data/coopolis-production:/var/lib/postgresql/data/
