@@ -310,7 +310,7 @@ class ProjectStage(models.Model):
     def clean(self):
         super().clean()
         if not self.subaxis:
-            pass
+            return
 
         if not self.axis:
             raise ValidationError({'axis': "Si selecciones un sub-eix, cal indicar també l'eix corresponent."})
