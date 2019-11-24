@@ -144,7 +144,10 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     }
 
     def stages_field(self, obj):
-        return mark_safe(f"<a href=\"../../coopolis/projectstage?project__exact={ obj.id }\">{ obj.stages_list }</a>")
+        if obj.stages_list:
+            return mark_safe(
+                f"<a href=\"../../coopolis/projectstage?project__exact={ obj.id }\">{ obj.stages_list }</a>")
+        return None
 
     stages_field.short_description = 'Acompanyaments'
 
