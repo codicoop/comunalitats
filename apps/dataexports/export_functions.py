@@ -4,7 +4,6 @@ from dataexports.models import DataExports
 from django.http import HttpResponseNotFound, HttpResponse
 from openpyxl import Workbook
 from datetime import datetime
-from openpyxl.compat import unicode
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Border, Side, PatternFill, colors
 from django.db.models import Count
@@ -140,7 +139,7 @@ class ExportFunctions:
             column_dimensions.width = column_width
             cell.font = Font(bold=True, name="ttf-opensans", size=9)
             cell.border = Border(bottom=Side(border_style="thin", color='000000'))
-            cell.value = unicode(column_title)
+            cell.value = str(column_title)
 
     @classmethod
     def fill_row_data(cls, row):
@@ -167,7 +166,7 @@ class ExportFunctions:
                 if error_mark:
                     cell.fill = PatternFill(start_color='FFFF0000', end_color='FFFF0000', fill_type='solid')
                 cell_value = cell_value[0]
-            cell.value = unicode(cell_value)
+            cell.value = str(cell_value)
 
     @classmethod
     def export_2018_2019(cls):
@@ -275,7 +274,9 @@ class ExportFunctions:
             subaxis = cls.get_correlation("subaxis", item.subaxis)
             if subaxis is None:
                 subaxis = ("", True)
-            town = item.town
+            town = None
+            if item.place is not None:
+                town = item.place.town
             if town is None or town == "":
                 town = ("", True)
             row = [
