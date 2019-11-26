@@ -23,17 +23,24 @@ class ProjectStageAdmin(admin.ModelAdmin):
 
     form = ProjectStageForm
     empty_value_display = '(cap)'
-    list_display = ('project', 'date_start', 'stage_responsible', 'stage_type', 'axis', 'organizer', 'subsidy_period',
+    list_display = ('project_field_ellipsis', 'date_start', 'stage_responsible_field_ellipsis', 'stage_type', 'axis', 'subaxis', 'organizer', 'subsidy_period',
                     'project_field')
     list_filter = ('subsidy_period', ('stage_responsible', admin.RelatedOnlyFieldListFilter), 'date_start',
                    'stage_type', 'axis', 'organizer', 'project__sector')
     actions = ["export_as_csv"]
     search_fields = ['project__name']
+    list_editable = ('axis', 'subaxis', )
 
     def project_field_ellipsis(self, obj):
-        if len(obj.__str__()) > 100:
-            return "%s..." % obj.__str__()[:100]
-        return obj.__str__()
+        if len(obj.project.name) > 50:
+            return "%s..." % obj.project.name[:50]
+        return obj.project.name
+
+    def stage_responsible_field_ellipsis(self, obj):
+        if obj.stage_responsible and len(str(obj.stage_responsible)) > 15:
+            return "%s..." % str(obj.stage_responsible)[:15]
+        return obj.stage_responsible
+    stage_responsible_field_ellipsis.short_description = 'Responsable'
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "stage_responsible":

@@ -7,6 +7,7 @@ from django.core.validators import ValidationError
 from cc_users.models import BaseUser
 from cc_courses.models import Entity
 from cc_users.managers import CCUserManager
+from coopolis.helpers import get_subaxis_choices
 
 
 def stage_certificate_upload_path(instance, filename):
@@ -290,7 +291,7 @@ class ProjectStage(models.Model):
     axis = models.CharField("eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
                             null=True, blank=True, max_length=1)
     subaxis = models.CharField("sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
-                               null=True, blank=True, max_length=2)
+                               null=True, blank=True, max_length=2, choices=get_subaxis_choices())
     organizer = models.ForeignKey(Entity, verbose_name="qui ho fa", default=None, null=True, blank=True,
                                   on_delete=models.SET_NULL)
     stage_responsible = models.ForeignKey(
