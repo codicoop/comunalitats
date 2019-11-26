@@ -10,6 +10,7 @@ from django.apps import apps
 from cc_lib.utils import slugify_model
 from coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
+from coopolis.helpers import get_subaxis_choices
 
 
 def upload_path(instance, filename):
@@ -137,7 +138,7 @@ class Activity(models.Model):
     axis = models.CharField("eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
                             null=True, blank=True, max_length=1)
     subaxis = models.CharField("sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
-                               null=True, blank=True, max_length=2)
+                               null=True, blank=True, max_length=2, choices=get_subaxis_choices())
     scanned_signatures = models.FileField("document amb signatures", blank=True, null=True,
                                           upload_to=activity_signatures_upload_path, max_length=250)
     photo1 = models.FileField("fotografia", blank=True, null=True,
