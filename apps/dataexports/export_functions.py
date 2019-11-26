@@ -297,7 +297,7 @@ class ExportFunctions:
         cls.row_number = 1
 
         columns = [
-            ("Referència", 10),
+            ("Referència", 20),
             ("Nom actuació", 40),
             ("Destinatari de l'acompanyament", 28),
             ("En cas d'entitat (nom de l'entitat)", 40),
@@ -321,8 +321,8 @@ class ExportFunctions:
             hours = item.hours if item.hours is not None else ("", True)
             town = item.project.town if item.project.town is not None else ("", True)
             row = [
-                reference_number,  # Referència.
-                "",  # Camp no editable, l'ha d'omplir l'excel automàticament.
+                f"{ reference_number} { item.project.name }",  # Referència.
+                item.project.name,  # Camp no editable, l'ha d'omplir l'excel automàticament.
                 ("Entitat", True),  # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat PENDENT.
                 item.project.name,  # "En cas d'entitat (Nom de l'entitat)"
                 ("Constituida", True),  # "En cas d'entitat" Opcions: Constituida/En procés/No finalitzat. PENDENT.
@@ -364,7 +364,7 @@ class ExportFunctions:
                                       "no pot ser inclosa a l'excel.</p>".format(item.name))
             row = [
                 "",  # Referència. En aquest full no cal que tinguin relació amb Actuacions.
-                "",  # Nom de l'actuació. Camp automàtic de l'excel.
+                "",  # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
                 item.name,
                 item.cif,
                 item.partners.all()[0].full_name,
@@ -380,7 +380,7 @@ class ExportFunctions:
         cls.row_number = 1
 
         columns = [
-            ("Referència", 10),
+            ("Referència", 40),
             ("Nom actuació", 40),
             ("Cognoms", 20),
             ("Nom", 10),
@@ -410,8 +410,8 @@ class ExportFunctions:
                 else:
                     town = participant.town.name
                 row = [
-                    activity_reference_number,  # Referència.
-                    "",  # Nom de l'actuació. Camp automàtic de l'excel.
+                    f"{ activity_reference_number} { activity.name }",  # Referència.
+                    activity.name,  # Nom de l'actuació. Camp automàtic de l'excel.
                     participant.surname,
                     participant.first_name,
                     participant.id_number,
@@ -427,7 +427,7 @@ class ExportFunctions:
         cls.row_number = 1
 
         columns = [
-            ("Referència", 10),
+            ("Referència", 40),
             ("Nom actuació", 40),
             ("Grau d'estudis", 20),
             ("Nom centre educatiu", 20),
@@ -444,8 +444,8 @@ class ExportFunctions:
             cls.row_number += 1
             nouniversitari_reference_number += 1
             row = [
-                nouniversitari_reference_number,  # Referència.
-                "",  # Nom de l'actuació. Camp automàtic de l'excel.
+                f"{ nouniversitari_reference_number} {activity.name }",  # Referència.
+                activity.name,  # Nom de l'actuació. Camp automàtic de l'excel.
                 cls.get_correlation('minors_grade', activity.minors_grade),
                 activity.minors_school_name,
             ]
