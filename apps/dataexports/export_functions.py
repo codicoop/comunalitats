@@ -29,8 +29,8 @@ class ExportFunctions:
     To use them, call ExportFunctions.callmethod('function_name')
     """
     ignore_errors = False
-    workbook = Workbook()
-    worksheet = workbook.active
+    workbook = None
+    worksheet = None
     subsidy_period = 2019
 
     # TODO: Passar això a una funció get_stages_obj
@@ -51,6 +51,8 @@ class ExportFunctions:
             obj = DataExports.objects.get(function_name=name)
             cls.ignore_errors = obj.ignore_errors
             cls.subsidy_period = obj.subsidy_period
+            cls.workbook = Workbook()
+            cls.worksheet = cls.workbook.active
             return getattr(cls, name)()
         else:
             return cls.return_404("La funció especificada no existeix")
