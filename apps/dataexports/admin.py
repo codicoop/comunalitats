@@ -31,4 +31,5 @@ class DataExportsAdmin(admin.ModelAdmin):
     def export_data(self, request, _id):
         from dataexports.export_functions import ExportFunctions
         obj = DataExports.objects.get(id=_id)
-        return ExportFunctions.callmethod(obj.function_name)
+        instance = ExportFunctions()
+        return instance.callmethod(obj.function_name)

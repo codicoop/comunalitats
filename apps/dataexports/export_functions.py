@@ -26,45 +26,45 @@ class ExportFunctions:
 
     This class holds the functions that generate this .xlsx.
 
-    To use them, call ExportFunctions.callmethod('function_name')
+    To use them, call callmethod('function_name')
     """
-    ignore_errors = False
-    workbook = None
-    worksheet = None
-    subsidy_period = 2019
 
-    stages_obj = None
+    def __init__(self):
+        self.ignore_errors = False
+        self.workbook = None
+        self.worksheet = None
+        self.subsidy_period = 2019
 
-    subsidy_period_range = None
-    row_number = 1
-    error_message = set()
-    number_of_activities = 0
-    number_of_stages = 0
-    number_of_nouniversitaris = 0
-    number_of_founded_projects = 0
+        self.stages_obj = None
 
-    correlations = dict()
+        self.subsidy_period_range = None
+        self.row_number = 1
+        self.error_message = set()
+        self.number_of_activities = 0
+        self.number_of_stages = 0
+        self.number_of_nouniversitaris = 0
+        self.number_of_founded_projects = 0
 
-    @classmethod
-    def callmethod(cls, name):
-        if hasattr(cls, name):
+        self.correlations = dict()
+
+    def callmethod(self, name):
+        if hasattr(self, name):
             obj = DataExports.objects.get(function_name=name)
-            cls.ignore_errors = obj.ignore_errors
-            cls.subsidy_period = obj.subsidy_period
-            cls.workbook = Workbook()
-            cls.worksheet = cls.workbook.active
-            return getattr(cls, name)()
+            self.ignore_errors = obj.ignore_errors
+            self.subsidy_period = obj.subsidy_period
+            self.workbook = Workbook()
+            self.worksheet = self.workbook.active
+            return getattr(self, name)()
         else:
-            return cls.return_404("La funció especificada no existeix")
+            return self.return_404("La funció especificada no existeix")
 
-    @classmethod
-    def return_document(cls, name):
+    def return_document(self, name):
         """ Attention: non-ascii characters in the name will cause
         an encoding error with gunicorn.
         Haven't tried it with a proxy under apache, in theory should
         work."""
-        if len(cls.error_message) > 0 and cls.ignore_errors is False:
-            return cls.return_404()
+        if len(self.error_message) > 0 and self.ignore_errors is False:
+            return self.return_404()
 
         response = HttpResponse(
             content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -72,58 +72,53 @@ class ExportFunctions:
         response['Content-Disposition'] = 'attachment; filename={date}-{name}.xlsx'.format(
             date=datetime.now().strftime('%Y-%m-%d'), name=name,
         )
-        cls.workbook.save(response)
+        self.workbook.save(response)
         return response
 
-    @classmethod
-    def return_404(cls, message=""):
+    def return_404(self, message=""):
         """When the exported data has to fit a specific format, there
         are many cases in which we need to stop the generation and tell
         the user that something needs to be fixed.
         This will show a blank page with the message.
         """
         if message:
-            cls.error_message.add(message)
-        message = "<h1>Error al generar el document</h1>" + " ".join(cls.error_message)
+            self.error_message.add(message)
+        message = "<h1>Error al generar el document</h1>" + " ".join(self.error_message)
         return HttpResponseNotFound(message)
-    
-    @classmethod
-    def get_sessions_obj(cls, justification="A", for_minors=False):
-        return Activity.objects.filter(justification=justification, date_start__range=cls.subsidy_period_range,
+
+    def get_sessions_obj(self, justification="A", for_minors=False):
+        return Activity.objects.filter(justification=justification, date_start__range=self.subsidy_period_range,
                                        for_minors=for_minors)
 
-    @classmethod
-    def import_correlations(cls, file_path):
+    def import_correlations(self, file_path):
         try:
             file_object = open(file_path, 'r')
-            cls.correlations = json.load(file_object)
+            self.correlations = json.load(file_object)
         except FileNotFoundError:
             print(file_path + " not found. ")
 
-    @classmethod
-    def get_correlation(cls, correlated_field, original_data, subsidy_period=2019):
+    def get_correlation(self, correlated_field, original_data, subsidy_period=2019):
         """When exporting data, we might need to make the exported data
          fit specific requirements. For example, we store the field
          'axis' as 'A', 'B', but the strings we actually need to
          show are:
          'A) Diagnosi i visibilització', 'B) Creació i desenvolupament'
 
-         We have these correlations in a json file and loaded at cls.correlations.
+         We have these correlations in a json file and loaded at self.correlations.
 
         This function is a wrapper to get those.
         """
         try:
-            new_data = cls.correlations[correlated_field][original_data]
+            new_data = self.correlations[correlated_field][original_data]
         except KeyError:
-            cls.error_message.add(
+            self.error_message.add(
                 "<p>El document no s'ha pogut generar perquè s'ha intentat aplicar aquesta correlació:</p"
                 "<ul><li>Convocatòria: {}</li><li>Camp: {}</li><li>Dada original: {}</li></ul>"
                 "<p>Però no s'ha trobat.</p>".format(subsidy_period, correlated_field, original_data))
             return None
         return new_data
 
-    @classmethod
-    def create_columns(cls, columns):
+    def create_columns(self, columns):
         """ create_columns
 
         Expects an iterable containing tuples with the name and the
@@ -134,17 +129,16 @@ class ExportFunctions:
         ]
         """
         for col_num, (column_title, column_width) in enumerate(columns, 1):
-            cell = cls.worksheet.cell(row=1, column=col_num)
+            cell = self.worksheet.cell(row=1, column=col_num)
             column_letter = get_column_letter(col_num)
-            column_dimensions = cls.worksheet.column_dimensions[column_letter]
+            column_dimensions = self.worksheet.column_dimensions[column_letter]
             column_dimensions.font = Font(name="ttf-opensans", size=9)
             column_dimensions.width = column_width
             cell.font = Font(bold=True, name="ttf-opensans", size=9)
             cell.border = Border(bottom=Side(border_style="thin", color='000000'))
             cell.value = str(column_title)
 
-    @classmethod
-    def fill_row_data(cls, row):
+    def fill_row_data(self, row):
         """ fill_row_data
 
         Populates the columns of a given row with each of the values.
@@ -162,7 +156,7 @@ class ExportFunctions:
         ]
         """
         for col_num, cell_value in enumerate(row, 1):
-            cell = cls.worksheet.cell(row=cls.row_number, column=col_num)
+            cell = self.worksheet.cell(row=self.row_number, column=col_num)
             if isinstance(cell_value, tuple):
                 error_mark = cell_value[1]
                 if error_mark:
@@ -170,25 +164,23 @@ class ExportFunctions:
                 cell_value = cell_value[0]
             cell.value = str(cell_value)
 
-    @classmethod
-    def export_2018_2019(cls):
-        cls.import_correlations(settings.BASE_DIR+"/../apps/dataexports/fixtures/correlations_2019.json")
-        cls.subsidy_period_range = ["2018-11-01", "2019-10-31"]
+    def export_2018_2019(self):
+        self.import_correlations(settings.BASE_DIR + "/../apps/dataexports/fixtures/correlations_2019.json")
+        self.subsidy_period_range = ["2018-11-01", "2019-10-31"]
 
         """ Each function here called handles the creation of one of the worksheets."""
-        cls.export_actuacions_2018_2019()
-        cls.export_stages_2018_2019()
-        cls.export_founded_projects_2018_2019()
-        cls.export_participants_2018_2019()
-        cls.export_nouniversitaris_2018_2019()
+        self.export_actuacions_2018_2019()
+        self.export_stages_2018_2019()
+        self.export_founded_projects_2018_2019()
+        self.export_participants_2018_2019()
+        self.export_nouniversitaris_2018_2019()
 
-        return cls.return_document("justificacio2018-2019")
+        return self.return_document("justificacio2018-2019")
 
-    @classmethod
-    def export_actuacions_2018_2019(cls):
+    def export_actuacions_2018_2019(self):
         # Tutorial: https://djangotricks.blogspot.com/2019/02/how-to-export-data-to-xlsx-files.html
         # Docs: https://openpyxl.readthedocs.io/en/stable/tutorial.html#create-a-workbook
-        cls.worksheet.title = "Actuacions"
+        self.worksheet.title = "Actuacions"
 
         columns = [
             ("Eix", 40),
@@ -200,24 +192,23 @@ class ExportFunctions:
             ("Material de difusió (S/N)", 21),
             ("Incidències", 20)
         ]
-        cls.create_columns(columns)
-        cls.actuacions_2018_2019_rows_activities()
-        cls.actuacions_2018_2019_rows_stages()
-        cls.actuacions_2018_2019_rows_nouniversitaris()
-        cls.actuacions_2018_2019_rows_founded_projects()
-        # Total Stages: cls.row_number-Total Activities-1
+        self.create_columns(columns)
+        self.actuacions_2018_2019_rows_activities()
+        self.actuacions_2018_2019_rows_stages()
+        self.actuacions_2018_2019_rows_nouniversitaris()
+        self.actuacions_2018_2019_rows_founded_projects()
+        # Total Stages: self.row_number-Total Activities-1
 
-    @classmethod
-    def actuacions_2018_2019_rows_activities(cls):
-        obj = cls.get_sessions_obj()
-        cls.number_of_activities = len(obj)
+    def actuacions_2018_2019_rows_activities(self):
+        obj = self.get_sessions_obj()
+        self.number_of_activities = len(obj)
         for item in obj:
-            cls.row_number += 1
+            self.row_number += 1
 
-            axis = cls.get_correlation("axis", item.axis)
+            axis = self.get_correlation("axis", item.axis)
             if axis is None:
                 axis = ("", True)
-            subaxis = cls.get_correlation("subaxis", item.subaxis)
+            subaxis = self.get_correlation("subaxis", item.subaxis)
             if subaxis is None:
                 subaxis = ("", True)
             town = None
@@ -235,20 +226,19 @@ class ExportFunctions:
                 "No",
                 ""
             ]
-            cls.fill_row_data(row)
+            self.fill_row_data(row)
 
-    @classmethod
-    def actuacions_2018_2019_rows_stages(cls):
-        cls.stages_obj = ProjectStage.objects.filter(
-            subsidy_period=cls.subsidy_period).annotate(dcount=Count('project'))
-        cls.number_of_stages = len(cls.stages_obj)
-        for item in cls.stages_obj:
-            cls.row_number += 1
+    def actuacions_2018_2019_rows_stages(self):
+        self.stages_obj = ProjectStage.objects.filter(
+            subsidy_period=self.subsidy_period).annotate(dcount=Count('project'))
+        self.number_of_stages = len(self.stages_obj)
+        for item in self.stages_obj:
+            self.row_number += 1
 
-            axis = cls.get_correlation("axis", item.axis)
+            axis = self.get_correlation("axis", item.axis)
             if axis is None:
                 axis = ("", True)
-            subaxis = cls.get_correlation("subaxis", item.subaxis)
+            subaxis = self.get_correlation("subaxis", item.subaxis)
             if subaxis is None:
                 subaxis = ("", True)
             town = item.project.town
@@ -264,19 +254,18 @@ class ExportFunctions:
                 "No",
                 ""
             ]
-            cls.fill_row_data(row)
+            self.fill_row_data(row)
 
-    @classmethod
-    def actuacions_2018_2019_rows_nouniversitaris(cls):
-        obj = cls.get_sessions_obj(for_minors=True)
-        cls.number_of_nouniversitaris = len(obj)
+    def actuacions_2018_2019_rows_nouniversitaris(self):
+        obj = self.get_sessions_obj(for_minors=True)
+        self.number_of_nouniversitaris = len(obj)
         for item in obj:
-            cls.row_number += 1
+            self.row_number += 1
 
-            axis = cls.get_correlation("axis", item.axis)
+            axis = self.get_correlation("axis", item.axis)
             if axis is None:
                 axis = ("", True)
-            subaxis = cls.get_correlation("subaxis", item.subaxis)
+            subaxis = self.get_correlation("subaxis", item.subaxis)
             if subaxis is None:
                 subaxis = ("", True)
             town = None
@@ -294,10 +283,9 @@ class ExportFunctions:
                 "No",
                 ""
             ]
-            cls.fill_row_data(row)
+            self.fill_row_data(row)
 
-    @classmethod
-    def actuacions_2018_2019_rows_founded_projects(cls):
+    def actuacions_2018_2019_rows_founded_projects(self):
         """
         Tots els projectes que tinguin data de constitució dins de les dates de la convocatòria apareixeran
         a la pestanya d'EntitatsCreades.
@@ -312,21 +300,21 @@ class ExportFunctions:
         Després a la pestanya d'EntitatsCreades hem de fer el mateix filtre per saber quins tenen
         actuació creada, i deduïr per l'ordre quina ID li toca.
         """
-        obj = Project.objects.filter(constitution_date__range=cls.subsidy_period_range)
-        cls.number_of_founded_projects = len(obj)
+        obj = Project.objects.filter(constitution_date__range=self.subsidy_period_range)
+        self.number_of_founded_projects = len(obj)
         for project in obj:
             stages = ProjectStage.objects.filter(
-                project=project, subsidy_period=cls.subsidy_period
+                project=project, subsidy_period=self.subsidy_period
             ).order_by("-date_start")[:1]
             if stages.count() < 1:
                 continue
             stage = stages.all()[0]
 
-            cls.row_number += 1
-            axis = cls.get_correlation("axis", stage.axis)
+            self.row_number += 1
+            axis = self.get_correlation("axis", stage.axis)
             if axis is None:
                 axis = ("", True)
-            subaxis = cls.get_correlation("subaxis", stage.subaxis)
+            subaxis = self.get_correlation("subaxis", stage.subaxis)
             if subaxis is None:
                 subaxis = ("", True)
             town = project.town
@@ -342,12 +330,11 @@ class ExportFunctions:
                 "No",
                 ""
             ]
-            cls.fill_row_data(row)
+            self.fill_row_data(row)
 
-    @classmethod
-    def export_stages_2018_2019(cls):
-        cls.worksheet = cls.workbook.create_sheet("Acompanyaments")
-        cls.row_number = 1
+    def export_stages_2018_2019(self):
+        self.worksheet = self.workbook.create_sheet("Acompanyaments")
+        self.row_number = 1
 
         columns = [
             ("Referència", 20),
@@ -361,36 +348,35 @@ class ExportFunctions:
             ("Breu descripció del projecte", 50),
             ("Total hores d'acompanyament", 10),
         ]
-        cls.create_columns(columns)
+        self.create_columns(columns)
 
-        cls.stages_2018_2019_rows()
+        self.stages_2018_2019_rows()
 
-    @classmethod
-    def stages_2018_2019_rows(cls):
-        reference_number = cls.number_of_activities
-        for item in cls.stages_obj:
-            cls.row_number += 1
+    def stages_2018_2019_rows(self):
+        reference_number = self.number_of_activities
+        for item in self.stages_obj:
+            self.row_number += 1
             reference_number += 1
             hours = item.hours if item.hours is not None else ("", True)
             town = item.project.town if item.project.town is not None else ("", True)
             row = [
-                f"{ reference_number} { item.project.name }",  # Referència.
+                f"{reference_number} {item.project.name}",  # Referència.
                 item.project.name,  # Camp no editable, l'ha d'omplir l'excel automàticament.
-                ("Entitat", True),  # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat PENDENT.
+                ("Entitat", True),
+                # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat PENDENT.
                 item.project.name,  # "En cas d'entitat (Nom de l'entitat)"
                 ("Constituida", True),  # "En cas d'entitat" Opcions: Constituida/En procés/No finalitzat. PENDENT.
-                cls.get_correlation("stage_type", item.stage_type),  # "Creació/consolidació".
+                self.get_correlation("stage_type", item.stage_type),  # "Creació/consolidació".
                 item.date_start,
                 town,
                 item.project.object_finality,  # Breu descripció.
                 hours  # Total hores d'acompanyament.
             ]
-            cls.fill_row_data(row)
+            self.fill_row_data(row)
 
-    @classmethod
-    def export_founded_projects_2018_2019(cls):
-        cls.worksheet = cls.workbook.create_sheet("EntitatCreada")
-        cls.row_number = 1
+    def export_founded_projects_2018_2019(self):
+        self.worksheet = self.workbook.create_sheet("EntitatCreada")
+        self.row_number = 1
 
         columns = [
             ("Referència", 10),
@@ -402,39 +388,34 @@ class ExportFunctions:
             ("Telèfon", 10),
             ("Economia solidària (S/N)", 10),
         ]
-        cls.create_columns(columns)
+        self.create_columns(columns)
 
-        cls.founded_projects_2018_2019_rows()
+        self.founded_projects_2018_2019_rows()
 
-    @classmethod
-    def founded_projects_2018_2019_rows(cls):
+    def founded_projects_2018_2019_rows(self):
         # The Ids start at 1, so later we add 1 to this number to have the right ID.
         founded_projects_reference_number = \
-            cls.number_of_stages + cls.number_of_activities + cls.number_of_nouniversitaris
-        obj = Project.objects.filter(constitution_date__range=cls.subsidy_period_range)
-        print(founded_projects_reference_number)
+            self.number_of_stages + self.number_of_activities + self.number_of_nouniversitaris
+        obj = Project.objects.filter(constitution_date__range=self.subsidy_period_range)
         for project in obj:
             # Repeating the same filter than in Actuacions to determine if we have an Actuació or not
             reference_number = ""
             name = ""
             stages = ProjectStage.objects.filter(
-                project=project, subsidy_period=cls.subsidy_period
+                project=project, subsidy_period=self.subsidy_period
             ).order_by("-date_start")[:1]
             if stages.count() > 0:
                 stage = stages.all()[0]
-                print(f"In project: {project.id }: {project.name}, "
-                      f"stage start: { stage.date_start }, "
-                      f"tipus: { stage.get_stage_type_display()},"
-                      f"stge id: {stage.id }.")
                 founded_projects_reference_number += 1
-                reference_number = f"{ founded_projects_reference_number } { project.name }"
+                reference_number = f"{founded_projects_reference_number} {project.name}"
                 name = project.name
 
-            cls.row_number += 1
+            self.row_number += 1
             if project.cif is None:
-                cls.error_message.add("<p><strong>Error: falta NIF</strong>. L'entitat '{}' apareix com a EntitatCreada"
-                                      " perquè té una Data de constitució dins de la convocatòria, però si no té NIF, "
-                                      "no pot ser inclosa a l'excel.</p>".format(project.name))
+                self.error_message.add(
+                    "<p><strong>Error: falta NIF</strong>. L'entitat '{}' apareix com a EntitatCreada"
+                    " perquè té una Data de constitució dins de la convocatòria, però si no té NIF, "
+                    "no pot ser inclosa a l'excel.</p>".format(project.name))
                 project.cif = ""
             row = [
                 reference_number,  # Referència. En aquest full no cal que tinguin relació amb Actuacions.
@@ -446,12 +427,11 @@ class ExportFunctions:
                 project.phone,
                 "Sí"
             ]
-            cls.fill_row_data(row)
+            self.fill_row_data(row)
 
-    @classmethod
-    def export_participants_2018_2019(cls):
-        cls.worksheet = cls.workbook.create_sheet("Participants")
-        cls.row_number = 1
+    def export_participants_2018_2019(self):
+        self.worksheet = self.workbook.create_sheet("Participants")
+        self.row_number = 1
 
         columns = [
             ("Referència", 40),
@@ -463,28 +443,27 @@ class ExportFunctions:
             ("Data naixement", 10),
             ("Municipi del participant", 20),
         ]
-        cls.create_columns(columns)
+        self.create_columns(columns)
 
-        cls.participants_2018_2019_rows()
+        self.participants_2018_2019_rows()
 
-    @classmethod
-    def participants_2018_2019_rows(cls):
+    def participants_2018_2019_rows(self):
         activity_reference_number = 0
-        obj = cls.get_sessions_obj(for_minors=False)
+        obj = self.get_sessions_obj(for_minors=False)
         for activity in obj:
             activity_reference_number += 1  # We know that activities where generated first, so it starts at 1.
             for participant in activity.enrolled.all():
-                cls.row_number += 1
+                self.row_number += 1
                 if participant.gender is None:
                     gender = ""
                 else:
-                    gender = cls.get_correlation('gender', participant.gender)
+                    gender = self.get_correlation('gender', participant.gender)
                 if participant.town is None:
                     town = ""
                 else:
                     town = participant.town.name
                 row = [
-                    f"{ activity_reference_number} { activity.name }",  # Referència.
+                    f"{activity_reference_number} {activity.name}",  # Referència.
                     activity.name,  # Nom de l'actuació. Camp automàtic de l'excel.
                     participant.surname,
                     participant.first_name,
@@ -493,12 +472,11 @@ class ExportFunctions:
                     participant.birthdate,
                     town
                 ]
-                cls.fill_row_data(row)
+                self.fill_row_data(row)
 
-    @classmethod
-    def export_nouniversitaris_2018_2019(cls):
-        cls.worksheet = cls.workbook.create_sheet("ParticipantsNoUniversitaris")
-        cls.row_number = 1
+    def export_nouniversitaris_2018_2019(self):
+        self.worksheet = self.workbook.create_sheet("ParticipantsNoUniversitaris")
+        self.row_number = 1
 
         columns = [
             ("Referència", 40),
@@ -506,21 +484,20 @@ class ExportFunctions:
             ("Grau d'estudis", 20),
             ("Nom centre educatiu", 20),
         ]
-        cls.create_columns(columns)
+        self.create_columns(columns)
 
-        cls.nouniversitaris_2018_2019_rows()
+        self.nouniversitaris_2018_2019_rows()
 
-    @classmethod
-    def nouniversitaris_2018_2019_rows(cls):
-        nouniversitari_reference_number = cls.number_of_stages + cls.number_of_activities
-        obj = cls.get_sessions_obj(for_minors=True)
+    def nouniversitaris_2018_2019_rows(self):
+        nouniversitari_reference_number = self.number_of_stages + self.number_of_activities
+        obj = self.get_sessions_obj(for_minors=True)
         for activity in obj:
-            cls.row_number += 1
+            self.row_number += 1
             nouniversitari_reference_number += 1
             row = [
-                f"{ nouniversitari_reference_number} {activity.name }",  # Referència.
+                f"{nouniversitari_reference_number} {activity.name}",  # Referència.
                 activity.name,  # Nom de l'actuació. Camp automàtic de l'excel.
-                cls.get_correlation('minors_grade', activity.minors_grade),
+                self.get_correlation('minors_grade', activity.minors_grade),
                 activity.minors_school_name,
             ]
-            cls.fill_row_data(row)
+            self.fill_row_data(row)
