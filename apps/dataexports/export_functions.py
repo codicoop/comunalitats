@@ -427,7 +427,7 @@ class ExportFunctions:
                       f"tipus: { stage.get_stage_type_display()},"
                       f"stge id: {stage.id }.")
                 founded_projects_reference_number += 1
-                reference_number = founded_projects_reference_number
+                reference_number = f"{ founded_projects_reference_number } { project.name }"
                 name = project.name
 
             cls.row_number += 1
