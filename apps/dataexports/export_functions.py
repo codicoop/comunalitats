@@ -33,8 +33,7 @@ class ExportFunctions:
     worksheet = None
     subsidy_period = 2019
 
-    # TODO: Passar això a una funció get_stages_obj
-    stages_obj = ProjectStage.objects.filter(subsidy_period=subsidy_period).annotate(dcount=Count('project'))
+    stages_obj = None
 
     subsidy_period_range = None
     row_number = 1
@@ -42,6 +41,7 @@ class ExportFunctions:
     number_of_activities = 0
     number_of_stages = 0
     number_of_nouniversitaris = 0
+    number_of_founded_projects = 0
 
     correlations = dict()
 
@@ -204,6 +204,7 @@ class ExportFunctions:
         cls.actuacions_2018_2019_rows_activities()
         cls.actuacions_2018_2019_rows_stages()
         cls.actuacions_2018_2019_rows_nouniversitaris()
+        cls.actuacions_2018_2019_rows_founded_projects()
         # Total Stages: cls.row_number-Total Activities-1
 
     @classmethod
@@ -238,6 +239,8 @@ class ExportFunctions:
 
     @classmethod
     def actuacions_2018_2019_rows_stages(cls):
+        cls.stages_obj = ProjectStage.objects.filter(
+            subsidy_period=cls.subsidy_period).annotate(dcount=Count('project'))
         cls.number_of_stages = len(cls.stages_obj)
         for item in cls.stages_obj:
             cls.row_number += 1
@@ -288,6 +291,54 @@ class ExportFunctions:
                 item.date_start,
                 town,
                 item.minors_participants_number,
+                "No",
+                ""
+            ]
+            cls.fill_row_data(row)
+
+    @classmethod
+    def actuacions_2018_2019_rows_founded_projects(cls):
+        """
+        Tots els projectes que tinguin data de constitució dins de les dates de la convocatòria apareixeran
+        a la pestanya d'EntitatsCreades.
+        No obstant només aquells que tinguin una actuació vinculada durant el període de la convocatòria han de
+        d'aparèixer a la pestanya d'Actuacions.
+
+        Els que tenen això vol dir que hi ha hagut un acompanyament del projecte dins de la convocatòria.
+        Poden haver-hi hagut varis acompanyaments, per tant, hem de d'obtenir l'acompanyament més recent.
+
+        Si tot això existeix mostrem les dades del més recent, sinó, ignorem el projecte.
+
+        Després a la pestanya d'EntitatsCreades hem de fer el mateix filtre per saber quins tenen
+        actuació creada, i deduïr per l'ordre quina ID li toca.
+        """
+        obj = Project.objects.filter(constitution_date__range=cls.subsidy_period_range)
+        cls.number_of_founded_projects = len(obj)
+        for project in obj:
+            stages = ProjectStage.objects.filter(
+                project=project, subsidy_period=cls.subsidy_period
+            ).order_by("-date_start")[:1]
+            if stages.count() < 1:
+                continue
+            stage = stages.all()[0]
+
+            cls.row_number += 1
+            axis = cls.get_correlation("axis", stage.axis)
+            if axis is None:
+                axis = ("", True)
+            subaxis = cls.get_correlation("subaxis", stage.subaxis)
+            if subaxis is None:
+                subaxis = ("", True)
+            town = project.town
+            if town is None or town == "":
+                town = ("", True)
+            row = [
+                axis,
+                subaxis,
+                project.name,
+                stage.date_start,
+                town,
+                stage.involved_partners.count(),
                 "No",
                 ""
             ]
@@ -357,21 +408,42 @@ class ExportFunctions:
 
     @classmethod
     def founded_projects_2018_2019_rows(cls):
+        # The Ids start at 1, so later we add 1 to this number to have the right ID.
+        founded_projects_reference_number = \
+            cls.number_of_stages + cls.number_of_activities + cls.number_of_nouniversitaris
         obj = Project.objects.filter(constitution_date__range=cls.subsidy_period_range)
-        for item in obj:
+        print(founded_projects_reference_number)
+        for project in obj:
+            # Repeating the same filter than in Actuacions to determine if we have an Actuació or not
+            reference_number = ""
+            name = ""
+            stages = ProjectStage.objects.filter(
+                project=project, subsidy_period=cls.subsidy_period
+            ).order_by("-date_start")[:1]
+            if stages.count() > 0:
+                stage = stages.all()[0]
+                print(f"In project: {project.id }: {project.name}, "
+                      f"stage start: { stage.date_start }, "
+                      f"tipus: { stage.get_stage_type_display()},"
+                      f"stge id: {stage.id }.")
+                founded_projects_reference_number += 1
+                reference_number = founded_projects_reference_number
+                name = project.name
+
             cls.row_number += 1
-            if item.cif is None:
+            if project.cif is None:
                 cls.error_message.add("<p><strong>Error: falta NIF</strong>. L'entitat '{}' apareix com a EntitatCreada"
                                       " perquè té una Data de constitució dins de la convocatòria, però si no té NIF, "
-                                      "no pot ser inclosa a l'excel.</p>".format(item.name))
+                                      "no pot ser inclosa a l'excel.</p>".format(project.name))
+                project.cif = ""
             row = [
-                "",  # Referència. En aquest full no cal que tinguin relació amb Actuacions.
-                "",  # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
-                item.name,
-                item.cif,
-                item.partners.all()[0].full_name,
-                item.mail,
-                item.phone,
+                reference_number,  # Referència. En aquest full no cal que tinguin relació amb Actuacions.
+                name,  # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
+                project.name,
+                project.cif,
+                project.partners.all()[0].full_name,
+                project.mail,
+                project.phone,
                 "Sí"
             ]
             cls.fill_row_data(row)
