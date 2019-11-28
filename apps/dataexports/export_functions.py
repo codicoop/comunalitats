@@ -442,6 +442,10 @@ class ExportFunctions:
             ("Gènere", 10),
             ("Data naixement", 10),
             ("Municipi del participant", 20),
+            ("[Situació laboral]", 20),
+            ("[Procedència]", 20),
+            ("[Nivell d'estudis]", 20),
+            ("[Com ens has conegut]", 20),
         ]
         self.create_columns(columns)
 
@@ -470,7 +474,11 @@ class ExportFunctions:
                     participant.id_number,
                     gender,
                     participant.birthdate,
-                    town
+                    town,
+                    participant.get_employment_situation_display() if participant.get_employment_situation_display() else "",
+                    participant.get_birth_place_display() if participant.get_birth_place_display() else "",
+                    participant.get_educational_level_display() if participant.get_educational_level_display() else "",
+                    participant.get_discovered_us_display() if participant.get_discovered_us_display() else "",
                 ]
                 self.fill_row_data(row)
 
