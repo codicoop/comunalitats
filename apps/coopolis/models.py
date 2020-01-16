@@ -72,7 +72,7 @@ class Project(models.Model):
         ('H', 'Habitatge'),
         ('L', 'Logística'),
         ('E', 'Educació'),
-        ('C', 'Cultura'),
+        ('CU', 'Cultura'),
         ('S', 'Assessorament'),
         ('M', 'Alimentació'),
         ('U', 'Cures'),
