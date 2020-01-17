@@ -203,6 +203,13 @@ class Activity(models.Model):
                 return datetime.combine(self.date_start, self.ending_time)
         return datetime.combine(self.date_end, self.ending_time)
 
+    def axis_summary(self):
+        axis = self.axis if self.axis else '(cap)'
+        subaxis = self.subaxis if self.subaxis else '(cap)'
+        return f"{axis} - {subaxis}"
+    axis_summary.short_description = "Eix - Subeix"
+    axis_summary.admin_order_field = 'axis'
+
     def __str__(self):
         return self.name
 

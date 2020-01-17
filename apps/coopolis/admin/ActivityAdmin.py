@@ -20,7 +20,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         js = ('js/grappellihacks.js',)
 
     form = ActivityForm
-    list_display = ('date_start', 'spots', 'remaining_spots', 'name', 'axis', 'subaxis', 'attendee_filter_field', 'attendee_list_field',
+    list_display = ('date_start', 'spots', 'remaining_spots', 'name', 'axis_summary', 'attendee_filter_field', 'attendee_list_field',
                     'send_reminder_field')
     readonly_fields = ('attendee_list_field', 'attendee_filter_field', 'send_reminder_field')
     summernote_fields = ('objectives',)
@@ -49,7 +49,6 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         'm2m': ['enrolled'],
     }
     date_hierarchy = 'date_start'
-    list_editable = ('axis', 'subaxis',)
 
     def get_form(self, request, obj=None, **kwargs):
         # Hack to be able to use self.request at the form.
