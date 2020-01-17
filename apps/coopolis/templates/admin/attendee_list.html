@@ -70,7 +70,7 @@ td {
     <tbody>
       <tr>
         <td style="width: 23%;" class="table-header-caption">EXPEDIENT</td>
-        <td>{{ num_expedient }}</td>
+        <td>{{ activity.subsidy_period.number|default_if_none:"" }}</td>
         <td style="width: 18%;" class="table-header-caption">PROJECTE</td>
         <td class="table-header-content">{{ activity.organizer|default_if_none:"" }}</td>
       </tr>

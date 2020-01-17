@@ -210,6 +210,13 @@ class Activity(models.Model):
     axis_summary.short_description = "Eix - Subeix"
     axis_summary.admin_order_field = 'axis'
 
+    @property
+    def subsidy_period(self):
+        model = apps.get_model('dataexports', 'SubsidyPeriod')
+        # Using date start as the reference one, if an activity last for more than 1 day it should not matter here.
+        obj = model.objects.get(date_start__lte=self.date_start, date_end__gte=self.date_start)
+        return obj
+
     def __str__(self):
         return self.name
 
