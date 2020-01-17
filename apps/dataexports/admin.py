@@ -1,7 +1,12 @@
 from django.contrib import admin
 from django.urls import path, reverse
 from django.utils.html import format_html
-from dataexports.models import DataExports
+from dataexports.models import DataExports, SubsidyPeriod
+
+
+@admin.register(SubsidyPeriod)
+class SubsidyPeriodAdmin(admin.ModelAdmin):
+    list_display = ('name', 'number', 'date_start', 'date_end')
 
 
 @admin.register(DataExports)
