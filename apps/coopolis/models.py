@@ -8,6 +8,7 @@ from cc_users.models import BaseUser
 from cc_courses.models import Entity
 from cc_users.managers import CCUserManager
 from coopolis.helpers import get_subaxis_choices
+from dataexports.models import SubsidyPeriod
 
 
 def stage_certificate_upload_path(instance, filename):
@@ -283,8 +284,7 @@ class ProjectStage(models.Model):
     )
     stage_type = models.CharField("tipus d'acompanyament", max_length=2, default=DEFAULT_STAGE_TYPE,
                                   choices=STAGE_TYPE_OPTIONS)
-    subsidy_period = models.CharField("convocatòria", blank=True, null=True, max_length=4, default=2020,
-                                      choices=settings.SUBSIDY_PERIOD_OPTIONS)
+    subsidy_period = models.ForeignKey(SubsidyPeriod, null=True, on_delete=models.SET_NULL)
     date_start = models.DateField("data d'inici", null=True, blank=True, default=datetime.date.today)
     date_end = models.DateField("data de finalització", null=True, blank=True)
     follow_up = models.TextField("seguiment", null=True, blank=True)
