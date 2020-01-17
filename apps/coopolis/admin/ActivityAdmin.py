@@ -158,7 +158,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
             mail_to_bcc = set()
             for participant in obj.enrolled.all():
                 mail_to_bcc.add(participant.email)
-            self._send_confirmation_email(mail_to_bcc, obj, request)
+            self._send_reminder_email(mail_to_bcc, obj, request)
             self.message_user(request, "Recordatoris enviats correctament.")
             return HttpResponseRedirect("../../")
 
@@ -171,7 +171,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
             request, 'admin/reminder_confirmation.html', context)
 
     @staticmethod
-    def _send_confirmation_email(mail_to_bcc, activity, request):
+    def _send_reminder_email(mail_to_bcc, activity, request):
         # TODO: Funció molt similar a la que hi ha a EnrollActivityView, unificar-les.
         from django.core.mail.message import EmailMultiAlternatives
         from django.utils.html import strip_tags
@@ -183,7 +183,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
             'contact_number': config.CONTACT_PHONE_NUMBER,
             'request': request,
         })
-        template = Template(config.EMAIL_ENROLLMENT_CONFIRMATION)
+        template = Template(config.EMAIL_ENROLLMENT_REMINDER)
         html_content = template.render(context)
         text_content = strip_tags(html_content)
 
@@ -193,7 +193,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
 
         # create the email, and attach the HTML version as well.
         msg = EmailMultiAlternatives(
-            config.EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT.format(activity.name),
+            config.EMAIL_ENROLLMENT_REMINDER_SUBJECT.format(activity.name),
             text_content,
             config.EMAIL_FROM_ENROLLMENTS,
             mail_to,

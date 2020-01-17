@@ -271,7 +271,7 @@ CONSTANCE_CONFIG = {
         "Cos del correu de recordatori que s'envia a tothom que s'ha inscrit"
         "a una activitat mitjançant el botó per enviar el recordatori a tothom."),
     'EMAIL_ENROLLMENT_REMINDER_SUBJECT': (
-        "",
+        "Recordatori d'inscripció a l'activitat: {}",
         "Assumpte del correu de recordatori que s'envia a tothom que s'ha inscrit"
         "a una activitat mitjançant el botó per enviar el recordatori a tothom."),
     'EMAIL_SIGNUP_WELCOME_SUBJECT': (
