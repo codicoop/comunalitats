@@ -6,6 +6,7 @@ from uuid import uuid4
 from datetime import date, datetime, time
 from easy_thumbnails.fields import ThumbnailerImageField
 from django.apps import apps
+from django.core.validators import ValidationError
 
 from cc_lib.utils import slugify_model
 from coopolis.managers import Published
@@ -234,6 +235,15 @@ class Activity(models.Model):
         # Using date start as the reference one, if an activity last for more than 1 day it should not matter here.
         obj = model.objects.get(date_start__lte=self.date_start, date_end__gte=self.date_start)
         return obj
+
+    def clean(self):
+        super().clean()
+        if self.minors_grade or self.minors_participants_number or self.minors_school_cif or self.minors_school_name\
+                or self.minors_teacher:
+            if not self.for_minors:
+                raise ValidationError(
+                    {'for_minors': "Has omplert dades relatives a sessions dirigides a menors però no has marcat "
+                                   "aquesta casella. Marca-la per tal que la sessió es justifiqui com a tal."})
 
     def __str__(self):
         return self.name

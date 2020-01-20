@@ -310,14 +310,16 @@ class ProjectStage(models.Model):
 
     def clean(self):
         super().clean()
-        if not self.subaxis:
-            return
+        if self.subaxis:
+            if not self.axis:
+                raise ValidationError({'axis': "Si selecciones un sub-eix, cal indicar també l'eix corresponent."})
+            if self.axis not in self.subaxis:
+                raise ValidationError({'subaxis': f"El sub-eix { self.subaxis } no pertany a l'eix { self.axis }."})
 
-        if not self.axis:
-            raise ValidationError({'axis': "Si selecciones un sub-eix, cal indicar també l'eix corresponent."})
-
-        if self.axis not in self.subaxis:
-            raise ValidationError({'subaxis': f"El sub-eix { self.subaxis } no pertany a l'eix { self.axis }."})
+        if self.subsidy_period and self.date_end:
+            if self.date_end < self.subsidy_period.date_start or self.date_end > self.subsidy_period.date_end:
+                raise ValidationError({'date_end': "La data de finalització ha d'estar dins del període de la "
+                                                   "convocatòria seleccionada."})
 
     def __str__(self):
         return f"{str(self.project)}: {self.get_stage_type_display()}"
