@@ -36,6 +36,10 @@ GRAPPELLI_ADMIN_TITLE = ""
 # the settings module environment variable is set to a file that does it:
 DATABASES = {}
 
+# Base folder for custom function to upload private or public files to Wasabi/S3 providers. Without trailing slash.
+AWS_PUBLIC_MEDIA_LOCATION = 'media/public'
+AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
+
 # Application definition
 INSTALLED_APPS = [
     'maintenance_mode',

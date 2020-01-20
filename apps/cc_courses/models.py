@@ -12,6 +12,7 @@ from cc_lib.utils import slugify_model
 from coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 from coopolis.helpers import get_subaxis_choices
+from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 
 
 def upload_path(instance, filename):
@@ -98,7 +99,7 @@ class Course(models.Model):
     description = models.TextField("descripció", null=True)
     publish = models.BooleanField("publicat")
     created = models.DateTimeField("data de creació", null=True, blank=True, auto_now_add=True)
-    banner = ThumbnailerImageField(null=True, upload_to=upload_path, max_length=250, blank=True)
+    banner = ThumbnailerImageField(null=True, storage=PublicMediaStorage(), max_length=250, blank=True)
     place = models.ForeignKey(CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc", blank=True,
                               help_text="Aquesta dada de moment és d'ús intern i no es publica.")
     objects = models.Manager()
@@ -154,16 +155,14 @@ class Activity(models.Model):
                             null=True, blank=True, max_length=1)
     subaxis = models.CharField("sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
                                null=True, blank=True, max_length=2, choices=get_subaxis_choices())
-    scanned_signatures = models.FileField("document amb signatures", blank=True, null=True,
-                                          upload_to=activity_signatures_upload_path, max_length=250)
     photo1 = models.FileField("fotografia", blank=True, null=True,
-                              upload_to=photo1_signatures_upload_path, max_length=250)
+                              storage=PrivateMediaStorage(), max_length=250)
     photo3 = models.FileField("fotografia 2", blank=True, null=True,
-                              upload_to=photo3_upload_path, max_length=250)
+                              storage=PrivateMediaStorage(), max_length=250)
     photo2 = models.FileField("document acreditatiu", blank=True, null=True,
-                              upload_to=photo2_signatures_upload_path, max_length=250)
+                              storage=PrivateMediaStorage(), max_length=250)
     file1 = models.FileField("material de difusió", blank=True, null=True,
-                              upload_to=file1_upload_path, max_length=250)
+                             storage=PrivateMediaStorage(), max_length=250)
     publish = models.BooleanField("publicada", default=True)
     # minors
     for_minors = models.BooleanField(

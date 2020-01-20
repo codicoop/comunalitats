@@ -9,6 +9,7 @@ from cc_courses.models import Entity
 from cc_users.managers import CCUserManager
 from coopolis.helpers import get_subaxis_choices
 from dataexports.models import SubsidyPeriod
+from apps.coopolis.storage_backends import PrivateMediaStorage
 
 
 def stage_certificate_upload_path(instance, filename):
@@ -111,11 +112,11 @@ class Project(models.Model):
     solves_necessities = models.TextField("quines necessitats resol el vostre projecte?", blank=True, null=True)
     social_base = models.TextField("compta el vostre projecte amb una base social?", blank=True, null=True)
     constitution_date = models.DateField("data de constitució", blank=True, null=True)
-    estatuts = models.FileField("estatuts", blank=True, null=True, upload_to=estatuts_upload_path, max_length=250)
-    viability = models.FileField("pla de viabilitat", blank=True, null=True,
-                                 upload_to=estatuts_upload_path, max_length=250)
-    sostenibility = models.FileField("pla de sostenibilitat", blank=True, null=True,
-                                     upload_to=estatuts_upload_path, max_length=250)
+    estatuts = models.FileField("estatuts", blank=True, null=True, storage=PrivateMediaStorage(), max_length=250)
+    viability = models.FileField("pla de viabilitat", blank=True, null=True, storage=PrivateMediaStorage(),
+                                 max_length=250)
+    sostenibility = models.FileField("pla de sostenibilitat", blank=True, null=True, storage=PrivateMediaStorage(),
+                                     max_length=250)
     derivation = models.ForeignKey(Derivation, verbose_name="derivat", on_delete=models.SET_NULL, blank=True, null=True)
     derivation_date = models.DateField("data de derivació", blank=True, null=True)
 
@@ -298,12 +299,13 @@ class ProjectStage(models.Model):
         "User", verbose_name="persona responsable", blank=True, null=True, on_delete=models.SET_NULL,
         related_name='stage_responsible', help_text="Persona de l'equip al càrrec de l'acompanyament. Per aparèixer "
         "al desplegable, cal que la persona tingui activada la opció 'Membre del personal'.")
-    scanned_signatures = models.FileField("fitxa de projectes (document amb signatures)", blank=True, null=True,
-                                          upload_to=stage_signatures_upload_path, max_length=250)
-    scanned_certificate = models.FileField("certificat", blank=True, null=True,
-                                           upload_to=stage_certificate_upload_path, max_length=250)
-    hours = models.IntegerField("número d'hores", help_text="Camp necessari per la justificació.", null=True,
-                                blank=True)
+    scanned_signatures = models.FileField(
+        "fitxa de projectes (document amb signatures)", blank=True, null=True, storage=PrivateMediaStorage(),
+        max_length=250)
+    scanned_certificate = models.FileField(
+        "certificat", blank=True, null=True, storage=PrivateMediaStorage(), max_length=250)
+    hours = models.IntegerField(
+        "número d'hores", help_text="Camp necessari per la justificació.", null=True, blank=True)
     involved_partners = models.ManyToManyField(
         User, verbose_name="persones involucrades", blank=True, related_name='stage_involved_partners',
         help_text="Persones que apareixeran a la justificació com a que han participat a l'acompanyament.")
