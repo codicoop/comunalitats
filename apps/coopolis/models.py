@@ -12,31 +12,6 @@ from dataexports.models import SubsidyPeriod
 from apps.coopolis.storage_backends import PrivateMediaStorage
 
 
-def stage_certificate_upload_path(instance, filename):
-    if isinstance(instance, ProjectStage):
-        return 'course.stage_certificate/{0}/{1}'.format(str(uuid4()), filename)
-
-
-def stage_signatures_upload_path(instance, filename):
-    if isinstance(instance, ProjectStage):
-        return 'course.stage_signatures/{0}/{1}'.format(str(uuid4()), filename)
-
-
-def estatuts_upload_path(instance, filename):
-    if isinstance(instance, Project):
-        return 'course.estatuts/{0}/{1}'.format(str(uuid4()), filename)
-
-
-def viability_upload_path(instance, filename):
-    if isinstance(instance, Project):
-        return 'course.pla_viabilitat/{0}/{1}'.format(str(uuid4()), filename)
-
-
-def sostenibility_upload_path(instance, filename):
-    if isinstance(instance, Project):
-        return 'course.pla_sostenibilitat/{0}/{1}'.format(str(uuid4()), filename)
-
-
 class Town(models.Model):
     class Meta:
         verbose_name = "població"

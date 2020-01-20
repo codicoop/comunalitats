@@ -14,11 +14,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='projectstage',
             name='scanned_certificate',
-            field=models.FileField(blank=True, max_length=250, null=True, upload_to=coopolis.models.stage_certificate_upload_path, verbose_name='certificat'),
+            field=models.FileField(blank=True, max_length=250, null=True, verbose_name='certificat'),
         ),
         migrations.AlterField(
             model_name='projectstage',
             name='scanned_signatures',
-            field=models.FileField(blank=True, max_length=250, null=True, upload_to=coopolis.models.stage_signatures_upload_path, verbose_name='fitxa de projectes (document amb signatures)'),
+            field=models.FileField(blank=True, max_length=250, null=True, verbose_name='fitxa de projectes (document amb signatures)'),
         ),
     ]

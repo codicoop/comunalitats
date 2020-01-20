@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='activity',
             name='scanned_signatures',
-            field=models.FileField(blank=True, max_length=250, null=True, upload_to=cc_courses.models.activity_signatures_upload_path, verbose_name='document amb signatures'),
+            field=models.FileField(blank=True, max_length=250, null=True, verbose_name='document amb signatures'),
         ),
     ]

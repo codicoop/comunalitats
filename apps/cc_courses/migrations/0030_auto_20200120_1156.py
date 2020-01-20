@@ -14,11 +14,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='activity',
             name='file1',
-            field=models.FileField(blank=True, max_length=250, null=True, upload_to=cc_courses.models.file1_upload_path, verbose_name='material de difusió'),
+            field=models.FileField(blank=True, max_length=250, null=True, verbose_name='material de difusió'),
         ),
         migrations.AddField(
             model_name='activity',
             name='photo3',
-            field=models.FileField(blank=True, max_length=250, null=True, upload_to=cc_courses.models.photo3_upload_path, verbose_name='fotografia 2'),
+            field=models.FileField(blank=True, max_length=250, null=True, verbose_name='fotografia 2'),
         ),
     ]

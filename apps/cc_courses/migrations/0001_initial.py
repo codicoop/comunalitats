@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(null=True, verbose_name='descripció')),
                 ('published', models.BooleanField(verbose_name='publicat')),
                 ('created', models.DateTimeField(blank=True, null=True)),
-                ('banner', easy_thumbnails.fields.ThumbnailerImageField(max_length=250, null=True, upload_to=cc_courses.models.upload_path)),
+                ('banner', easy_thumbnails.fields.ThumbnailerImageField(max_length=250, null=True)),
             ],
             options={
                 'verbose_name': 'formació',

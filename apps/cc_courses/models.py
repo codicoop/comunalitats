@@ -15,36 +15,6 @@ from coopolis.helpers import get_subaxis_choices
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 
 
-def upload_path(instance, filename):
-    if isinstance(instance, Course):
-        return 'course.banner/{0}/banner.png'.format(str(uuid4()), filename)
-
-
-def activity_signatures_upload_path(instance, filename):
-    if isinstance(instance, Activity):
-        return 'course.activity_signatures/{0}/{1}'.format(str(uuid4()), filename)
-
-
-def photo1_signatures_upload_path(instance, filename):
-    if isinstance(instance, Activity):
-        return 'course.activity_photo1/{0}/{1}'.format(str(uuid4()), filename)
-
-
-def photo2_signatures_upload_path(instance, filename):
-    if isinstance(instance, Activity):
-        return 'course.activity_photo2/{0}/{1}'.format(str(uuid4()), filename)
-
-
-def photo3_upload_path(instance, filename):
-    if isinstance(instance, Activity):
-        return 'course.activity_photo3/{0}/{1}'.format(str(uuid4()), filename)
-
-
-def file1_upload_path(instance, filename):
-    if isinstance(instance, Activity):
-        return 'course.activity_file1/{0}/{1}'.format(str(uuid4()), filename)
-
-
 class CoursePlace(models.Model):
     class Meta:
         verbose_name = "lloc"

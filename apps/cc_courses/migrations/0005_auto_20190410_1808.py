@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='course',
             name='banner',
-            field=easy_thumbnails.fields.ThumbnailerImageField(blank=True, max_length=250, null=True, upload_to=cc_courses.models.upload_path),
+            field=easy_thumbnails.fields.ThumbnailerImageField(blank=True, max_length=250, null=True),
         ),
     ]
