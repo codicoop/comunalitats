@@ -103,8 +103,12 @@ class Course(models.Model):
             return reverse('course', args=[str(self.slug)])
         return None
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("title__icontains", )
+
     def __str__(self):
-        return self.title
+        return f"{self.title} ({self.date_start})"
 
 
 class Activity(models.Model):

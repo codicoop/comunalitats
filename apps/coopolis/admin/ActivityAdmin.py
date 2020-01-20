@@ -43,10 +43,11 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         })
     )
     # define the raw_id_fields
-    raw_id_fields = ('enrolled',)
+    raw_id_fields = ('enrolled', 'course')
     # define the autocomplete_lookup_fields
     autocomplete_lookup_fields = {
         'm2m': ['enrolled'],
+        'fk': ['course'],
     }
     date_hierarchy = 'date_start'
 
