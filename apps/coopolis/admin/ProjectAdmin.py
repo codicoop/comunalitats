@@ -28,7 +28,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
     list_filter = ('subsidy_period', ('stage_responsible', admin.RelatedOnlyFieldListFilter), 'date_start',
                    'stage_type', 'axis', 'organizer', 'project__sector')
     actions = ["export_as_csv"]
-    search_fields = ['project__name']
+    search_fields = ['project__name__unaccent']
     list_editable = ('axis', 'subaxis', )
 
     def project_field_ellipsis(self, obj):
@@ -106,8 +106,8 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
 
     form = ProjectFormAdmin
     list_display = ('id', 'name', 'mail', 'phone', 'registration_date', 'stages_field', 'last_stage_responsible')
-    search_fields = ('id', 'name', 'web', 'mail', 'phone', 'registration_date', 'object_finality', 'project_origins',
-                     'solves_necessities', 'social_base', 'sector')
+    search_fields = ('id', 'name__unaccent', 'web', 'mail', 'phone', 'registration_date', 'object_finality',
+                     'project_origins', 'solves_necessities', 'social_base', 'sector')
     list_filter = ('registration_date', 'sector', 'project_status')
     readonly_fields = ('id', )
     actions = ["export_as_csv"]

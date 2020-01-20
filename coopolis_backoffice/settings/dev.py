@@ -39,6 +39,7 @@ DATABASES = {}
 # Application definition
 INSTALLED_APPS = [
     'maintenance_mode',
+    'django.contrib.postgres',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

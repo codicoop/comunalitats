@@ -14,7 +14,7 @@ class CourseAdmin(SummernoteModelAdmin):
     summernote_fields = ('description',)
     readonly_fields = ('copy_clipboard_field', 'created',)
     exclude = ('slug',)
-    search_fields = ('date_start', 'title', 'description',)
+    search_fields = ('date_start', 'title__unaccent', 'description__unaccent',)
     list_filter = ('date_start',)
 
     def get_queryset(self, request):

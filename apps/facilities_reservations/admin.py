@@ -47,7 +47,7 @@ class ReservationAdmin(admin.ModelAdmin):
     readonly_fields = ('created_by', 'created',)
     fields = ('start', 'end', 'room', 'title', 'responsible', 'created_by', 'created',)
     list_filter = ('room', 'start', ('responsible', admin.RelatedOnlyFieldListFilter))
-    search_fields = ('title', )
+    search_fields = ('title__unaccent', )
     date_hierarchy = 'start'
 
     def get_object(self, request, object_id, from_field=None):
