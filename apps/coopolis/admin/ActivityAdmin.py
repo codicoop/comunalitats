@@ -29,8 +29,8 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     fieldsets = (
         (None, {
             'fields': ['course', 'name', 'objectives', 'place', 'date_start', 'date_end', 'starting_time',
-                       'ending_time', 'spots', 'enrolled', 'axis', 'subaxis', 'entity', 'organizer', 'photo1',
-                       'photo2', 'publish', ]
+                       'ending_time', 'spots', 'enrolled', 'axis', 'subaxis', 'entity', 'organizer', 'photo1', 'photo3',
+                       'photo2', 'file1', 'publish', ]
         }),
         ('Dades relatives a activitats per menors', {
             'classes': ('grp-collapse grp-closed',),

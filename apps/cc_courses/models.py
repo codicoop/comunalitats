@@ -33,6 +33,16 @@ def photo2_signatures_upload_path(instance, filename):
         return 'course.activity_photo2/{0}/{1}'.format(str(uuid4()), filename)
 
 
+def photo3_upload_path(instance, filename):
+    if isinstance(instance, Activity):
+        return 'course.activity_photo3/{0}/{1}'.format(str(uuid4()), filename)
+
+
+def file1_upload_path(instance, filename):
+    if isinstance(instance, Activity):
+        return 'course.activity_file1/{0}/{1}'.format(str(uuid4()), filename)
+
+
 class CoursePlace(models.Model):
     class Meta:
         verbose_name = "lloc"
@@ -147,8 +157,12 @@ class Activity(models.Model):
                                           upload_to=activity_signatures_upload_path, max_length=250)
     photo1 = models.FileField("fotografia", blank=True, null=True,
                               upload_to=photo1_signatures_upload_path, max_length=250)
+    photo3 = models.FileField("fotografia 2", blank=True, null=True,
+                              upload_to=photo3_upload_path, max_length=250)
     photo2 = models.FileField("document acreditatiu", blank=True, null=True,
                               upload_to=photo2_signatures_upload_path, max_length=250)
+    file1 = models.FileField("material de difusió", blank=True, null=True,
+                              upload_to=file1_upload_path, max_length=250)
     publish = models.BooleanField("publicada", default=True)
     # minors
     for_minors = models.BooleanField(
