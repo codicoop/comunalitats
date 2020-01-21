@@ -177,6 +177,19 @@ class ExportFunctions:
 
         return self.return_document("justificacio2018-2019")
 
+    def export_2019_2020(self):
+        self.import_correlations(settings.BASE_DIR + "/../apps/dataexports/fixtures/correlations_2019.json")
+        self.subsidy_period_range = ["2019-11-01", "2020-10-31"]
+
+        """ Each function here called handles the creation of one of the worksheets."""
+        self.export_actuacions_2018_2019()
+        self.export_stages_2018_2019()
+        self.export_founded_projects_2018_2019()
+        self.export_participants_2018_2019()
+        self.export_nouniversitaris_2018_2019()
+
+        return self.return_document("justificacio2018-2019")
+
     def export_actuacions_2018_2019(self):
         # Tutorial: https://djangotricks.blogspot.com/2019/02/how-to-export-data-to-xlsx-files.html
         # Docs: https://openpyxl.readthedocs.io/en/stable/tutorial.html#create-a-workbook
@@ -446,6 +459,7 @@ class ExportFunctions:
             ("[Procedència]", 20),
             ("[Nivell d'estudis]", 20),
             ("[Com ens has conegut]", 20),
+            ("[Organitzadora]", 30),
         ]
         self.create_columns(columns)
 
@@ -479,6 +493,7 @@ class ExportFunctions:
                     participant.get_birth_place_display() if participant.get_birth_place_display() else "",
                     participant.get_educational_level_display() if participant.get_educational_level_display() else "",
                     participant.get_discovered_us_display() if participant.get_discovered_us_display() else "",
+                    activity.organizer if activity.organizer else "",
                 ]
                 self.fill_row_data(row)
 

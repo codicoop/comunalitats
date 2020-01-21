@@ -26,8 +26,6 @@ class Command(BaseCommand):
         rewriting it at the moment."""
         self.create_towns()
 
-        self.populate_dataexports()
-
     @staticmethod
     def create_towns():
         """ These 2 weird methods are because of the FK constraints in postgres.
@@ -70,10 +68,3 @@ class Command(BaseCommand):
         for town in equivalences:
             User.objects.filter(town=town['town_id']).update(town=town['new_id'])
             print("Updated users that had town id {} for the new town id: {}".format(town['town_id'], town['new_id']))
-
-    @staticmethod
-    def populate_dataexports():
-        """ Data exports to excel are triggered through a registry which
-        indicates the function name to be executed."""
-        print("Loading Exports data.")
-        call_command('loaddata', 'basedata_dataexports.json', app_label='dataexports')

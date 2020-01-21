@@ -1,3 +1,0 @@
-[{
-  "model": "dataexports.dataexports", "pk": 1, "fields": {"created": "2019-06-15T16:21:42.830Z", "subsidy_period": "2019", "name": "Exportaci\u00f3 de totes les dades en un sol fitxer", "notes": "", "function_name": "export_2018_2019", "ignore_errors": false}
-}]
