@@ -319,6 +319,7 @@ class EmploymentInsertion(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat",
                                 related_name="employment_insertions")
     user = models.ForeignKey(User, verbose_name="persona", blank=True, null=True, on_delete=models.PROTECT)
+    subsidy_period = models.ForeignKey(SubsidyPeriod, verbose_name="convocatòria", null=True, on_delete=models.SET_NULL)
     insertion_date = models.DateField("alta seguretat social")
     CONTRACT_TYPE_CHOICES = (
         ('autonom', "Autònom -RETA-"),
