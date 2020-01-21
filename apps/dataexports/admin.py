@@ -8,6 +8,21 @@ from dataexports.models import DataExports, SubsidyPeriod
 class SubsidyPeriodAdmin(admin.ModelAdmin):
     list_display = ('name', 'number', 'date_start', 'date_end')
 
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_add_permission(self, request):
+        if request.user.is_superuser:
+            return True
+        return False
+
 
 @admin.register(DataExports)
 class DataExportsAdmin(admin.ModelAdmin):
