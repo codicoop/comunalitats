@@ -1,4 +1,4 @@
-from coopolis.models import ProjectStage, Project, User
+from coopolis.models import ProjectStage, Project, User, EmploymentInsertion
 from cc_courses.models import Activity
 from dataexports.models import DataExports
 from django.http import HttpResponseNotFound, HttpResponse
@@ -174,6 +174,7 @@ class ExportFunctions:
         self.export_founded_projects_2018_2019()
         self.export_participants_2018_2019()
         self.export_nouniversitaris_2018_2019()
+        self.export_insercionslaborals_2018_2019()
 
         return self.return_document("justificacio2018-2019")
 
@@ -187,6 +188,7 @@ class ExportFunctions:
         self.export_founded_projects_2018_2019()
         self.export_participants_2018_2019()
         self.export_nouniversitaris_2018_2019()
+        self.export_insercionslaborals_2018_2019()
 
         return self.return_document("justificacio2018-2019")
 
@@ -522,5 +524,36 @@ class ExportFunctions:
                 activity.name,  # Nom de l'actuació. Camp automàtic de l'excel.
                 self.get_correlation('minors_grade', activity.minors_grade),
                 activity.minors_school_name,
+            ]
+            self.fill_row_data(row)
+
+    def export_insercionslaborals_2018_2019(self):
+        self.worksheet = self.workbook.create_sheet("InsercionsLaborals")
+        self.row_number = 1
+
+        columns = [
+            ("Projecte", 40),
+            ("Persona", 40),
+            ("Convocatòria", 20),
+            ("Data alta SS", 20),
+            ("Tipus de contracte", 20),
+            ("Durada", 20),
+        ]
+        self.create_columns(columns)
+
+        self.insercionslaborals_2018_2019_rows()
+
+    def insercionslaborals_2018_2019_rows(self):
+        obj = EmploymentInsertion.objects.filter(
+            subsidy_period__date_start__range=self.subsidy_period_range)
+        for insertion in obj:
+            self.row_number += 1
+            row = [
+                insertion.project.name,  # Projecte
+                insertion.user.full_name,  # Persona
+                insertion.subsidy_period,  # Convocatòria
+                insertion.insertion_date,  # Data d'alta SS
+                insertion.get_contract_type_display(),  # Tipus de contracte
+                insertion.get_duration_display(),  # Durada del contracte
             ]
             self.fill_row_data(row)
