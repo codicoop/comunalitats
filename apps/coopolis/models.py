@@ -285,6 +285,14 @@ class ProjectStage(models.Model):
         User, verbose_name="persones involucrades", blank=True, related_name='stage_involved_partners',
         help_text="Persones que apareixeran a la justificació com a que han participat a l'acompanyament.")
 
+    def axis_summary(self):
+        axis = self.axis if self.axis else '(cap)'
+        subaxis = self.subaxis if self.subaxis else '(cap)'
+        return f"{axis} - {subaxis}"
+
+    axis_summary.short_description = "Eix - Subeix"
+    axis_summary.admin_order_field = 'axis'
+
     def clean(self):
         super().clean()
         if self.subaxis:
