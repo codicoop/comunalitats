@@ -68,7 +68,6 @@
         <div class="content menu">
             <ul class="menu-ul">
                 <li><a href="{{ config.PROJECT_WEBSITE_URL }}">Web de {{ PROJECT_NAME }}</a></li>
-                <li><a href="{% url 'how_it_works' %}">Com funciona?</a></li>
             {% if user.is_anonymous %}
                 <li><a href="{% url 'password_reset' %}">Recuperar contrasenya</a></li>
                 <li><a href="{% url 'loginsignup' %}">Crear compte</a></li>
