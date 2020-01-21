@@ -134,6 +134,10 @@ class Project(models.Model):
         return self.stages.all()[0].stage_responsible
     last_stage_responsible.fget.short_description = "Últim acompanyament"
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('name__icontains', )
+
     def __str__(self):
         return self.name
 
@@ -335,4 +339,4 @@ class EmploymentInsertion(models.Model):
     duration = models.CharField("durada", max_length=50, choices=DURATION_CHOICES)
 
     def __str__(self):
-        return f"{ self.user.full_name }: { self.contract_type }"
+        return f"{ self.user.full_name }: { self.get_contract_type_display() }"

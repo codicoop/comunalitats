@@ -113,6 +113,10 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     change_actions = ('print', )
     print_template = 'admin/my_test/myentry/review.html'
     inlines = (ProjectStagesInline, EmploymentInsertionInline,)
+    raw_id_fields = ('partners',)
+    autocomplete_lookup_fields = {
+        'm2m': ['partners'],
+    }
 
     def get_urls(self):
         def wrap(view):
@@ -156,11 +160,6 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         return None
 
     stages_field.short_description = 'Acompanyaments'
-
-    raw_id_fields = ('partners',)
-    autocomplete_lookup_fields = {
-        'm2m': ['partners'],
-    }
 
     def save_model(self, request, obj, form, change):
         if request.POST['partners']:
@@ -218,3 +217,14 @@ class DerivationAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return True
         return False
+
+
+class EmploymentInsertionAdmin(admin.ModelAdmin):
+    model = EmploymentInsertion
+    list_display = ('insertion_date', 'project', 'user', 'contract_type', 'duration', 'subsidy_period',)
+    list_filter = ('subsidy_period', 'contract_type', 'insertion_date', )
+    search_fields = ('project__name__unaccent', 'user__first_name__unaccent', )
+    raw_id_fields = ('user', 'project',)
+    autocomplete_lookup_fields = {
+        'fk': ['user', 'project', ],
+    }
