@@ -264,7 +264,7 @@ class ProjectStage(models.Model):
     )
     stage_type = models.CharField("tipus d'acompanyament", max_length=2, default=DEFAULT_STAGE_TYPE,
                                   choices=STAGE_TYPE_OPTIONS)
-    subsidy_period = models.ForeignKey(SubsidyPeriod, null=True, on_delete=models.SET_NULL)
+    subsidy_period = models.ForeignKey(SubsidyPeriod, verbose_name="convocatòria", null=True, on_delete=models.SET_NULL)
     date_start = models.DateField("data d'inici", null=True, blank=True, default=datetime.date.today)
     date_end = models.DateField("data de finalització", null=True, blank=True)
     follow_up = models.TextField("seguiment", null=True, blank=True)
