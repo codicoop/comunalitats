@@ -13,28 +13,34 @@ def populate_exports(apps, schema_editor):
     SubsidyPeriod = apps.get_model('dataexports', 'SubsidyPeriod')
     DataExports = apps.get_model('dataexports', 'DataExports')
 
-    p2019 = SubsidyPeriod.objects.get(name="2018-2019")
-    r = DataExports(
-        name="Exportació de totes les dades en un sol fitxer",
-        function_name="export_2018_2019",
-        ignore_errors=True,
-        subsidy_period=p2019
-    )
-    r.save()
-    print("")
-    print("Exportacio de dades de la convocatòria 2018-2019 creada.")
+    p2019, created = SubsidyPeriod.objects.get_or_create(name="2018-2019")
+    if not created:
+        r = DataExports(
+            name="Exportació de totes les dades en un sol fitxer",
+            function_name="export_2018_2019",
+            ignore_errors=True,
+            subsidy_period=p2019
+        )
+        r.save()
+        print("")
+        print("Exportacio de dades de la convocatòria 2018-2019 creada.")
+    else:
+        print("L'exportació de 2018-2019 ja existeix.")
 
-    p2020 = SubsidyPeriod.objects.get(name="2019-2020")
-    r = DataExports(
-        name="Exportació provisional 2019-2020",
-        function_name="export_2019_2020",
-        ignore_errors=True,
-        subsidy_period=p2020,
-        notes="És una rèplica de la de 2018-2019, fins que no tinguem el nou format, aquesta exportació només serveix "
-              "per poder fer seguiment."
-    )
-    r.save()
-    print("Exportacio de dades PROVISIONAL per la convocatòria 2019-2020 creada.")
+    p2020, created = SubsidyPeriod.objects.get_or_create(name="2019-2020")
+    if not created:
+        r = DataExports(
+            name="Exportació provisional 2019-2020",
+            function_name="export_2019_2020",
+            ignore_errors=True,
+            subsidy_period=p2020,
+            notes="És una rèplica de la de 2018-2019, fins que no tinguem el nou format, aquesta exportació només serveix "
+                  "per poder fer seguiment."
+        )
+        r.save()
+        print("Exportacio de dades PROVISIONAL per la convocatòria 2019-2020 creada.")
+    else:
+        print("L'exportació de 2019-2020 ja existeix.")
 
 
 class Migration(migrations.Migration):
