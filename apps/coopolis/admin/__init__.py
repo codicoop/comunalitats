@@ -4,11 +4,12 @@
 from django.contrib import admin
 from django.conf import settings
 
-from coopolis.models import User, Project, ProjectStage, Derivation, EmploymentInsertion
+from coopolis.models import User, Project, ProjectStage, Derivation, EmploymentInsertion, StagesByAxis
 from cc_courses.models import Course, Activity, CoursePlace, Entity, Organizer
 from .ActivityAdmin import ActivityAdmin
 from .CourseAdmin import CourseAdmin
-from .ProjectAdmin import ProjectAdmin, ProjectStageAdmin, DerivationAdmin, EmploymentInsertionAdmin
+from .ProjectAdmin import ProjectAdmin, ProjectStageAdmin, DerivationAdmin, EmploymentInsertionAdmin, \
+    ProjectStageAdminAxis
 from .UserAdmin import UserAdmin
 from .CoursePlaceAdmin import CoursePlaceAdmin
 
@@ -16,6 +17,7 @@ from .CoursePlaceAdmin import CoursePlaceAdmin
 admin.site.register(User, UserAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectStage, ProjectStageAdmin)
+admin.site.register(StagesByAxis, ProjectStageAdminAxis)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Activity, ActivityAdmin)
 admin.site.register(CoursePlace, CoursePlaceAdmin)

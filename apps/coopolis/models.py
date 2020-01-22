@@ -314,6 +314,14 @@ class ProjectStage(models.Model):
         return f"{str(self.project)}: {self.get_stage_type_display()}"
 
 
+class StagesByAxis(ProjectStage):
+    class Meta:
+        proxy = True
+        verbose_name_plural = "Acompanyaments per Eix"
+        verbose_name = "acompanyament"
+        ordering = ["axis", "subaxis", "organizer", "date_start"]
+
+
 class EmploymentInsertion(models.Model):
     class Meta:
         verbose_name = "inserció laboral"
