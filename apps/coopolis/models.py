@@ -128,6 +128,16 @@ class Project(models.Model):
         return "; ".join(stages)
 
     @property
+    def axis_list(self):
+        if not self.stages or self.stages.count() < 1:
+            return None
+        stages = []
+        for stage in self.stages.all():
+            stages.append(stage.axis_summary())
+        stages.sort()
+        return "; ".join(stages)
+
+    @property
     def last_stage_responsible(self):
         if not self.stages or self.stages.count() < 1:
             return None
@@ -260,7 +270,9 @@ class ProjectStage(models.Model):
         ('2', "01 Nova creació - procés"),
         ('6', "02 Nova creació - constitució"),
         ('7', "03 Consolidació - 1a acollida"),
-        ('8', "04 Consolidació - acompanyament")
+        ('8', "04 Consolidació - acompanyament"),
+        ('9', "05 Incubació"),
+        ('10', "06 Crisi Covid"),
     )
     stage_type = models.CharField("tipus d'acompanyament", max_length=2, default=DEFAULT_STAGE_TYPE,
                                   choices=STAGE_TYPE_OPTIONS)

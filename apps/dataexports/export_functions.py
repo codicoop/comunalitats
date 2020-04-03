@@ -175,6 +175,7 @@ class ExportFunctions:
         self.export_participants_2018_2019()
         self.export_nouniversitaris_2018_2019()
         self.export_insercionslaborals_2018_2019()
+        self.export_all_projects_2018_2019()
 
         return self.return_document("justificacio2018-2019")
 
@@ -402,6 +403,7 @@ class ExportFunctions:
             ("Correu electrònic", 12),
             ("Telèfon", 10),
             ("Economia solidària (S/N)", 10),
+            ("[Acompanyaments]", 10),
         ]
         self.create_columns(columns)
 
@@ -440,7 +442,8 @@ class ExportFunctions:
                 project.partners.all()[0].full_name,
                 project.mail,
                 project.phone,
-                "Sí"
+                "Sí",
+                project.stages_list
             ]
             self.fill_row_data(row)
 
@@ -462,6 +465,10 @@ class ExportFunctions:
             ("[Nivell d'estudis]", 20),
             ("[Com ens has conegut]", 20),
             ("[Organitzadora]", 30),
+            ("[Email]", 30),
+            ("[Telèfon]", 30),
+            ("[Projecte]", 30),
+            ("[Acompanyaments]", 30),
         ]
         self.create_columns(columns)
 
@@ -482,6 +489,7 @@ class ExportFunctions:
                     town = ""
                 else:
                     town = participant.town.name
+
                 row = [
                     f"{activity_reference_number} {activity.name}",  # Referència.
                     activity.name,  # Nom de l'actuació. Camp automàtic de l'excel.
@@ -496,6 +504,10 @@ class ExportFunctions:
                     participant.get_educational_level_display() if participant.get_educational_level_display() else "",
                     participant.get_discovered_us_display() if participant.get_discovered_us_display() else "",
                     activity.organizer if activity.organizer else "",
+                    participant.email,
+                    participant.phone_number,
+                    participant.project if participant.project else "",
+                    participant.project.stages_list if participant.project else ""
                 ]
                 self.fill_row_data(row)
 
@@ -555,5 +567,44 @@ class ExportFunctions:
                 insertion.insertion_date,  # Data d'alta SS
                 insertion.get_contract_type_display(),  # Tipus de contracte
                 insertion.get_duration_display(),  # Durada del contracte
+            ]
+            self.fill_row_data(row)
+
+    def export_all_projects_2018_2019(self):
+        self.worksheet = self.workbook.create_sheet("PROJECTES")
+        self.row_number = 1
+
+        columns = [
+            ("ID", 5),
+            ("Data registre", 12),
+            ("Data constitució", 12),
+            ("Nom de l'entitat", 40),
+            ("NIF de l'entitat", 12),
+            ("Nom i cognoms persona de contacte", 30),
+            ("Correu electrònic", 30),
+            ("Telèfon", 15),
+            ("[Acompanyaments]", 40),
+            ("[Eixos]", 40),
+        ]
+        self.create_columns(columns)
+
+        self.all_projects_2018_2019_rows()
+
+    def all_projects_2018_2019_rows(self):
+        self.row_number = 1
+        obj = Project.objects.order_by('id').all()
+        for project in obj:
+            self.row_number += 1
+            row = [
+                project.id,
+                project.registration_date if project.registration_date else "",
+                project.constitution_date if project.constitution_date else "",
+                project.name,
+                project.cif if project.cif else "",
+                project.partners.all()[0].full_name if project.partners.all() else "",
+                project.mail,
+                project.phone,
+                project.stages_list if project.stages_list else "",
+                project.axis_list if project.axis_list else ""
             ]
             self.fill_row_data(row)
