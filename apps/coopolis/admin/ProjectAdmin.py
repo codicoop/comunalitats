@@ -14,6 +14,25 @@ from coopolis.models import User, Project, ProjectStage, EmploymentInsertion, St
 from coopolis.forms import ProjectFormAdmin, ProjectStageInlineForm, ProjectStageForm
 
 
+class FilterByFounded(admin.SimpleListFilter):
+    """
+    If CIF and constitution_date are non empty.
+    """
+    title = 'Que tinguin CIF i Data de constitució'
+    parameter_name = 'is_founded'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('Yes', 'Sí'),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == 'Yes':
+            return queryset.filter(cif__isnull=False, constitution_date__isnull=False)
+        return queryset
+
+
 class ProjectStageAdmin(admin.ModelAdmin):
     class Media:
         js = ('js/grappellihacks.js',)
@@ -104,10 +123,11 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         }
 
     form = ProjectFormAdmin
-    list_display = ('id', 'name', 'mail', 'phone', 'registration_date', 'stages_field', 'last_stage_responsible')
-    search_fields = ('id', 'name__unaccent', 'web', 'mail', 'phone', 'registration_date', 'object_finality',
-                     'project_origins', 'solves_necessities', 'social_base', 'sector')
-    list_filter = ('registration_date', 'sector', 'project_status')
+    list_display = ('id', 'name', 'mail', 'phone', 'registration_date', 'constitution_date', 'stages_field',
+                    'last_stage_responsible',)
+    search_fields = ('id', 'name__unaccent', 'web', 'mail', 'phone', 'registration_date',
+                     'object_finality', 'project_origins', 'solves_necessities', 'social_base', 'sector')
+    list_filter = ('registration_date', 'sector', 'project_status', FilterByFounded, )
     readonly_fields = ('id', )
     actions = ["export_as_csv"]
     change_actions = ('print', )
