@@ -327,7 +327,6 @@ CONSTANCE_CONFIG = {
         "Mail enviat quan es reinicia la contrassenya: cos. Ha d'incloure en algun lloc (username) i "
         "(password_reset_url) per poder mostrar el link i el nom d'usuari."),
     # Configuration
-    'NUM_EXPEDIENT': ('-', "Número d'expedient que apareix al PDF del llistat de participants."),
     'EMAIL_FROM_ENROLLMENTS': (
         'formacio@bcn.coop', "És el remitent del correu que rep la gent a l'inscriure's a una sessió. Quan s'envia un "
                              "recordatori a tothom inscrit a una sessió, s'envia a aquest compte i posa en còpia "
@@ -358,7 +357,7 @@ CONSTANCE_CONFIG = {
         "URL de l'imatge pel peu de pàgina del llistat d'assistència."),
 }
 CONSTANCE_CONFIG_FIELDSETS = {
-    'Configuració': ('NUM_EXPEDIENT', 'ENABLE_ROOM_RESERVATIONS_MODULE', 'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL',
+    'Configuració': ('ENABLE_ROOM_RESERVATIONS_MODULE', 'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL',
                      'PROJECT_CONTACT_URL', 'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG',
                      'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS'),
     'Correus': ('EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT', 'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT',
