@@ -162,7 +162,7 @@ class ExportFunctions:
                 if error_mark:
                     cell.fill = PatternFill(start_color='FFFF0000', end_color='FFFF0000', fill_type='solid')
                 cell_value = cell_value[0]
-            cell.value = str(cell_value)
+            cell.value = cell_value if isinstance(cell_value, int) else str(cell_value)
 
     def export_2018_2019(self):
         self.import_correlations(settings.BASE_DIR + "/../apps/dataexports/fixtures/correlations_2019.json")
