@@ -43,9 +43,9 @@ class ProjectStageAdmin(admin.ModelAdmin):
     form = ProjectStageForm
     empty_value_display = '(cap)'
     list_display = ('project_field_ellipsis', 'date_start', 'stage_responsible_field_ellipsis', 'stage_type',
-                    'axis_summary', 'organizer', 'subsidy_period', 'project_field')
+                    'axis_summary', 'entity', 'subsidy_period', 'project_field')
     list_filter = ('subsidy_period', ('stage_responsible', admin.RelatedOnlyFieldListFilter), 'date_start',
-                   'stage_type', 'axis', 'organizer', 'project__sector')
+                   'stage_type', 'axis', 'entity', 'project__sector')
     actions = ["export_as_csv"]
     search_fields = ['project__name__unaccent']
 
@@ -258,10 +258,10 @@ class ProjectStageAdminAxis(admin.ModelAdmin):
         }
 
     empty_value_display = '(cap)'
-    list_display = ('axis_summary', 'organizer', 'date_start', 'project_field_ellipsis',
+    list_display = ('axis_summary', 'entity', 'date_start', 'project_field_ellipsis',
                     'stage_responsible_field_ellipsis', 'stage_type', 'subsidy_period', 'project_field')
     list_filter = ('subsidy_period', ('stage_responsible', admin.RelatedOnlyFieldListFilter), 'date_start',
-                   'stage_type', 'axis', 'organizer', 'project__sector')
+                   'stage_type', 'axis', 'entity', 'project__sector')
     actions = ["export_as_csv"]
     search_fields = ['project__name__unaccent']
 

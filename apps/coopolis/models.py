@@ -1,11 +1,10 @@
 from django.db import models
 from django.conf import settings
-from uuid import uuid4
 import datetime
 from django.core.validators import ValidationError
 
 from cc_users.models import BaseUser
-from cc_courses.models import Entity
+from cc_courses.models import Entity, Organizer
 from cc_users.managers import CCUserManager
 from coopolis.helpers import get_subaxis_choices
 from dataexports.models import SubsidyPeriod
@@ -285,8 +284,18 @@ class ProjectStage(models.Model):
                             null=True, blank=True, max_length=1)
     subaxis = models.CharField("sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
                                null=True, blank=True, max_length=2, choices=get_subaxis_choices())
-    organizer = models.ForeignKey(Entity, verbose_name="qui ho fa", default=None, null=True, blank=True,
+    entity = models.ForeignKey(Entity, verbose_name="qui ho fa", default=None, null=True, blank=True,
                                   on_delete=models.SET_NULL)
+    # Entity was called "organizer" before, causing confusion, specially because we wanted to add the Organizer field
+    # here. We renamed 'organizer' to entity and made a migration for this change (0046_auto...py).
+    # Then I added the 'organizer' FK field. Makemigration worked fine, but migrate was throwing an error:
+    #   django.db.utils.ProgrammingError: relation "coopolis_projectstage_organizer_id_26459182" already exists
+    # In the database everything was correct, not a field or a key in coopolis_projectstage table called 'organizer'
+    # or any other reference, also not postgres cache glitches or anything I could identify.
+    # Did the experiment of calling it differently and worked.
+    # Given that I don't understand the problem, leaving the field with a different name seems the safest option.
+    stage_organizer = models.ForeignKey(Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL, null=True,
+                                  blank=True)
     stage_responsible = models.ForeignKey(
         "User", verbose_name="persona responsable", blank=True, null=True, on_delete=models.SET_NULL,
         related_name='stage_responsible', help_text="Persona de l'equip al càrrec de l'acompanyament. Per aparèixer "
@@ -332,7 +341,7 @@ class StagesByAxis(ProjectStage):
         proxy = True
         verbose_name_plural = "Acompanyaments per Eix"
         verbose_name = "acompanyament"
-        ordering = ["axis", "subaxis", "organizer", "date_start"]
+        ordering = ["axis", "subaxis", "entity", "date_start"]
 
 
 class EmploymentInsertion(models.Model):
