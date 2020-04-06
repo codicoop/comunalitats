@@ -70,7 +70,13 @@ class UserAdmin(admin.ModelAdmin):
         for user in queryset:
             emails.append(user.email)
         # self.message_user(request, "%s successfully marked as published." % message_bit)
-        return HttpResponse(", ".join(emails))
+        html = f"<p>La majoria d'aplicacions separen els correus amb comes, però d'altres amb punt i coma; " \
+               f"selecciona i copia el que necessitis.</p>" \
+               f"<p><em>Recorda: triple clic per seleccionar-ho tot, CTRL+C per copiar i CTRL+V per enganxar. En Mac, " \
+               f"CMD en comptes de CTRL.</em></p>" \
+               f"<textarea cols=\"150\" rows=\"10\">{', '.join(emails)}</textarea><br><br>" \
+               f"<textarea cols=\"150\" rows=\"10\">{'; '.join(emails)}</textarea><br>"
+        return HttpResponse(html)
 
     copy_emails.short_description = 'Copiar tots els e-mails'
 
