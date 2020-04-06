@@ -70,6 +70,13 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
     password = ReadOnlyPasswordHashField()
     first_name = forms.CharField(label="Nom", max_length=30)
     last_name = forms.CharField(label="Cognom", max_length=30, required=False)
+    no_welcome_email = forms.BooleanField(label="No enviar correu de benvinguda",
+                                          help_text="Al crear un compte per defecte s'enviarà un correu de notificació "
+                                                    "amb l'enllaç al back-office i instruccions. Si marqueu aquesta "
+                                                    "casella, no s'enviarà.", required=False)
+    resend_welcome_email = forms.BooleanField(label="Reenviar correu de benvinguda", required=False,
+                                              help_text="Marca aquesta casella si desitges tornar a enviar la "
+                                                        "notificació de creació de nou compte.")
 
     class Meta:
         model = User

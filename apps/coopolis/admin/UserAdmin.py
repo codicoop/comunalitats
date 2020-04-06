@@ -52,6 +52,17 @@ class UserAdmin(admin.ModelAdmin):
             self.fields.remove('id')
             self.fields.remove('last_login')
 
+        if obj is None:
+            if 'no_welcome_email' not in self.fields:
+                self.fields.append('no_welcome_email')
+            if 'resend_welcome_email' in self.fields:
+                self.fields.remove('resend_welcome_email')
+        if obj:
+            if 'no_welcome_email' in self.fields:
+                self.fields.remove('no_welcome_email')
+            if 'resend_welcome_email' not in self.fields:
+                self.fields.append('resend_welcome_email')
+
         return super().get_fields(request, obj)
 
     def copy_emails(self, request, queryset):
@@ -65,8 +76,11 @@ class UserAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         # Sending welcome e-mail only if we're creating a new account.
-        if not change:
-            self.send_welcome_email(request.POST['email'])
+        #  and form.cleaned_data['resend_welcome_email']
+        send_welcome = (change and form.cleaned_data['resend_welcome_email'] is True) or \
+                       (not change and form.cleaned_data['no_welcome_email'] is False)
+        if send_welcome:
+            self.send_welcome_email(form.cleaned_data['email'])
 
         super().save_model(request, obj, form, change)
 
