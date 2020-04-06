@@ -43,12 +43,13 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
         label="He llegit i accepto", required=True)
     accept_conditions2 = forms.BooleanField(
         label="He llegit i accepto", required=True)
+    authorize_communications = forms.BooleanField(label="Accepto rebre informació sobre els serveis", required=False)
 
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
                   'birth_place', 'town', 'district', 'address', 'gender', 'educational_level',
-                  'employment_situation', 'discovered_us', 'password1', 'password2']
+                  'employment_situation', 'discovered_us', 'password1', 'password2', 'authorize_communications']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -214,6 +214,7 @@ class User(BaseUser):
                                                help_text="Tens coneixements / formació / experiència en "
                                                          "cooperativisme? Quina? Cursos realitzats?",
                                                blank=True, null=True)
+    authorize_communications = models.BooleanField("autoritza comunicació publicitària", default=False)
 
     @staticmethod
     def autocomplete_search_fields():

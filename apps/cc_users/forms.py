@@ -39,7 +39,7 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
         model = get_user_model()
         fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
                   'birth_place', 'town', 'district', 'address', 'gender', 'educational_level',
-                  'employment_situation', 'discovered_us', ]
+                  'employment_situation', 'discovered_us', 'authorize_communications', ]
 
     required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)
