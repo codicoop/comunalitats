@@ -110,7 +110,7 @@ class Activity(models.Model):
     ending_time = models.TimeField("hora de finalització")
     spots = models.IntegerField('places totals', default=0)
     enrolled = models.ManyToManyField("coopolis.User", blank=True, related_name='enrolled_activities',
-                                      verbose_name="inscrites")
+                                      verbose_name="inscrites", through="ActivityEnrolled")
     entity = models.ForeignKey(Entity, verbose_name="entitat", on_delete=models.SET_NULL, null=True, blank=True)
     organizer = models.ForeignKey(Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL, null=True,
                                   blank=True)
@@ -222,6 +222,22 @@ class Activity(models.Model):
             raise EnrollToActivityNotValidException()
         self.enrolled.add(user)
         self.save()
+
+
+class ActivityEnrolled(models.Model):
+    class Meta:
+        db_table = 'cc_courses_activity_enrolled'
+        unique_together = ('user', 'activity')
+        verbose_name = "inscripció"
+        verbose_name_plural = "inscripcions"
+
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name="sessió")
+    user = models.ForeignKey("coopolis.User", on_delete=models.CASCADE, verbose_name="persona")
+    date_enrolled = models.DateTimeField("data d'inscripció", auto_now_add=True, null=True)
+    user_comments = models.TextField("comentaris", null=True, blank=True)
+
+    def __str__(self):
+        return f"Inscripció de {self.user.full_name} a: {self.activity.name}"
 
 
 pre_save.connect(Course.pre_save, sender=Course)

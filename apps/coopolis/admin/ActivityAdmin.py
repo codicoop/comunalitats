@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+from django.contrib import admin
 from django.utils.html import format_html
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import path, reverse
@@ -12,7 +12,21 @@ import modelclone
 from django.template import Template, Context
 
 from coopolis.forms import ActivityForm
-from cc_courses.models import Activity
+from cc_courses.models import Activity, ActivityEnrolled
+
+
+class ActivityEnrolledInline(admin.TabularInline):
+    class Media:
+        js = ('js/grappellihacks.js',)
+
+    model = ActivityEnrolled
+    extra = 0
+    fields = ('user', 'user_comments', 'date_enrolled', )
+    readonly_fields = ('date_enrolled', )
+    raw_id_fields = ('user',)
+    autocomplete_lookup_fields = {
+        'fk': ['user']
+    }
 
 
 class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
@@ -29,7 +43,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     fieldsets = (
         (None, {
             'fields': ['course', 'name', 'objectives', 'place', 'date_start', 'date_end', 'starting_time',
-                       'ending_time', 'spots', 'enrolled', 'axis', 'subaxis', 'entity', 'organizer', 'photo1', 'photo3',
+                       'ending_time', 'spots', 'axis', 'subaxis', 'entity', 'organizer', 'photo1', 'photo3',
                        'photo2', 'file1', 'publish', ]
         }),
         ('Dades relatives a activitats per menors', {
@@ -50,6 +64,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         'fk': ['course'],
     }
     date_hierarchy = 'date_start'
+    inlines = (ActivityEnrolledInline, )
 
     def get_form(self, request, obj=None, **kwargs):
         # Hack to be able to use self.request at the form.
