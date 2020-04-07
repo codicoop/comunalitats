@@ -87,7 +87,7 @@ class ProjectStagesInline(admin.StackedInline):
     show_change_link = True
     can_delete = False
     fields = ('date_start', 'stage_responsible', 'stage_type', 'axis', 'subaxis', 'subsidy_period',
-              'follow_up', 'organizer', 'scanned_signatures', 'scanned_certificate', 'hours', 'involved_partners')
+              'follow_up', 'stage_organizer', 'scanned_signatures', 'scanned_certificate', 'hours', 'involved_partners')
     empty_value_display = '(cap)'
 
     raw_id_fields = ('involved_partners',)
