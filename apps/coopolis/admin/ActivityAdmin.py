@@ -105,10 +105,18 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         ]
         return custom_urls + urls
 
-    def tweak_cloned_fields(self, fields):
-        """ From ClonableModelAdmin. When cloning an Activity, we discard the enrolled people. """
-        fields['enrolled'] = None
-        return fields
+    def tweak_cloned_inline_fields(self, related_name, fields_list):
+        """
+        fields_list contains every m2m record that was in the Inline.
+
+        Filtering for the "activityenrolled_set" just in case we add more inlines in the future.
+
+        :param related_name: contains activityenrolled_set
+        :param fields_list: contains [{'user': 897, 'user_comments': None}, {'user': 898, 'user_comments': None}, ETC.
+        :return: empty list
+        """
+        print(f"related_name: {related_name}, fields_list: {fields_list}")
+        return list() if related_name == "activityenrolled_set" else fields_list
 
     def render_change_form(self, request, context, *args, **kwargs):
         """ modelclone not showing Save button because of a bug. This workarounds it. """
