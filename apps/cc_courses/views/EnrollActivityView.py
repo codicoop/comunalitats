@@ -3,21 +3,27 @@
 
 from django.views import generic
 from django.shortcuts import reverse
-from cc_courses.models import Activity
 from constance import config
 from django.conf import settings
 from django.template import Template, Context
 
+from cc_courses.models import Activity, ActivityEnrolled
+
 
 class EnrollActivityView(generic.RedirectView):
+
     def get(self, request, *args, **kwargs):
-        if request.user.is_anonymous:
+        if request.user.is_anonymous or not request.POST:
             self.url = reverse('loginsignup')
         else:
-            activity = Activity.objects.get(id=kwargs['id'])
+            activity = Activity.objects.get(id=request.POST['activity_id'])
             if activity.remaining_spots > 0:
                 self.url = activity.course.absolute_url
-                request.user.enrolled_activities.add(activity)
+                enrollment = ActivityEnrolled(
+                    user=request.user,
+                    activity=activity,
+                    user_comments=request.POST['user_comments'])
+                enrollment.save()
                 self._send_confirmation_email(activity)
             else:
                 request.session['enrollment_failed'] = True

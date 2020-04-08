@@ -1,23 +1,28 @@
 
         <div class="course">
             <div class="course-data">
-                <h2>Programa / curs: "{{ activity.course }}"</h2>
-                <h3>Activitat: {{ activity.name }}</h3>
-                <p><strong>Data:</strong> {{ activity.date_start }}</p>
-                <p><strong>Horari:</strong> de {{ activity.starting_time }} a {{ activity.ending_time }}</p>
-                <p><strong>Lloc:</strong> {{ activity.place }}</p>
-                <p><strong>Descripció:</strong> {{ activity.objectives|safe }}</p>
+                <h2>Programa / curs: "{{ enrollment.activity.course }}"</h2>
+                <h3>Activitat: {{ enrollment.activity.name }}</h3>
+                <p><strong>Data:</strong> {{ enrollment.activity.date_start }}</p>
+                <p><strong>Horari:</strong> de {{ enrollment.activity.starting_time }} a {{ enrollment.activity.ending_time }}</p>
+                <p><strong>Lloc:</strong> {{ enrollment.activity.place }}</p>
+                <p><strong>Descripció:</strong> {{ enrollment.activity.objectives|safe }}</p>
                 {% if optout_button %}
                 <a
-                    id="actButton{{activity.id}}"
+                    id="actButton{{enrollment.activity.id}}"
                     href="#"
-                    onclick="javascript:onOptoutButtonClick('{{ activity.name|escapejs }}', '{% url 'activity_optout' id=activity.id %}');"
+                    onclick="javascript:onOptoutButtonClick('{{ enrollment.activity.name|escapejs }}', '{% url 'activity_optout' id=enrollment.activity.id %}');"
                     class="enroll-button"
                 >
                     <div>
                         Eliminar inscripció
                     </div>
                 </a>
+                {% endif %}
+                {% if enrollment.user_comments %}
+                <p>&nbsp;</p>
+                <p>A l'inscriure't, vas deixar el següent comentari:</p>
+                <p><em>{{ enrollment.user_comments }}</em></p>
                 {% endif %}
             </div>
         </div>

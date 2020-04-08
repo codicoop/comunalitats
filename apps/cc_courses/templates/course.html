@@ -43,7 +43,7 @@
                 <a
                         id="actButton{{activity.id}}"
                         href="#"
-                        onclick="javascript:onInscriptionButtonClick('{{ activity.name|escapejs }}', '{% url 'enroll_course' id=activity.id %}', '{% url 'loginsignup' %}?next={{ request.get_full_path }}&act={{activity.id}}');"
+                        onclick="javascript:onInscriptionButtonClick('{{ activity.id }}', '{{ activity.name|escapejs }}', '{% url 'loginsignup' %}?next={{ request.get_full_path }}&act={{activity.id}}');"
                         class="enroll-button"
                 >
                 <div>
@@ -71,29 +71,33 @@
             Confirmació
         </div>
         <div class="modal-content">
-            <p>Ets a punt d'inscriure't a l'activitat:</p>
-            <p id="modal-title-text"></p>
+            <p>Ets a punt d'inscriure't a l'activitat: <span id="modal-title-text"></span></p>
+
             {% if user.is_anonymous %}
             <p>Però per fer-ho has d'accedir al teu compte o bé registrar-te.</p>
-            {% else %}
-            <p>Segur que vols inscriure't-hi?</p>
             {% endif %}
         </div>
-        <div class="modal-buttons">
-            {% if user.is_anonymous %}
-            <a id="button1" href="#" class="enroll-button">
-            <div>
-                Fes login // Registra't
-            </div>
-            </a>
-            {% else %}
-            <a id="button3" href="#" class="enroll-button">
-            <div>
-                Incriure's-hi
-            </div>
-            </a>
+        <form action="{% url 'enroll_course' %}" method="post">
+            <div class="modal-buttons">
+                {% if user.is_anonymous %}
+                <a id="button1" href="#" class="enroll-button">
+                <div>
+                    Fes login // Registra't
+                </div>
+                </a>
+                {% else %}
+                <p>Hi ha res que vulguis que tinguem en compte?</p>
+                {% csrf_token %}
+                <input name="user_comments" id="user_comments">
+                <input type="hidden" id="activity_id" name="activity_id">
+                <a onclick="$(this).closest('form').submit()" id="button3" href="#" class="enroll-button">
+                <div>
+                    Incriure's-hi
+                </div>
+                </a>
             {% endif %}
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 <script>
@@ -107,10 +111,10 @@
         }
     });
 
-    function onInscriptionButtonClick (activityName, activityUrl, loginsignupUrl) {
+    function onInscriptionButtonClick (activityId, activityName, loginsignupUrl) {
         $('#modal-title-text').text(activityName);
         $("#button1").attr("href", loginsignupUrl);
-        $("#button3").attr("href", activityUrl);
+        $('#activity_id').val(activityId);
         showModal('#modal-confirm');
     }
 </script>

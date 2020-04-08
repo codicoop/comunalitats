@@ -15,7 +15,7 @@
     display: none;
     margin: auto;
     width: 600px; 
-    height: 250px; 
+    height: 200px;
     background-color: white;
     position: absolute;
     top: 0; left: 0; bottom: 0; right: 0;
@@ -44,6 +44,10 @@
     padding-top: 20px;
 }
 
+#modal-title-text {
+    font-weight: bold;
+}
+
 .modal-content {
     flex-direction: column;
     flex-grow: 1;
@@ -52,6 +56,6 @@
 
 .modal-buttons {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-around;
 }

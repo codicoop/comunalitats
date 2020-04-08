@@ -363,7 +363,7 @@ footer .logos img {
   display: none;
   margin: auto;
   width: 600px;
-  height: 250px;
+  height: 200px;
   background-color: white;
   position: absolute;
   top: 0;
@@ -395,6 +395,10 @@ footer .logos img {
   padding-top: 20px;
 }
 
+#modal-title-text {
+  font-weight: bold;
+}
+
 .modal-content {
   flex-direction: column;
   flex-grow: 1;
@@ -403,7 +407,7 @@ footer .logos img {
 
 .modal-buttons {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-around;
 }
 

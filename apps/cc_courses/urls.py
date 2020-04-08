@@ -11,6 +11,6 @@ urlpatterns = [
     path('activities/my_activities', login_required(MyCoursesListView.as_view()), name='my_activities'),
     path('program/<slug>', CourseDetailView.as_view(), name='course'),
     path('program/', get_courses_list_view_class().as_view(), name='courses'),
-    path('<id>/enroll', EnrollActivityView.as_view(), name='enroll_course'),
+    path('enroll/', EnrollActivityView.as_view(), name='enroll_course'),
     path('activities/<id>/activity_optout', OptoutActivityView.as_view(), name='activity_optout')
 ]

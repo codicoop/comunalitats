@@ -18,7 +18,7 @@
 
     <div class="courses-container">
         {% with optout_button=True %}
-            {% for activity in enrolled_activities %}
+            {% for enrollment in enrolled_activities %}
                 {% include "reusable/my_courses_activity.html" %}
             {% endfor %}
         {% endwith %}
@@ -31,7 +31,7 @@
     <h1>Activitats a les que has assistit anteriorment:</h1><br />
 
     <div class="courses-container">
-        {% for activity in past_enrolled_activities %}
+        {% for enrollment in past_enrolled_activities %}
             {% include "reusable/my_courses_activity.html" %}
         {% endfor %}
     </div>
