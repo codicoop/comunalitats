@@ -82,5 +82,6 @@ assigned to groups.
 Locate the last groups update migration (user_groups in the filename, usually).
 
 Create a new empty migration and replicate the code there, making the changes you want.
+Make sure you add the function in the "operations" list.
 
 Run migrate and commit the new migration.
