@@ -67,3 +67,20 @@ To compile, go to styles/scss folder and do:
 There's an option to keep the service running so it detects changes and auto-compiles them, but I had
 problems running this and editing the files with PyCharm, I guess because PyCharm keeps the changes
 saved all the time and that messes up with the changes detection.
+
+### Adding or modifying permissions assigned to user groups
+
+The idea is to keep all the instances with the same permissions structure.
+To do so we need data migrations that create or modify the groups whenever something change, i.e. adding a new model.
+
+Note: when a m2m field without a through is migrated to one with a through table, even if the new through model's table
+is the same than before, users will need specific permissions to continue being able to see and use this m2m relation.
+
+In order to keep things simple, the data migration always replace everything, therefore, contains all the permissions
+assigned to groups.
+
+Locate the last groups update migration (user_groups in the filename, usually).
+
+Create a new empty migration and replicate the code there, making the changes you want.
+
+Run migrate and commit the new migration.
