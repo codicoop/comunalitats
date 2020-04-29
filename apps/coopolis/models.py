@@ -155,7 +155,7 @@ class User(BaseUser):
     class Meta:
         verbose_name = "persona"
         verbose_name_plural = "persones"
-        ordering = ["first_name"]
+        ordering = ["-date_joined"]
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -235,7 +235,7 @@ class User(BaseUser):
     def get_full_name(self):
         name = self.first_name
         if self.surname:
-            name = name + " " + self.surname
+            name = f"{name} {self.surname}"
         return name
 
     @property
@@ -244,11 +244,11 @@ class User(BaseUser):
 
     @property
     def surname(self):
-        surname = ""
+        surname = None
         if self.last_name:
-            surname = surname + " " + self.last_name
+            surname = self.last_name
         if self.surname2:
-            surname = surname + " " + self.surname2
+            surname = f"{surname} {self.surname2}" if surname else self.surname2
         return surname
 
     def __str__(self):

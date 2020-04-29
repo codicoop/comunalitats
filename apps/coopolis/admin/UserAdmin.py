@@ -20,7 +20,8 @@ class UserAdmin(admin.ModelAdmin):
 
     form = MySignUpAdminForm
     empty_value_display = '(cap)'
-    list_display = ('first_name', 'last_name', 'id_number', 'email', 'project', 'enrolled_activities_count')
+    list_display = ('date_joined', 'first_name', 'last_name', 'id_number', 'email', 'project',
+                    'enrolled_activities_count')
     search_fields = ('id_number', 'last_name__unaccent', 'first_name__unaccent', 'email', 'phone_number',
                      'cooperativism_knowledge')
     list_filter = ('gender', ('town', admin.RelatedOnlyFieldListFilter), 'district', 'is_staff', 'fake_email',
