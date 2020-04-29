@@ -25,6 +25,9 @@
                         <p>Horaris: {{ course.hours }}</p>
                         <br />
                         <p>{{ course.description|safe }}</p>
+                        <a href="{{ course.absolute_url }}" class="enroll-button">
+                            <div>Veure les sessions</div>
+                        </a>
                     </div>
                 </div>
             {% endfor %}

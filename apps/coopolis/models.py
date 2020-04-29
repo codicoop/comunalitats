@@ -67,8 +67,8 @@ class Project(models.Model):
     MOTIVATION_OPTIONS = (
         ('COOPERATIVISM_EDUCATION', 'Formació en cooperativisme'),
         ('COOPERATIVE_CREATION', "Constitució d'una cooperativa"),
-        ('TRANSFORM_FROM_ASSOCIATION', "Transformació d'associació a coopetiva"),
-        ('TRANSFORM_FROM_SCP', "Transformació de SCP a coopertiva"),
+        ('TRANSFORM_FROM_ASSOCIATION', "Transformació d'associació a cooperativa"),
+        ('TRANSFORM_FROM_SCP', "Transformació de SCP a cooperativa"),
         ('ENTERPRISE_RELIEF', "Relleu empresarial"),
         ('CONSOLIDATION', "Consolidació"),
         ('OTHER', "Altres"),
