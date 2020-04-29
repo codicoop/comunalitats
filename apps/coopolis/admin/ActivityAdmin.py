@@ -115,7 +115,6 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         :param fields_list: contains [{'user': 897, 'user_comments': None}, {'user': 898, 'user_comments': None}, ETC.
         :return: empty list
         """
-        print(f"related_name: {related_name}, fields_list: {fields_list}")
         return list() if related_name == "activityenrolled_set" else fields_list
 
     def render_change_form(self, request, context, *args, **kwargs):
