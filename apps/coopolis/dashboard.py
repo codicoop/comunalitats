@@ -89,10 +89,12 @@ class MyDashboard(Dashboard):
             limit=5,
         ))
 
-        self.children.append(modules.LinkList(
-            title='Enllaços',
-            column=3,
-            children=(
-                ['Gestió de textos del back-office', 'constance/config'],
-            )
-        ))
+    def init_with_context(self, context):
+        if context['request'].user.is_superuser:
+            self.children.append(modules.LinkList(
+                title='Enllaços',
+                column=3,
+                children=(
+                    ['Gestió de textos del back-office', 'constance/config'],
+                )
+            ))
