@@ -13,12 +13,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='activityenrolled',
-            name='date',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
-            preserve_default=False,
-        ),
-        migrations.AddField(
-            model_name='activityenrolled',
             name='waiting_list',
             field=models.BooleanField(default=False, verbose_name="en llista d'espera"),
             preserve_default=False,
