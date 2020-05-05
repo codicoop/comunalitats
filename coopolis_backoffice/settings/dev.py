@@ -267,6 +267,12 @@ CONSTANCE_CONFIG = {
     'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT': (
         "Confirmació d'inscripció a l'activitat: {}",
         "Assumpte del correu que s'envia quan algú s'inscriu a una activitat"),
+    'EMAIL_ENROLLMENT_WAITING_LIST': (
+        "Inscripció en llista d'espera.",
+        "Cos del correu que s'envia quan algú s'inscriu a una activitat i entra en llista d'espera."),
+    'EMAIL_ENROLLMENT_WAITING_LIST_SUBJECT': (
+        "Ets en llista d'espera per l'activitat: {}",
+        "Assumpte del correu que s'envia quan algú s'inscriu a una activitat i entra en llista d'espera."),
     'EMAIL_ENROLLMENT_REMINDER': (
         "",
         "Cos del correu de recordatori que s'envia a tothom que s'ha inscrit"

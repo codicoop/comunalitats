@@ -21,8 +21,8 @@ class ActivityEnrolledInline(admin.TabularInline):
 
     model = ActivityEnrolled
     extra = 0
-    fields = ('user', 'user_comments', 'date_enrolled', )
-    readonly_fields = ('date_enrolled', )
+    fields = ('user', 'user_comments', 'date_enrolled', 'waiting_list',)
+    readonly_fields = ('date_enrolled', 'waiting_list', 'user_comments',)
     raw_id_fields = ('user',)
     autocomplete_lookup_fields = {
         'fk': ['user']
