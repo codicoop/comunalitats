@@ -1,9 +1,14 @@
+from constance import config
+from django.core.mail import EmailMultiAlternatives
 from django.db import models
+from django.dispatch import receiver
 from django.shortcuts import reverse
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, pre_delete, post_delete
 from django.conf import settings
-from uuid import uuid4
 from datetime import date, datetime, time
+
+from django.template import Template, Context
+from django.utils.html import strip_tags
 from easy_thumbnails.fields import ThumbnailerImageField
 from django.apps import apps
 from django.core.validators import ValidationError
@@ -166,7 +171,15 @@ class Activity(models.Model):
 
     @property
     def remaining_spots(self):
-        return self.spots - self.enrolled.count()
+        return self.spots - self.enrollments.filter(waiting_list=False).count()
+
+    @property
+    def waiting_list_count(self):
+        return self.enrollments.filter(waiting_list=True).count()
+
+    @property
+    def waiting_list(self):
+        return self.enrollments.filter(waiting_list=True).order_by('date_enrolled')
 
     @property
     def absolute_url(self):
@@ -231,14 +244,76 @@ class ActivityEnrolled(models.Model):
         verbose_name = "inscripció"
         verbose_name_plural = "inscripcions"
 
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name="sessió")
-    user = models.ForeignKey("coopolis.User", on_delete=models.CASCADE, verbose_name="persona")
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name="sessió", related_name="enrollments")
+    user = models.ForeignKey("coopolis.User", on_delete=models.CASCADE, verbose_name="persona",
+                             related_name="enrollments")
     date_enrolled = models.DateTimeField("data d'inscripció", auto_now_add=True, null=True)
     user_comments = models.TextField("comentaris", null=True, blank=True)
     waiting_list = models.BooleanField("en llista d'espera")
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        is_full = self.activity.remaining_spots < 1
+        self.waiting_list = True if is_full else False
+        super(ActivityEnrolled, self).save(force_insert, force_update, using, update_fields)
 
     def __str__(self):
         return f"Inscripció de {self.user.full_name} a: {self.activity.name}"
 
 
 pre_save.connect(Course.pre_save, sender=Course)
+
+
+@receiver(models.signals.post_save, sender=Activity)
+def save_activity(sender, instance, *args, **kwargs):
+    """
+    When an Activity is saved, it can happen that the nº of spots is increased.
+    This signal makes sure that any available spot is filled with people in the waiting list.
+    """
+    _process_available_spots(instance)
+
+
+@receiver(models.signals.post_delete, sender=ActivityEnrolled)
+def delete_enrollment(sender, instance, *args, **kwargs):
+    """
+    When an enrollment is deleted, we have to check if it left free spots that people in the waiting list could make use
+    of.
+    """
+    _process_available_spots(instance.activity)
+
+
+def _process_available_spots(activity):
+    if activity.remaining_spots > 0 and activity.waiting_list_count > 0:
+        # s'han de processar les places lliures i omplir-les amb gent en llista d'espera.
+        waiting_list = activity.waiting_list
+        for enrollment in waiting_list:
+            # The .save() checks for free spots and sets waiting_list to false if there's one.
+            enrollment.save()
+            # Check that it actually is now enrolled
+            if enrollment.waiting_list is False:
+                _send_confirmation_email(activity, enrollment.user)
+
+
+def _send_confirmation_email(activity, user):
+    context = Context({
+        'activity': activity,
+        'absolute_url_my_activities': f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+        'contact_email': config.CONTACT_EMAIL,
+        'contact_number': config.CONTACT_PHONE_NUMBER,
+    })
+    template = Template(config.EMAIL_ENROLLMENT_CONFIRMATION)
+    html_content = template.render(context)  # render with dynamic value
+    text_content = strip_tags(html_content)  # Strip the html tag. So people can see the pure text at least.
+
+    mail_to = {user.email}
+    if settings.DEBUG:
+        mail_to.add(config.EMAIL_TO_DEBUG)
+
+    # create the email, and attach the HTML version as well.
+    msg = EmailMultiAlternatives(
+        config.EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT.format(activity.name),
+        text_content,
+        config.EMAIL_FROM_ENROLLMENTS,
+        mail_to)
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()

@@ -6,6 +6,8 @@ from django.shortcuts import reverse
 from constance import config
 from django.conf import settings
 from django.template import Template, Context
+from django.core.mail.message import EmailMultiAlternatives
+from django.utils.html import strip_tags
 
 from cc_courses.models import Activity, ActivityEnrolled
 
@@ -17,16 +19,14 @@ class EnrollActivityView(generic.RedirectView):
             self.url = reverse('loginsignup')
         else:
             activity = Activity.objects.get(id=request.POST['activity_id'])
-            is_full = activity.remaining_spots < 1
             enrollment = ActivityEnrolled(
                 user=request.user,
                 activity=activity,
                 user_comments=request.POST['user_comments'],
-                waiting_list=True if is_full else False
             )
             self.url = activity.course.absolute_url
             enrollment.save()
-            if is_full:
+            if enrollment.waiting_list:
                 self._send_waiting_list_email(activity)
             else:
                 self._send_confirmation_email(activity)
@@ -34,12 +34,9 @@ class EnrollActivityView(generic.RedirectView):
         return super().get(request, *args, **kwargs)
 
     def _send_confirmation_email(self, activity):
-        from django.core.mail.message import EmailMultiAlternatives
-        from django.utils.html import strip_tags
-
         context = Context({
             'activity': activity,
-            'absolute_url': self.request.build_absolute_uri(reverse('my_activities')),
+            'absolute_url_my_activities': self.request.build_absolute_uri(reverse('my_activities')),
             'contact_email': config.CONTACT_EMAIL,
             'contact_number': config.CONTACT_PHONE_NUMBER,
             'request': self.request,
@@ -62,12 +59,9 @@ class EnrollActivityView(generic.RedirectView):
         msg.send()
 
     def _send_waiting_list_email(self, activity):
-        from django.core.mail.message import EmailMultiAlternatives
-        from django.utils.html import strip_tags
-
         context = Context({
             'activity': activity,
-            'absolute_url': self.request.build_absolute_uri(reverse('my_activities')),
+            'absolute_url_my_activities': self.request.build_absolute_uri(reverse('my_activities')),
             'contact_email': config.CONTACT_EMAIL,
             'contact_number': config.CONTACT_PHONE_NUMBER,
             'request': self.request,
