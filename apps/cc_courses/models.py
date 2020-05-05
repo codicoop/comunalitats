@@ -231,10 +231,12 @@ class ActivityEnrolled(models.Model):
         verbose_name = "inscripció"
         verbose_name_plural = "inscripcions"
 
+    date = models.DateTimeField(auto_now_add=True)
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name="sessió")
     user = models.ForeignKey("coopolis.User", on_delete=models.CASCADE, verbose_name="persona")
     date_enrolled = models.DateTimeField("data d'inscripció", auto_now_add=True, null=True)
     user_comments = models.TextField("comentaris", null=True, blank=True)
+    waiting_list = models.BooleanField("en llista d'espera")
 
     def __str__(self):
         return f"Inscripció de {self.user.full_name} a: {self.activity.name}"
