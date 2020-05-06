@@ -9,6 +9,31 @@ from constance import config
 from django.utils.safestring import mark_safe
 
 from coopolis.forms import MySignUpAdminForm
+from cc_courses.models import ActivityEnrolled
+
+
+class ActivityEnrolledInline(admin.TabularInline):
+    class Media:
+        js = ('js/grappellihacks.js',)
+
+    model = ActivityEnrolled
+    extra = 0
+    fields = ('activity', 'course_field', 'user_comments', 'date_enrolled', 'waiting_list',)
+    readonly_fields = ('activity', 'course_field', 'user_comments', 'date_enrolled', 'waiting_list',)
+    can_delete = False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def course_field(self, obj):
+        return obj.activity.course
+    course_field.short_description = "Acció"
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -33,6 +58,7 @@ class UserAdmin(admin.ModelAdmin):
               'is_active', 'date_joined', 'last_login', ]
     readonly_fields = ['id', 'last_login', 'date_joined', 'project', ]
     actions = ['copy_emails', ]
+    inlines = (ActivityEnrolledInline, )
 
     def project(self, obj):
         if obj.project:
