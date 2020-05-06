@@ -182,6 +182,10 @@ class Activity(models.Model):
         return self.enrollments.filter(waiting_list=True).order_by('date_enrolled')
 
     @property
+    def confirmed_enrollments(self):
+        return self.enrollments.filter(waiting_list=False).order_by('date_enrolled')
+
+    @property
     def absolute_url(self):
         return self.course.absolute_url
 

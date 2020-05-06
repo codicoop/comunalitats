@@ -479,7 +479,8 @@ class ExportFunctions:
         obj = self.get_sessions_obj(for_minors=False)
         for activity in obj:
             activity_reference_number += 1  # We know that activities where generated first, so it starts at 1.
-            for participant in activity.enrolled.all():
+            for enrollment in activity.confirmed_enrollments:
+                participant = enrollment.user
                 self.row_number += 1
                 if participant.gender is None:
                     gender = ""
@@ -493,21 +494,21 @@ class ExportFunctions:
                 row = [
                     f"{activity_reference_number} {activity.name}",  # Referència.
                     activity.name,  # Nom de l'actuació. Camp automàtic de l'excel.
-                    participant.surname,
+                    participant.surname if participant.surname else "",
                     participant.first_name,
                     participant.id_number,
-                    gender,
-                    participant.birthdate,
-                    town,
+                    gender if gender else "",
+                    participant.birthdate if participant.birthdate else "",
+                    town if town else "",
                     participant.get_employment_situation_display() if participant.get_employment_situation_display() else "",
                     participant.get_birth_place_display() if participant.get_birth_place_display() else "",
                     participant.get_educational_level_display() if participant.get_educational_level_display() else "",
                     participant.get_discovered_us_display() if participant.get_discovered_us_display() else "",
                     activity.organizer if activity.organizer else "",
                     participant.email,
-                    participant.phone_number,
+                    participant.phone_number if participant.phone_number else "",
                     participant.project if participant.project else "",
-                    participant.project.stages_list if participant.project else ""
+                    participant.project.stages_list if participant.project and participant.project.stages_list else ""
                 ]
                 self.fill_row_data(row)
 
