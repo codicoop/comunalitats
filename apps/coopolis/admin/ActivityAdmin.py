@@ -142,7 +142,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         temp = loader.get_template('admin/attendee_list.html')
         content = temp.render(
             {
-                'assistants': Activity.objects.get(pk=_id).enrolled.all(),
+                'assistants': Activity.objects.get(pk=_id).enrolled.filter(enrollments__waiting_list=False),
                 'activity': Activity.objects.get(pk=_id),
                 'footer_image': config.ATTENDEE_LIST_FOOTER_IMG,
             }
@@ -158,7 +158,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         if obj.id is None:
             return '-'
         base_url = reverse('admin:coopolis_user_changelist')
-        return mark_safe(u'<a href="%s?enrolled_activities__exact=%d">Inscrites</a>' % (
+        return mark_safe(u'<a href="%s?enrolled_activities__exact=%d">Inscrites i en llista d\'espera</a>' % (
             base_url, obj.id))
 
     attendee_filter_field.short_description = 'Llistat'
@@ -178,8 +178,8 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         obj = Activity.objects.get(id=_id)
         if request.method == 'POST':
             mail_to_bcc = set()
-            for participant in obj.enrolled.all():
-                mail_to_bcc.add(participant.email)
+            for enrollment in obj.enrollments.filter(waiting_list=False):
+                mail_to_bcc.add(enrollment.user.email)
             self._send_reminder_email(mail_to_bcc, obj, request)
             self.message_user(request, "Recordatoris enviats correctament.")
             return HttpResponseRedirect("../../")
