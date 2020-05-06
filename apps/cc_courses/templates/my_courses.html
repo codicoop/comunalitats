@@ -23,6 +23,17 @@
             {% endfor %}
         {% endwith %}
     </div>
+
+    <h1>Ets en llista d'espera per les següents activitats:</h1><br />
+
+    <div class="courses-container">
+        {% with optout_button=True button_text_waiting_list=True %}
+            {% for enrollment in waiting_list_activities %}
+                {% include "reusable/my_courses_activity.html" %}
+            {% endfor %}
+        {% endwith %}
+    </div>
+
     {% endif %}
 
     {% if past_enrolled_activities.count %}

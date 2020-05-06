@@ -15,7 +15,11 @@
                     class="enroll-button"
                 >
                     <div>
+                        {% if button_text_waiting_list %}
+                        Sortir de la llista d'espera
+                        {% else %}
                         Eliminar inscripció
+                        {% endif %}
                     </div>
                 </a>
                 {% endif %}
