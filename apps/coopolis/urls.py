@@ -3,14 +3,15 @@
 
 from django.urls import path, include
 from django.contrib import admin
-from .views import ProjectFormView, ProjectCreateFormView, ProjectInfoView, LoginSignupContainerView,\
-    CoopolisSignUpView, CoopolisLoginView, HomeView, CustomPasswordResetView
 from django.conf.urls import url
 from django.conf import settings
 from django.views.generic.base import RedirectView
 from django.contrib.auth.decorators import login_required
-from cc_users.decorators import anonymous_required
 from django.views.generic import TemplateView
+
+from .views import ProjectFormView, ProjectCreateFormView, ProjectInfoView, LoginSignupContainerView,\
+    CoopolisSignUpView, CoopolisLoginView, HomeView, CustomPasswordResetView
+from cc_users.decorators import anonymous_required
 
 
 urlpatterns = [
