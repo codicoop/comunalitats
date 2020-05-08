@@ -1,14 +1,8 @@
-from constance import config
-from django.core.mail import EmailMultiAlternatives
 from django.db import models
-from django.dispatch import receiver
 from django.shortcuts import reverse
-from django.db.models.signals import pre_save, pre_delete, post_delete
 from django.conf import settings
 from datetime import date, datetime, time
 
-from django.template import Template, Context
-from django.utils.html import strip_tags
 from easy_thumbnails.fields import ThumbnailerImageField
 from django.apps import apps
 from django.core.validators import ValidationError
@@ -263,67 +257,3 @@ class ActivityEnrolled(models.Model):
 
     def __str__(self):
         return f"Inscripció de {self.user.full_name} a: {self.activity.name}"
-
-
-pre_save.connect(Course.pre_save, sender=Course)
-
-
-@receiver(models.signals.post_save, sender=Activity)
-def save_activity(sender, instance, *args, **kwargs):
-    """
-    When an Activity is saved, it can happen that the nº of spots is increased.
-    This signal makes sure that any available spot is filled with people in the waiting list.
-    """
-    _process_available_spots(instance)
-
-
-@receiver(models.signals.post_delete, sender=ActivityEnrolled)
-def delete_enrollment(sender, instance, *args, **kwargs):
-    """
-    When an enrollment is deleted, we have to check if it left free spots that people in the waiting list could make use
-    of.
-    """
-    _process_available_spots(instance.activity)
-
-
-def _process_available_spots(activity):
-    """
-    That's going to happen both when a user removes an enrollment in the Front and when they manage them in the back.
-
-    Therefore, it's important that it can only be triggered for events that are active and not past due. Otherwise
-    users will receive e-mails months after the activity, when the Ateneu is organizing the information.
-    """
-    if not activity.is_past_due and activity.remaining_spots > 0 and activity.waiting_list_count > 0:
-        # s'han de processar les places lliures i omplir-les amb gent en llista d'espera.
-        waiting_list = activity.waiting_list
-        for enrollment in waiting_list:
-            # The .save() checks for free spots and sets waiting_list to false if there's one.
-            enrollment.save()
-            # Check that it actually is now enrolled
-            if enrollment.waiting_list is False:
-                _send_confirmation_email(activity, enrollment.user)
-
-
-def _send_confirmation_email(activity, user):
-    context = Context({
-        'activity': activity,
-        'absolute_url_my_activities': f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-        'contact_email': config.CONTACT_EMAIL,
-        'contact_number': config.CONTACT_PHONE_NUMBER,
-    })
-    template = Template(config.EMAIL_ENROLLMENT_CONFIRMATION)
-    html_content = template.render(context)  # render with dynamic value
-    text_content = strip_tags(html_content)  # Strip the html tag. So people can see the pure text at least.
-
-    mail_to = {user.email}
-    if settings.DEBUG:
-        mail_to.add(config.EMAIL_TO_DEBUG)
-
-    # create the email, and attach the HTML version as well.
-    msg = EmailMultiAlternatives(
-        config.EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT.format(activity.name),
-        text_content,
-        config.EMAIL_FROM_ENROLLMENTS,
-        mail_to)
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
