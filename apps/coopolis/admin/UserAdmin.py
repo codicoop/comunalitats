@@ -53,8 +53,8 @@ class UserAdmin(admin.ModelAdmin):
                    'authorize_communications', )
     fields = ['id', 'first_name', 'last_name', 'surname2', 'gender', 'id_number', 'email', 'fake_email', 'birthdate',
               'birth_place', 'town', 'district', 'address', 'phone_number', 'educational_level',
-              'employment_situation', 'discovered_us', 'cooperativism_knowledge', 'authorize_communications',
-              'project', 'is_staff', 'groups',
+              'employment_situation', 'discovered_us', 'project_involved', 'cooperativism_knowledge',
+              'authorize_communications', 'project', 'is_staff', 'groups',
               'is_active', 'date_joined', 'last_login', ]
     readonly_fields = ['id', 'last_login', 'date_joined', 'project', ]
     actions = ['copy_emails', ]

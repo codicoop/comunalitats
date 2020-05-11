@@ -49,7 +49,8 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
         model = User
         fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
                   'birth_place', 'town', 'district', 'address', 'gender', 'educational_level',
-                  'employment_situation', 'discovered_us', 'password1', 'password2', 'authorize_communications']
+                  'employment_situation', 'discovered_us', 'project_involved', 'password1', 'password2',
+                  'authorize_communications']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -82,7 +83,7 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
                   'birth_place', 'town', 'district', 'address', 'gender', 'educational_level',
-                  'employment_situation', 'discovered_us', ]
+                  'employment_situation', 'discovered_us', 'project_involved', ]
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
