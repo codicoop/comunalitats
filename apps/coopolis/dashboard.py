@@ -18,6 +18,15 @@ class MyDashboard(Dashboard):
     def __init__(self, **kwargs):
         Dashboard.__init__(self, **kwargs)
 
+        # There's not a special reason for it to be here, just that it doesn't need the context.
+        # move it to init_with_context safely if you want to!
+        self.children.append(modules.RecentActions(
+            title='Accions que has fet recentment',
+            column=2,
+            limit=5,
+        ))
+
+    def init_with_context(self, context):
         # 'Disabling' reservations module by default, by assigning an empty link module:
         reservations_module_app = modules.LinkList()
         reservations_module_calendar = modules.LinkList()
@@ -42,59 +51,65 @@ class MyDashboard(Dashboard):
                     ),
                 )
 
+        group_children = [
+            modules.ModelList(
+                title='Accions i sessions',
+                column=1,
+                collapsible=False,
+                models=('cc_courses.models.Course', 'cc_courses.models.Activity',),
+            ),
+            modules.ModelList(
+                title='Acompanyament de projectes',
+                column=1,
+                collapsible=False,
+                models=('coopolis.models.Project', 'coopolis.models.ProjectStage',
+                        'coopolis.models.EmploymentInsertion',),
+            ),
+            reservations_module_app,
+            reservations_module_calendar,
+            modules.ModelList(
+                title="Gestió d'usuàries",
+                column=1,
+                collapsible=False,
+                models=('coopolis.models.User',),
+            ),
+            modules.ModelList(
+                title="Exportació de dades per justificacions",
+                column=1,
+                collapsible=False,
+                models=('dataexports.models.DataExports', 'dataexports.models.SubsidyPeriod'),
+            ),
+            modules.ModelList(
+                title="Gestió de dades",
+                column=1,
+                collapsible=False,
+                models=('cc_courses.models.Organizer', 'cc_courses.models.Entity', 'cc_courses.models.CoursePlace'),
+            ),
+        ]
+
+        if context['request'].user.is_superuser:
+            group_children.append(
+                modules.ModelList(
+                    title="Configuració dels correus electrònics",
+                    column=1,
+                    collapsible=False,
+                    models=('mailing_manager.models.Mail',),
+                )
+            )
+
         self.children.append(modules.Group(
             title=settings.PROJECT_NAME,
             column=1,
             collapsible=True,
-            children=[
-                modules.ModelList(
-                    title='Accions i sessions',
-                    column=1,
-                    collapsible=False,
-                    models=('cc_courses.models.Course', 'cc_courses.models.Activity',),
-                ),
-                modules.ModelList(
-                    title='Acompanyament de projectes',
-                    column=1,
-                    collapsible=False,
-                    models=('coopolis.models.Project', 'coopolis.models.ProjectStage',
-                            'coopolis.models.EmploymentInsertion',),
-                ),
-                reservations_module_app,
-                reservations_module_calendar,
-                modules.ModelList(
-                    title="Gestió d'usuàries",
-                    column=1,
-                    collapsible=False,
-                    models=('coopolis.models.User',),
-                ),
-                modules.ModelList(
-                    title="Exportació de dades per justificacions",
-                    column=1,
-                    collapsible=False,
-                    models=('dataexports.models.DataExports', 'dataexports.models.SubsidyPeriod'),
-                ),
-                modules.ModelList(
-                    title="Gestió de dades",
-                    column=1,
-                    collapsible=False,
-                    models=('cc_courses.models.Organizer', 'cc_courses.models.Entity', 'cc_courses.models.CoursePlace'),
-                )
-            ]
+            children=group_children
         ))
 
-        self.children.append(modules.RecentActions(
-            title='Accions que has fet recentment',
-            column=2,
-            limit=5,
-        ))
-
-    def init_with_context(self, context):
         if context['request'].user.is_superuser:
             self.children.append(modules.LinkList(
                 title='Enllaços',
                 column=3,
                 children=(
                     ['Gestió de textos del back-office', 'constance/config'],
+                    ["Registre d'e-mails enviats", 'mailqueue/mailermessage/']
                 )
             ))
