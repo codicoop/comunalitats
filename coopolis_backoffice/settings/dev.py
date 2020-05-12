@@ -356,6 +356,12 @@ CONSTANCE_CONFIG = {
         "93 432 00 63", "Apareix al correu que s'envia a la gent que s'inscriu a activitats, perquè sàpiguen on "
                         "contactar si tenen dubtes. De la mateixa manera apareix al correu que s'envia quan envieu "
                         "un recordatori a tota la gent inscrita a una sessió."),
+    'PROJECT_FACEBOOK_URL': (
+        "", "Si s'indica la URL del perfil de Facebook, apareixerà a la plantilla dels correus electrònics."),
+    'PROJECT_TWITTER_URL': (
+        "", "Si s'indica la URL del perfil de Twitter, apareixerà a la plantilla dels correus electrònics."),
+    'PROJECT_INSTAGRAM_URL': (
+        "", "Si s'indica la URL del perfil d'Instagram, apareixerà a la plantilla dels correus electrònics."),
     'CONTACT_EMAIL': (
         "coopolis@bcn.coop",
         "Apareix al correu que s'envia a la persona que s'ha inscrit a una sessió (i al de recordatori que s'envia"
@@ -367,7 +373,8 @@ CONSTANCE_CONFIG = {
 CONSTANCE_CONFIG_FIELDSETS = {
     'Configuració': ('ENABLE_ROOM_RESERVATIONS_MODULE', 'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL',
                      'PROJECT_CONTACT_URL', 'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG',
-                     'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS'),
+                     'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS',
+                     'PROJECT_FACEBOOK_URL', 'PROJECT_TWITTER_URL', 'PROJECT_INSTAGRAM_URL'),
     'Correus': ('EMAIL_NEW_PROJECT_SUBJECT', 'EMAIL_NEW_PROJECT',
                 'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT', 'EMAIL_ENROLLMENT_CONFIRMATION',
                 'EMAIL_ENROLLMENT_WAITING_LIST_SUBJECT', 'EMAIL_ENROLLMENT_WAITING_LIST',
@@ -482,3 +489,18 @@ THUMBNAIL_ALIASES = {
     },
 }
 THUMBNAIL_DEFAULT_STORAGE = 'cc_lib.storages.MediaStorage'
+
+# MAIL-QUEUE SETTINGS
+MAILQUEUE_CELERY = False
+
+# Enable the mail queue. If this is set to False, the mail queue will be disabled and emails will be
+# sent immediately instead.
+MAILQUEUE_QUEUE_UP = True
+
+# Maximum amount of emails to send during each queue run
+MAILQUEUE_LIMIT = 10
+
+# If MAILQUEUE_STORAGE is set to True, will ignore your default storage settings
+# and use Django's filesystem storage instead (stores them in MAILQUEUE_ATTACHMENT_DIR)
+MAILQUEUE_STORAGE = False
+MAILQUEUE_ATTACHMENT_DIR = 'mailqueue-attachments'
