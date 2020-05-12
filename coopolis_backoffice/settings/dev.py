@@ -344,6 +344,9 @@ CONSTANCE_CONFIG = {
                            "s'envia a aquest compte. Aquest camp, a diferència dels altres, permet indicar diversos "
                            "comptes, separant-los per comes."),
     'EMAIL_TO_DEBUG': ('p.picornell@gmail.com', 'Correu per fer tests del codi.'),
+    'PROJECT_NAME': ("Ateneu", "Nom curt de l'ateneu."),
+    'PROJECT_FULL_NAME': ("Ateneu cooperatiu", "Nom llarg, p.ex.: 'Coòpolis. Ateneu cooperatiu de Barcelona'. També "
+                                               "hi podeu posar el mateix que al nom curt, si voleu."),
     'PROJECT_CONTACT_URL': (
         "https://bcn.coop/contacte/", "Enllaç a la pàgina de contacte de l'ateneu, apareix a peu de pàgina."),
     'PROJECT_LEGAL_URL': (
@@ -371,7 +374,8 @@ CONSTANCE_CONFIG = {
         "URL de l'imatge pel peu de pàgina del llistat d'assistència."),
 }
 CONSTANCE_CONFIG_FIELDSETS = {
-    'Configuració': ('ENABLE_ROOM_RESERVATIONS_MODULE', 'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL',
+    'Configuració': ('PROJECT_NAME', 'PROJECT_FULL_NAME',
+                     'ENABLE_ROOM_RESERVATIONS_MODULE', 'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL',
                      'PROJECT_CONTACT_URL', 'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG',
                      'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS',
                      'PROJECT_FACEBOOK_URL', 'PROJECT_TWITTER_URL', 'PROJECT_INSTAGRAM_URL'),
