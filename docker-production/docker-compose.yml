@@ -12,9 +12,11 @@ services:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.server_production
+      - PYTHONPATH=/shared_libraries
     command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --timeout 300
     volumes:
       - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
     ports:
       - 8000:8000
     depends_on:
@@ -31,9 +33,11 @@ services:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-demo
+      - PYTHONPATH=/shared_libraries
     command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8001 --timeout 300
     volumes:
       - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
     ports:
       - 8001:8001
     depends_on:
@@ -49,9 +53,11 @@ services:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopcamp
+      - PYTHONPATH=/shared_libraries
     command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8002 --timeout 300
     volumes:
       - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
     ports:
       - 8002:8002
     depends_on:
@@ -67,9 +73,11 @@ services:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopmaresme
+      - PYTHONPATH=/shared_libraries
     command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8003 --timeout 300
     volumes:
       - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
     ports:
       - 8003:8003
     depends_on:
@@ -85,9 +93,11 @@ services:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-bnord
+      - PYTHONPATH=/shared_libraries
     command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8004 --timeout 300
     volumes:
       - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
     ports:
       - 8004:8004
     depends_on:
@@ -104,11 +114,53 @@ services:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-ponentcoopera
+      - PYTHONPATH=/shared_libraries
     command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8006 --timeout 300
     volumes:
       - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
     ports:
       - 8006:8006
+    depends_on:
+      - db
+
+  # https://serveis.ateneucooperatiuvalles.org
+  ateneu-vallesoccidental:
+    container_name: ateneu_vallesoccidental
+    build:
+      context: ..
+      dockerfile: ./docker-production/Dockerfile
+    environment:
+      - DB_HOST=db
+      - "PYTHONUNBUFFERED=1"
+      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-vallesoccidental
+      - PYTHONPATH=/shared_libraries
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8007
+    volumes:
+      - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
+    ports:
+      - 8007:8007
+    depends_on:
+      - db
+
+  # https://serveis.coopcatcentral.cat
+  ateneu-catcentral:
+    container_name: ateneu_catcentral
+    build:
+      context: ..
+      dockerfile: ./docker-production/Dockerfile
+    environment:
+      - DB_HOST=db
+      - "PYTHONUNBUFFERED=1"
+      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-catcentral
+      - PYTHONPATH=/shared_libraries
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8008
+    volumes:
+      - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
+    ports:
+      - 8008:8008
     depends_on:
       - db
 

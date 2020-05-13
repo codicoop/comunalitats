@@ -12,9 +12,11 @@ services:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.server_develop
+      - PYTHONPATH=/shared_libraries
     command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
     depends_on:
       - db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
@@ -29,9 +31,11 @@ services:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.segon_ateneu
+      - PYTHONPATH=/shared_libraries
     command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
     depends_on:
       - db
 
