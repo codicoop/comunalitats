@@ -1,6 +1,5 @@
 FROM python:3.6-alpine
 COPY docker-production/requirements.txt /srv/requirements.txt
-COPY local_packages /srv/local_packages
 
 WORKDIR /srv
 
@@ -16,5 +15,3 @@ RUN pip install -r /srv/requirements.txt
 RUN apk --update --upgrade add gcc musl-dev jpeg-dev zlib-dev libffi-dev cairo-dev pango-dev gdk-pixbuf-dev
 # Installing font for PDFs:
 RUN apk --update add fontconfig ttf-opensans
-
-RUN pip install /srv/local_packages/django-dynamic-form-fields-master
