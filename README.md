@@ -85,3 +85,14 @@ Create a new empty migration and replicate the code there, making the changes yo
 Make sure you add the function in the "operations" list.
 
 Run migrate and commit the new migration.
+
+# Installed packages
+
+[ To do: add them all and clean unused ones ]
+
+## dynamic-fields
+
+https://gitlab.com/dannosaur/django-dynamic-form-fields
+
+Enables dropdowns that filter its content according to another dropdown.
+We use them when selecting Axis and Sub-axis.
