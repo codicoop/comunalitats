@@ -164,6 +164,22 @@ services:
     depends_on:
       - db
 
+  # https://documentacio-backoffice.bcn.coop
+  documentacio:
+    container_name: documentacio
+    image: requarks/wiki:2
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: mysecretpassword
+      DB_NAME: documentacio_wikijs
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+
   db:
     container_name: postgres
     image: postgres
