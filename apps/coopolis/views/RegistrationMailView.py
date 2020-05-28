@@ -46,7 +46,6 @@ class CustomPasswordResetView(auth_views.PasswordResetView):
     def form_valid(self, form):
         email = form.cleaned_data["email"]
         if len(list(form.get_users(email))) == 0:
-            print('invalid e-mail detected')
             return SimpleTemplateResponse('registration/password_reset_error.html')
 
         return super(CustomPasswordResetView, self).form_valid(form)
