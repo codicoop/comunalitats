@@ -439,7 +439,7 @@ class ExportFunctions:
                 name,  # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
                 project.name,
                 project.cif,
-                project.partners.all()[0].full_name,
+                project.partners.all()[0].full_name if project.partners.all() else "",
                 project.mail,
                 project.phone,
                 "Sí",
