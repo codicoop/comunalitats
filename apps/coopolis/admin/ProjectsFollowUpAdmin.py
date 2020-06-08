@@ -24,11 +24,11 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             return response
 
         query = {
-            'members_h': Count('partners',
-                               filter=Q(partners__gender='MALE')),
-            'members_d': Count('partners',
-                               filter=Q(partners__gender='FEMALE')),
-            'members_total': Count('partners'),
+            'members_h': Count('stages__involved_partners',
+                             filter=Q(stages__involved_partners__gender='MALE')),
+            'members_d': Count('stages__involved_partners',
+                               filter=Q(stages__involved_partners__gender='FEMALE')),
+            'members_total': Count('stages__involved_partners'),
             'acollida_hores': Sum('stages__hours', filter=Q(stages__stage_type=1)),
             'acollida_certificat':
                 Count('stages__scanned_certificate',
