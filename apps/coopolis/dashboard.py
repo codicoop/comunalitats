@@ -63,7 +63,7 @@ class MyDashboard(Dashboard):
                 column=1,
                 collapsible=False,
                 models=('coopolis.models.Project', 'coopolis.models.ProjectStage',
-                        'coopolis.models.EmploymentInsertion',),
+                        'coopolis.models.EmploymentInsertion', 'coopolis.models.ProjectsFollowUp', ),
             ),
             reservations_module_app,
             reservations_module_calendar,

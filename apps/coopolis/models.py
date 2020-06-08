@@ -143,6 +143,15 @@ class Project(models.Model):
         return self.stages.all()[0].stage_responsible
     last_stage_responsible.fget.short_description = "Últim acompanyament"
 
+    @property
+    def full_town_district(self):
+        if not self.town:
+            return None
+        ret = self.town
+        if self.district:
+            ret = f"{ret} ({self.get_district_display()})"
+        return ret
+
     @staticmethod
     def autocomplete_search_fields():
         return ('name__icontains', )
@@ -336,6 +345,13 @@ class ProjectStage(models.Model):
 
     def __str__(self):
         return f"{str(self.project)}: {self.get_stage_type_display()}"
+
+
+class ProjectsFollowUp(Project):
+    class Meta:
+        proxy = True
+        verbose_name_plural = "Seguiment d'acompanyaments"
+        verbose_name = "Seguiment d'acompanyament"
 
 
 class StagesByAxis(ProjectStage):

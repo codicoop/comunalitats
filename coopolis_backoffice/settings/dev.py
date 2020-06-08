@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'dynamic_fields',
     'mailing_manager',
     'mailqueue',
+    'django.contrib.humanize',
 ]
 
 
