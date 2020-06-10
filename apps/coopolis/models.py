@@ -93,7 +93,10 @@ class Project(models.Model):
                                      max_length=250)
     derivation = models.ForeignKey(Derivation, verbose_name="derivat", on_delete=models.SET_NULL, blank=True, null=True)
     derivation_date = models.DateField("data de derivació", blank=True, null=True)
-
+    description = models.TextField("descripció", blank=True, null=True)
+    other = models.CharField("altres", max_length=240, blank=True, null=True,
+                             help_text="Apareix a la taula de Seguiment d'Acompanyaments")
+    employment_estimation = models.PositiveIntegerField("insercions laborals previstes", default=0)
 
     @property
     def has_estatus(self):

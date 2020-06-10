@@ -8,9 +8,39 @@
 
 {% block content %}
 <style>
-  .totals td {
-    border-top:1px black solid;
-  }
+.totals td {
+  border-top:1px black solid;
+}
+
+[ellipsis-tooltip]::after {
+  content: attr(ellipsis-tooltip);
+  display: block;
+  width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+[ellipsis-tooltip] {
+	position: relative;
+	cursor: help;
+}
+[ellipsis-tooltip]::before {
+  display: none;
+  width: 300px;
+}
+[ellipsis-tooltip]:hover::before {
+	content: attr(ellipsis-tooltip);
+  display: block;
+	position: absolute;
+	top: 20px;
+	padding: 10px;
+	background: #000;
+	color: #fff;
+	font-size: 14px;
+}
+.ellipsis-tooltip--left::before {
+  left: -220px;
+}
 </style>
 
 <div class="grp-module">
@@ -199,7 +229,7 @@
           <td>{{ row.members_h }} / {{ row.members_d }}</td>
           <td>{{ row.members_total }}</td>
           <td>{{ row.get_sector_display }}</td>
-          <td>descripció interna</td>
+          <td>{% if row.description %}<span ellipsis-tooltip="{{ row.description }}"></span>{% endif %}</td>
           <td>{{ row.get_project_status_display }}</td>
           <td>{{ row.full_town_district }}</td>
           <td>{{ row.acollida_hores|default_if_none:0 }}</td>
@@ -218,10 +248,10 @@
           <td>{% if row.consolidacio_certificat > 0 %}
             <img src="{% static 'admin/img/icon-yes.svg' %}" alt="True"></a>{% endif %}
           </td>
-          <td></td>
+          <td>{{ row.employment_estimation }}</td>
           <td>{{ row.employment_insertions.all|length }}</td>
           <td>{{ row.constitution_date|date:"Y.m.d"|default_if_none:"" }}</td>
-          <td>altres</td>
+          <td>{% if row.other %}<span ellipsis-tooltip="{{ row.other }}" class="ellipsis-tooltip--left"></span>{% endif %}</td>
         </tr>
         {% endfor %}
         <tr class="grp-row totals">
