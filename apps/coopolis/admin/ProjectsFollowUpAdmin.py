@@ -1,6 +1,5 @@
 from django.contrib import admin
-from django.db.models import Count, Sum, Q, When
-from django.db.models.functions import Coalesce
+from django.db.models import Count, Sum, Q
 
 
 class ProjectsFollowUpAdmin(admin.ModelAdmin):
@@ -46,25 +45,6 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
                 Count('stages__scanned_certificate',
                       filter=Q(stages__stage_type__in=[7, 8]) & Q(stages__scanned_certificate__isnull=False)),
         }
-        #     'total_to_pay': Sum('enrolled_activities__price'),
-        #     'total_grants_requested':
-        #         Count('activityenrolled__grant_requested',
-        #               filter=Q(activityenrolled__grant_requested=True),
-        #               distinct=True),
-        #     'total_grants_obtained':
-        #         Sum('activityenrolled__payments__amount', filter=Q(activityenrolled__payments__method='B')),
-        #     'total_to_pay_after_grants':
-        #         Sum('enrolled_activities__price') -
-        #         Coalesce(
-        #             Sum('activityenrolled__payments__amount', filter=Q(activityenrolled__payments__method='B')),
-        #             0
-        #         ),
-        #     'total_payments_without_grants':
-        #         Sum('activityenrolled__payments__amount', filter=~Q(activityenrolled__payments__method='B')),
-        #     'to_pay':
-        #         Sum('enrolled_activities__price') -
-        #         Coalesce(Sum('activityenrolled__payments__amount'), 0),
-        # }
 
         # Annotate adds columns to each row with the sum or calculations of the row:
         response.context_data['rows'] = list(
