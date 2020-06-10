@@ -1,13 +1,16 @@
 from django.contrib import admin
 from django.db.models import Count, Sum, Q
 
+from .ProjectAdmin import FilterByFounded
+from dataexports.models import SubsidyPeriod
+
 
 class ProjectsFollowUpAdmin(admin.ModelAdmin):
     """
     Inspired in: https://medium.com/@hakibenita/how-to-turn-django-admin-into-a-lightweight-dashboard-a0e0bbf609ad
     """
     change_list_template = 'admin/projects_follow_up.html'
-    list_filter = ('stages__subsidy_period', )
+    list_filter = ('stages__subsidy_period', FilterByFounded)
     show_full_result_count = False
     list_display = ('name', )
     list_per_page = 99999
@@ -85,6 +88,100 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             totals['total_employment_insertions'] += \
                 len(row.employment_insertions.all()) if row.employment_insertions else 0
             totals['total_constitutions'] += 1 if row.constitution_date else 0
+
+        response.context_data['totals'] = totals
+
+        return response
+
+    # def has_change_permission(self, request, obj=None):
+    #     return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request):
+        return False
+
+
+class ConstitutionDateFilter(admin.SimpleListFilter):
+    title = "Amb data de constitució dins la convocatòria…"
+
+    parameter_name = 'constitution_subsidy'
+
+    def lookups(self, request, model_admin):
+        qs = SubsidyPeriod.objects.all()
+        qs.order_by('name')
+        return list(qs.values_list('id', 'name'))
+
+    # def choices(self, cl):
+    #     for lookup, title in self.lookup_choices:
+    #         selected = False
+    #         if not self.value() and int(lookup) == datetime.datetime.now().year:
+    #             selected = True
+    #         yield {
+    #             'selected': selected,
+    #             'query_string': cl.get_query_string({
+    #                 self.parameter_name: lookup,
+    #             }, []),
+    #             'display': title,
+    #         }
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value:
+            period = SubsidyPeriod.objects.get(id=value)
+            return queryset.filter(constitution_date__range=(period.date_start, period.date_end))
+        return queryset
+
+
+class ProjectsConstitutedAdmin(admin.ModelAdmin):
+    """
+    Inspired in: https://medium.com/@hakibenita/how-to-turn-django-admin-into-a-lightweight-dashboard-a0e0bbf609ad
+    """
+    change_list_template = 'admin/projects_constituted.html'
+    list_filter = (ConstitutionDateFilter, )
+    show_full_result_count = False
+    list_display = ('name', )
+    list_per_page = 99999
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(
+            request,
+            extra_context=extra_context,
+        )
+
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+
+        query = {
+            'members_h': Count('stages__involved_partners',
+                               filter=Q(stages__involved_partners__gender='MALE'), distinct=True),
+            'members_d': Count('stages__involved_partners',
+                               filter=Q(stages__involved_partners__gender='FEMALE'), distinct=True),
+            'members_a': Count('stages__involved_partners',
+                               filter=~Q(stages__involved_partners__gender='FEMALE') &
+                                      ~Q(stages__involved_partners__gender='MALE'), distinct=True),
+        }
+
+        # Annotate adds columns to each row with the sum or calculations of the row:
+        response.context_data['rows'] = list(
+            qs.filter(cif__isnull=False, constitution_date__isnull=False).annotate(**query)
+        )
+
+        # Normally it should be easier to call aggregate to have the totals, but given how complex is it to combine
+        # with the ORM filters, I opted for filling the values like this.
+        # The original version was: qs.aggregate(**query)
+        totals = dict(
+            total_members_h=0,
+            total_members_d=0,
+            total_members_a=0,
+        )
+        for row in response.context_data['rows']:
+            totals['total_members_h'] += row.members_h if row.members_h else 0
+            totals['total_members_d'] += row.members_d if row.members_d else 0
+            totals['total_members_a'] += row.members_a if row.members_a else 0
 
         response.context_data['totals'] = totals
 

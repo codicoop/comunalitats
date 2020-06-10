@@ -4,13 +4,14 @@
 from django.contrib import admin
 from django.conf import settings
 
-from coopolis.models import User, Project, ProjectStage, Derivation, EmploymentInsertion, StagesByAxis, ProjectsFollowUp
+from coopolis.models import User, Project, ProjectStage, Derivation, EmploymentInsertion, StagesByAxis, \
+    ProjectsFollowUp, ProjectsConstituted
 from cc_courses.models import Course, Activity, CoursePlace, Entity, Organizer
 from .ActivityAdmin import ActivityAdmin
 from .CourseAdmin import CourseAdmin
 from .ProjectAdmin import ProjectAdmin, ProjectStageAdmin, DerivationAdmin, EmploymentInsertionAdmin, \
     ProjectStageAdminAxis
-from .ProjectsFollowUpAdmin import ProjectsFollowUpAdmin
+from .ProjectsFollowUpAdmin import ProjectsFollowUpAdmin, ProjectsConstitutedAdmin
 from .UserAdmin import UserAdmin
 from .CoursePlaceAdmin import CoursePlaceAdmin
 
@@ -27,6 +28,7 @@ admin.site.register(Organizer)
 admin.site.register(Derivation, DerivationAdmin)
 admin.site.register(EmploymentInsertion, EmploymentInsertionAdmin)
 admin.site.register(ProjectsFollowUp, ProjectsFollowUpAdmin)
+admin.site.register(ProjectsConstituted, ProjectsConstitutedAdmin)
 
 admin.site.site_header = settings.ADMIN_HEADER
 admin.site.site_title = settings.ADMIN_SITE_TITLE

@@ -357,6 +357,13 @@ class ProjectsFollowUp(Project):
         verbose_name = "Seguiment d'acompanyament"
 
 
+class ProjectsConstituted(Project):
+    class Meta:
+        proxy = True
+        verbose_name_plural = "Projectes constituïts"
+        verbose_name = "Projecte constituït"
+
+
 class StagesByAxis(ProjectStage):
     class Meta:
         proxy = True
