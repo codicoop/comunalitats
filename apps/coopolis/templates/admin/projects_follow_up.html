@@ -7,6 +7,11 @@
 {% endblock %}
 
 {% block content %}
+<style>
+  .totals td {
+    border-top:1px black solid;
+  }
+</style>
 <section id="grp-changelist" class="{% if cl.list_editable %} grp-editable{% endif %}">
   <header style="display:none"><h1>Results</h1></header>
   <!-- ERRORS -->
@@ -168,23 +173,36 @@
           <td>{% if row.consolidacio_certificat > 0 %}
             <img src="{% static 'admin/img/icon-yes.svg' %}" alt="True"></a>{% endif %}
           </td>
-          <td>ins. previstes</td>
+          <td></td>
           <td>{{ row.employment_insertions.all|length }}</td>
           <td>{{ row.constitution_date|date:"Y.m.d"|default_if_none:"" }}</td>
           <td>altres</td>
         </tr>
         {% endfor %}
-        <tr class="grp-row {% cycle 'grp-row-even' 'grp-row-odd' %}">
-          <td style="border-top:1px black solid"> TOTALS </td>
-          <td style="border-top:1px black solid"> - </td>
-          <td style="border-top:1px black solid"> {{ totals.turns|intcomma }}</td>
-          <td style="border-top:1px black solid"> {{ totals.total_to_pay|default_if_none:0|intcomma }}&nbsp;€</td>
-          <td style="border-top:1px black solid"> - </td>
-          <td style="border-top:1px black solid"> {{ totals.total_grants_obtained|default_if_none:0|intcomma }}&nbsp;€</td>
-          <td style="border-top:1px black solid"> {{ totals.total_to_pay_after_grants|default_if_none:0|intcomma }}&nbsp;€</td>
-          <td style="border-top:1px black solid"> {{ totals.total_payments_without_grants|default_if_none:0|intcomma }}&nbsp;€</td>
-          <td style="border-top:1px black solid"> {{ totals.to_pay|default_if_none:0|intcomma }}&nbsp;€</td>
-          <td style="border-top:1px black solid"></td>
+        <tr class="grp-row totals">
+          <td>Totals</td>
+          <td>-</td>
+          <td>{{ rows|length }}</td>
+          <td>-</td>
+          <td>-</td>
+          <td>{{ totals.total_members_h }} / {{ totals.total_members_d }}</td>
+          <td>{{ totals.total_members_total }}</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>{{ totals.total_acollida_hores|default_if_none:0 }}</td>
+          <td>{{ totals.total_acollida_certificat }}</td>
+          <td>{{ totals.total_proces_hores|default_if_none:0 }}</td>
+          <td>{{ totals.total_proces_certificat }}</td>
+          <td>{{ totals.total_constitucio_hores|default_if_none:0 }}</td>
+          <td>{{ totals.total_constitucio_certificat }}</td>
+          <td>{{ totals.total_consolidacio_hores|default_if_none:0 }}</td>
+          <td>{{ totals.total_consolidacio_certificat }}</td>
+          <td>-</td>
+          <td>{{ totals.total_employment_insertions }}</td>
+          <td>{{ totals.total_constitutions }}</td>
+          <td>-</td>
         </tr>
       </tbody>
 
