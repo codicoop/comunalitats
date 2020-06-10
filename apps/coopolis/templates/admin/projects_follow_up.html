@@ -230,8 +230,8 @@
           <td>{{ row.members_total }}</td>
           <td>{{ row.get_sector_display }}</td>
           <td>{% if row.description %}<span ellipsis-tooltip="{{ row.description }}"></span>{% endif %}</td>
-          <td>{{ row.get_project_status_display }}</td>
-          <td>{{ row.full_town_district }}</td>
+          <td>{{ row.get_project_status_display|default_if_none:"" }}</td>
+          <td>{{ row.full_town_district|default_if_none:"" }}</td>
           <td>{{ row.acollida_hores|default_if_none:0 }}</td>
           <td>{% if row.acollida_certificat > 0 %}
             <img src="{% static 'admin/img/icon-yes.svg' %}" alt="True"></a>{% endif %}
