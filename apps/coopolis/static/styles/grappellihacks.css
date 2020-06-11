@@ -42,3 +42,8 @@
 .ellipsis-tooltip--left::before {
   left: -220px;
 }
+
+.user_comments .grp-readonly {
+  white-space: break-spaces;
+  width: 200px;
+}

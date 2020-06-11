@@ -21,8 +21,8 @@ class ActivityEnrolledInline(admin.TabularInline):
 
     model = ActivityEnrolled
     extra = 0
-    fields = ('user', 'user_comments', 'date_enrolled', 'waiting_list',)
-    readonly_fields = ('date_enrolled', 'waiting_list', 'user_comments',)
+    fields = ('user', 'date_enrolled', 'waiting_list', 'user_comments', )
+    readonly_fields = ('date_enrolled', 'waiting_list', 'user_comments', )
     raw_id_fields = ('user',)
     autocomplete_lookup_fields = {
         'fk': ['user']
@@ -32,7 +32,9 @@ class ActivityEnrolledInline(admin.TabularInline):
 class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     class Media:
         js = ('js/grappellihacks.js',)
-
+        css = {
+            'all': ('styles/grappellihacks.css',)
+        }
     form = ActivityForm
     list_display = ('date_start', 'spots', 'remaining_spots', 'name', 'axis_summary', 'attendee_filter_field', 'attendee_list_field',
                     'send_reminder_field')
