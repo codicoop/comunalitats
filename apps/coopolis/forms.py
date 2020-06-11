@@ -33,24 +33,24 @@ class ProjectFormAdmin(ProjectForm):
 
 
 class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
-    required_css_class = "required"
-    first_name = forms.CharField(label="Nom", max_length=30)
-    last_name = forms.CharField(label="Cognom", max_length=30, required=True)
-    email = forms.EmailField(
-        label="Correu electrònic", max_length=254, help_text='Requerit, ha de ser una adreça vàlida.')
-    birthdate = forms.DateField(label="Data de naixement", required=False, widget=XDSoftDatePickerInput())
-    accept_conditions = forms.BooleanField(
-        label="He llegit i accepto", required=True)
-    accept_conditions2 = forms.BooleanField(
-        label="He llegit i accepto", required=True)
-    authorize_communications = forms.BooleanField(label="Accepto rebre informació sobre els serveis", required=False)
-
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
                   'birth_place', 'town', 'district', 'address', 'gender', 'educational_level',
                   'employment_situation', 'discovered_us', 'project_involved', 'password1', 'password2',
                   'authorize_communications']
+
+    required_css_class = "required"
+    first_name = forms.CharField(label="Nom", max_length=30)
+    last_name = forms.CharField(label="Cognom", max_length=30, required=True)
+    email = forms.EmailField(
+        label="Correu electrònic", max_length=254, help_text='Requerit, ha de ser una adreça vàlida.')
+    birthdate = forms.DateField(label="Data de naixement", required=True, widget=XDSoftDatePickerInput())
+    accept_conditions = forms.BooleanField(
+        label="He llegit i accepto", required=True)
+    accept_conditions2 = forms.BooleanField(
+        label="He llegit i accepto", required=True)
+    authorize_communications = forms.BooleanField(label="Accepto rebre informació sobre els serveis", required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -68,6 +68,12 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
     the user, but replaces the password field with admin's
     password hash display field.
     """
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
+                  'birth_place', 'town', 'district', 'address', 'gender', 'educational_level',
+                  'employment_situation', 'discovered_us', 'project_involved', ]
+
     password = ReadOnlyPasswordHashField()
     first_name = forms.CharField(label="Nom", max_length=30)
     last_name = forms.CharField(label="Cognom", max_length=30, required=False)
@@ -79,11 +85,11 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
                                               help_text="Marca aquesta casella si desitges tornar a enviar la "
                                                         "notificació de creació de nou compte.")
 
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
-                  'birth_place', 'town', 'district', 'address', 'gender', 'educational_level',
-                  'employment_situation', 'discovered_us', 'project_involved', ]
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if "town" in self.fields:
+            self.fields['town'].required = False
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
