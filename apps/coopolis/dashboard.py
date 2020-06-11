@@ -66,6 +66,12 @@ class MyDashboard(Dashboard):
                         'coopolis.models.EmploymentInsertion', 'coopolis.models.ProjectsFollowUp',
                         'coopolis.models.ProjectsConstituted', ),
             ),
+            modules.ModelList(
+                title='Seguiment de projectes',
+                column=1,
+                collapsible=False,
+                models=('coopolis.models.ProjectsFollowUp', 'coopolis.models.ProjectsConstituted', ),
+            ),
             reservations_module_app,
             reservations_module_calendar,
             modules.ModelList(
