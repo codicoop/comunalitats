@@ -345,7 +345,7 @@ class ProjectStage(models.Model):
     def axis_summary(self):
         axis = self.axis if self.axis else '(cap)'
         subaxis = self.subaxis if self.subaxis else '(cap)'
-        return f"{axis} - {subaxis}"
+        return f"{axis}-{subaxis}"
 
     axis_summary.short_description = "Eix - Subeix"
     axis_summary.admin_order_field = 'axis'
