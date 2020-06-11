@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 import datetime
 from django.core.validators import ValidationError
+from django.utils.timezone import now
 
 from cc_users.models import BaseUser
 from cc_courses.models import Entity, Organizer
@@ -97,6 +98,9 @@ class Project(models.Model):
     other = models.CharField("altres", max_length=240, blank=True, null=True,
                              help_text="Apareix a la taula de Seguiment d'Acompanyaments")
     employment_estimation = models.PositiveIntegerField("insercions laborals previstes", default=0)
+    follow_up_situation = models.CharField("seguiment", max_length=50, choices=settings.PROJECT_STATUS, blank=True,
+                                           null=True)
+    follow_up_situation_update = models.DateTimeField("actualització seguiment", blank=True, null=True)
 
     @property
     def has_estatus(self):
@@ -155,9 +159,22 @@ class Project(models.Model):
             ret = f"{ret} ({self.get_district_display()})"
         return ret
 
+    @property
+    def follow_up_with_date(self):
+        if self.follow_up_situation_update:
+            return f"{self.follow_up_situation} ({self.follow_up_situation_update.strftime('%d-%m-%Y')})"
+        return self.follow_up_situation
+
     @staticmethod
     def autocomplete_search_fields():
         return ('name__icontains', )
+
+    def save(self, *args, **kw):
+        if self.pk is not None:
+            orig = Project.objects.get(pk=self.pk)
+            if orig.follow_up_situation != self.follow_up_situation:
+                self.follow_up_situation_update = now()
+        super(Project, self).save(*args, **kw)
 
     def __str__(self):
         return self.name
@@ -355,6 +372,7 @@ class ProjectsFollowUp(Project):
         proxy = True
         verbose_name_plural = "Seguiment d'acompanyaments"
         verbose_name = "Seguiment d'acompanyament"
+        ordering = ['follow_up_situation', 'follow_up_situation_update']
 
 
 class ProjectsConstituted(Project):

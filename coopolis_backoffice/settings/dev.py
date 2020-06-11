@@ -482,6 +482,14 @@ DISTRICTS = (
     ('SS', 'Sarrià-Sant Gervasi'),
     ('GR', 'Gràcia')
 )
+PROJECT_STATUS = (
+    ('PENDENT', "Pendent d’enviar proposta de trobada"),
+    ('ENVIAT', "Enviat email amb proposta de data per trobar-nos"),
+    ('CONCERTADA', "Data de trobada concertada"),
+    ('ACOLLIT', "Acollida realitzada"),
+    ('PAUSA', "Acompanyament en pausa"),
+    ('CANCEL', "Acompanyament cancel·lat")
+)
 CALENDAR_COLOR_FOR_ACTIVITIES_OUTSIDE = '#808080'
 
 # Grappeli (https://django-grappelli.readthedocs.io/en/latest/customization.html)

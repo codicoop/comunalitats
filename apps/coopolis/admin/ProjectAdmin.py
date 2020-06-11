@@ -134,10 +134,11 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         }),
         ("Dades internes gestionades per l'ateneu", {
             'fields': ['partners', 'registration_date', 'cif', 'constitution_date', 'derivation', 'derivation_date',
-                       'description', 'employment_estimation', 'other']
+                       'description', 'employment_estimation', 'other', 'follow_up_situation',
+                       'follow_up_situation_update']
         })
     )
-    readonly_fields = ('id', )
+    readonly_fields = ('id', 'follow_up_situation_update')
     actions = ["export_as_csv"]
     change_actions = ('print', )
     print_template = 'admin/my_test/myentry/review.html'

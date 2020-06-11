@@ -9,6 +9,12 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
     """
     Inspired in: https://medium.com/@hakibenita/how-to-turn-django-admin-into-a-lightweight-dashboard-a0e0bbf609ad
     """
+    class Media:
+        js = ('js/grappellihacks.js',)
+        css = {
+            'all': ('styles/grappellihacks.css',)
+        }
+
     change_list_template = 'admin/projects_follow_up.html'
     list_filter = ('stages__subsidy_period', FilterByFounded)
     show_full_result_count = False
@@ -138,6 +144,12 @@ class ProjectsConstitutedAdmin(admin.ModelAdmin):
     """
     Inspired in: https://medium.com/@hakibenita/how-to-turn-django-admin-into-a-lightweight-dashboard-a0e0bbf609ad
     """
+    class Media:
+        js = ('js/grappellihacks.js',)
+        css = {
+            'all': ('styles/grappellihacks.css',)
+        }
+
     change_list_template = 'admin/projects_constituted.html'
     list_filter = (ConstitutionDateFilter, )
     show_full_result_count = False

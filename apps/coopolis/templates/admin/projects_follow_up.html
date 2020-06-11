@@ -11,36 +11,6 @@
 .totals td {
   border-top:1px black solid;
 }
-
-[ellipsis-tooltip]::after {
-  content: attr(ellipsis-tooltip);
-  display: block;
-  width: 100px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-[ellipsis-tooltip] {
-	position: relative;
-	cursor: help;
-}
-[ellipsis-tooltip]::before {
-  display: none;
-  width: 300px;
-}
-[ellipsis-tooltip]:hover::before {
-	content: attr(ellipsis-tooltip);
-  display: block;
-	position: absolute;
-	top: 20px;
-	padding: 10px;
-	background: #000;
-	color: #fff;
-	font-size: 14px;
-}
-.ellipsis-tooltip--left::before {
-  left: -220px;
-}
 </style>
 
 <div class="grp-module">
@@ -113,6 +83,11 @@
           <th class="sortable" rowspan="2">
             <div class="grp-text">
               <span>ID</span>
+            </div>
+          </th>
+          <th class="sortable" rowspan="2">
+            <div class="grp-text">
+              <span>Seguiment</span>
             </div>
           </th>
           <th class="sortable" rowspan="2">
@@ -222,6 +197,11 @@
         {% for row in rows %}
         <tr class="grp-row {% cycle 'grp-row-even' 'grp-row-odd' %}">
           <td>{{ row.id }}</td>
+          <td>
+            {% if row.follow_up_with_date %}
+            <span tooltip="{{ row.get_follow_up_situation_display }}">{{ row.follow_up_with_date }}</span>
+            {% endif %}
+          </td>
           <td>{{ row.stages.last.stage_organizer|default_if_none:'(cap)' }}</td>
           <td><a href="{% url 'admin:coopolis_project_change' row.id %}">{{ row.name }}</a></td>
           <td>{{ row.axis_list|default_if_none:"" }} </td>
