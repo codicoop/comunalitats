@@ -119,19 +119,6 @@ class ConstitutionDateFilter(admin.SimpleListFilter):
         qs.order_by('name')
         return list(qs.values_list('id', 'name'))
 
-    # def choices(self, cl):
-    #     for lookup, title in self.lookup_choices:
-    #         selected = False
-    #         if not self.value() and int(lookup) == datetime.datetime.now().year:
-    #             selected = True
-    #         yield {
-    #             'selected': selected,
-    #             'query_string': cl.get_query_string({
-    #                 self.parameter_name: lookup,
-    #             }, []),
-    #             'display': title,
-    #         }
-
     def queryset(self, request, queryset):
         value = self.value()
         if value:
