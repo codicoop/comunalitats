@@ -2,3 +2,43 @@
   display: inline-block;
   width: 60px;
 }
+
+#grp-content {
+  width: inherit; /* restoring the horizontal scroll bar when viewport is too narrow */
+}
+
+[ellipsis-tooltip]::after {
+  content: attr(ellipsis-tooltip);
+  display: block;
+  width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+[ellipsis-tooltip], [tooltip] {
+	position: relative;
+	cursor: help;
+}
+[ellipsis-tooltip]::before, [tooltip]::before {
+  display: none;
+  width: 300px;
+}
+[ellipsis-tooltip]:hover::before, [tooltip]:hover::before {
+  display: block;
+  position: absolute;
+  top: 20px;
+  padding: 10px;
+  background: #000;
+  color: #fff;
+  font-size: 14px;
+  z-index: 1;
+}
+[ellipsis-tooltip]:hover::before {
+  content: attr(ellipsis-tooltip);
+}
+[tooltip]:hover::before {
+  content: attr(tooltip);
+}
+.ellipsis-tooltip--left::before {
+  left: -220px;
+}
