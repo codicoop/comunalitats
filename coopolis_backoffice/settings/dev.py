@@ -177,9 +177,9 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     # Configurable modules or features
     'ENABLE_ROOM_RESERVATIONS_MODULE': (
-        False,
-        "Activar el mòdul de reserva d'espais",
-        bool),
+        False, "Activar el mòdul de reserva d'espais", bool),
+    'ENABLE_COFUNDED_OPTIONS': (
+        False, "Activar el bloc d'opcions per activitats cofinançades", bool),
     # Courses
     'CONTENT_COURSES_INTRODUCTION': (
         "Des de Coòpolis disposem d’una oferta regular de formació en economia social i cooperativisme per a tots els "
@@ -376,7 +376,8 @@ CONSTANCE_CONFIG = {
 }
 CONSTANCE_CONFIG_FIELDSETS = {
     'Configuració': ('PROJECT_NAME', 'PROJECT_FULL_NAME',
-                     'ENABLE_ROOM_RESERVATIONS_MODULE', 'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL',
+                     'ENABLE_ROOM_RESERVATIONS_MODULE', 'ENABLE_COFUNDED_OPTIONS',
+                     'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL',
                      'PROJECT_CONTACT_URL', 'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG',
                      'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS',
                      'PROJECT_FACEBOOK_URL', 'PROJECT_TWITTER_URL', 'PROJECT_INSTAGRAM_URL'),
