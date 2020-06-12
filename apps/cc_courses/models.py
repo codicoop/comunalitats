@@ -135,14 +135,6 @@ class Activity(models.Model):
     entity = models.ForeignKey(Entity, verbose_name="entitat", on_delete=models.SET_NULL, null=True, blank=True)
     organizer = models.ForeignKey(Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL, null=True,
                                   blank=True)
-
-    JUSTIFICATION_CHOICES = (
-        ('A', "Ateneus Cooperatius"),
-        ('J', "Ajuntament"),
-        ('2', "Les 2 - cofinançat")
-    )
-    justification = models.CharField("justificació", max_length=1, null=True, blank=True, choices=JUSTIFICATION_CHOICES,
-                                     default='A')
     axis = models.CharField("eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
                             null=True, blank=True, max_length=1)
     subaxis = models.CharField("sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
