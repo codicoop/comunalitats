@@ -11,6 +11,10 @@ class SubsidyPeriod(models.Model):
     date_end = models.DateField("dia de finalització")
     number = models.CharField("número d'expedient", max_length=50, null=True, blank=True)
 
+    @property
+    def range(self):
+        return (self.date_start, self.date_end)
+
     def __str__(self):
         return self.name
 

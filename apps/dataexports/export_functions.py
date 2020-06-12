@@ -86,9 +86,9 @@ class ExportFunctions:
         message = "<h1>Error al generar el document</h1>" + " ".join(self.error_message)
         return HttpResponseNotFound(message)
 
-    def get_sessions_obj(self, justification="A", for_minors=False):
+    def get_sessions_obj(self, for_minors=False):
         return Activity.objects.filter(
-            Q(justification=justification, date_start__range=self.subsidy_period_range, for_minors=for_minors) &
+            Q(date_start__range=self.subsidy_period.range, for_minors=for_minors) &
             (
                 Q(cofunded__isnull=True) | (
                     Q(cofunded__isnull=False) & Q(cofunded_ateneu=True)
@@ -170,6 +170,145 @@ class ExportFunctions:
                 cell_value = cell_value[0]
             cell.value = cell_value if isinstance(cell_value, int) else str(cell_value)
 
+    """
+    
+    Exportació cofinançades
+    
+    """
+    def export_cofunded_2019_2020(self):
+        self.import_correlations(settings.BASE_DIR + "/../apps/dataexports/fixtures/correlations_2019.json")
+        """ Each function here called handles the creation of one of the worksheets."""
+        self.export_cofunded_actuacions()
+        self.export_cofunded_participants()
+
+        return self.return_document("cofinançades")
+
+    def export_cofunded_actuacions(self):
+        # Tutorial: https://djangotricks.blogspot.com/2019/02/how-to-export-data-to-xlsx-files.html
+        # Docs: https://openpyxl.readthedocs.io/en/stable/tutorial.html#create-a-workbook
+        self.worksheet.title = "Actuacions"
+
+        columns = [
+            ("Eix", 40),
+            ("Tipus d'actuació", 70),
+            ("Nom de l'actuació", 70),
+            ("Data inici d'actuació", 16),
+            ("Municipi", 30),
+            ("Nombre de participants", 20),
+            ("Material de difusió (S/N)", 21),
+            ("Incidències", 20),
+            ("Cofinançat", 20),
+            ("Cofin. Ateneu", 20),
+            ("Línia estratègica", 60)
+        ]
+        self.create_columns(columns)
+        self.export_cofunded_actuacions_rows()
+
+    def export_cofunded_actuacions_rows(self):
+        obj = Activity.objects.filter(date_start__range=self.subsidy_period.range, cofunded__isnull=False)
+        self.number_of_activities = len(obj)
+        self.row_number = 1
+        for item in obj:
+            print(item)
+            self.row_number += 1
+
+            axis = self.get_correlation("axis", item.axis)
+            if axis is None:
+                axis = ("", True)
+            subaxis = self.get_correlation("subaxis", item.subaxis)
+            if subaxis is None:
+                subaxis = ("", True)
+            town = None
+            if item.place is not None:
+                town = item.place.town
+            if town is None or town == "":
+                town = ("", True)
+
+            row = [
+                axis,
+                subaxis,
+                item.name,
+                item.date_start,
+                town,
+                item.enrolled.count(),
+                "No",
+                "",
+                item.cofunded,
+                "Sí" if item.cofunded_ateneu else "No",
+                item.strategic_line if item.strategic_line else ""
+            ]
+            self.fill_row_data(row)
+
+    def export_cofunded_participants(self):
+        self.worksheet = self.workbook.create_sheet("Participants")
+        self.row_number = 1
+
+        columns = [
+            ("Referència", 40),
+            ("Nom actuació", 40),
+            ("Cognoms", 20),
+            ("Nom", 10),
+            ("Doc. identificatiu", 12),
+            ("Gènere", 10),
+            ("Data naixement", 10),
+            ("Municipi del participant", 20),
+            ("[Situació laboral]", 20),
+            ("[Procedència]", 20),
+            ("[Nivell d'estudis]", 20),
+            ("[Com ens has conegut]", 20),
+            ("[Organitzadora]", 30),
+            ("[Email]", 30),
+            ("[Telèfon]", 30),
+            ("[Projecte]", 30),
+            ("[Acompanyaments]", 30),
+        ]
+        self.create_columns(columns)
+
+        self.export_cofunded_participants_rows()
+
+    def export_cofunded_participants_rows(self):
+        activity_reference_number = 0
+        obj = Activity.objects.filter(date_start__range=self.subsidy_period.range, cofunded__isnull=False)
+        for activity in obj:
+            activity_reference_number += 1  # We know that activities where generated first, so it starts at 1.
+            for enrollment in activity.confirmed_enrollments:
+                participant = enrollment.user
+                self.row_number += 1
+                if participant.gender is None:
+                    gender = ""
+                else:
+                    gender = self.get_correlation('gender', participant.gender)
+                if participant.town is None:
+                    town = ""
+                else:
+                    town = participant.town.name
+
+                row = [
+                    f"{activity_reference_number} {activity.name}",  # Referència.
+                    activity.name,  # Nom de l'actuació. Camp automàtic de l'excel.
+                    participant.surname if participant.surname else "",
+                    participant.first_name,
+                    participant.id_number,
+                    gender if gender else "",
+                    participant.birthdate if participant.birthdate else "",
+                    town if town else "",
+                    participant.get_employment_situation_display() if participant.get_employment_situation_display() else "",
+                    participant.get_birth_place_display() if participant.get_birth_place_display() else "",
+                    participant.get_educational_level_display() if participant.get_educational_level_display() else "",
+                    participant.get_discovered_us_display() if participant.get_discovered_us_display() else "",
+                    activity.organizer if activity.organizer else "",
+                    participant.email,
+                    participant.phone_number if participant.phone_number else "",
+                    participant.project if participant.project else "",
+                    participant.project.stages_list if participant.project and participant.project.stages_list else ""
+                ]
+                self.fill_row_data(row)
+
+    """
+    
+    Exportació Ateneu
+    
+    """
     def export_2018_2019(self):
         self.import_correlations(settings.BASE_DIR + "/../apps/dataexports/fixtures/correlations_2019.json")
         self.subsidy_period_range = ["2018-11-01", "2019-10-31"]

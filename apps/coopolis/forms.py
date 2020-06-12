@@ -157,7 +157,7 @@ class ActivityForm(forms.ModelForm):
     class Meta:
         model = Activity
         fields = ('course', 'name', 'objectives', 'place', 'date_start', 'date_end', 'starting_time', 'ending_time',
-                  'spots', 'enrolled', 'entity', 'organizer', 'justification', 'axis', 'subaxis',
+                  'spots', 'enrolled', 'entity', 'organizer', 'axis', 'subaxis',
                   'photo1', 'photo2', 'publish', 'for_minors', 'minors_school_name', 'minors_school_cif',
                   'minors_grade', 'minors_participants_number', 'minors_teacher', 'room', )
         widgets = {
