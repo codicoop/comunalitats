@@ -6,8 +6,8 @@ from django.conf import settings
 
 from coopolis.models import User, Project, ProjectStage, Derivation, EmploymentInsertion, StagesByAxis, \
     ProjectsFollowUp, ProjectsConstituted
-from cc_courses.models import Course, Activity, CoursePlace, Entity, Organizer
-from .ActivityAdmin import ActivityAdmin
+from cc_courses.models import Course, Activity, CoursePlace, Entity, Organizer, Cofunding, StrategicLine
+from .ActivityAdmin import ActivityAdmin, CofundingAdmin, StrategicLineAdmin
 from .CourseAdmin import CourseAdmin
 from .ProjectAdmin import ProjectAdmin, ProjectStageAdmin, DerivationAdmin, EmploymentInsertionAdmin, \
     ProjectStageAdminAxis
@@ -29,6 +29,8 @@ admin.site.register(Derivation, DerivationAdmin)
 admin.site.register(EmploymentInsertion, EmploymentInsertionAdmin)
 admin.site.register(ProjectsFollowUp, ProjectsFollowUpAdmin)
 admin.site.register(ProjectsConstituted, ProjectsConstitutedAdmin)
+admin.site.register(Cofunding, CofundingAdmin)
+admin.site.register(StrategicLine, StrategicLineAdmin)
 
 admin.site.site_header = settings.ADMIN_HEADER
 admin.site.site_title = settings.ADMIN_SITE_TITLE

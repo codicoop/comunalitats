@@ -49,6 +49,28 @@ class Organizer(models.Model):
         return self.name
 
 
+class Cofunding(models.Model):
+    class Meta:
+        verbose_name = "cofinançadora"
+        verbose_name_plural = "cofinançadores"
+
+    name = models.CharField("nom", max_length=200, blank=False, unique=True, null=False)
+
+    def __str__(self):
+        return self.name
+
+
+class StrategicLine(models.Model):
+    class Meta:
+        verbose_name = "línia estratègica"
+        verbose_name_plural = "línies estratègiques"
+
+    name = models.CharField("nom", max_length=200, blank=False, unique=True, null=False)
+
+    def __str__(self):
+        return self.name
+
+
 class Course(models.Model):
     class Meta:
         verbose_name = "acció"
@@ -159,6 +181,12 @@ class Activity(models.Model):
                              help_text="Si selecciones una sala, quan guardis quedarà reservada per la sessió. "
                                        f"<br>Consulta el <a href=\"/reservations/calendar/\" target=\"_blank\">"
                                        "CALENDARI DE RESERVES</a> per veure la disponibilitat.")
+    # cofunding options module
+    cofunded = models.ForeignKey(Cofunding, verbose_name="Cofinançat", on_delete=models.SET_NULL, null=True, blank=True,
+                                 related_name='cofunded_activities')
+    cofunded_ateneu = models.BooleanField("Cofinançat amb Ateneus Cooperatius", default=False)
+    strategic_line = models.ForeignKey(StrategicLine, verbose_name="línia estratègica", on_delete=models.SET_NULL,
+                                       blank=True, null=True, related_name='strategic_line_activities')
 
     objects = models.Manager()
     published = Published()

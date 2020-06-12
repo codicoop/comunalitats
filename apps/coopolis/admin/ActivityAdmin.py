@@ -15,6 +15,40 @@ from coopolis.forms import ActivityForm
 from cc_courses.models import Activity, ActivityEnrolled
 
 
+class CofundingAdmin(admin.ModelAdmin):
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_add_permission(self, request):
+        if request.user.is_superuser:
+            return True
+        return False
+
+
+class StrategicLineAdmin(admin.ModelAdmin):
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_add_permission(self, request):
+        if request.user.is_superuser:
+            return True
+        return False
+
+
 class ActivityEnrolledInline(admin.TabularInline):
     class Media:
         js = ('js/grappellihacks.js',)
@@ -42,7 +76,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     summernote_fields = ('objectives',)
     search_fields = ('date_start', 'name', 'objectives',)
     list_filter = ('course', 'date_start', 'justification', 'room', 'entity', 'axis', 'place', 'for_minors',)
-    fieldsets = (
+    fieldsets = [
         (None, {
             'fields': ['course', 'name', 'objectives', 'place', 'date_start', 'date_end', 'starting_time',
                        'ending_time', 'spots', 'axis', 'subaxis', 'entity', 'organizer', 'photo1', 'photo3',
@@ -57,7 +91,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
             'classes': ('grp-collapse grp-closed',),
             'fields': ('attendee_list_field', 'attendee_filter_field', 'send_reminder_field'),
         })
-    )
+    ]
     # define the raw_id_fields
     raw_id_fields = ('enrolled', 'course')
     # define the autocomplete_lookup_fields
@@ -76,14 +110,24 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
 
     def get_fieldsets(self, request, obj=None):
         """
-        For ateneus using room reservations module:
-        Adding the room field.
+        For ateneus using room reservations module: Adding the room field.
         """
         if config.ENABLE_ROOM_RESERVATIONS_MODULE and 'room' not in self.fieldsets[0][1]['fields']:
             index = 0
             if 'place' in self.fieldsets[0][1]['fields']:
                 index = self.fieldsets[0][1]['fields'].index('place') + 1
             self.fieldsets[0][1]['fields'].insert(index, 'room')
+
+        """
+        For ateneus enabling cofunded options: Adding the Cofinançades fieldset.
+        """
+        fs = ('Opcions de cofinançament', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('cofunded', 'cofunded_ateneu', 'strategic_line',),
+        })
+        if config.ENABLE_COFUNDED_OPTIONS and fs not in self.fieldsets:
+            self.fieldsets.insert(1, fs)
+
         return self.fieldsets
 
     def get_queryset(self, request):
