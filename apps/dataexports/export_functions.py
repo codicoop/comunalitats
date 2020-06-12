@@ -6,7 +6,7 @@ from openpyxl import Workbook
 from datetime import datetime
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Border, Side, PatternFill, colors
-from django.db.models import Count
+from django.db.models import Count, Q
 import json
 from django.conf import settings
 
@@ -87,8 +87,14 @@ class ExportFunctions:
         return HttpResponseNotFound(message)
 
     def get_sessions_obj(self, justification="A", for_minors=False):
-        return Activity.objects.filter(justification=justification, date_start__range=self.subsidy_period_range,
-                                       for_minors=for_minors)
+        return Activity.objects.filter(
+            Q(justification=justification, date_start__range=self.subsidy_period_range, for_minors=for_minors) &
+            (
+                Q(cofunded__isnull=True) | (
+                    Q(cofunded__isnull=False) & Q(cofunded_ateneu=True)
+                )
+            )
+        )
 
     def import_correlations(self, file_path):
         try:
