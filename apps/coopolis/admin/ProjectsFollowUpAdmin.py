@@ -16,7 +16,8 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
         }
 
     change_list_template = 'admin/projects_follow_up.html'
-    list_filter = ('stages__subsidy_period', 'follow_up_situation', FilterByFounded)
+    list_filter = ('stages__subsidy_period', 'follow_up_situation', FilterByFounded,
+                   ('stages__stage_responsible', admin.RelatedOnlyFieldListFilter), )
     show_full_result_count = False
     list_display = ('name', )
     list_per_page = 99999
