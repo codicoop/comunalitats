@@ -63,8 +63,7 @@ class MyDashboard(Dashboard):
                 column=1,
                 collapsible=False,
                 models=('coopolis.models.Project', 'coopolis.models.ProjectStage',
-                        'coopolis.models.EmploymentInsertion', 'coopolis.models.ProjectsFollowUp',
-                        'coopolis.models.ProjectsConstituted', ),
+                        'coopolis.models.EmploymentInsertion', ),
             ),
             modules.ModelList(
                 title='Seguiment de projectes',
