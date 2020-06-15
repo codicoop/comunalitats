@@ -1,10 +1,12 @@
 from django.db import models
+from django.utils.timezone import now
 
 
 class SubsidyPeriod(models.Model):
     class Meta:
         verbose_name = "convocatòria"
         verbose_name_plural = "convocatòries"
+        ordering = ['-date_start']
 
     name = models.CharField("nom", max_length=250)
     date_start = models.DateField("dia d'inici")
@@ -14,6 +16,11 @@ class SubsidyPeriod(models.Model):
     @property
     def range(self):
         return (self.date_start, self.date_end)
+
+    @staticmethod
+    def get_current():
+        today = now()
+        return SubsidyPeriod.objects.get(date_start__lte=today, date_end__gte=today)
 
     def __str__(self):
         return self.name

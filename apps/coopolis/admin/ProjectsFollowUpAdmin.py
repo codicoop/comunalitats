@@ -5,6 +5,36 @@ from .ProjectAdmin import FilterByFounded
 from dataexports.models import SubsidyPeriod
 
 
+class DefaultedSubsidyPeriodFilter(admin.SimpleListFilter):
+    title = "Convocatòria"
+    parameter_name = 'subsidy_period'
+
+    def lookups(self, request, model_admin):
+        qs = SubsidyPeriod.objects.all()
+        qs.order_by('name')
+        return list(qs.values_list('id', 'name'))
+
+    def choices(self, changelist):
+        for lookup, title in self.lookup_choices:
+            yield {
+                'selected': self.value() == str(lookup),
+                'query_string': changelist.get_query_string({self.parameter_name: lookup}),
+                'display': title,
+            }
+
+    def queryset(self, request, queryset):
+        value = self.value()
+
+        if 'subsidy_period' not in request.GET:
+            current = SubsidyPeriod.get_current()
+            if current:
+                value = current.id
+
+        if value:
+            return queryset.filter(stages__subsidy_period__pk=value)
+        return queryset
+
+
 class ProjectsFollowUpAdmin(admin.ModelAdmin):
     """
     Inspired in: https://medium.com/@hakibenita/how-to-turn-django-admin-into-a-lightweight-dashboard-a0e0bbf609ad
@@ -16,7 +46,7 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
         }
 
     change_list_template = 'admin/projects_follow_up.html'
-    list_filter = ('stages__subsidy_period', 'follow_up_situation', FilterByFounded,
+    list_filter = (DefaultedSubsidyPeriodFilter, 'follow_up_situation', FilterByFounded,
                    ('stages__stage_responsible', admin.RelatedOnlyFieldListFilter), )
     show_full_result_count = False
     list_display = ('name', )
