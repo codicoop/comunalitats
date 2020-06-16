@@ -133,8 +133,8 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
                        'solves_necessities', 'social_base']
         }),
         ("Dades internes gestionades per l'ateneu", {
-            'fields': ['partners', 'registration_date', 'cif', 'constitution_date', 'derivation', 'derivation_date',
-                       'description', 'employment_estimation', 'other', 'follow_up_situation',
+            'fields': ['partners', 'registration_date', 'cif', 'constitution_date', 'subsidy_period', 'derivation',
+                       'derivation_date', 'description', 'employment_estimation', 'other', 'follow_up_situation',
                        'follow_up_situation_update']
         })
     )

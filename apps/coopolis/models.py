@@ -87,6 +87,13 @@ class Project(models.Model):
     solves_necessities = models.TextField("quines necessitats resol el vostre projecte?", blank=True, null=True)
     social_base = models.TextField("compta el vostre projecte amb una base social?", blank=True, null=True)
     constitution_date = models.DateField("data de constitució", blank=True, null=True)
+    subsidy_period = models.ForeignKey(
+        SubsidyPeriod, verbose_name="convocatòria de la constitució", null=True, blank=True, on_delete=models.SET_NULL,
+        help_text="OPCIONAL. En cas que el projecte s'hagi constituït en una convocatòria posterior a l'ultima "
+                  "intervenció de l'ateneu, podeu indicar-ho aquí, per tal que aparegui a l'informe de Projectes "
+                  "Constituïts. Aquest camp NO farà aparèixer el projecte a l'excel de justificació (per aparèixer a "
+                  "l'excel cal crear una Justificació d'Acompanyament)"
+    )
     estatuts = models.FileField("estatuts", blank=True, null=True, storage=PrivateMediaStorage(), max_length=250)
     viability = models.FileField("pla de viabilitat", blank=True, null=True, storage=PrivateMediaStorage(),
                                  max_length=250)
