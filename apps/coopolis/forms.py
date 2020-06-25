@@ -22,8 +22,10 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = '__all__'
-        exclude = ['cif', 'registration_date', 'constitution_date', 'partners']
+        fields = ('name', 'sector', 'web', 'project_status', 'motivation', 'mail', 'phone', 'town', 'district',
+                       'number_people', 'estatuts', 'viability', 'sostenibility', 'object_finality', 'project_origins',
+                       'solves_necessities', 'social_base')
+        exclude = ['cif', 'registration_date', 'constitution_date', 'partners',]
 
 
 class ProjectFormAdmin(ProjectForm):
