@@ -14,6 +14,7 @@ from django.template import Template, Context
 from coopolis.forms import ActivityForm
 from cc_courses.models import Activity, ActivityEnrolled
 from coopolis.models import User
+from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 
 class CofundingAdmin(admin.ModelAdmin):
@@ -244,35 +245,22 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
 
     @staticmethod
     def _send_reminder_email(mail_to_bcc, activity, request):
-        # TODO: Funció molt similar a la que hi ha a EnrollActivityView, unificar-les.
-        from django.core.mail.message import EmailMultiAlternatives
-        from django.utils.html import strip_tags
-
-        context = Context({
-            'activity': activity,
-            'absolute_url': request.build_absolute_uri(reverse('my_activities')),
-            'contact_email': config.CONTACT_EMAIL,
-            'contact_number': config.CONTACT_PHONE_NUMBER,
-            'request': request,
-        })
-        template = Template(config.EMAIL_ENROLLMENT_REMINDER)
-        html_content = template.render(context)
-        text_content = strip_tags(html_content)
-
-        mail_to = {config.EMAIL_FROM_ENROLLMENTS}
-        if settings.DEBUG:
-            mail_to.add(config.EMAIL_TO_DEBUG)
-
-        # create the email, and attach the HTML version as well.
-        msg = EmailMultiAlternatives(
-            config.EMAIL_ENROLLMENT_REMINDER_SUBJECT.format(activity.name),
-            text_content,
-            config.EMAIL_FROM_ENROLLMENTS,
-            mail_to,
-            mail_to_bcc
-        )
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
+        mail = MyMailTemplate('EMAIL_ENROLLMENT_REMINDER')
+        mail.to = config.EMAIL_FROM_ENROLLMENTS
+        mail.bcc = mail_to_bcc
+        mail.subject_strings = {
+            'activitat_nom': activity.name
+        }
+        mail.body_strings = {
+            'activitat_nom': activity.name,
+            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'activitat_data_inici': activity.date_start,
+            'activitat_hora_inici': activity.starting_time,
+            'activitat_lloc': activity.place,
+            'absolute_url_my_activities': f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
+        }
+        mail.send()
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "responsible":
