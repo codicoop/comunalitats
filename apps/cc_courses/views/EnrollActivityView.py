@@ -35,29 +35,21 @@ class EnrollActivityView(generic.RedirectView):
         return super().get(request, *args, **kwargs)
 
     def _send_confirmation_email(self, activity):
-        context = Context({
-            'activity': activity,
-            'absolute_url_my_activities': self.request.build_absolute_uri(reverse('my_activities')),
-            'contact_email': config.CONTACT_EMAIL,
-            'contact_number': config.CONTACT_PHONE_NUMBER,
-            'request': self.request,
-        })
-        template = Template(config.EMAIL_ENROLLMENT_CONFIRMATION)
-        html_content = template.render(context)  # render with dynamic value
-        text_content = strip_tags(html_content)  # Strip the html tag. So people can see the pure text at least.
-
-        mail_to = {self.request.user.email}
-        if settings.DEBUG:
-            mail_to.add(config.EMAIL_TO_DEBUG)
-
-        # create the email, and attach the HTML version as well.
-        msg = EmailMultiAlternatives(
-            config.EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT.format(activity.name),
-            text_content,
-            config.EMAIL_FROM_ENROLLMENTS,
-            mail_to)
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
+        mail = MyMailTemplate('EMAIL_ENROLLMENT_CONFIRMATION')
+        mail.to = self.request.user.email
+        mail.subject_strings = {
+            'activitat_nom': activity.name
+        }
+        mail.body_strings = {
+            'activitat_nom': activity.name,
+            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'activitat_data_inici': activity.date_start,
+            'activitat_hora_inici': activity.starting_time,
+            'activitat_lloc': activity.place,
+            'absolute_url_my_activities': f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
+        }
+        mail.send()
 
     def _send_waiting_list_email(self, activity):
         mail = MyMailTemplate('EMAIL_ENROLLMENT_WAITING_LIST')
