@@ -66,8 +66,8 @@ INSTALLED_APPS = [
     'modelclone',
     'apps.coopolis.templatetags.my_tag_library',
     'dynamic_fields',
-    'mailing_manager',
     'mailqueue',
+    'mailing_manager',
     'django.contrib.humanize',
 ]
 

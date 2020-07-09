@@ -187,6 +187,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('coopolis', '0051_user_project_involved'),
+        ('mailing_manager', '0001_initial'),
     ]
 
     operations = [
