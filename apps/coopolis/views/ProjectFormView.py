@@ -4,15 +4,16 @@
 from django.views import generic
 from django import urls
 from django.http import HttpResponseRedirect
-from coopolis.models import Project, ProjectStage
-from coopolis.forms import ProjectForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
-from coopolis.views import LoginSignupContainerView
 from constance import config
 
+from coopolis.models import Project
+from coopolis.forms import ProjectForm
+from coopolis.views import LoginSignupContainerView
+from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
     model = Project
@@ -45,26 +46,19 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
         newproject = form.save()
         newproject.partners.add(self.request.user)
 
-        # TODO: Helper que encapsuli el sistema d'enviar mails segons debug i string separada per comes.
-        mail_to = set()
-        if settings.DEBUG:
-            mail_to.add(config.EMAIL_TO_DEBUG)
-        else:
-            for r in config.EMAIL_FROM_PROJECTS.split(','):
-                mail_to.add(r.strip())
-        message = config.EMAIL_NEW_PROJECT.format(
-                        newproject.name,
-                        newproject.phone,
-                        newproject.mail,
-                        self.request.user.email
-            )
-        send_mail(
-            subject=config.EMAIL_NEW_PROJECT_SUBJECT.format(newproject.name),
-            message=message,
-            html_message=message,
-            recipient_list=mail_to,
-            from_email=config.EMAIL_FROM_PROJECTS
-        )
+        mail = MyMailTemplate('EMAIL_NEW_PROJECT')
+        mail.to = config.EMAIL_FROM_PROJECTS.split(',')
+        mail.subject_strings = {
+            'projecte_nom': newproject.name
+        }
+        mail.body_strings = {
+            'projecte_nom': newproject.name,
+            'projecte_telefon': newproject.phone,
+            'projecte_email': newproject.mail,
+            'usuari_email': self.request.user.email
+        }
+        mail.send()
+
         messages.success(self.request, "S'ha enviat una sol·licitud d'acompanyament del projecte. En els propers dies "
                                        "et contactarà una persona de l'ateneu per concertar una primera reunió.")
         return HttpResponseRedirect(self.get_success_url())
