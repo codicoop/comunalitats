@@ -1,18 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-from cc_users.views import LoginView
-from cc_users.views import SignUpView
+from django.urls import reverse
 from django.views.generic import TemplateView
-from coopolis.models import User
-from coopolis.forms import MySignUpForm
-from cc_users.forms import LogInForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django import urls
 from django.core.mail import send_mail
 from django.conf import settings
 from constance import config
+
+from cc_users.views import LoginView
+from cc_users.views import SignUpView
+from coopolis.models import User
+from coopolis.forms import MySignUpForm
+from cc_users.forms import LogInForm
+from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 
 class LoginSignupContainerView(TemplateView):
@@ -60,18 +62,19 @@ class CoopolisSignUpView(SignUpView):
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect(urls.reverse('loginsignup'))
 
-    # TODO: Aquesta funció està duplicada a UserAdmin. Decidir si ficar-la com a helper? O fitxer de funcions de mail?
     def send_welcome_email(self, mail_to):
-        mail_to = {mail_to}
-        if settings.DEBUG:
-            mail_to.add(config.EMAIL_TO_DEBUG)
-        send_mail(
-            subject=config.EMAIL_SIGNUP_WELCOME_SUBJECT,
-            message=config.EMAIL_SIGNUP_WELCOME,
-            html_message=config.EMAIL_SIGNUP_WELCOME,
-            recipient_list=mail_to,
-            from_email=settings.DEFAULT_FROM_EMAIL
-        )
+        mail = MyMailTemplate('EMAIL_SIGNUP_WELCOME')
+        mail.to = mail_to
+        mail.subject_strings = {
+            'ateneu_nom': config.PROJECT_FULL_NAME
+        }
+        mail.body_strings = {
+            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'url_backoffice': settings.ABSOLUTE_URL,
+            'url_accions': f"{settings.ABSOLUTE_URL}{reverse('courses')}",
+            'url_projecte': f"{settings.ABSOLUTE_URL}{reverse('project_info')}",
+        }
+        mail.send()
 
 
 class CoopolisLoginView(LoginView):
