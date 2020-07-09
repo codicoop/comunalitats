@@ -135,6 +135,10 @@ class Activity(models.Model):
     entity = models.ForeignKey(Entity, verbose_name="entitat", on_delete=models.SET_NULL, null=True, blank=True)
     organizer = models.ForeignKey(Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL, null=True,
                                   blank=True)
+    responsible = models.ForeignKey(
+        "coopolis.User", verbose_name="persona responsable", blank=True, null=True, on_delete=models.SET_NULL,
+        related_name='activities_responsible', help_text="Persona de l'equip al càrrec de la sessió. Per aparèixer "
+        "al desplegable, cal que la persona tingui activada la opció 'Membre del personal'.")
     axis = models.CharField("eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
                             null=True, blank=True, max_length=1)
     subaxis = models.CharField("sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",

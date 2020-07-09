@@ -13,6 +13,7 @@ from django.template import Template, Context
 
 from coopolis.forms import ActivityForm
 from cc_courses.models import Activity, ActivityEnrolled
+from coopolis.models import User
 
 
 class CofundingAdmin(admin.ModelAdmin):
@@ -79,8 +80,11 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     fieldsets = [
         (None, {
             'fields': ['course', 'name', 'objectives', 'place', 'date_start', 'date_end', 'starting_time',
-                       'ending_time', 'spots', 'axis', 'subaxis', 'entity', 'organizer', 'photo1', 'photo3',
-                       'photo2', 'file1', 'publish', ]
+                       'ending_time', 'spots', 'axis', 'subaxis', 'entity', 'organizer', 'responsible', 'publish', ]
+        }),
+        ("Documents per la justificació", {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('photo1', 'photo3', 'photo2', 'file1', ),
         }),
         ('Dades relatives a activitats per menors', {
             'classes': ('grp-collapse grp-closed',),
@@ -269,3 +273,8 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         )
         msg.attach_alternative(html_content, "text/html")
         msg.send()
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "responsible":
+            kwargs["queryset"] = User.objects.filter(is_staff=True)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
