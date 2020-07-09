@@ -43,8 +43,8 @@ class EnrollActivityView(generic.RedirectView):
         mail.body_strings = {
             'activitat_nom': activity.name,
             'ateneu_nom': config.PROJECT_FULL_NAME,
-            'activitat_data_inici': activity.date_start,
-            'activitat_hora_inici': activity.starting_time,
+            'activitat_data_inici': activity.date_start.strftime("%d-%m-%Y"),
+            'activitat_hora_inici': activity.starting_time.strftime("%H:%M"),
             'activitat_lloc': activity.place,
             'absolute_url_my_activities': f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
             'url_web_ateneu': config.PROJECT_WEBSITE_URL,
@@ -60,8 +60,8 @@ class EnrollActivityView(generic.RedirectView):
         mail.body_strings = {
             'activitat_nom': activity.name,
             'ateneu_nom': config.PROJECT_FULL_NAME,
-            'activitat_data_inici': activity.date_start,
-            'activitat_hora_inici': activity.starting_time,
+            'activitat_data_inici': activity.date_start.strftime("%d-%m-%Y"),
+            'activitat_hora_inici': activity.starting_time.strftime("%H:%M"),
             'activitat_lloc': activity.place,
             'url_els_meus_cursos': f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
             'url_ateneu': settings.ABSOLUTE_URL,
