@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+from django.urls import reverse
 from django_object_actions import DjangoObjectActions
 from django.contrib import admin
 from django.utils.safestring import mark_safe
@@ -12,6 +12,7 @@ from django.conf.urls import url
 
 from coopolis.models import User, Project, ProjectStage, EmploymentInsertion, StagesByAxis
 from coopolis.forms import ProjectFormAdmin, ProjectStageInlineForm, ProjectStageForm
+from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 
 class FilterByFounded(admin.SimpleListFilter):
@@ -220,16 +221,18 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
     def send_added_to_project_email(self, mail_to, project_name):
-        mail_to = {mail_to}
-        if settings.DEBUG:
-            mail_to.add(config.EMAIL_TO_DEBUG)
-        send_mail(
-            subject=config.EMAIL_ADDED_TO_PROJECT_SUBJECT.format(project_name),
-            message=config.EMAIL_ADDED_TO_PROJECT.format(project_name),
-            html_message=config.EMAIL_ADDED_TO_PROJECT.format(project_name),
-            recipient_list=mail_to,
-            from_email=settings.DEFAULT_FROM_EMAIL
-        )
+        mail = MyMailTemplate('EMAIL_ADDED_TO_PROJECT')
+        mail.to = mail_to
+        mail.subject_strings = {
+            'projecte_nom': project_name
+        }
+        mail.body_strings = {
+            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'projecte_nom': project_name,
+            'url_projectes': f"{settings.ABSOLUTE_URL}{reverse('project_info')}",
+            'url_backoffice': settings.ABSOLUTE_URL
+        }
+        mail.send()
 
 
 class DerivationAdmin(admin.ModelAdmin):
