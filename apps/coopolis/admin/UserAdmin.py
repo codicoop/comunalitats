@@ -6,10 +6,12 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings
 from constance import config
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from coopolis.forms import MySignUpAdminForm
 from cc_courses.models import ActivityEnrolled
+from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 
 class ActivityEnrolledInline(admin.TabularInline):
@@ -118,13 +120,15 @@ class UserAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
     def send_welcome_email(self, mail_to):
-        mail_to = {mail_to}
-        if settings.DEBUG:
-            mail_to.add(config.EMAIL_TO_DEBUG)
-        send_mail(
-            subject=config.EMAIL_SIGNUP_WELCOME_SUBJECT,
-            message=config.EMAIL_SIGNUP_WELCOME,
-            html_message=config.EMAIL_SIGNUP_WELCOME,
-            recipient_list=mail_to,
-            from_email=settings.DEFAULT_FROM_EMAIL
-        )
+        mail = MyMailTemplate('EMAIL_SIGNUP_WELCOME')
+        mail.to = mail_to
+        mail.subject_strings = {
+            'ateneu_nom': config.PROJECT_FULL_NAME
+        }
+        mail.body_strings = {
+            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'url_backoffice': settings.ABSOLUTE_URL,
+            'url_accions': f"{settings.ABSOLUTE_URL}{reverse('courses')}",
+            'url_projecte': f"{settings.ABSOLUTE_URL}{reverse('project_info')}",
+        }
+        mail.send()
