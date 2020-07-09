@@ -1,8 +1,9 @@
 from django.contrib import admin
-from django.db.models import Count, Sum, Q
+from django.db.models import Count, Q
 
 from .ProjectAdmin import FilterByFounded
 from dataexports.models import SubsidyPeriod
+from coopolis.db_utils import DistinctSum
 
 
 class DefaultedSubsidyPeriodFilter(admin.SimpleListFilter):
@@ -69,19 +70,19 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             'members_d': Count('stages__involved_partners',
                                filter=Q(stages__involved_partners__gender='FEMALE'), distinct=True),
             'members_total': Count('stages__involved_partners', distinct=True),
-            'acollida_hores': Sum('stages__hours', filter=Q(stages__stage_type=1)),
+            'acollida_hores': DistinctSum('stages__hours', filter=Q(stages__stage_type=1)),
             'acollida_certificat':
                 Count('stages__scanned_certificate',
                       filter=Q(stages__stage_type=1) & Q(stages__scanned_certificate__isnull=False)),
-            'proces_hores': Sum('stages__hours', filter=Q(stages__stage_type=2)),
+            'proces_hores': DistinctSum('stages__hours', filter=Q(stages__stage_type=2)),
             'proces_certificat':
                 Count('stages__scanned_certificate',
                       filter=Q(stages__stage_type=2) & Q(stages__scanned_certificate__isnull=False)),
-            'constitucio_hores': Sum('stages__hours', filter=Q(stages__stage_type=6)),
+            'constitucio_hores': DistinctSum('stages__hours', filter=Q(stages__stage_type=6)),
             'constitucio_certificat':
                 Count('stages__scanned_certificate',
                       filter=Q(stages__stage_type=6) & Q(stages__scanned_certificate__isnull=False)),
-            'consolidacio_hores': Sum('stages__hours', filter=Q(stages__stage_type__in=[7, 8])),
+            'consolidacio_hores': DistinctSum('stages__hours', filter=Q(stages__stage_type__in=[7, 8])),
             'consolidacio_certificat':
                 Count('stages__scanned_certificate',
                       filter=Q(stages__stage_type__in=[7, 8]) & Q(stages__scanned_certificate__isnull=False)),
