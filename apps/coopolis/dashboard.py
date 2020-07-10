@@ -110,12 +110,15 @@ class MyDashboard(Dashboard):
             children=group_children
         ))
 
+        links_children = [
+            ["Documentació", 'docs/']
+        ]
+        if context['request'].user.is_superuser:
+            links_children.append(['Gestió de textos del back-office', 'constance/config'])
+            links_children.append(["Registre d'e-mails enviats", 'mailqueue/mailermessage/'])
         if context['request'].user.is_superuser:
             self.children.append(modules.LinkList(
                 title='Enllaços',
                 column=3,
-                children=(
-                    ['Gestió de textos del back-office', 'constance/config'],
-                    ["Registre d'e-mails enviats", 'mailqueue/mailermessage/']
-                )
+                children=links_children
             ))

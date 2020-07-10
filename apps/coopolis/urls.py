@@ -27,6 +27,7 @@ urlpatterns += [
     path('users/signup', anonymous_required(CoopolisSignUpView.as_view()), name='signup'),
     path('grappelli/', include('grappelli.urls')),
     path('admin/', admin.site.urls),
+    path('admin/docs/', TemplateView.as_view(template_name="admin/docs.html"), name='docs'),
     path('summernote/', include('django_summernote.urls')),
     path('project/edit/', login_required(ProjectFormView.as_view()), name='edit_project'),
     path('project/new/', login_required(ProjectCreateFormView.as_view()), name='new_project'),
