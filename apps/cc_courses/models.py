@@ -267,7 +267,7 @@ class Activity(models.Model):
 class ActivityResourceFile(models.Model):
     class Meta:
         verbose_name = "recurs"
-        verbose_name_plural = "recursos"
+        verbose_name_plural = "recursos i material formatiu"
         ordering = ["name"]
 
     image = models.FileField("fitxer", storage=PublicMediaStorage())

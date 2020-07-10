@@ -9,10 +9,9 @@ from django_summernote.admin import SummernoteModelAdminMixin
 from constance import config
 from django.conf import settings
 import modelclone
-from django.template import Template, Context
 
 from coopolis.forms import ActivityForm
-from cc_courses.models import Activity, ActivityEnrolled
+from cc_courses.models import Activity, ActivityEnrolled, ActivityResourceFile
 from coopolis.models import User
 from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
@@ -65,6 +64,15 @@ class ActivityEnrolledInline(admin.TabularInline):
     }
 
 
+class ActivityResourcesInlineAdmin(admin.TabularInline):
+    class Media:
+        js = ('js/grappellihacks.js',)
+
+    classes = ('grp-collapse', 'grp-closed')
+    model = ActivityResourceFile
+    extra = 0
+
+
 class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     class Media:
         js = ('js/grappellihacks.js',)
@@ -92,6 +100,10 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
             'fields': ('for_minors', 'minors_school_name', 'minors_school_cif', 'minors_grade', 'minors_participants_number',
                        'minors_teacher'),
         }),
+        ("Instruccions per les participants", {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('videocall_url', 'instructions'),
+        }),
         ('Accions i llistats', {
             'classes': ('grp-collapse grp-closed',),
             'fields': ('attendee_list_field', 'attendee_filter_field', 'send_reminder_field'),
@@ -105,7 +117,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         'fk': ['course'],
     }
     date_hierarchy = 'date_start'
-    inlines = (ActivityEnrolledInline, )
+    inlines = (ActivityResourcesInlineAdmin, ActivityEnrolledInline)
 
     def get_form(self, request, obj=None, **kwargs):
         # Hack to be able to use self.request at the form.
