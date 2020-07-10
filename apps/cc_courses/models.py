@@ -185,6 +185,10 @@ class Activity(models.Model):
     strategic_line = models.ForeignKey(StrategicLine, verbose_name="línia estratègica", on_delete=models.SET_NULL,
                                        blank=True, null=True, related_name='strategic_line_activities')
 
+    # Camps pel material formatiu
+    videocall_url = models.URLField("enllaç a la videotrucada", max_length=250, null=True, blank=True)
+    instructions = models.TextField("instruccions per participar", null=True, blank=True)
+
     objects = models.Manager()
     published = Published()
 
@@ -258,6 +262,20 @@ class Activity(models.Model):
             raise EnrollToActivityNotValidException()
         self.enrolled.add(user)
         self.save()
+
+
+class ActivityResourceFile(models.Model):
+    class Meta:
+        verbose_name = "recurs"
+        verbose_name_plural = "recursos"
+        ordering = ["name"]
+
+    image = models.FileField("fitxer", storage=PublicMediaStorage())
+    name = models.CharField("nom del recurs", max_length=120, null=False, blank=False)
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name="resources")
+
+    def __str__(self):
+        return self.name
 
 
 class ActivityEnrolled(models.Model):
