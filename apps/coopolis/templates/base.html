@@ -72,11 +72,8 @@
                 <li><a href="{% url 'password_reset' %}">Recuperar contrasenya</a></li>
                 <li><a href="{% url 'loginsignup' %}">Crear compte</a></li>
             {% else %}
-                <li class="dropdown">Perfil
-                    <ul class="dropdown-content flex-column ">
-                        <li><a href="{% url 'user_profile' %}">Les meves dades</a></li>
-                        <li><a href="{% url 'my_activities' %}">Els meus cursos</a></li>
-                    </ul>
+                <li><a href="{% url 'user_profile' %}">Les meves dades</a></li>
+                <li><a href="{% url 'my_activities' %}">Els meus cursos</a></li>
             {% endif %}
                 <li><a href="{% url 'courses' %}">Inscripcions</a></li>
                 <li><a href="{% url 'project_info' %}">Projecte</a></li>
