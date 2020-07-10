@@ -187,7 +187,9 @@ class Activity(models.Model):
 
     # Camps pel material formatiu
     videocall_url = models.URLField("enllaç a la videotrucada", max_length=250, null=True, blank=True)
-    instructions = models.TextField("instruccions per participar", null=True, blank=True)
+    instructions = models.TextField("instruccions per participar", null=True, blank=True,
+                                    help_text="En un futur, aquest text s'inclourà als recordatoris que envieu a tota "
+                                              "la gent inscrita. Ara per ara, però, l'heu d'enviar manualment.")
 
     objects = models.Manager()
     published = Published()
