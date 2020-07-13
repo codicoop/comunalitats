@@ -14,4 +14,4 @@ class ActivityPollView(DetailView):
         ret = super(ActivityPollView, self).get(request, *args, **kwargs)
         if not self.object.poll_access_allowed():
             return HttpResponseRedirect(reverse('my_activities'))
-        return super(ActivityPollView, self).get(request, *args, **kwargs)
+        return ret
