@@ -104,6 +104,10 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
             'classes': ('grp-collapse grp-closed',),
             'fields': ('videocall_url', 'instructions'),
         }),
+        ("Recursos i material formatiu", {
+            'classes': ('placeholder resources-group',),  # Grappelli way for sorting inlines
+            'fields': (),
+        }),
         ('Accions i llistats', {
             'classes': ('grp-collapse grp-closed',),
             'fields': ('attendee_list_field', 'attendee_filter_field', 'send_reminder_field'),
