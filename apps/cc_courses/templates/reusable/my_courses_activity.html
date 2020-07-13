@@ -12,9 +12,11 @@
                     <div style="background-color: #e94e1b;">Instruccions i material</div>
                 </a>
                 {% endif %}
+                {% if enrollment.activity.poll_access_allowed%}
                 <a href="{% url 'activity_poll' pk=enrollment.activity.id %}" class="enroll-button">
                     <div style="background-color: #e94e1b;">Enquesta de valoració</div>
                 </a>
+                {% endif %}
                 {% if optout_button %}
                 <a
                     id="actButton{{enrollment.activity.id}}"

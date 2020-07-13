@@ -53,8 +53,12 @@
     <p><a href="{{ object.videocall_url }}" target="_blank">{{ object.videocall_url }}</a></p>
     {% endif %}
 
-    <h2>[IF TOCA MOSTRAR L'ENQUESTA] Enquesta formativa</h2>
+    <h2>Enquesta de valoració</h2>
+    {% if object.poll_access_allowed %}
     <p><a href="{% url 'activity_poll' pk=object.id %}">Accedir a l'enquesta</a></p>
+    {% else %}
+    <p>L'enquesta de valoració s'activarà quan s'hagi celebrat la sessió.</p>
+    {% endif %}
 
 
 </div>

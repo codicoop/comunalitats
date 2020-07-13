@@ -3,6 +3,7 @@ from django.shortcuts import reverse
 from django.conf import settings
 from datetime import date, datetime, time
 
+from django.utils import timezone
 from easy_thumbnails.fields import ThumbnailerImageField
 from django.apps import apps
 from django.core.validators import ValidationError
@@ -246,6 +247,13 @@ class Activity(models.Model):
         # Using date start as the reference one, if an activity last for more than 1 day it should not matter here.
         obj = model.objects.get(date_start__lte=self.date_start, date_end__gte=self.date_start)
         return obj
+
+    def poll_access_allowed(self):
+        # Si la data actual és superior o igual a la data d'inici, mostrem l'enquesta.
+        if timezone.now().date() >= self.date_start:
+            return True
+        return False
+
 
     def clean(self):
         super().clean()
