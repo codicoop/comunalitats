@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {% load staticfiles %}
+{% endblock %}
+
+{% block content %}
+
+<style>
+.activity-resources {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 400px;
+    border: 1px black solid;
+    padding: 10px;
+}
+.resource-name {
+    width: 90%;
+}
+.resource-name ~ .resource-name,
+.resource-download ~ .resource-download {
+    margin-top: 10px;
+}
+.resource-download {
+    width: 10%;
+}
+</style>
+
+<div class="breadcrumb">
+    <span><a href="{% url 'home' %}">Inici</a> > <a href="{% url 'my_activities' %}">Els meus cursos</a> > {{ activity.title }}</span>
+</div>
+<div class="page-content">
+
+    <h1>{{ object }}</h1>
+
+    <h2>Enquesta de valoració</h2>
+
+    <em>pendent</em>
+
+</div>
+{% endblock %}
