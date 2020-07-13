@@ -33,12 +33,13 @@
 
     <h1>{{ object }}</h1>
 
+    {% if object.instructions %}
     <h2>Instruccions sobre el funcionament de la sessió</h2>
-
     <p>{{ object.instructions|safe }}</p>
+    {% endif %}
 
+    {% if object.resources.all %}
     <h2>Material formatiu</h2>
-    {% if object.resources %}
     <div class="activity-resources">
         {% for resource in object.resources.all %}
         <div class="resource-name">{{ resource.name }}</div>

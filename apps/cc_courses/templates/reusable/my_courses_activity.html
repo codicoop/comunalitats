@@ -7,9 +7,11 @@
                 <p><strong>Horari:</strong> de {{ enrollment.activity.starting_time }} a {{ enrollment.activity.ending_time }}</p>
                 <p><strong>Lloc:</strong> {{ enrollment.activity.place }}</p>
                 <p><strong>Descripció:</strong> {{ enrollment.activity.objectives|safe }}</p>
+                {% if enrollment.activity.videocall_url or enrollment.activity.instructions or enrollment.activity.resources.all %}
                 <a href="{% url 'activity' pk=enrollment.activity.id %}" class="enroll-button">
                     <div style="background-color: #e94e1b;">Instruccions i material</div>
                 </a>
+                {% endif %}
                 <a href="{% url 'activity_poll' pk=enrollment.activity.id %}" class="enroll-button">
                     <div style="background-color: #e94e1b;">Enquesta de valoració</div>
                 </a>
