@@ -13,4 +13,8 @@ echo "Running migrate ateneu_coopmaresme"
 docker exec ateneu_coopmaresme python manage.py migrate
 echo "Running migrate ateneu_coopcamp"
 docker exec ateneu_coopcamp python manage.py migrate
+echo "Running migrate ateneu_coopsetania"
+docker exec ateneu_coopsetania python manage.py migrate
+echo "Running migrate ateneu_terresgironines"
+docker exec ateneu_terresgironines python manage.py migrate
 echo "Tots els migrates tirats, excepte ateneu_demo."

@@ -41,7 +41,7 @@ services:
 
   db:
     container_name: develop_coopolis_db
-    image: postgres
+    image: postgres:11
     volumes:
       - /srv/postgres-data/coopolis-develop2:/var/lib/postgresql/data/
     environment:

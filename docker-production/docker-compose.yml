@@ -164,6 +164,48 @@ services:
     depends_on:
       - db
 
+  # https://serveis.coopsetania.cat
+  # Nota: no té el port 8009 perquè l'ocupa el java
+  ateneu-coopsetania:
+    container_name: ateneu_coopsetania
+    build:
+      context: ..
+      dockerfile: ./docker-production/Dockerfile
+    environment:
+      - DB_HOST=db
+      - "PYTHONUNBUFFERED=1"
+      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopsetania
+      - PYTHONPATH=/shared_libraries
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8010
+    volumes:
+      - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
+    ports:
+      - 8010:8010
+    depends_on:
+      - db
+
+  # https://serveis.ateneucoopgi.org
+  ateneu-terresgironines:
+    container_name: ateneu_terresgironines
+    build:
+      context: ..
+      dockerfile: ./docker-production/Dockerfile
+    environment:
+      - DB_HOST=db
+      - "PYTHONUNBUFFERED=1"
+      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-terresgironines
+      - PYTHONPATH=/shared_libraries
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8011
+    volumes:
+      - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
+    ports:
+      - 8011:8011
+    depends_on:
+      - db
+
+
   # https://documentacio-backoffice.bcn.coop
   documentacio:
     container_name: documentacio
@@ -182,7 +224,7 @@ services:
 
   db:
     container_name: postgres
-    image: postgres
+    image: postgres:11
     volumes:
       - /srv/postgres-data/coopolis-production:/var/lib/postgresql/data/
     environment:
