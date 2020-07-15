@@ -1,0 +1,20 @@
+.poll {
+  width: 500px;
+  flex-wrap: wrap;
+
+  .poll__item {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+
+    &:hover {
+      background-color: #fdfdfd;
+    }
+
+    & div {
+      width: calc(100% - 120px);
+    }
+
+  }
+}

@@ -2,6 +2,8 @@
 
 {% block head %}
     {% load staticfiles %}
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" type="text/css">
+    <link rel="stylesheet" href="{% static 'styles/stars-rating.css' %}" type="text/css">
 {% endblock %}
 
 {% block content %}
@@ -35,7 +37,33 @@
 
     <h2>Enquesta de valoració</h2>
 
-    <em>pendent</em>
+    <form action="#" method="post">
+
+        <div class="poll">
+            <div class="poll__item">
+                <div>Valora de l'1 al 4:</div>
+                <fieldset class="rating">
+                    <input type="radio" id="field1_4" name="rating" value="4" /><label class="full" for="field1_4" title="(4) Molt bé"></label>
+                    <input type="radio" id="field1_3" name="rating" value="3" /><label class="full" for="field1_3" title="(3) Bé"></label>
+                    <input type="radio" id="field1_2" name="rating" value="2" /><label class="full" for="field1_2" title="(2) Malament"></label>
+                    <input type="radio" id="field1_1" name="rating" value="1" /><label class="full" for="field1_1" title="(1) Molt malament"></label>
+                </fieldset>
+            </div>
+
+            <div class="poll__item">
+                <div>Segona pregunta Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi, incidunt!:</div>
+                <fieldset class="rating">
+                    <input type="radio" id="star4" name="field2" value="4" /><label class="full" for="star4" title="(4) Molt bé"></label>
+                    <input type="radio" id="star3" name="field2" value="3" /><label class="full" for="star3" title="(3) Bé"></label>
+                    <input type="radio" id="star2" name="field2" value="2" /><label class="full" for="star2" title="(2) Malament"></label>
+                    <input type="radio" id="star1" name="field2" value="1" /><label class="full" for="star1" title="(1) Molt malament"></label>
+                </fieldset>
+            </div>
+
+        </div>
+
+
+    </form>
 
 </div>
 {% endblock %}

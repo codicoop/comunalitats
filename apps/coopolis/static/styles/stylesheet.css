@@ -654,5 +654,21 @@ label.required:after {
     width: 90%;
   }
 }
+.poll {
+  width: 500px;
+  flex-wrap: wrap;
+}
+.poll .poll__item {
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+}
+.poll .poll__item:hover {
+  background-color: #fdfdfd;
+}
+.poll .poll__item div {
+  width: calc(100% - 120px);
+}
 
 /*# sourceMappingURL=stylesheet.css.map */
