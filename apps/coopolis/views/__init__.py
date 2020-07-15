@@ -6,3 +6,4 @@ from .LoginSignupContainerView import LoginSignupContainerView, CoopolisSignUpVi
 from .HomeView import HomeView
 from .ProjectFormView import ProjectFormView, ProjectCreateFormView, ProjectInfoView
 from .RegistrationMailView import CustomPasswordResetView
+from .ActivityPollView import ActivityPollView

@@ -9,6 +9,18 @@
 
 <div class="page-content">
 
+
+    {% if messages %}
+    <div class="generated-form">
+        <ul class="message-container">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}-message"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+
     {% if enrolled_activities.count is 0 %}
     <h1>Encara no t'has inscrit a cap activitat.</h1>
     <p>Aquí podràs veure i gestionar les activitats a les que t'hagis inscrit. Per veure quins cursos i activitats hi

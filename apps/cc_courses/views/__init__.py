@@ -7,4 +7,3 @@ from .EnrollActivityView import EnrollActivityView
 from .MyCoursesView import MyCoursesListView
 from .OptoutActivityView import OptoutActivityView
 from .ActivityDetailView import ActivityDetailView
-from .ActivityPollView import ActivityPollView

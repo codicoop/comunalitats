@@ -33,6 +33,7 @@
 
     .message-container {
         position: inherit;
+        list-style-type: none;
 
         .success-message {
             @extend %message;

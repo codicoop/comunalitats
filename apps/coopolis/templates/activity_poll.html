@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% load staticfiles %}
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" type="text/css">
+<link rel="stylesheet" href="{% static 'styles/stars-rating.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb">
+  <span><a href="{% url 'home' %}">Inici</a> > <a href="{% url 'my_activities' %}">Els meus cursos</a> > {{ activity.name }}</span>
+</div>
+<div class="page-content">
+
+  <h1>{{ activity }}</h1>
+
+  <h2>Enquesta anònima de valoració</h2>
+
+  {% if already_answered %}
+  <em>Ja has omplert l'enquesta de valoració per aquesta activitat.</em>
+  {% else %}
+  <form method="post">{% csrf_token %}
+    <div class="poll">
+
+      <div class="poll__item">
+        <div>Valora de l'1 al 4:</div>
+        <fieldset class="rating">
+          <input type="radio" id="id_duration_3" name="duration" value="4"/>
+          <label class="full" for="id_duration_3" title="(4) Molt bé"></label>
+          <input type="radio" id="id_duration_2" name="duration" value="3"/>
+          <label class="full" for="id_duration_2" title="(3) Bé"></label>
+          <input type="radio" id="id_duration_1" name="duration" value="2"/>
+          <label class="full" for="id_duration_1" title="(2) Malament"></label>
+          <input type="radio" id="id_duration_0" name="duration" value="1"/>
+          <label class="full" for="id_duration_0" title="(1) Molt malament"></label>
+        </fieldset>
+      </div>
+
+    </div>
+
+    <div class="poll__item">
+      <input type="submit" value="Save">
+    </div>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

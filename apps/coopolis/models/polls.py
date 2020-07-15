@@ -7,37 +7,45 @@ class ActivityPoll(models.Model):
     class Meta:
         verbose_name = "enquesta de valoració"
         verbose_name_plural = "enquestes de valoració"
+        constraints = [
+            models.UniqueConstraint(fields=['activity', 'user'], name='unique_answer'),
+        ]
 
     activity = models.ForeignKey('cc_courses.Activity', on_delete=models.CASCADE, related_name="polls")
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     created = models.DateTimeField(verbose_name="creació", auto_now_add=True)
 
     # Organització
-    duration = models.PositiveSmallIntegerField("la durada ha estat l'adequada?")
-    hours = models.PositiveSmallIntegerField("els horaris han estat adequats?")
-    information = models.PositiveSmallIntegerField("Informació necessària per fer l'activitat")
-    on_schedule = models.PositiveSmallIntegerField("S'han complert les dates, horaris, etc...")
-    included_resources = models.PositiveSmallIntegerField("Materials de suport facilitats")
-    space_adequation = models.PositiveSmallIntegerField("Els espais han estat adequats (sales,aules...) ")
+    duration = models.PositiveSmallIntegerField("la durada ha estat l'adequada?", null=True, blank=True)
+    hours = models.PositiveSmallIntegerField("els horaris han estat adequats?", null=True, blank=True)
+    information = models.PositiveSmallIntegerField("Informació necessària per fer l'activitat", null=True, blank=True)
+    on_schedule = models.PositiveSmallIntegerField("S'han complert les dates, horaris, etc...", null=True, blank=True)
+    included_resources = models.PositiveSmallIntegerField("Materials de suport facilitats", null=True, blank=True)
+    space_adequation = models.PositiveSmallIntegerField("Els espais han estat adequats (sales,aules...) ", null=True,
+                                                        blank=True)
 
     # Continguts
-    contents = models.PositiveSmallIntegerField("Els continguts han estat adequats")
+    contents = models.PositiveSmallIntegerField("Els continguts han estat adequats", null=True, blank=True)
 
     # Metodologia
     methodology_fulfilled_objectives = models.PositiveSmallIntegerField(
-        "La metodologia ha estat coherent amb els objectius "
+        "La metodologia ha estat coherent amb els objectius ", null=True, blank=True
     )
-    methodology_better_results = models.PositiveSmallIntegerField("La metodologia ha permès obtenir millors resultats")
+    methodology_better_results = models.PositiveSmallIntegerField("La metodologia ha permès obtenir millors resultats",
+                                                                  null=True, blank=True)
 
     # Valoració de la persona formadora
-    teacher_has_knowledge = models.PositiveSmallIntegerField("Ha mostrat coneixements i experiència sobre el tema?")
+    teacher_has_knowledge = models.PositiveSmallIntegerField("Ha mostrat coneixements i experiència sobre el tema?",
+                                                             null=True, blank=True)
     teacher_resolved_doubts = models.PositiveSmallIntegerField(
-        "Ha aconseguit resoldre els problemes i dubtes que s’ha plantejat?"
+        "Ha aconseguit resoldre els problemes i dubtes que s’ha plantejat?", null=True, blank=True
     )
 
     # Utilitat del curs
-    expectations_satisfied = models.PositiveSmallIntegerField("Ha satisfet les meves expectatives")
-    adquired_new_tools = models.PositiveSmallIntegerField("He incorporat eines per aplicar a nous projectes")
+    expectations_satisfied = models.PositiveSmallIntegerField("Ha satisfet les meves expectatives", null=True,
+                                                              blank=True)
+    adquired_new_tools = models.PositiveSmallIntegerField("He incorporat eines per aplicar a nous projectes", null=True,
+                                                          blank=True)
     met_new_people = models.NullBooleanField("M'ha permès conèixer persones afins")
     wanted_start_cooperative = models.NullBooleanField(
         "Abans del curs, teníeu ganes/necessitats d'engegar algun projecte cooperatiu"
@@ -45,9 +53,9 @@ class ActivityPoll(models.Model):
     wants_start_cooperative_now = models.NullBooleanField("I després?")
 
     # Valoració global
-    general_satisfaction = models.PositiveSmallIntegerField("Grau de satisfacció general")
-    also_interested_in = models.TextField("De quins altres temes t'interessaria rebre formació?")
-    comments = models.TextField("Vols comentar alguna cosa més?")
+    general_satisfaction = models.PositiveSmallIntegerField("Grau de satisfacció general", null=True, blank=True)
+    also_interested_in = models.TextField("De quins altres temes t'interessaria rebre formació?", null=True, blank=True)
+    comments = models.TextField("Vols comentar alguna cosa més?", null=True, blank=True)
 
     def __str__(self):
         return f"Enquesta de {self.activity} del {self.created.strftime('%d-%m-%Y')}"

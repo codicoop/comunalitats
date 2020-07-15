@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
 from .views import ProjectFormView, ProjectCreateFormView, ProjectInfoView, LoginSignupContainerView,\
-    CoopolisSignUpView, CoopolisLoginView, HomeView, CustomPasswordResetView
+    CoopolisSignUpView, CoopolisLoginView, HomeView, CustomPasswordResetView, ActivityPollView
 from cc_users.decorators import anonymous_required
 
 
@@ -35,4 +35,5 @@ urlpatterns += [
     path('email_template_test/', TemplateView.as_view(template_name="emails/base.html"), name='email_template_test'),
     path('users/password_reset/', CustomPasswordResetView.as_view(), name='password_reset'),
     path('reservations/', include('apps.facilities_reservations.urls')),
+    path('activities/<pk>/poll', ActivityPollView.as_view(), name='activity_poll')
 ]
