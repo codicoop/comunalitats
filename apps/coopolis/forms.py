@@ -10,7 +10,7 @@ from django.conf import settings
 from datetime import datetime
 from django.utils.timezone import make_aware
 
-from coopolis.models import Project, User, ProjectStage
+from coopolis.models import Project, User, ProjectStage, ActivityPoll
 from cc_courses.models import Activity
 from coopolis.mixins import FormDistrictValidationMixin
 from dynamic_fields.fields import DynamicChoicesWidget
@@ -223,3 +223,22 @@ class ActivityForm(forms.ModelForm):
         obj.delete()
         self.instance.room_reservation = None
         self.instance.save()
+
+
+class ActivityPollForm(FormDistrictValidationMixin, forms.ModelForm):
+    class Meta:
+        model = ActivityPoll
+        fields = (
+            # Organització
+            'duration', 'hours', 'information', 'on_schedule', 'included_resources', 'space_adequation',
+            # Continguts
+            'contents',
+            # Metodologia
+            'methodology_fulfilled_objectives', 'methodology_better_results',
+            # Valoració de la persona formadora
+            'teacher_has_knowledge', 'teacher_resolved_doubts',
+            # Utilitat del curs
+            'expectations_satisfied', 'adquired_new_tools', 'met_new_people', 'wanted_start_cooperative',
+            # Valoració global
+            'general_satisfaction', 'also_interested_in', 'comments'
+        )
