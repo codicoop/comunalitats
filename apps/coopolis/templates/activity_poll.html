@@ -23,19 +23,33 @@
   <form method="post">{% csrf_token %}
     <div class="poll">
 
-      <div class="poll__item">
-        <div>Valora de l'1 al 4:</div>
-        <fieldset class="rating">
-          <input type="radio" id="id_duration_3" name="duration" value="4"/>
-          <label class="full" for="id_duration_3" title="(4) Molt bé"></label>
-          <input type="radio" id="id_duration_2" name="duration" value="3"/>
-          <label class="full" for="id_duration_2" title="(3) Bé"></label>
-          <input type="radio" id="id_duration_1" name="duration" value="2"/>
-          <label class="full" for="id_duration_1" title="(2) Malament"></label>
-          <input type="radio" id="id_duration_0" name="duration" value="1"/>
-          <label class="full" for="id_duration_0" title="(1) Molt malament"></label>
-        </fieldset>
+      {% for fieldset in fieldsets %}
+      <div class="poll__fieldset">
+        <h3>{{ fieldset.0 }}</h3>
+        {% for field in fieldset.1.fields %}
+        <div class="poll__item">
+          {% if field.type == 'stars' %}
+          <div>{{ field.obj.label }}</div>
+          <fieldset class="rating">
+            <input type="radio" id="id_{{ field.name }}_3" name="{{ field.name }}" value="4"/>
+            <label class="full" for="id_{{ field.name }}_3" title="(4) Molt bé"></label>
+            <input type="radio" id="id_{{ field.name }}_2" name="{{ field.name }}" value="3"/>
+            <label class="full" for="id_{{ field.name }}_2" title="(3) Bé"></label>
+            <input type="radio" id="id_{{ field.name }}_1" name="{{ field.name }}" value="2"/>
+            <label class="full" for="id_{{ field.name }}_1" title="(2) Malament"></label>
+            <input type="radio" id="id_{{ field.name }}_0" name="{{ field.name }}" value="1"/>
+            <label class="full" for="id_{{ field.name }}_0" title="(1) Molt malament"></label>
+          </fieldset>
+          {% elif field.type == 'yesno' %}
+          <em>YES NO FIELD</em>
+          {% elif field.type == 'text' %}
+          <em>TEXT FIELD</em>
+          {% endif %}
+
+        </div>
+        {% endfor %}
       </div>
+      {% endfor %}
 
     </div>
 

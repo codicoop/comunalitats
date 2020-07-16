@@ -46,6 +46,9 @@ class ActivityPollView(CreateView):
         ctx = super(ActivityPollView, self).get_context_data(**kwargs)
         ctx['activity'] = self.activity_obj
         ctx['already_answered'] = False
+        ctx['fieldsets'] = ctx['form'].get_grouped_fields()
+        # Amb getattr(object, attribute_name) hauria de poder accedir als form.field_name)
+
         if self.activity_obj.polls.filter(user=self.request.user).count():
             ctx['already_answered'] = True
         return ctx
@@ -68,3 +71,8 @@ class ActivityPollView(CreateView):
         except Activity.DoesNotExist:
             raise Http404(f"No existeix cap Activity amb la id {pk}.")
         return obj
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # print(form.fields)
+        return form

@@ -1,20 +1,28 @@
 .poll {
-  width: 500px;
-  flex-wrap: wrap;
+  display: block;
+  columns: 500px;
+  width: 100%;
 
-  .poll__item {
+  .poll__fieldset {
+    display: block;
     width: 100%;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px;
+    max-width: 500px;
+    break-inside: avoid;
 
-    &:hover {
-      background-color: #fdfdfd;
+    .poll__item {
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px;
+
+      &:hover {
+        background-color: #fdfdfd;
+      }
+
+      & div {
+        width: calc(100% - 120px);
+      }
+
     }
-
-    & div {
-      width: calc(100% - 120px);
-    }
-
   }
 }

@@ -656,19 +656,26 @@ label.required:after {
   }
 }
 .poll {
-  width: 500px;
-  flex-wrap: wrap;
+  display: block;
+  columns: 500px;
+  width: 100%;
 }
-.poll .poll__item {
+.poll .poll__fieldset {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  break-inside: avoid;
+}
+.poll .poll__fieldset .poll__item {
   width: 100%;
   justify-content: space-between;
   align-items: center;
   padding: 5px;
 }
-.poll .poll__item:hover {
+.poll .poll__fieldset .poll__item:hover {
   background-color: #fdfdfd;
 }
-.poll .poll__item div {
+.poll .poll__fieldset .poll__item div {
   width: calc(100% - 120px);
 }
 

@@ -225,7 +225,7 @@ class ActivityForm(forms.ModelForm):
         self.instance.save()
 
 
-class ActivityPollForm(FormDistrictValidationMixin, forms.ModelForm):
+class ActivityPollForm(forms.ModelForm):
     class Meta:
         model = ActivityPoll
         fields = (
@@ -242,3 +242,128 @@ class ActivityPollForm(FormDistrictValidationMixin, forms.ModelForm):
             # Valoració global
             'general_satisfaction', 'also_interested_in', 'comments'
         )
+
+    def get_grouped_fields(self):
+        fieldsets = [
+            ("Organització", {
+                'classes': ('',),
+                'fields': [
+                    {
+                        'name': 'duration',
+                        'type': 'stars',
+                        'obj': self.fields.get('hours')
+                    },
+                    {
+                        'name': 'hours',
+                        'type': 'stars',
+                        'obj': self.fields.get('hours')
+                    },
+                    {
+                        'name': 'information',
+                        'type': 'stars',
+                        'obj': self.fields.get('information')
+                    },
+                    {
+                        'name': 'on_schedule',
+                        'type': 'stars',
+                        'obj': self.fields.get('on_schedule')
+                    },
+                    {
+                        'name': 'space_adequation',
+                        'type': 'stars',
+                        'obj': self.fields.get('space_adequation')
+                    },
+                ]
+            }),
+            ("Continguts", {
+                'classes': ('',),
+                'fields': [
+                    {
+                        'name': 'contents',
+                        'type': 'stars',
+                        'obj': self.fields.get('contents')
+                    },
+                ]
+            }),
+            ("Metodologia", {
+                'classes': ('',),
+                'fields': [
+                    {
+                        'name': 'methodology_fulfilled_objectives',
+                        'type': 'stars',
+                        'obj': self.fields.get('methodology_fulfilled_objectives')
+                    },
+                    {
+                        'name': 'methodology_better_results',
+                        'type': 'stars',
+                        'obj': self.fields.get('methodology_better_results')
+                    },
+                ]
+            }),
+            ("Valoració de la persona formadora", {
+                'classes': ('',),
+                'fields': [
+                    {
+                        'name': 'teacher_has_knowledge',
+                        'type': 'stars',
+                        'obj': self.fields.get('teacher_has_knowledge')
+                    },
+                    {
+                        'name': 'teacher_resolved_doubts',
+                        'type': 'stars',
+                        'obj': self.fields.get('teacher_resolved_doubts')
+                    },
+                ]
+            }),
+            ("Utilitat del curs", {
+                'classes': ('',),
+                'fields': [
+                    {
+                        'name': 'expectations_satisfied',
+                        'type': 'stars',
+                        'obj': self.fields.get('expectations_satisfied')
+                    },
+                    {
+                        'name': 'adquired_new_tools',
+                        'type': 'stars',
+                        'obj': self.fields.get('adquired_new_tools')
+                    },
+                    {
+                        'name': 'met_new_people',
+                        'type': 'yesno',
+                        'obj': self.fields.get('met_new_people')
+                    },
+                    {
+                        'name': 'wanted_start_cooperative',
+                        'type': 'yesno',
+                        'obj': self.fields.get('wanted_start_cooperative')
+                    },
+                    {
+                        'name': 'wants_start_cooperative_now',
+                        'type': 'yesno',
+                        'obj': self.fields.get('wants_start_cooperative_now')
+                    },
+                ]
+            }),
+            ("Valoració global", {
+                'classes': ('',),
+                'fields': [
+                    {
+                        'name': 'general_satisfaction',
+                        'type': 'stars',
+                        'obj': self.fields.get('general_satisfaction')
+                    },
+                    {
+                        'name': 'also_interested_in',
+                        'type': 'text',
+                        'obj': self.fields.get('also_interested_in')
+                    },
+                    {
+                        'name': 'comments',
+                        'type': 'text',
+                        'obj': self.fields.get('comments')
+                    },
+                ]
+            }),
+        ]
+        return fieldsets
