@@ -239,9 +239,17 @@ class ActivityPollForm(forms.ModelForm):
             'teacher_has_knowledge', 'teacher_resolved_doubts',
             # Utilitat del curs
             'expectations_satisfied', 'adquired_new_tools', 'met_new_people', 'wanted_start_cooperative',
+            'wants_start_cooperative_now',
             # Valoració global
             'general_satisfaction', 'also_interested_in', 'comments'
         )
+        TRUE_FALSE_CHOICES = (
+            (True, 'Yes'),
+            (False, 'No')
+        )
+        widgets = {
+            'wants_start_cooperative_now': forms.Select(choices=TRUE_FALSE_CHOICES)
+        }
 
     def get_grouped_fields(self):
         fieldsets = [

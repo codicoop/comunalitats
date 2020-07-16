@@ -1,12 +1,24 @@
+$poll-width: 500px;
+
 .poll {
   display: block;
-  columns: 500px;
+  columns: $poll-width;
   width: 100%;
+
+  .poll__send {
+    max-width: $poll-width;
+    justify-content: center;
+
+    & input {
+      width: 200px;
+      margin-top: 20px;
+    }
+  }
 
   .poll__fieldset {
     display: block;
     width: 100%;
-    max-width: 500px;
+    max-width: $poll-width;
     break-inside: avoid;
 
     .poll__item {
@@ -24,5 +36,13 @@
       }
 
     }
+
+    .poll__item--text {
+      flex-wrap: wrap;
+      & input {
+        width: 100%;
+      }
+    }
+
   }
 }

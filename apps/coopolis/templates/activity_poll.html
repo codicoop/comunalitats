@@ -18,7 +18,7 @@
   <h2>Enquesta anònima de valoració</h2>
 
   {% if already_answered %}
-  <em>Ja has omplert l'enquesta de valoració per aquesta activitat.</em>
+  <em>Ja has omplert anteriorment l'enquesta de valoració anònima per aquesta activitat. Moltes gràcies!</em>
   {% else %}
   <form method="post">{% csrf_token %}
     <div class="poll">
@@ -27,7 +27,7 @@
       <div class="poll__fieldset">
         <h3>{{ fieldset.0 }}</h3>
         {% for field in fieldset.1.fields %}
-        <div class="poll__item">
+        <div class="poll__item{% if field.type == 'text' %} poll__item--text{% endif %}">
           {% if field.type == 'stars' %}
           <div>{{ field.obj.label }}</div>
           <fieldset class="rating">
@@ -41,9 +41,15 @@
             <label class="full" for="id_{{ field.name }}_0" title="(1) Molt malament"></label>
           </fieldset>
           {% elif field.type == 'yesno' %}
-          <em>YES NO FIELD</em>
+          <label for="id_{{ field.name }}">{{ field.obj.label }}</label>
+          <select name="{{ field.name }}" id="id_{{ field.name }}">
+            <option value="unknown" selected="">ns / nc</option>
+            <option value="true">Sí</option>
+            <option value="false">No</option>
+          </select>
           {% elif field.type == 'text' %}
-          <em>TEXT FIELD</em>
+          <label for="id_{{ field.name }}">{{ field.obj.label }}</label>
+          <input type="text" name="{{ field.name }}" id="id_{{ field.name }}">
           {% endif %}
 
         </div>
@@ -51,11 +57,11 @@
       </div>
       {% endfor %}
 
+      <div class="poll__send">
+        <input type="submit" value="Enviar">
+      </div>
     </div>
 
-    <div class="poll__item">
-      <input type="submit" value="Save">
-    </div>
   </form>
   {% endif %}
 </div>

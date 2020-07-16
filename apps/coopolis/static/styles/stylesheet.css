@@ -660,6 +660,14 @@ label.required:after {
   columns: 500px;
   width: 100%;
 }
+.poll .poll__send {
+  max-width: 500px;
+  justify-content: center;
+}
+.poll .poll__send input {
+  width: 200px;
+  margin-top: 20px;
+}
 .poll .poll__fieldset {
   display: block;
   width: 100%;
@@ -677,6 +685,12 @@ label.required:after {
 }
 .poll .poll__fieldset .poll__item div {
   width: calc(100% - 120px);
+}
+.poll .poll__fieldset .poll__item--text {
+  flex-wrap: wrap;
+}
+.poll .poll__fieldset .poll__item--text input {
+  width: 100%;
 }
 
 /*# sourceMappingURL=stylesheet.css.map */
