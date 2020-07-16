@@ -82,7 +82,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     form = ActivityForm
     list_display = ('date_start', 'spots', 'remaining_spots', 'name', 'axis_summary', 'attendee_filter_field', 'attendee_list_field',
                     'send_reminder_field')
-    readonly_fields = ('attendee_list_field', 'attendee_filter_field', 'send_reminder_field')
+    readonly_fields = ('attendee_list_field', 'attendee_filter_field', 'send_reminder_field', 'activity_poll_field')
     summernote_fields = ('objectives', 'instructions',)
     search_fields = ('date_start', 'name', 'objectives',)
     list_filter = ('course', 'date_start', 'room', 'entity', 'axis', 'place', 'for_minors', 'cofunded',)
@@ -110,7 +110,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         }),
         ('Accions i llistats', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ('attendee_list_field', 'attendee_filter_field', 'send_reminder_field'),
+            'fields': ('attendee_list_field', 'attendee_filter_field', 'send_reminder_field', 'activity_poll_field',),
         })
     ]
     # define the raw_id_fields
@@ -282,3 +282,12 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         if db_field.name == "responsible":
             kwargs["queryset"] = User.objects.filter(is_staff=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def activity_poll_field(self, obj):
+        if obj.id is None:
+            return '-'
+        url = f"<a href=\"{reverse('admin:coopolis_activitypoll_changelist')}" \
+              f"?activity__id__exact={obj.id}\" target=\"_new\">Resultats de l'enquesta (pestanya nova)</a>"
+        return format_html(url)
+
+    activity_poll_field.short_description = "Resultats de l'enquesta"

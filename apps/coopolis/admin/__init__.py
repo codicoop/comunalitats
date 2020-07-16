@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.conf import settings
 
 from coopolis.models import User, Project, ProjectStage, Derivation, EmploymentInsertion, StagesByAxis, \
-    ProjectsFollowUp, ProjectsConstituted
+    ProjectsFollowUp, ProjectsConstituted, ActivityPoll
 from cc_courses.models import Course, Activity, CoursePlace, Entity, Organizer, Cofunding, StrategicLine
 from .ActivityAdmin import ActivityAdmin, CofundingAdmin, StrategicLineAdmin
 from .CourseAdmin import CourseAdmin
@@ -14,6 +14,7 @@ from .ProjectAdmin import ProjectAdmin, ProjectStageAdmin, DerivationAdmin, Empl
 from .ProjectsFollowUpAdmin import ProjectsFollowUpAdmin, ProjectsConstitutedAdmin
 from .UserAdmin import UserAdmin
 from .CoursePlaceAdmin import CoursePlaceAdmin
+from .ActivityPollAdmin import ActivityPollAdmin
 
 
 admin.site.register(User, UserAdmin)
@@ -31,6 +32,7 @@ admin.site.register(ProjectsFollowUp, ProjectsFollowUpAdmin)
 admin.site.register(ProjectsConstituted, ProjectsConstitutedAdmin)
 admin.site.register(Cofunding, CofundingAdmin)
 admin.site.register(StrategicLine, StrategicLineAdmin)
+admin.site.register(ActivityPoll, ActivityPollAdmin)
 
 admin.site.site_header = settings.ADMIN_HEADER
 admin.site.site_title = settings.ADMIN_SITE_TITLE
