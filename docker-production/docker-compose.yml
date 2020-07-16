@@ -4,7 +4,7 @@ services:
 
   # http://serveis.bcn.coop
   coopolis:
-    container_name: ateneu_coopolis
+    container_name: ateneu_coopolis # If changed, update ofelia config and db backups script
     build:
       context: ..
       dockerfile: ./docker-production/Dockerfile
@@ -45,7 +45,7 @@ services:
 
   # https://serveis.coopcamp.cat
   ateneu-coopcamp:
-    container_name: ateneu_coopcamp
+    container_name: ateneu_coopcamp # If changed, update ofelia config and db backups script
     build:
       context: ..
       dockerfile: ./docker-production/Dockerfile
@@ -65,7 +65,7 @@ services:
 
   # https://serveis.coopmaresme.cat
   ateneu-coopmaresme:
-    container_name: ateneu_coopmaresme
+    container_name: ateneu_coopmaresme # If changed, update ofelia config and db backups script
     build:
       context: ..
       dockerfile: ./docker-production/Dockerfile
@@ -85,7 +85,7 @@ services:
 
   # https://serveis.ateneubnord.cat
   ateneu-bnord:
-    container_name: ateneu_bnord
+    container_name: ateneu_bnord # If changed, update ofelia config and db backups script
     build:
       context: ..
       dockerfile: ./docker-production/Dockerfile
@@ -106,7 +106,7 @@ services:
   # https://serveis.ponentcoopera.cat
   # Ens saltem el port 8005 perquè hi ha l'antic back-office (java) allà.
   ateneu-ponentcoopera:
-    container_name: ateneu_ponentcoopera
+    container_name: ateneu_ponentcoopera # If changed, update ofelia config and db backups script
     build:
       context: ..
       dockerfile: ./docker-production/Dockerfile
@@ -126,7 +126,7 @@ services:
 
   # https://serveis.ateneucooperatiuvalles.org
   ateneu-vallesoccidental:
-    container_name: ateneu_vallesoccidental
+    container_name: ateneu_vallesoccidental # If changed, update ofelia config and db backups script
     build:
       context: ..
       dockerfile: ./docker-production/Dockerfile
@@ -146,7 +146,7 @@ services:
 
   # https://serveis.coopcatcentral.cat
   ateneu-catcentral:
-    container_name: ateneu_catcentral
+    container_name: ateneu_catcentral # If changed, update ofelia config and db backups script
     build:
       context: ..
       dockerfile: ./docker-production/Dockerfile
@@ -167,7 +167,7 @@ services:
   # https://serveis.coopsetania.cat
   # Nota: no té el port 8009 perquè l'ocupa el java
   ateneu-coopsetania:
-    container_name: ateneu_coopsetania
+    container_name: ateneu_coopsetania # If changed, update ofelia config and db backups script
     build:
       context: ..
       dockerfile: ./docker-production/Dockerfile
@@ -187,7 +187,7 @@ services:
 
   # https://serveis.ateneucoopgi.org
   ateneu-terresgironines:
-    container_name: ateneu_terresgironines
+    container_name: ateneu_terresgironines # If changed, update ofelia config and db backups script
     build:
       context: ..
       dockerfile: ./docker-production/Dockerfile
@@ -205,6 +205,24 @@ services:
     depends_on:
       - db
 
+  # Important: a l'afegir un nou ateneu, actualitzar el depends_on de l'Ofelia.
+
+  ofelia:
+    container_name: ofelia
+    image: 'mcuadros/ofelia:latest'
+    volumes:
+      - ./ofelia/config.ini:/etc/ofelia/config.ini
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - ateneu_coopolis
+      - ateneu_coopcamp
+      - ateneu_coopmaresme
+      - ateneu_bnord
+      - ateneu_ponentcoopera
+      - ateneu_vallesoccidental
+      - ateneu_catcentral
+      - ateneu_coopsetania
+      - ateneu_terresgironines
 
   # https://documentacio-backoffice.bcn.coop
   documentacio:
