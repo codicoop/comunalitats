@@ -21,8 +21,9 @@ class ActivityPoll(models.Model):
     information = models.PositiveSmallIntegerField("Informació necessària per fer l'activitat", null=True, blank=True)
     on_schedule = models.PositiveSmallIntegerField("S'han complert les dates, horaris, etc...", null=True, blank=True)
     included_resources = models.PositiveSmallIntegerField("Materials de suport facilitats", null=True, blank=True)
-    space_adequation = models.PositiveSmallIntegerField("Els espais han estat adequats (sales,aules...) ", null=True,
-                                                        blank=True)
+    space_adequation = models.PositiveSmallIntegerField(
+        "Els espais han estat adequats (sales, aules, plataforma digital...) ", null=True, blank=True
+    )
 
     # Continguts
     contents = models.PositiveSmallIntegerField("Els continguts han estat adequats", null=True, blank=True)
@@ -33,12 +34,18 @@ class ActivityPoll(models.Model):
     )
     methodology_better_results = models.PositiveSmallIntegerField("La metodologia ha permès obtenir millors resultats",
                                                                   null=True, blank=True)
+    participation_system = models.PositiveSmallIntegerField(
+        "el sistema de participació i resolució de dubtes ha estat adequat?", null=True, blank=True
+    )
 
     # Valoració de la persona formadora
     teacher_has_knowledge = models.PositiveSmallIntegerField("Ha mostrat coneixements i experiència sobre el tema?",
                                                              null=True, blank=True)
     teacher_resolved_doubts = models.PositiveSmallIntegerField(
         "Ha aconseguit resoldre els problemes i dubtes que s’ha plantejat?", null=True, blank=True
+    )
+    teacher_has_communication_skills = models.PositiveSmallIntegerField(
+        "el professional ha mostrat competències comunicatives?", null=True, blank=True
     )
 
     # Utilitat del curs
@@ -55,6 +62,7 @@ class ActivityPoll(models.Model):
     # Valoració global
     general_satisfaction = models.PositiveSmallIntegerField("Grau de satisfacció general", null=True, blank=True)
     also_interested_in = models.TextField("De quins altres temes t'interessaria rebre formació?", null=True, blank=True)
+    heard_about_it = models.TextField("com us heu assabentat d'aquesta activitat?", null=True, blank=True)
     comments = models.TextField("Vols comentar alguna cosa més?", null=True, blank=True)
 
     def __str__(self):

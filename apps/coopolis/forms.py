@@ -234,14 +234,14 @@ class ActivityPollForm(forms.ModelForm):
             # Continguts
             'contents',
             # Metodologia
-            'methodology_fulfilled_objectives', 'methodology_better_results',
+            'methodology_fulfilled_objectives', 'methodology_better_results', 'participation_system',
             # Valoració de la persona formadora
-            'teacher_has_knowledge', 'teacher_resolved_doubts',
+            'teacher_has_knowledge', 'teacher_resolved_doubts', 'teacher_has_communication_skills',
             # Utilitat del curs
             'expectations_satisfied', 'adquired_new_tools', 'met_new_people', 'wanted_start_cooperative',
             'wants_start_cooperative_now',
             # Valoració global
-            'general_satisfaction', 'also_interested_in', 'comments'
+            'general_satisfaction', 'also_interested_in', 'heard_about_it', 'comments'
         )
         TRUE_FALSE_CHOICES = (
             (True, 'Yes'),
@@ -254,7 +254,6 @@ class ActivityPollForm(forms.ModelForm):
     def get_grouped_fields(self):
         fieldsets = [
             ("Organització", {
-                'classes': ('',),
                 'fields': [
                     {
                         'name': 'duration',
@@ -284,7 +283,6 @@ class ActivityPollForm(forms.ModelForm):
                 ]
             }),
             ("Continguts", {
-                'classes': ('',),
                 'fields': [
                     {
                         'name': 'contents',
@@ -294,7 +292,6 @@ class ActivityPollForm(forms.ModelForm):
                 ]
             }),
             ("Metodologia", {
-                'classes': ('',),
                 'fields': [
                     {
                         'name': 'methodology_fulfilled_objectives',
@@ -306,10 +303,14 @@ class ActivityPollForm(forms.ModelForm):
                         'type': 'stars',
                         'obj': self.fields.get('methodology_better_results')
                     },
+                    {
+                        'name': 'participation_system',
+                        'type': 'stars',
+                        'obj': self.fields.get('participation_system')
+                    },
                 ]
             }),
             ("Valoració de la persona formadora", {
-                'classes': ('',),
                 'fields': [
                     {
                         'name': 'teacher_has_knowledge',
@@ -321,10 +322,14 @@ class ActivityPollForm(forms.ModelForm):
                         'type': 'stars',
                         'obj': self.fields.get('teacher_resolved_doubts')
                     },
+                    {
+                        'name': 'teacher_has_communication_skills',
+                        'type': 'stars',
+                        'obj': self.fields.get('teacher_has_communication_skills')
+                    },
                 ]
             }),
             ("Utilitat del curs", {
-                'classes': ('',),
                 'fields': [
                     {
                         'name': 'expectations_satisfied',
@@ -354,7 +359,6 @@ class ActivityPollForm(forms.ModelForm):
                 ]
             }),
             ("Valoració global", {
-                'classes': ('',),
                 'fields': [
                     {
                         'name': 'general_satisfaction',
@@ -365,6 +369,11 @@ class ActivityPollForm(forms.ModelForm):
                         'name': 'also_interested_in',
                         'type': 'text',
                         'obj': self.fields.get('also_interested_in')
+                    },
+                    {
+                        'name': 'heard_about_it',
+                        'type': 'text',
+                        'obj': self.fields.get('heard_about_it')
                     },
                     {
                         'name': 'comments',

@@ -6,24 +6,22 @@ class ActivityPollAdmin(admin.ModelAdmin):
         css = {
             'all': ('styles/grappelli-change-list-width-fixed.css', 'styles/grappelli-change-list-hide-total.css')
         }
-    """
-    To filter by activity:
-    activity__id__exact=324
-    """
+
+    # IMPORTANT: Evita que el camp User arribi a mostrar-se mai per preservar l'anonimat de l'enquesta.
     list_display = (
         # Organització
         'duration', 'hours', 'information', 'on_schedule', 'included_resources', 'space_adequation',
         # Continguts
         'contents',
         # Metodologia
-        'methodology_fulfilled_objectives', 'methodology_better_results',
+        'methodology_fulfilled_objectives', 'methodology_better_results', 'participation_system',
         # Valoració de la persona formadora
-        'teacher_has_knowledge', 'teacher_resolved_doubts',
+        'teacher_has_knowledge', 'teacher_resolved_doubts', 'teacher_has_communication_skills',
         # Utilitat del curs
         'expectations_satisfied', 'adquired_new_tools', 'met_new_people', 'wanted_start_cooperative',
         'wants_start_cooperative_now',
         # Valoració global
-        'general_satisfaction', 'also_interested_in', 'comments'
+        'general_satisfaction', 'also_interested_in', 'heard_about_it', 'comments'
     )
     list_per_page = 500
 
