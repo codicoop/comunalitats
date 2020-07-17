@@ -214,15 +214,15 @@ services:
       - ./ofelia/config.ini:/etc/ofelia/config.ini
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
-      - ateneu_coopolis
-      - ateneu_coopcamp
-      - ateneu_coopmaresme
-      - ateneu_bnord
-      - ateneu_ponentcoopera
-      - ateneu_vallesoccidental
-      - ateneu_catcentral
-      - ateneu_coopsetania
-      - ateneu_terresgironines
+      - coopolis
+      - ateneu-coopcamp
+      - ateneu-coopmaresme
+      - ateneu-bnord
+      - ateneu-ponentcoopera
+      - ateneu-vallesoccidental
+      - ateneu-catcentral
+      - ateneu-coopsetania
+      - ateneu-terresgironines
 
   # https://documentacio-backoffice.bcn.coop
   documentacio:
