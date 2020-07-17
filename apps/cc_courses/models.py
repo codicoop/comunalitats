@@ -130,7 +130,13 @@ class Activity(models.Model):
     date_end = models.DateField("dia finalització", blank=True, null=True)
     starting_time = models.TimeField("hora d'inici")
     ending_time = models.TimeField("hora de finalització")
-    spots = models.IntegerField('places totals', default=0)
+    spots = models.IntegerField('places totals', default=0,
+                                help_text="Si hi ha inscripcions en llista d'espera i augmentes el número de places, "
+                                          "passaran a confirmades i se'ls hi notificarà el canvi. Si redueixes el "
+                                          "número de places per sota del total d'inscrites, les que no hi càpiguen "
+                                          "passaran a llista d'espera, però no se'ls hi notificarà automàticament. "
+                                          "Aquestes autotatitzacions únicament s'activen si la sessió té una data "
+                                          "futura.")
     enrolled = models.ManyToManyField("coopolis.User", blank=True, related_name='enrolled_activities',
                                       verbose_name="inscrites", through="ActivityEnrolled")
     entity = models.ForeignKey(Entity, verbose_name="entitat", on_delete=models.SET_NULL, null=True, blank=True)
