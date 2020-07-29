@@ -4,6 +4,7 @@ services:
 
   # http://serveis.bcn.coop
   coopolis:
+    restart: on-failure
     container_name: ateneu_coopolis # If changed, update ofelia config and db backups script
     build:
       context: ..
@@ -13,7 +14,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.server_production
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --timeout 300
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -25,6 +26,7 @@ services:
 
   # http://ateneu-demo.codi.coop
   ateneu-demo:
+    restart: on-failure
     container_name: ateneu_demo
     build:
       context: ..
@@ -34,7 +36,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-demo
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8001 --timeout 300
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8001
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -45,6 +47,7 @@ services:
 
   # https://serveis.coopcamp.cat
   ateneu-coopcamp:
+    restart: on-failure
     container_name: ateneu_coopcamp # If changed, update ofelia config and db backups script
     build:
       context: ..
@@ -54,7 +57,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopcamp
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8002 --timeout 300
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8002
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -65,6 +68,7 @@ services:
 
   # https://serveis.coopmaresme.cat
   ateneu-coopmaresme:
+    restart: on-failure
     container_name: ateneu_coopmaresme # If changed, update ofelia config and db backups script
     build:
       context: ..
@@ -74,7 +78,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopmaresme
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8003 --timeout 300
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8003
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -85,6 +89,7 @@ services:
 
   # https://serveis.ateneubnord.cat
   ateneu-bnord:
+    restart: on-failure
     container_name: ateneu_bnord # If changed, update ofelia config and db backups script
     build:
       context: ..
@@ -94,7 +99,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-bnord
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8004 --timeout 300
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8004
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -106,6 +111,7 @@ services:
   # https://serveis.ponentcoopera.cat
   # Ens saltem el port 8005 perquè hi ha l'antic back-office (java) allà.
   ateneu-ponentcoopera:
+    restart: on-failure
     container_name: ateneu_ponentcoopera # If changed, update ofelia config and db backups script
     build:
       context: ..
@@ -115,7 +121,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-ponentcoopera
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8006 --timeout 300
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8006
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -126,6 +132,7 @@ services:
 
   # https://serveis.ateneucooperatiuvalles.org
   ateneu-vallesoccidental:
+    restart: on-failure
     container_name: ateneu_vallesoccidental # If changed, update ofelia config and db backups script
     build:
       context: ..
@@ -146,6 +153,7 @@ services:
 
   # https://serveis.coopcatcentral.cat
   ateneu-catcentral:
+    restart: on-failure
     container_name: ateneu_catcentral # If changed, update ofelia config and db backups script
     build:
       context: ..
@@ -167,6 +175,7 @@ services:
   # https://serveis.coopsetania.cat
   # Nota: no té el port 8009 perquè l'ocupa el java
   ateneu-coopsetania:
+    restart: on-failure
     container_name: ateneu_coopsetania # If changed, update ofelia config and db backups script
     build:
       context: ..
@@ -187,6 +196,7 @@ services:
 
   # https://serveis.ateneucoopgi.org
   ateneu-terresgironines:
+    restart: on-failure
     container_name: ateneu_terresgironines # If changed, update ofelia config and db backups script
     build:
       context: ..
@@ -226,6 +236,7 @@ services:
 
   # https://documentacio-backoffice.bcn.coop
   documentacio:
+    restart: on-failure
     container_name: documentacio
     image: requarks/wiki:2
     environment:
