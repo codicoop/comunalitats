@@ -49,6 +49,7 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
     change_list_template = 'admin/projects_follow_up.html'
     list_filter = (DefaultedSubsidyPeriodFilter, 'follow_up_situation', FilterByFounded,
                    ('stages__stage_responsible', admin.RelatedOnlyFieldListFilter), )
+    search_fields = ('id', 'name', 'cif', )
     show_full_result_count = False
     list_display = ('name', )
     list_per_page = 99999

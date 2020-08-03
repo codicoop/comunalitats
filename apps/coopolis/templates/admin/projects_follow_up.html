@@ -11,6 +11,24 @@
 .totals td {
   border-top:1px black solid;
 }
+#result_list {
+  text-align: left;
+  position: relative;
+  border-collapse: collapse;
+}
+#result_list th.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* hacks to make sticky headers possible */
+header#grp-header {
+  position: initial;
+}
+#grp-content {
+  overflow: initial;
+}
 </style>
 
 <div class="grp-module">
@@ -19,7 +37,6 @@
       {% if cl.has_filters or cl.search_fields %}
       {% block aside %}
       <aside class="c-1">
-        <header style="display:none"><h1>{% if cl.search_fields %}Search{% if cl.has_filters %} &amp; {% endif %}{% endif %}{% if cl.has_filters %}Filters{% endif %}</h1></header>
         <!-- SEARCH -->
         {% if cl.search_fields %}
         {% block search %}
@@ -80,116 +97,118 @@
 
       <thead>
         <tr>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>ID</span>
             </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Seguiment</span>
             </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Organitzadora</span>
             </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Nom</span>
             </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Eix-Subeix</span>
             </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Tutoritza</span>
             </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Membres<br>H/D</span>
             </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Total<br>sòcies</span>
             </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Sector</span>
             </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Descripció</span>
             </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Estat</span>
             </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Territori</span>
             </div>
           </th>
-          <th class="sortable" colspan="2">
+          <th class="sticky" colspan="2">
             <div class="grp-text">
               <span>Acollida</span>
             </div>
+            <div class="grp-text">
+              <span>Hores / Cert.</span>
+            </div>
           </th>
-          <th class="sortable" colspan="2">
+          <th class="sticky" colspan="2">
             <div class="grp-text">
               <span>Procés</span>
             </div>
+            <div class="grp-text">
+              <span>Hores / Cert.</span>
+            </div>
           </th>
-          <th class="sortable" colspan="2">
+          <th class="sticky" colspan="2">
             <div class="grp-text">
               <span>Constitució</span>
             </div>
+            <div class="grp-text">
+              <span>Hores / Cert.</span>
+            </div>
           </th>
-          <th class="sortable" colspan="2">
+          <th class="sticky" colspan="2">
             <div class="grp-text">
               <span>Consolidació</span>
             </div>
+            <div class="grp-text">
+              <span>Hores / Cert.</span>
+            </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Insercions previstes</span>
             </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Insercions justificades</span>
             </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Constitució</span>
             </div>
           </th>
-          <th class="sortable" rowspan="2">
+          <th class="sticky">
             <div class="grp-text">
               <span>Altres</span>
             </div>
           </th>
-        </tr>
-        <tr>
-          <td>Hores</td>
-          <td>Cert.</td>
-          <td>Hores</td>
-          <td>Cert.</td>
-          <td>Hores</td>
-          <td>Cert.</td>
-          <td>Hores</td>
-          <td>Cert.</td>
         </tr>
       </thead>
 
@@ -214,19 +233,19 @@
           <td>{{ row.full_town_district|default_if_none:"" }}</td>
           <td>{{ row.acollida_hores|default_if_none:0 }}</td>
           <td>{% if row.acollida_certificat > 0 %}
-            <img src="{% static 'admin/img/icon-yes.svg' %}" alt="True"></a>{% endif %}
+            <img src="{% static 'admin/img/icon-yes.svg' %}" alt="1">{% endif %}
           </td>
           <td>{{ row.proces_hores|default_if_none:0 }}</td>
           <td>{% if row.proces_certificat > 0 %}
-            <img src="{% static 'admin/img/icon-yes.svg' %}" alt="True"></a>{% endif %}
+            <img src="{% static 'admin/img/icon-yes.svg' %}" alt="1">{% endif %}
           </td>
           <td>{{ row.constitucio_hores|default_if_none:0 }}</td>
           <td>{% if row.constitucio_certificat > 0 %}
-            <img src="{% static 'admin/img/icon-yes.svg' %}" alt="True"></a>{% endif %}
+            <img src="{% static 'admin/img/icon-yes.svg' %}" alt="1">{% endif %}
           </td>
           <td>{{ row.consolidacio_hores|default_if_none:0 }}</td>
           <td>{% if row.consolidacio_certificat > 0 %}
-            <img src="{% static 'admin/img/icon-yes.svg' %}" alt="True"></a>{% endif %}
+            <img src="{% static 'admin/img/icon-yes.svg' %}" alt="1">{% endif %}
           </td>
           <td>{{ row.employment_estimation }}</td>
           <td>{{ row.employment_insertions.all|length }}</td>
