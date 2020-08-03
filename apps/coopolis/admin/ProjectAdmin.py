@@ -49,6 +49,19 @@ class ProjectStageAdmin(admin.ModelAdmin):
                    'stage_type', 'axis', 'entity', 'project__sector')
     actions = ["export_as_csv"]
     search_fields = ['project__name__unaccent']
+    raw_id_fields = ('involved_partners',)
+    autocomplete_lookup_fields = {
+        'm2m': ['involved_partners'],
+    }
+    fieldsets = [
+        (None, {
+            'fields': ['project', 'stage_type', 'subsidy_period', 'date_start',
+                       'date_end', 'follow_up', 'axis', 'subaxis', 'entity',
+                       'stage_organizer', 'stage_responsible',
+                       'scanned_signatures', 'scanned_certificate', 'hours',
+                       'involved_partners', ]
+        })
+    ]
 
     def project_field_ellipsis(self, obj):
         if len(obj.project.name) > 50:
@@ -71,13 +84,20 @@ class ProjectStageAdmin(admin.ModelAdmin):
     def project_field(self, obj):
         return mark_safe(u'<a href="../../%s/%s/%d/change">%s</a>' % (
             'coopolis', 'project', obj.project.id, 'Veure'))
-
     project_field.short_description = 'Projecte'
 
-    raw_id_fields = ('involved_partners',)
-    autocomplete_lookup_fields = {
-        'm2m': ['involved_partners'],
-    }
+    def get_fieldsets(self, request, obj=None):
+        """
+        For ateneus enabling cofunded options: Adding the Cofinançades fieldset.
+        """
+        fs = ('Opcions de cofinançament', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('cofunded', 'cofunded_ateneu', 'strategic_line',),
+        })
+        if config.ENABLE_COFUNDED_OPTIONS and fs not in self.fieldsets:
+            self.fieldsets.insert(1, fs)
+
+        return self.fieldsets
 
 
 class ProjectStagesInline(admin.StackedInline):

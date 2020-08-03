@@ -4,7 +4,7 @@ from django.db import models
 import datetime
 from django.utils.timezone import now
 
-from cc_courses.models import Entity, Organizer
+from cc_courses.models import Entity, Organizer, Cofunding, StrategicLine
 from coopolis.helpers import get_subaxis_choices
 from coopolis.models import Town, User
 from coopolis.storage_backends import PrivateMediaStorage
@@ -230,6 +230,13 @@ class ProjectStage(models.Model):
     involved_partners = models.ManyToManyField(
         User, verbose_name="persones involucrades", blank=True, related_name='stage_involved_partners',
         help_text="Persones que apareixeran a la justificació com a que han participat a l'acompanyament.")
+
+    # cofunding options module
+    cofunded = models.ForeignKey(Cofunding, verbose_name="Cofinançat", on_delete=models.SET_NULL, null=True, blank=True,
+                                 related_name='cofunded_projects')
+    cofunded_ateneu = models.BooleanField("Cofinançat amb Ateneus Cooperatius", default=False)
+    strategic_line = models.ForeignKey(StrategicLine, verbose_name="línia estratègica", on_delete=models.SET_NULL,
+                                       blank=True, null=True, related_name='strategic_line_projects')
 
     def axis_summary(self):
         axis = self.axis if self.axis else '(cap)'
