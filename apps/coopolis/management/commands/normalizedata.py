@@ -102,6 +102,15 @@ class Command(BaseCommand):
         group.save()
         print("Permisos del grup Gestió de projectes actualitzats.")
 
+        # exportacions
+        group, created = Group.objects.get_or_create(name='Exportar justificació')
+        add_thing = Permission.objects.filter(
+            codename__in=['view_dataexports', ]
+        )
+        group.permissions.set(add_thing)
+        group.save()
+        print('Permisos del grup Exportar justificació actualitzats.')
+
         # gestió de sales
         group, created = Group.objects.get_or_create(name="Afegir o modificar Sales")
         add_thing = Permission.objects.filter(
