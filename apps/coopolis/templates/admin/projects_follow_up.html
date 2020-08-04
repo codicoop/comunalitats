@@ -6,6 +6,14 @@
 {% block pagination_bottom %}
 {% endblock %}
 
+{% block object-tools-items %}
+  <li>
+    <a href="{{ spreadsheet_url }}" class="addlink" target="_blank">
+      Descarregar
+    </a>
+  </li>
+{% endblock %}
+
 {% block content %}
 <style>
 .totals td {

@@ -2,13 +2,60 @@
 
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group, Permission
+from datetime import date
+
+from dataexports.models import SubsidyPeriod
 
 
 class Command(BaseCommand):
-    help = 'Creates the user Groups and fills them with the standard permissions.'
+    help = 'Normalizes the minimum common data that every instance should have: ' \
+           'user groups and convocatòries.'
 
     def handle(self, *args, **options):
         self.add_group_permissions()
+        self.normalize_subsidy_periods()
+
+    @staticmethod
+    def normalize_subsidy_periods():
+        periods = (
+            {
+                'name': 'Sense justificar',
+                'date_start': date(1975, 1, 1),
+                'date_end': date(1975, 1, 1)
+            },
+            {
+                'name': '2016-2017',
+                'date_start': date(2016, 11, 1),
+                'date_end': date(2017, 10, 31)
+            },
+            {
+                'name': '2017-2018',
+                'date_start': date(2017, 11, 1),
+                'date_end': date(2018, 10, 31)
+            },
+            {
+                'name': '2018-2019',
+                'date_start': date(2018, 11, 1),
+                'date_end': date(2019, 10, 31)
+            },
+            {
+                'name': '2019-2020',
+                'date_start': date(2019, 11, 1),
+                'date_end': date(2020, 10, 31)
+            },
+        )
+        for period in periods:
+            obj, created = SubsidyPeriod.objects.get_or_create(
+                name=period['name'],
+                date_start=period['date_start'],
+                date_end=period['date_end']
+            )
+            if created:
+                msg = f"SubsidyPeriod {period['name']} did NOT exist and was" \
+                      f" created."
+            else:
+                msg = f"SubsidyPeriod {period['name']} was already there."
+            print(msg)
 
     @staticmethod
     def add_group_permissions():
