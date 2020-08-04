@@ -43,6 +43,11 @@ class Command(BaseCommand):
                 'date_start': date(2019, 11, 1),
                 'date_end': date(2020, 10, 31)
             },
+            {
+                'name': '2020-2021',
+                'date_start': date(2020, 11, 1),
+                'date_end': date(2021, 10, 31)
+            },
         )
         for period in periods:
             obj, created = SubsidyPeriod.objects.get_or_create(
