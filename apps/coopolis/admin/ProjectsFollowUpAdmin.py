@@ -1,11 +1,10 @@
 from datetime import datetime
-from urllib.parse import parse_qsl
+from urllib.parse import urlencode
 
 from django.contrib import admin
-from django.contrib.admin.templatetags.admin_urls import add_preserved_filters
 from django.db.models import Count, Q
 from django.http import HttpResponse
-from django.urls import path, reverse_lazy, reverse
+from django.urls import path, reverse
 from openpyxl import Workbook
 from openpyxl.styles import Font, Border, Side, PatternFill
 from openpyxl.utils import get_column_letter
@@ -13,7 +12,6 @@ from openpyxl.utils import get_column_letter
 from .ProjectAdmin import FilterByFounded
 from dataexports.models import SubsidyPeriod
 from coopolis.db_utils import DistinctSum
-from ..models import ProjectsFollowUp
 
 
 class DefaultedSubsidyPeriodFilter(admin.SimpleListFilter):
@@ -202,11 +200,9 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
         return ctxt
 
     def get_download_url(self, request):
-        opts = self.model._meta
-        preserved_filters = self.get_preserved_filters(request)
+        querystring = urlencode(request.GET)
         url = reverse('admin:followup-spreadsheet')
-        url = add_preserved_filters(
-            {'preserved_filters': preserved_filters, 'opts': opts}, url)
+        url = f"{url}?{querystring}"
         return {'spreadsheet_url': url}
 
     def changelist_view(self, request, extra_context=None):
@@ -249,14 +245,13 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
         return custom_urls + urls
 
     def download_spreadsheet(self, request):
-        qs = self.get_queryset(request)
+        # Getting queryset with filters applied
+        try:
+            qs = super().get_changelist_instance(request).queryset
+        except (AttributeError, KeyError) as e:
+            return request
+
         rows = self.get_rows(qs)
-        # preserved_filters = request.GET['_changelist_filters']
-        # preserved_filters = dict(
-        #     parse_qsl(preserved_filters)
-        # )
-        # ProjectsFollowUp.objects.filter(**preserved_filters)
-        # use: Model.objects.filter(**preserved_filters)
         sheet = FollowUpSpreadsheet(rows['rows'], rows['totals'])
         return sheet.export_seguiment_acompanyaments()
 
