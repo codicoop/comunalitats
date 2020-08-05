@@ -1,10 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from django.urls import reverse
 from django_object_actions import DjangoObjectActions
 from django.contrib import admin
 from django.utils.safestring import mark_safe
-from django.core.mail import send_mail
 from django.conf import settings
 from constance import config
 from functools import update_wrapper
@@ -157,9 +154,14 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
             'fields': ['partners', 'registration_date', 'cif', 'constitution_date', 'subsidy_period', 'derivation',
                        'derivation_date', 'description', 'employment_estimation', 'other', 'follow_up_situation',
                        'follow_up_situation_update']
+        }),
+        ("Activitats a les que s'han inscrit sòcies del projecte", {
+            'fields': ['partners_activities', ]
         })
     )
-    readonly_fields = ('id', 'follow_up_situation_update')
+    readonly_fields = (
+        'id', 'follow_up_situation_update', 'partners_activities',
+    )
     actions = ["export_as_csv"]
     change_actions = ('print', )
     print_template = 'admin/my_test/myentry/review.html'

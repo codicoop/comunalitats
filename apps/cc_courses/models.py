@@ -260,7 +260,6 @@ class Activity(models.Model):
             return True
         return False
 
-
     def clean(self):
         super().clean()
         if self.minors_grade or self.minors_participants_number or self.minors_school_cif or self.minors_school_name\

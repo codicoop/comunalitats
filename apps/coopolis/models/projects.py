@@ -2,6 +2,8 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 import datetime
+
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 
 from cc_courses.models import Entity, Organizer, Cofunding, StrategicLine
@@ -163,6 +165,18 @@ class Project(models.Model):
     @staticmethod
     def autocomplete_search_fields():
         return ('name__icontains', )
+
+    @property
+    def partners_activities(self):
+        acts = []
+        for partner in self.partners.all():
+            for activity in partner.enrolled_activities.all():
+                if activity not in acts:
+                    activity = f"{activity.date_start}: {activity}"
+                    acts.append(activity)
+        acts.sort()
+        return mark_safe("<br>".join(acts))
+    partners_activities.fget.short_description = "Sessions"
 
     def save(self, *args, **kw):
         if self.pk is not None:
