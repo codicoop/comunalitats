@@ -451,7 +451,8 @@ SUBAXIS_OPTIONS = {
         ('C1', "C.1 Tallers de dinamització adreçats al teixit associatiu i a empreses"),
         ('C2', "C.2 Tallers de dinamització adreçats a professionals que s'agrupen per prestar serveis de manera "
                "conjunta"),
-        ('C3', "C.3 Altres"),
+        ('C3', "C.3 Acompanyament a mida per a la creació o transformació"),
+        ('C4', "C.4 Altres"),
     },
     'D': {
         ('D1', "D.1 Accions de difusió"),
