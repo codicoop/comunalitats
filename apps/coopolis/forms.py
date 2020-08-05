@@ -11,7 +11,7 @@ from datetime import datetime
 from django.utils.timezone import make_aware
 
 from coopolis.models import Project, User, ProjectStage, ActivityPoll
-from cc_courses.models import Activity
+from cc_courses.models import Activity, ActivityEnrolled
 from coopolis.mixins import FormDistrictValidationMixin
 from dynamic_fields.fields import DynamicChoicesWidget
 from facilities_reservations.models import Reservation
@@ -223,6 +223,22 @@ class ActivityForm(forms.ModelForm):
         obj.delete()
         self.instance.room_reservation = None
         self.instance.save()
+
+
+class ActivityEnrolledForm(forms.ModelForm):
+    class Meta:
+        model = ActivityEnrolled
+        fields = (
+            'user',
+        )
+
+    send_enrollment_email = forms.BooleanField(
+        label="Enviar notificació d'inscripció",
+        required=False,
+        help_text="Si fas una inscripció des del panell d'administració, per "
+                  "defecte no s'envia el correu. Marca aquesta casella per "
+                  "tal que el rebi de la mateixa manera que si s'hagués "
+                  "inscrit des de la part pública.")
 
 
 class ActivityPollForm(forms.ModelForm):

@@ -39,35 +39,24 @@ def delete_enrollment(sender, instance, *args, **kwargs):
 
 def _process_available_spots(activity):
     """
-    That's going to happen both when a user removes an enrollment in the Front and when they manage them in the back.
+    That's going to happen both when a user removes an enrollment in the Front
+    and when admins increase the available spots.
 
-    Therefore, it's important that it can only be triggered for events that are active and not past due. Otherwise
-    users will receive e-mails months after the activity, when the Ateneu is organizing the information.
+    Therefore, it's important that it can only be triggered for events that
+    are active and not past due. Otherwise
+    users will receive e-mails months after the activity, when the Ateneu is
+    organizing the information.
     """
-    if not activity.is_past_due and activity.remaining_spots > 0 and activity.waiting_list_count > 0:
-        # s'han de processar les places lliures i omplir-les amb gent en llista d'espera.
+    if (not activity.is_past_due and activity.remaining_spots > 0 and
+            activity.waiting_list_count > 0):
+        # s'han de processar les places lliures i omplir-les amb gent en llista
+        # d'espera.
         waiting_list = activity.waiting_list
         for enrollment in waiting_list:
-            # The .save() checks for free spots and sets waiting_list to false if there's one.
+            # The .save() checks for free spots and sets waiting_list to false
+            # if there's one.
             enrollment.save()
             # Check that it actually is now enrolled
             if enrollment.waiting_list is False:
-                _send_confirmation_email(activity, enrollment.user)
+                enrollment.send_confirmation_email()
 
-
-def _send_confirmation_email(activity, user):
-    mail = MyMailTemplate('EMAIL_ENROLLMENT_CONFIRMATION')
-    mail.to = user.email
-    mail.subject_strings = {
-        'activitat_nom': activity.name
-    }
-    mail.body_strings = {
-        'activitat_nom': activity.name,
-        'ateneu_nom': config.PROJECT_FULL_NAME,
-        'activitat_data_inici': activity.date_start.strftime("%d-%m-%Y"),
-        'activitat_hora_inici': activity.starting_time.strftime("%H:%M"),
-        'activitat_lloc': activity.place,
-        'absolute_url_my_activities': f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-        'url_web_ateneu': config.PROJECT_WEBSITE_URL,
-    }
-    mail.send()

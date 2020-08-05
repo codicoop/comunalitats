@@ -1,3 +1,4 @@
+from constance import config
 from django.db import models
 from django.shortcuts import reverse
 from django.conf import settings
@@ -12,7 +13,10 @@ from cc_lib.utils import slugify_model
 from coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 from coopolis.helpers import get_subaxis_choices
-from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
+from apps.coopolis.storage_backends import (
+    PrivateMediaStorage, PublicMediaStorage
+)
+from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 
 class CoursePlace(models.Model):
@@ -300,10 +304,23 @@ class ActivityEnrolled(models.Model):
         verbose_name = "inscripció"
         verbose_name_plural = "inscripcions"
 
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name="sessió", related_name="enrollments")
-    user = models.ForeignKey("coopolis.User", on_delete=models.CASCADE, verbose_name="persona",
-                             related_name="enrollments")
-    date_enrolled = models.DateTimeField("data d'inscripció", auto_now_add=True, null=True)
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.CASCADE,
+        verbose_name="sessió",
+        related_name="enrollments"
+    )
+    user = models.ForeignKey(
+        "coopolis.User",
+        on_delete=models.CASCADE,
+        verbose_name="persona",
+        related_name="enrollments"
+    )
+    date_enrolled = models.DateTimeField(
+        "data d'inscripció",
+        auto_now_add=True,
+        null=True
+    )
     user_comments = models.TextField("comentaris", null=True, blank=True)
     waiting_list = models.BooleanField("en llista d'espera")
 
@@ -311,7 +328,50 @@ class ActivityEnrolled(models.Model):
              update_fields=None):
         is_full = self.activity.remaining_spots < 1
         self.waiting_list = True if is_full else False
-        super(ActivityEnrolled, self).save(force_insert, force_update, using, update_fields)
+        super(ActivityEnrolled, self).save(
+            force_insert, force_update, using, update_fields
+        )
+
+    def send_confirmation_email(self):
+        print('sending confirmation!')
+        mail = MyMailTemplate('EMAIL_ENROLLMENT_CONFIRMATION')
+        mail.to = self.user.email
+        mail.subject_strings = {
+            'activitat_nom': self.activity.name
+        }
+        mail.body_strings = {
+            'activitat_nom': self.activity.name,
+            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'activitat_data_inici':
+                self.activity.date_start.strftime("%d-%m-%Y"),
+            'activitat_hora_inici':
+                self.activity.starting_time.strftime("%H:%M"),
+            'activitat_lloc': self.activity.place,
+            'absolute_url_my_activities':
+                f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
+        }
+        mail.send()
+
+    def send_waiting_list_email(self):
+        mail = MyMailTemplate('EMAIL_ENROLLMENT_WAITING_LIST')
+        mail.to = self.user.email
+        mail.subject_strings = {
+            'activitat_nom': self.activity.name
+        }
+        mail.body_strings = {
+            'activitat_nom': self.activity.name,
+            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'activitat_data_inici':
+                self.activity.date_start.strftime("%d-%m-%Y"),
+            'activitat_hora_inici':
+                self.activity.starting_time.strftime("%H:%M"),
+            'activitat_lloc': self.activity.place,
+            'url_els_meus_cursos':
+                f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+            'url_ateneu': settings.ABSOLUTE_URL,
+        }
+        mail.send()
 
     def __str__(self):
         return f"Inscripció de {self.user.full_name} a: {self.activity.name}"

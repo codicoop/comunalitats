@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from django.contrib import admin
 from django.utils.html import format_html
 from django.http import HttpResponse, HttpResponseRedirect
@@ -10,7 +8,7 @@ from constance import config
 from django.conf import settings
 import modelclone
 
-from coopolis.forms import ActivityForm
+from coopolis.forms import ActivityForm, ActivityEnrolledForm
 from cc_courses.models import Activity, ActivityEnrolled, ActivityResourceFile
 from coopolis.models import User
 from coopolis_backoffice.custom_mail_manager import MyMailTemplate
@@ -55,8 +53,10 @@ class ActivityEnrolledInline(admin.TabularInline):
         js = ('js/grappellihacks.js',)
 
     model = ActivityEnrolled
+    form = ActivityEnrolledForm
     extra = 0
-    fields = ('user', 'date_enrolled', 'waiting_list', 'user_comments', )
+    fields = ['user', 'date_enrolled', 'waiting_list', 'user_comments',
+              'send_enrollment_email']
     readonly_fields = ('date_enrolled', 'waiting_list', 'user_comments', )
     raw_id_fields = ('user',)
     autocomplete_lookup_fields = {
@@ -289,5 +289,15 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         url = f"<a href=\"{reverse('admin:coopolis_activitypoll_changelist')}" \
               f"?activity__id__exact={obj.id}\" target=\"_new\">Resultats de l'enquesta (pestanya nova)</a>"
         return format_html(url)
-
     activity_poll_field.short_description = "Resultats de l'enquesta"
+
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save()
+        if change:
+            for obj in formset.cleaned_data:
+                if obj['send_enrollment_email']:
+                    # cleaned_data contains the OLD data. We have to find the
+                    # updated one in instances, which is a list full of
+                    # ActivityEnrolled objects.
+                    obj = instances[instances.index(obj['id'])]
+                    obj.send_confirmation_email()
