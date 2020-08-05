@@ -293,11 +293,21 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
 
     def save_formset(self, request, form, formset, change):
         instances = formset.save()
-        if change:
-            for obj in formset.cleaned_data:
-                if obj['send_enrollment_email']:
-                    # cleaned_data contains the OLD data. We have to find the
-                    # updated one in instances, which is a list full of
-                    # ActivityEnrolled objects.
+        for obj in formset.cleaned_data:
+            if (
+                    'send_enrollment_email' in obj and
+                    obj['send_enrollment_email'] is True
+            ):
+                if isinstance(obj['id'], ActivityEnrolled):
+                    # Then la inscripció ja existeix i l'estan editant.
+                    # Podem trobar l'objecte a instances:
                     obj = instances[instances.index(obj['id'])]
-                    obj.send_confirmation_email()
+                else:
+                    # Then és una nova inscripció a la que se li ha marcat
+                    # l'enviament de notificació. No he trobat cap manera
+                    # de connectar directament el que ve al cleaned_data
+                    # amb l'objecte ja desat. Per tant cal fer query.
+                    obj = obj['user'].enrollments.get(
+                        activity=obj['activity']
+                    )
+                obj.send_confirmation_email()
