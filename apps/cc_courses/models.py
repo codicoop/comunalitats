@@ -323,6 +323,9 @@ class ActivityEnrolled(models.Model):
     )
     user_comments = models.TextField("comentaris", null=True, blank=True)
     waiting_list = models.BooleanField("en llista d'espera")
+    reminder_sent = models.DateTimeField(
+        "Recordatori enviat", null=True, blank=True
+    )
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
