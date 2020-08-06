@@ -351,7 +351,11 @@ class ExportFunctions:
             ("Municipi", 30),
             ("Nombre de participants", 20),
             ("Material de difusió (S/N)", 21),
-            ("Incidències", 20)
+            ("Incidències", 20),
+            ("[Entitat]", 20),
+            ("[Organitzadora]", 20),
+            ("[Lloc]", 20),
+            ("[Acció]", 20),
         ]
         self.create_columns(columns)
         self.actuacions_2018_2019_rows_activities()
@@ -385,7 +389,11 @@ class ExportFunctions:
                 town,
                 item.enrolled.count(),
                 "No",
-                ""
+                "",
+                item.entity if item.entity else '',  # Entitat
+                item.organizer if item.organizer else '',  # Organitzadora
+                item.place if item.place else '',  # Lloc
+                item.course,  # Acció
             ]
             self.fill_row_data(row)
 
@@ -409,11 +417,15 @@ class ExportFunctions:
                 axis,
                 subaxis,
                 item.project.name,
-                item.date_start,
+                item.date_start if not None else '',
                 town,
                 item.involved_partners.count(),
                 "No",
-                ""
+                "",
+                item.entity if item.entity else '',  # Entitat
+                item.stage_organizer if item.stage_organizer else '',  # Organitzadora
+                '(no aplicable)',  # Lloc
+                '(no aplicable)',  # Acció
             ]
             self.fill_row_data(row)
 
@@ -442,7 +454,11 @@ class ExportFunctions:
                 town,
                 item.minors_participants_number,
                 "No",
-                ""
+                "",
+                item.entity if item.entity else '',  # Entitat
+                item.organizer if item.organizer else '',  # Organitzadora
+                item.place if item.place else '',  # Lloc
+                item.course,  # Acció
             ]
             self.fill_row_data(row)
 
@@ -489,7 +505,11 @@ class ExportFunctions:
                 town,
                 stage.involved_partners.count(),
                 "No",
-                ""
+                "",
+                stage.entity if stage.entity else '',  # Entitat
+                stage.stage_organizer if stage.stage_organizer else '',  # Organitzadora
+                '(no aplicable)',  # Lloc
+                '(no aplicable)',  # Acció
             ]
             self.fill_row_data(row)
 
@@ -508,6 +528,7 @@ class ExportFunctions:
             ("Localitat", 20),
             ("Breu descripció del projecte", 50),
             ("Total hores d'acompanyament", 10),
+            ("[Data fi]", 13),
         ]
         self.create_columns(columns)
 
@@ -520,18 +541,20 @@ class ExportFunctions:
             reference_number += 1
             hours = item.hours if item.hours is not None else ("", True)
             town = item.project.town if item.project.town is not None else ("", True)
+            crea_consolida = self.get_correlation("stage_type", item.stage_type)
             row = [
                 f"{reference_number} {item.project.name}",  # Referència.
                 item.project.name,  # Camp no editable, l'ha d'omplir l'excel automàticament.
-                ("Entitat", True),
+                "Entitat",
                 # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat PENDENT.
                 item.project.name,  # "En cas d'entitat (Nom de l'entitat)"
-                ("Constituida", True),  # "En cas d'entitat" Opcions: Constituida/En procés/No finalitzat. PENDENT.
-                self.get_correlation("stage_type", item.stage_type),  # "Creació/consolidació".
-                item.date_start,
+                "Constituida",  # "En cas d'entitat" Opcions: Constituida/En procés/No finalitzat. PENDENT.
+                crea_consolida if crea_consolida else '',  # "Creació/consolidació".
+                item.date_start if item.date_start else '',
                 town,
-                item.project.object_finality,  # Breu descripció.
-                hours  # Total hores d'acompanyament.
+                item.project.description,  # Breu descripció.
+                hours,  # Total hores d'acompanyament.
+                item.date_end if item.date_end else '',
             ]
             self.fill_row_data(row)
 
