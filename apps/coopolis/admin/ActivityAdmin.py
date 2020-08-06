@@ -1,17 +1,16 @@
 from django.contrib import admin
+from django.template.response import TemplateResponse
 from django.utils.html import format_html
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import path, reverse
 from django.utils.safestring import mark_safe
 from django_summernote.admin import SummernoteModelAdminMixin
 from constance import config
-from django.conf import settings
 import modelclone
 
 from coopolis.forms import ActivityForm, ActivityEnrolledForm
 from cc_courses.models import Activity, ActivityEnrolled, ActivityResourceFile
 from coopolis.models import User
-from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 
 class CofundingAdmin(admin.ModelAdmin):
@@ -241,13 +240,10 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
 
     def send_reminder(self, request, _id):
         # Confirmation page in admin inspired by: https://gist.github.com/rsarai/d475c766871f40e52b8b4d1b12dedea2
-        from django.template.response import TemplateResponse
         obj = Activity.objects.get(id=_id)
         if request.method == 'POST':
-            mail_to_bcc = set()
             for enrollment in obj.enrollments.filter(waiting_list=False):
-                mail_to_bcc.add(enrollment.user.email)
-            self._send_reminder_email(mail_to_bcc, obj, request)
+                enrollment.send_reminder_email()
             self.message_user(request, "Recordatoris enviats correctament.")
             return HttpResponseRedirect("../../")
 
@@ -258,25 +254,6 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         }
         return TemplateResponse(
             request, 'admin/reminder_confirmation.html', context)
-
-    @staticmethod
-    def _send_reminder_email(mail_to_bcc, activity, request):
-        mail = MyMailTemplate('EMAIL_ENROLLMENT_REMINDER')
-        mail.to = config.EMAIL_FROM_ENROLLMENTS
-        mail.bcc = mail_to_bcc
-        mail.subject_strings = {
-            'activitat_nom': activity.name
-        }
-        mail.body_strings = {
-            'activitat_nom': activity.name,
-            'ateneu_nom': config.PROJECT_FULL_NAME,
-            'activitat_data_inici': activity.date_start.strftime("%d-%m-%Y"),
-            'activitat_hora_inici': activity.starting_time.strftime("%H:%M"),
-            'activitat_lloc': activity.place,
-            'absolute_url_my_activities': f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
-        }
-        mail.send()
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "responsible":

@@ -24,7 +24,13 @@ class CoursePlace(models.Model):
         verbose_name = "lloc"
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
-    town = models.ForeignKey("coopolis.Town", verbose_name="població", on_delete=models.SET_NULL, null=True, blank=True)
+    town = models.ForeignKey(
+        "coopolis.Town",
+        verbose_name="població",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
     address = models.CharField("adreça", max_length=200)
 
     def __str__(self):
@@ -59,7 +65,13 @@ class Cofunding(models.Model):
         verbose_name = "cofinançadora"
         verbose_name_plural = "cofinançadores"
 
-    name = models.CharField("nom", max_length=200, blank=False, unique=True, null=False)
+    name = models.CharField(
+        "nom",
+        max_length=200,
+        blank=False,
+        unique=True,
+        null=False
+    )
 
     def __str__(self):
         return self.name
@@ -70,7 +82,13 @@ class StrategicLine(models.Model):
         verbose_name = "línia estratègica"
         verbose_name_plural = "línies estratègiques"
 
-    name = models.CharField("nom", max_length=200, blank=False, unique=True, null=False)
+    name = models.CharField(
+        "nom",
+        max_length=200,
+        blank=False,
+        unique=True,
+        null=False
+    )
 
     def __str__(self):
         return self.name
@@ -90,14 +108,34 @@ class Course(models.Model):
     slug = models.CharField(max_length=250, unique=True)
     date_start = models.DateField("dia inici")
     date_end = models.DateField("dia finalització", null=True, blank=True)
-    hours = models.CharField("horaris", blank=False, max_length=200,
-                             help_text="Indica només els horaris, sense els dies.")
+    hours = models.CharField(
+        "horaris",
+        blank=False,
+        max_length=200,
+        help_text="Indica només els horaris, sense els dies."
+    )
     description = models.TextField("descripció", null=True)
     publish = models.BooleanField("publicat")
-    created = models.DateTimeField("data de creació", null=True, blank=True, auto_now_add=True)
-    banner = ThumbnailerImageField(null=True, storage=PublicMediaStorage(), max_length=250, blank=True)
-    place = models.ForeignKey(CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc", blank=True,
-                              help_text="Aquesta dada de moment és d'ús intern i no es publica.")
+    created = models.DateTimeField(
+        "data de creació",
+        null=True,
+        blank=True,
+        auto_now_add=True
+    )
+    banner = ThumbnailerImageField(
+        null=True,
+        storage=PublicMediaStorage(),
+        max_length=250,
+        blank=True
+    )
+    place = models.ForeignKey(
+        CoursePlace,
+        on_delete=models.SET_NULL,
+        null=True,
+        verbose_name="lloc",
+        blank=True,
+        help_text="Aquesta dada de moment és d'ús intern i no es publica."
+    )
     objects = models.Manager()
     published = Published()
 
@@ -125,35 +163,80 @@ class Activity(models.Model):
         verbose_name_plural = "sessions"
         ordering = ["date_start"]
 
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="acció",
-                               related_name="activities")
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        verbose_name="acció",
+        related_name="activities"
+    )
     name = models.CharField("títol", max_length=200, blank=False, null=False)
     objectives = models.TextField("descripció", null=True)
-    place = models.ForeignKey(CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc")
+    place = models.ForeignKey(
+        CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc"
+    )
     date_start = models.DateField("dia inici")
     date_end = models.DateField("dia finalització", blank=True, null=True)
     starting_time = models.TimeField("hora d'inici")
     ending_time = models.TimeField("hora de finalització")
-    spots = models.IntegerField('places totals', default=0,
-                                help_text="Si hi ha inscripcions en llista d'espera i augmentes el número de places, "
-                                          "passaran a confirmades i se'ls hi notificarà el canvi. Si redueixes el "
-                                          "número de places per sota del total d'inscrites, les que no hi càpiguen "
-                                          "passaran a llista d'espera, però no se'ls hi notificarà automàticament. "
-                                          "Aquestes autotatitzacions únicament s'activen si la sessió té una data "
-                                          "futura.")
-    enrolled = models.ManyToManyField("coopolis.User", blank=True, related_name='enrolled_activities',
-                                      verbose_name="inscrites", through="ActivityEnrolled")
-    entity = models.ForeignKey(Entity, verbose_name="entitat", on_delete=models.SET_NULL, null=True, blank=True)
-    organizer = models.ForeignKey(Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL, null=True,
-                                  blank=True)
+    spots = models.IntegerField(
+        'places totals',
+        default=0,
+        help_text="Si hi ha inscripcions en llista d'espera i augmentes el "
+                  "número de places, passaran a confirmades i se'ls hi "
+                  "notificarà el canvi. Si redueixes el número de places per "
+                  "sota del total d'inscrites, les que no hi càpiguen passaran"
+                  " a llista d'espera, però no se'ls hi notificarà "
+                  "automàticament. Aquestes autotatitzacions únicament "
+                  "s'activen si la sessió té una data futura."
+    )
+    enrolled = models.ManyToManyField(
+        "coopolis.User",
+        blank=True,
+        related_name='enrolled_activities',
+        verbose_name="inscrites",
+        through="ActivityEnrolled"
+    )
+    entity = models.ForeignKey(
+        Entity,
+        verbose_name="entitat",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    organizer = models.ForeignKey(
+        Organizer,
+        verbose_name="organitzadora",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
     responsible = models.ForeignKey(
-        "coopolis.User", verbose_name="persona responsable", blank=True, null=True, on_delete=models.SET_NULL,
-        related_name='activities_responsible', help_text="Persona de l'equip al càrrec de la sessió. Per aparèixer "
-        "al desplegable, cal que la persona tingui activada la opció 'Membre del personal'.")
-    axis = models.CharField("eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
-                            null=True, blank=True, max_length=1)
-    subaxis = models.CharField("sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
-                               null=True, blank=True, max_length=2, choices=get_subaxis_choices())
+        "coopolis.User",
+        verbose_name="persona responsable",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='activities_responsible',
+        help_text="Persona de l'equip al càrrec de la sessió. Per aparèixer "
+                  "al desplegable, cal que la persona tingui activada l'opció "
+                  "'Membre del personal'."
+    )
+    axis = models.CharField(
+        "eix",
+        help_text="Eix de la convocatòria on es justificarà.",
+        choices=settings.AXIS_OPTIONS,
+        null=True,
+        blank=True,
+        max_length=1
+    )
+    subaxis = models.CharField(
+        "sub-eix",
+        help_text="Correspon a 'Tipus d'acció' a la justificació.",
+        null=True,
+        blank=True,
+        max_length=2,
+        choices=get_subaxis_choices()
+    )
     photo1 = models.FileField("fotografia", blank=True, null=True,
                               storage=PrivateMediaStorage(), max_length=250)
     photo3 = models.FileField("fotografia 2", blank=True, null=True,
@@ -165,10 +248,17 @@ class Activity(models.Model):
     publish = models.BooleanField("publicada", default=True)
     # minors
     for_minors = models.BooleanField(
-        "acció dirigida a menors", default=False,
-        help_text="Determina el tipus de justificació i en aquest cas, s'han d'omplir els camps relatius a menors.")
-    minors_school_name = models.CharField("nom del centre educatiu", blank=True, null=True, max_length=150)
-    minors_school_cif = models.CharField("CIF del centre educatiu", blank=True, null=True, max_length=12)
+        "acció dirigida a menors",
+        default=False,
+        help_text="Determina el tipus de justificació i en aquest cas, s'han "
+                  "d'omplir els camps relatius a menors."
+    )
+    minors_school_name = models.CharField(
+        "nom del centre educatiu", blank=True, null=True, max_length=150
+    )
+    minors_school_cif = models.CharField(
+        "CIF del centre educatiu", blank=True, null=True, max_length=12
+    )
     MINORS_GRADE_OPTIONS = (
         ('PRIM', "Primària"),
         ('ESO', "Secundària obligatòria"),
@@ -176,31 +266,81 @@ class Activity(models.Model):
         ('FPGM', "Formació professional grau mig"),
         ('FPGS', "Formació professional grau superior")
     )
-    minors_grade = models.CharField("grau d'estudis", blank=True, null=True, max_length=4, choices=MINORS_GRADE_OPTIONS)
-    minors_participants_number = models.IntegerField("número d'alumnes participants", blank=True, null=True)
-    minors_teacher = models.ForeignKey("coopolis.User", on_delete=models.SET_NULL, verbose_name="docent", null=True,
-                                       blank=True)
+    minors_grade = models.CharField(
+        "grau d'estudis",
+        blank=True,
+        null=True,
+        max_length=4,
+        choices=MINORS_GRADE_OPTIONS
+    )
+    minors_participants_number = models.IntegerField(
+        "número d'alumnes participants",
+        blank=True,
+        null=True
+    )
+    minors_teacher = models.ForeignKey(
+        "coopolis.User",
+        on_delete=models.SET_NULL,
+        verbose_name="docent",
+        null=True,
+        blank=True)
     # room reservations module
-    room_reservation = models.ForeignKey(apps.get_model("facilities_reservations", "Reservation", False),
-                                         on_delete=models.SET_NULL, null=True, blank=True,
-                                         related_name="related_activities")
-    room = models.ForeignKey(apps.get_model("facilities_reservations", "Room", False), on_delete=models.SET_NULL,
-                             verbose_name="sala", related_name='activities', null=True, blank=True,
-                             help_text="Si selecciones una sala, quan guardis quedarà reservada per la sessió. "
-                                       f"<br>Consulta el <a href=\"/reservations/calendar/\" target=\"_blank\">"
-                                       "CALENDARI DE RESERVES</a> per veure la disponibilitat.")
+    room_reservation = models.ForeignKey(
+        apps.get_model("facilities_reservations", "Reservation", False),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="related_activities"
+    )
+    room = models.ForeignKey(
+        apps.get_model("facilities_reservations", "Room", False),
+        on_delete=models.SET_NULL,
+        verbose_name="sala",
+        related_name='activities',
+        null=True,
+        blank=True,
+        help_text="Si selecciones una sala, quan guardis quedarà reservada "
+                  "per la sessió. <br>Consulta el "
+                  "<a href=\"/reservations/calendar/\" target=\"_blank\">"
+                  "CALENDARI DE RESERVES</a> per veure la disponibilitat."
+    )
     # cofunding options module
-    cofunded = models.ForeignKey(Cofunding, verbose_name="Cofinançat", on_delete=models.SET_NULL, null=True, blank=True,
-                                 related_name='cofunded_activities')
-    cofunded_ateneu = models.BooleanField("Cofinançat amb Ateneus Cooperatius", default=False)
-    strategic_line = models.ForeignKey(StrategicLine, verbose_name="línia estratègica", on_delete=models.SET_NULL,
-                                       blank=True, null=True, related_name='strategic_line_activities')
+    cofunded = models.ForeignKey(
+        Cofunding,
+        verbose_name="Cofinançat",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='cofunded_activities'
+    )
+    cofunded_ateneu = models.BooleanField(
+        "Cofinançat amb Ateneus Cooperatius", default=False
+    )
+    strategic_line = models.ForeignKey(
+        StrategicLine,
+        verbose_name="línia estratègica",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name='strategic_line_activities'
+    )
 
     # Camps pel material formatiu
-    videocall_url = models.URLField("enllaç a la videotrucada", max_length=250, null=True, blank=True)
-    instructions = models.TextField("instruccions per participar", null=True, blank=True,
-                                    help_text="En un futur, aquest text s'inclourà als recordatoris que envieu a tota "
-                                              "la gent inscrita. Ara per ara, però, l'heu d'enviar manualment.")
+    videocall_url = models.URLField(
+        "enllaç a la videotrucada", max_length=250, null=True, blank=True
+    )
+    instructions = models.TextField(
+        "instruccions per participar",
+        null=True,
+        blank=True,
+        help_text=
+            "Aquest text s'inclourà al correu de recordatori. És molt "
+            "important que el formateig del text sigui el menor possible, i en"
+            " particular, que si copieu i enganxeu el text d'algun altre lloc "
+            "cap aquí, ho feu amb l'opció \"enganxar sense format\", ja que "
+            "sinó arrossegarà molta informació de formateig que "
+            "probablement farà que el correu es vegi malament."
+    )
 
     objects = models.Manager()
     published = Published()
@@ -215,11 +355,15 @@ class Activity(models.Model):
 
     @property
     def waiting_list(self):
-        return self.enrollments.filter(waiting_list=True).order_by('date_enrolled')
+        return self.enrollments.filter(
+            waiting_list=True
+        ).order_by('date_enrolled')
 
     @property
     def confirmed_enrollments(self):
-        return self.enrollments.filter(waiting_list=False).order_by('date_enrolled')
+        return self.enrollments.filter(
+            waiting_list=False
+        ).order_by('date_enrolled')
 
     @property
     def absolute_url(self):
@@ -231,7 +375,10 @@ class Activity(models.Model):
 
     @property
     def datetime_start(self):
-        if isinstance(self.date_start, date) and isinstance(self.starting_time, time):
+        if (
+                isinstance(self.date_start, date) and
+                isinstance(self.starting_time, time)
+        ):
             return datetime.combine(self.date_start, self.starting_time)
         return None
 
@@ -254,24 +401,36 @@ class Activity(models.Model):
     @property
     def subsidy_period(self):
         model = apps.get_model('dataexports', 'SubsidyPeriod')
-        # Using date start as the reference one, if an activity last for more than 1 day it should not matter here.
-        obj = model.objects.get(date_start__lte=self.date_start, date_end__gte=self.date_start)
+        # Using date start as the reference one, if an activity last for more
+        # than 1 day it should not matter here.
+        obj = model.objects.get(
+            date_start__lte=self.date_start, date_end__gte=self.date_start
+        )
         return obj
 
     def poll_access_allowed(self):
-        # Si la data actual és superior o igual a la data d'inici, mostrem l'enquesta.
+        # Si la data actual és superior o igual a la data d'inici, mostrem
+        # l'enquesta.
         if timezone.now().date() >= self.date_start:
             return True
         return False
 
     def clean(self):
         super().clean()
-        if self.minors_grade or self.minors_participants_number or self.minors_school_cif or self.minors_school_name\
-                or self.minors_teacher:
+        if (
+                self.minors_grade or
+                self.minors_participants_number or
+                self.minors_school_cif or
+                self.minors_school_name or
+                self.minors_teacher
+        ):
             if not self.for_minors:
                 raise ValidationError(
-                    {'for_minors': "Has omplert dades relatives a sessions dirigides a menors però no has marcat "
-                                   "aquesta casella. Marca-la per tal que la sessió es justifiqui com a tal."})
+                    {'for_minors': "Has omplert dades relatives a sessions "
+                                   "dirigides a menors però no has marcat "
+                                   "aquesta casella. Marca-la per tal que la "
+                                   "sessió es justifiqui com a tal."}
+                )
 
     def __str__(self):
         return self.name
@@ -290,8 +449,17 @@ class ActivityResourceFile(models.Model):
         ordering = ["name"]
 
     image = models.FileField("fitxer", storage=PublicMediaStorage())
-    name = models.CharField("nom del recurs", max_length=120, null=False, blank=False)
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name="resources")
+    name = models.CharField(
+        "nom del recurs",
+        max_length=120,
+        null=False,
+        blank=False
+    )
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.CASCADE,
+        related_name="resources"
+    )
 
     def __str__(self):
         return self.name
@@ -373,6 +541,33 @@ class ActivityEnrolled(models.Model):
             'url_els_meus_cursos':
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
             'url_ateneu': settings.ABSOLUTE_URL,
+        }
+        mail.send()
+
+    def send_reminder_email(self):
+        mail = MyMailTemplate('EMAIL_ENROLLMENT_REMINDER')
+        mail.to = self.user.email
+        mail.subject_strings = {
+            'activitat_nom': self.activity.name
+        }
+        absolute_url_activity = (
+            settings.ABSOLUTE_URL +
+            reverse('activity',  args=[self.activity.id])
+        )
+        mail.body_strings = {
+            'activitat_nom': self.activity.name,
+            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'persona_nom': self.user.first_name,
+            'activitat_data_inici':
+                self.activity.date_start.strftime("%d-%m-%Y"),
+            'activitat_hora_inici':
+                self.activity.starting_time.strftime("%H:%M"),
+            'activitat_lloc': self.activity.place,
+            'activitat_instruccions': self.activity.instructions,
+            'absolute_url_activity': absolute_url_activity,
+            'absolute_url_my_activities':
+                f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
         }
         mail.send()
 
