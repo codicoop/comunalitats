@@ -24,7 +24,9 @@
   {% endif %}
 
   <ul style="padding: 0">
-    <li><p>S'enviarà un correu electrònic de recordatori a <strong>totes les persones inscrites</strong> a l'activitat:</p>
+    <li><p>S'enviarà un correu electrònic de recordatori a
+      <strong>aquelles persones inscrites</strong> a l'activitat
+      <strong>a qui no se'ls hi hagi enviat anteriorment el correu</strong>:</p>
       <p><h1>{{ obj.name }}</h1></p></li>
   </ul>
   <hr>
@@ -52,7 +54,22 @@
     <br>
     <div class="submit-row">
       <input type="hidden" name="send" value="1">
-      <input type="submit" name="_save" value="{% trans "Sí, enviar els recordatoris" %}"/>
+      <input type="submit" name="_save" value="{% trans "Sí, enviar els recordatoris a les persones pendents" %}"/>
+      <a href="#" onclick="window.history.back(); return false;"
+         class="button cancel-link">{% trans "No, take me back" %}</a>
+    </div>
+  </form>
+
+  <hr>
+  <br>
+
+  <form action="" method="post">{% csrf_token %}
+    <p style="max-width: 500px">Vols enviar el recordatori a totes les persones inscrites
+    independentment de si ja se'ls hi havia enviat anteriorment o no?</p>
+    <br>
+    <div class="submit-row">
+      <input type="hidden" name="send_all" value="1">
+      <input type="submit" name="_save" value="{% trans "Sí, tornar a enviar els recordatoris tothom" %}"/>
       <a href="#" onclick="window.history.back(); return false;"
          class="button cancel-link">{% trans "No, take me back" %}</a>
     </div>

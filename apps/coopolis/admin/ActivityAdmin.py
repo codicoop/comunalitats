@@ -55,8 +55,10 @@ class ActivityEnrolledInline(admin.TabularInline):
     form = ActivityEnrolledForm
     extra = 0
     fields = ['user', 'date_enrolled', 'waiting_list', 'user_comments',
-              'send_enrollment_email']
-    readonly_fields = ('date_enrolled', 'waiting_list', 'user_comments', )
+              'send_enrollment_email', 'reminder_sent', ]
+    readonly_fields = (
+        'date_enrolled', 'waiting_list', 'user_comments', 'reminder_sent'
+    )
     raw_id_fields = ('user',)
     autocomplete_lookup_fields = {
         'fk': ['user']
@@ -251,8 +253,11 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
                     "Correu de prova enviat correctament."
                 )
                 return HttpResponseRedirect(request.path_info)
-            elif 'send' in request.POST:
-                for enrollment in obj.enrollments.filter(waiting_list=False):
+            elif 'send' in request.POST or 'send_all' in request.POST:
+                qs = obj.enrollments.filter(waiting_list=False)
+                if 'send' in request.POST:
+                    qs = qs.filter(reminder_sent__isnull=True)
+                for enrollment in qs:
                     enrollment.send_reminder_email()
                 self.message_user(
                     request,
