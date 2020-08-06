@@ -544,31 +544,36 @@ class ActivityEnrolled(models.Model):
         }
         mail.send()
 
-    def send_reminder_email(self):
+    @staticmethod
+    def get_reminder_email(user, activity):
         mail = MyMailTemplate('EMAIL_ENROLLMENT_REMINDER')
-        mail.to = self.user.email
         mail.subject_strings = {
-            'activitat_nom': self.activity.name
+            'activitat_nom': activity.name
         }
         absolute_url_activity = (
             settings.ABSOLUTE_URL +
-            reverse('activity',  args=[self.activity.id])
+            reverse('activity',  args=[activity.id])
         )
         mail.body_strings = {
-            'activitat_nom': self.activity.name,
+            'activitat_nom': activity.name,
             'ateneu_nom': config.PROJECT_FULL_NAME,
-            'persona_nom': self.user.first_name,
+            'persona_nom': user.first_name,
             'activitat_data_inici':
-                self.activity.date_start.strftime("%d-%m-%Y"),
+                activity.date_start.strftime("%d-%m-%Y"),
             'activitat_hora_inici':
-                self.activity.starting_time.strftime("%H:%M"),
-            'activitat_lloc': self.activity.place,
-            'activitat_instruccions': self.activity.instructions,
+                activity.starting_time.strftime("%H:%M"),
+            'activitat_lloc': activity.place,
+            'activitat_instruccions': activity.instructions,
             'absolute_url_activity': absolute_url_activity,
             'absolute_url_my_activities':
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
             'url_web_ateneu': config.PROJECT_WEBSITE_URL,
         }
+        return mail
+
+    def send_reminder_email(self):
+        mail = self.get_reminder_email(self.user, self.activity)
+        mail.to = self.user.email
         mail.send()
 
     def __str__(self):

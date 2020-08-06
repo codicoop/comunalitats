@@ -242,10 +242,23 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         # Confirmation page in admin inspired by: https://gist.github.com/rsarai/d475c766871f40e52b8b4d1b12dedea2
         obj = Activity.objects.get(id=_id)
         if request.method == 'POST':
-            for enrollment in obj.enrollments.filter(waiting_list=False):
-                enrollment.send_reminder_email()
-            self.message_user(request, "Recordatoris enviats correctament.")
-            return HttpResponseRedirect("../../")
+            if 'preview' in request.POST:
+                mail = ActivityEnrolled.get_reminder_email(request.user, obj)
+                mail.to = request.POST['preview_to']
+                mail.send()
+                self.message_user(
+                    request,
+                    "Correu de prova enviat correctament."
+                )
+                return HttpResponseRedirect(request.path_info)
+            elif 'send' in request.POST:
+                for enrollment in obj.enrollments.filter(waiting_list=False):
+                    enrollment.send_reminder_email()
+                self.message_user(
+                    request,
+                    "Recordatoris enviats correctament."
+                )
+                return HttpResponseRedirect("../../")
 
         context = {
             **self.admin_site.each_context(request),

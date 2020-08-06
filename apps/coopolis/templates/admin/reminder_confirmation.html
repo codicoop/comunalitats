@@ -14,15 +14,45 @@
 {% endblock %}
 
 {% block content %}
+
+  {% if messages %}
+  <ul class="message-container">
+     {% for message in messages %}
+      <li>{% if message.tags %} class="{{ message.tags }}-message"{% endif %}>{{ message }}</li>
+     {% endfor %}
+  </ul>
+  {% endif %}
+
   <ul style="padding: 0">
     <li><p>S'enviarà un correu electrònic de recordatori a <strong>totes les persones inscrites</strong> a l'activitat:</p>
       <p><h1>{{ obj.name }}</h1></p></li>
   </ul>
   <hr>
   <br>
+
   <form action="" method="post">{% csrf_token %}
+    <p style="max-width: 500px">És molt fàcil que el text d'instruccions provoqui que el correu surti malgirbat,
+    fins i tot encara que el text sigui senzill i amb poc format. Abans d'enviar el correu
+    a tothom, procura enviar-te sempre una còpia a tu mateixa i comprovar que la plantilla es veu bé.</p>
+    <br>
+    <div class="input-row">
+      <label for="preview_to">Destinatari del correu de prova: </label><input id="preview_to" name="preview_to" type="text">
+    </div>
     <div class="submit-row">
-      <input type="submit" name="_save" value="{% trans "Confirmo l'enviament" %}"/>
+      <input type="hidden" name="preview" value="1">
+      <input type="submit" value="{% trans "Enviar correu de prova" %}"/>
+    </div>
+  </form>
+
+  <hr>
+  <br>
+
+  <form action="" method="post">{% csrf_token %}
+    <p style="max-width: 500px">El correu de prova ha funcionat correctament?</p>
+    <br>
+    <div class="submit-row">
+      <input type="hidden" name="send" value="1">
+      <input type="submit" name="_save" value="{% trans "Sí, enviar els recordatoris" %}"/>
       <a href="#" onclick="window.history.back(); return false;"
          class="button cancel-link">{% trans "No, take me back" %}</a>
     </div>
