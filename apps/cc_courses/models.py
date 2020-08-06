@@ -490,15 +490,17 @@ class ActivityEnrolled(models.Model):
         null=True
     )
     user_comments = models.TextField("comentaris", null=True, blank=True)
-    waiting_list = models.BooleanField("en llista d'espera")
+    waiting_list = models.BooleanField("en llista d'espera", default=False)
     reminder_sent = models.DateTimeField(
         "Recordatori enviat", null=True, blank=True
     )
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        is_full = self.activity.remaining_spots < 1
-        self.waiting_list = True if is_full else False
+        if self.id is None and not self.activity.is_past_due:
+            is_full = self.activity.remaining_spots < 1
+            self.waiting_list = is_full
+
         super(ActivityEnrolled, self).save(
             force_insert, force_update, using, update_fields
         )
@@ -575,6 +577,8 @@ class ActivityEnrolled(models.Model):
         mail = self.get_reminder_email(self.user, self.activity)
         mail.to = self.user.email
         mail.send()
+        self.reminder_sent = datetime.now()
+        self.save()
 
     def __str__(self):
         return f"Inscripció de {self.user.full_name} a: {self.activity.name}"
