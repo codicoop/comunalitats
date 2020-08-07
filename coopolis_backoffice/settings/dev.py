@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'apps.coopolis.apps.CoopolisConfig',
     'grappelli.dashboard',
     'grappelli',
+    'tagulous',
     'logentry_admin',
     'constance.backends.database',
     'constance',
@@ -71,7 +72,6 @@ INSTALLED_APPS = [
     'mailing_manager',
     'django.contrib.humanize',
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -139,6 +139,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+# For Tagulous
+SERIALIZATION_MODULES = {
+    'xml':    'tagulous.serializers.xml_serializer',
+    'json':   'tagulous.serializers.json',
+    'python': 'tagulous.serializers.python',
+    'yaml':   'tagulous.serializers.pyyaml',
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/

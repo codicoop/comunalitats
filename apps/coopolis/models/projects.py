@@ -1,10 +1,10 @@
+import datetime
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-import datetime
-
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
+import tagulous.models
 
 from cc_courses.models import Entity, Organizer, Cofunding, StrategicLine
 from coopolis.helpers import get_subaxis_choices
@@ -98,6 +98,14 @@ class Project(models.Model):
     follow_up_situation = models.CharField("seguiment", max_length=50, choices=settings.PROJECT_STATUS, blank=True,
                                            null=True)
     follow_up_situation_update = models.DateTimeField("actualització seguiment", blank=True, null=True)
+    tags = tagulous.models.TagField(
+        verbose_name="etiquetes",
+        force_lowercase=True,
+        help_text="Prioritza les etiquetes que apareixen auto-completades. Si "
+                  "escrius una etiqueta amb un espai creurà que son dues "
+                  "etiquetes, per evitar-ho escriu-la entre cometes dobles, "
+                  "\"etiqueta amb espais\"."
+    )
 
     @property
     def has_estatus(self):
