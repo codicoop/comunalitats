@@ -171,6 +171,48 @@ class ExportFunctions:
             cell.value = cell_value if isinstance(cell_value, int) else str(cell_value)
 
     """
+
+    Exportació de les memòries d'acompanyament a fitxer de text
+
+    """
+    def export_stages_descriptions(self):
+        qs = ProjectStage.objects.filter(
+            Q(subsidy_period=self.subsidy_period)
+            and
+            (
+                (Q(cofunded__isnull=True))
+                or
+                (Q(cofunded__isnull=False) and Q(cofunded_ateneu=True))
+            )
+            and
+            Q(follow_up__isnull=False)
+        )
+        lines = []
+        for stage in qs:
+            if stage.follow_up != '':
+                lines.append(self._html_title(stage.project.name))
+                lines.append(self._html_paragraph(stage.follow_up))
+        return HttpResponse(self._compose_html(lines))
+
+    @staticmethod
+    def _compose_html(lines):
+        html = "\r".join(lines)
+        html = (
+            "<em>Recorda! Fes ctrl+a o cmd+a per seleccionar-ho tot!</em>"
+            + html
+        )
+        html = f"<body style=\"width: 800px\">{html}</body>"
+        return html
+
+    @staticmethod
+    def _html_title(text):
+        return f"<h1>{text}</h1>"
+
+    @staticmethod
+    def _html_paragraph(text):
+        return f"<p>{text}</p>"
+
+    """
     
     Exportació cofinançades
     
@@ -205,7 +247,10 @@ class ExportFunctions:
         self.export_cofunded_actuacions_rows()
 
     def export_cofunded_actuacions_rows(self):
-        obj = Activity.objects.filter(date_start__range=self.subsidy_period.range, cofunded__isnull=False)
+        obj = Activity.objects.filter(
+            date_start__range=self.subsidy_period.range,
+            cofunded__isnull=False
+        )
         self.number_of_activities = len(obj)
         self.row_number = 1
         for item in obj:

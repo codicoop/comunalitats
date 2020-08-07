@@ -3,23 +3,6 @@
 from django.db import migrations
 
 
-def cofunded_export(apps, schema_editor):
-    print('')
-    mail_model = apps.get_model('dataexports', 'DataExports')
-    subsidy_model = apps.get_model('dataexports', 'SubsidyPeriod')
-    period_obj = subsidy_model.objects.get(name__exact='2019-2020')
-    obj, created = mail_model.objects.update_or_create(
-        function_name='export_cofunded_2019_2020',
-        defaults={
-            'subsidy_period': period_obj,
-            'name': 'Cofinançades',
-            'function_name': 'export_cofunded_2019_2020',
-            'ignore_errors': True
-        }
-    )
-    print("Exportació de Cofinançades creada")
-
-
 def populate_mail_templates(apps, schema_editor):
     print('')
     mail_model = apps.get_model('mailing_manager', 'Mail')
@@ -83,5 +66,4 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(populate_mail_templates),
-        migrations.RunPython(cofunded_export),
     ]
