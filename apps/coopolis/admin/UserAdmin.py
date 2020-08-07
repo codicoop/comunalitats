@@ -1,9 +1,8 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+import csv
+from datetime import datetime
 
 from django.contrib import admin
 from django.http import HttpResponse
-from django.core.mail import send_mail
 from django.conf import settings
 from constance import config
 from django.urls import reverse
@@ -59,7 +58,7 @@ class UserAdmin(admin.ModelAdmin):
               'authorize_communications', 'project', 'is_staff', 'groups',
               'is_active', 'date_joined', 'last_login', ]
     readonly_fields = ['id', 'last_login', 'date_joined', 'project', ]
-    actions = ['copy_emails', ]
+    actions = ['copy_emails', 'to_csv', ]
     inlines = (ActivityEnrolledInline, )
 
     def project(self, obj):
@@ -106,8 +105,45 @@ class UserAdmin(admin.ModelAdmin):
                f"<textarea cols=\"150\" rows=\"10\">{', '.join(emails)}</textarea><br><br>" \
                f"<textarea cols=\"150\" rows=\"10\">{'; '.join(emails)}</textarea><br>"
         return HttpResponse(html)
-
     copy_emails.short_description = 'Copiar tots els e-mails'
+
+    def to_csv(self, request, queryset):
+        response = HttpResponse(content_type='text/csv')
+        date = datetime.now().strftime('%Y-%m-%d')
+        response['Content-Disposition'] = (
+            f"attachment; filename={date}-csv_persones.csv"
+        )
+        writer = csv.writer(response)
+        self.get_csv(queryset, writer)
+        return response
+
+    to_csv.short_description = 'Exportar CSV per MailChimp'
+
+    @staticmethod
+    def get_csv(users_queryset, writer):
+        writer.writerow(
+            [
+                'Email Address',
+                'First Name',
+                'Last Name',
+                'City',
+                'Address',
+                'Authorize Newsletter',
+            ]
+        )
+        for user in users_queryset:
+            if user.fake_email is True:
+                continue
+            writer.writerow(
+                [
+                    user.email,
+                    user.first_name,
+                    user.surname,
+                    user.town if user.town else '',
+                    user.address if user.address else '',
+                    'yes' if user.authorize_communications else 'no'
+                ]
+            )
 
     def save_model(self, request, obj, form, change):
         # Sending welcome e-mail only if we're creating a new account.
