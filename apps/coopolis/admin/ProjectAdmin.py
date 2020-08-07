@@ -143,7 +143,8 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
                     'last_stage_responsible',)
     search_fields = ('id', 'name__unaccent', 'web', 'mail', 'phone', 'registration_date',
                      'object_finality', 'project_origins', 'solves_necessities', 'social_base', 'sector')
-    list_filter = ('registration_date', 'sector', 'project_status', FilterByFounded, )
+    list_filter = ('registration_date', 'sector', 'project_status',
+                   FilterByFounded, 'tags', )
     fieldsets = (
         ("Dades que s'omplen des de la web", {
             'fields': ['name', 'sector', 'web', 'project_status', 'motivation', 'mail', 'phone', 'town', 'district',
