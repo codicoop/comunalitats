@@ -26,6 +26,7 @@ django-object-actions = "*"
 django-maintenance-mode = "*"
 django-mail-queue = "*"
 django-dynamic-form-fields = "*"
+django-logentry-admin = "*"
 
 [requires]
 python_version = "3.6"

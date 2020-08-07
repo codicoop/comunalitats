@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'apps.coopolis.apps.CoopolisConfig',
     'grappelli.dashboard',
     'grappelli',
+    'logentry_admin',
     'constance.backends.database',
     'constance',
     'django_object_actions',

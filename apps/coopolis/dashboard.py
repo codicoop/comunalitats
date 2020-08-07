@@ -116,6 +116,7 @@ class MyDashboard(Dashboard):
         if context['request'].user.is_superuser:
             links_children.append(['Gestió de textos del back-office', 'constance/config'])
             links_children.append(["Registre d'e-mails enviats", 'mailqueue/mailermessage/'])
+            links_children.append(["Registre d'activitat al panell d'administració", 'admin/logentry/'])
         if context['request'].user.is_superuser:
             self.children.append(modules.LinkList(
                 title='Enllaços',
