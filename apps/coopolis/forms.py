@@ -77,6 +77,16 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
                   'employment_situation', 'discovered_us', 'project_involved', ]
 
     password = ReadOnlyPasswordHashField()
+    new_password = forms.CharField(
+        label="Canviar contrasenya",
+        help_text=(
+            "Les contrasenyes no es poden veure perquè es desen encriptades. "
+            "Però si escrius una contrasenya en aquest camp i deses els "
+            "canvis, l'usuari passarà a tenir aquesta nova contrasenya."
+        ),
+        max_length=150,
+        required=False
+    )
     first_name = forms.CharField(label="Nom", max_length=30)
     last_name = forms.CharField(label="Cognom", max_length=30, required=False)
     no_welcome_email = forms.BooleanField(label="No enviar correu de benvinguda",

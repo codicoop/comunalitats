@@ -56,7 +56,7 @@ class UserAdmin(admin.ModelAdmin):
               'birth_place', 'town', 'district', 'address', 'phone_number', 'educational_level',
               'employment_situation', 'discovered_us', 'project_involved', 'cooperativism_knowledge',
               'authorize_communications', 'project', 'is_staff', 'groups',
-              'is_active', 'date_joined', 'last_login', ]
+              'is_active', 'date_joined', 'last_login', 'new_password', ]
     readonly_fields = ['id', 'last_login', 'date_joined', 'project', ]
     actions = ['copy_emails', 'to_csv', ]
     inlines = (ActivityEnrolledInline, )
@@ -152,6 +152,11 @@ class UserAdmin(admin.ModelAdmin):
                        (not change and form.cleaned_data['no_welcome_email'] is False)
         if send_welcome:
             self.send_welcome_email(form.cleaned_data['email'])
+
+        # Override this to set the password to the value in the field if it's
+        # changed.
+        if change and form.cleaned_data['new_password'] != '':
+            obj.set_password(form.cleaned_data['new_password'])
 
         super().save_model(request, obj, form, change)
 
