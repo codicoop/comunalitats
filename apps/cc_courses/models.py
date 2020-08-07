@@ -396,7 +396,7 @@ class Activity(models.Model):
         subaxis = self.subaxis if self.subaxis else '(cap)'
         return f"{axis} - {subaxis}"
     axis_summary.short_description = "Eix - Subeix"
-    axis_summary.admin_order_field = 'axis'
+    axis_summary.admin_order_field = 'subaxis'
 
     @property
     def subsidy_period(self):
