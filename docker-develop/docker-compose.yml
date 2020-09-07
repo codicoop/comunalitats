@@ -60,7 +60,7 @@ services:
       - segon_ateneu
 
   ofelia:
-    container_name: esguard_dev_ofelia
+    container_name: develop_coopolis_ofelia
     image: 'mcuadros/ofelia:latest'
     volumes:
       - ./ofelia/config.ini:/etc/ofelia/config.ini
