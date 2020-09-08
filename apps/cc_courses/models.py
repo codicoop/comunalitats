@@ -506,7 +506,6 @@ class ActivityEnrolled(models.Model):
         )
 
     def send_confirmation_email(self):
-        print('sending confirmation!')
         mail = MyMailTemplate('EMAIL_ENROLLMENT_CONFIRMATION')
         mail.to = self.user.email
         mail.subject_strings = {

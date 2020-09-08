@@ -368,7 +368,6 @@ class FollowUpSpreadsheet:
 
     def export_seguiment_acompanyaments_rows(self):
         self.row_number = 1
-        print(self.raw_rows)
         for raw_row in self.raw_rows:
             self.row_number += 1
             stage_organizer = None
