@@ -61,7 +61,7 @@ class DataExports(models.Model):
     class Meta:
         verbose_name = "exportació"
         verbose_name_plural = "exportacions"
-        ordering = ["-subsidy_period"]
+        ordering = ["subsidy_period"]
 
     created = models.DateTimeField(verbose_name="creació", auto_now_add=True)
     subsidy_period = models.ForeignKey(SubsidyPeriod, verbose_name="convocatòria", null=True, on_delete=models.SET_NULL)
