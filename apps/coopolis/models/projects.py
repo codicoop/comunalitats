@@ -100,7 +100,7 @@ class Project(models.Model):
     follow_up_situation_update = models.DateTimeField("actualització seguiment", blank=True, null=True)
     tags = tagulous.models.TagField(
         verbose_name="etiquetes",
-        force_lowercase=True,
+        force_lowercase=True, null=True, blank=True,
         help_text="Prioritza les etiquetes que apareixen auto-completades. Si "
                   "escrius una etiqueta amb un espai creurà que son dues "
                   "etiquetes, per evitar-ho escriu-la entre cometes dobles, "

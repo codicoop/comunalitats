@@ -96,12 +96,19 @@ class Command(BaseCommand):
         # projectes
         group, created = Group.objects.get_or_create(name='Gestió de projectes')
         add_thing = Permission.objects.filter(
-            codename__in=['add_project', 'change_project', 'view_project', 'add_projectstagetype',
-                          'change_projectstagetype', 'delete_projectstagetype', 'view_projectstagetype',
-                          'view_projectstagetype',
-                          'add_projectstage', 'change_projectstage', 'delete_projectstage', 'view_projectstage',
-                          'add_employmentinsertion', 'change_employmentinsertion', 'delete_employmentinsertion',
-                          'view_employmentinsertion']
+            codename__in=[
+                # Projectes
+                'add_project', 'change_project', 'view_project',
+                # Justificacions d'acompanyament
+                'add_projectstagetype', 'change_projectstagetype', 'delete_projectstagetype', 'view_projectstagetype', 'view_projectstagetype',
+                'add_projectstage', 'change_projectstage', 'delete_projectstage', 'view_projectstage',
+                # Insercions laborals
+                'add_employmentinsertion', 'change_employmentinsertion', 'delete_employmentinsertion', 'view_employmentinsertion',
+                # Seguiment de projectes
+                'view_projectsconstituted', 'view_projectsfollowup',
+                # Etiquetes
+                'add_tagulous_project_tags', 'change_tagulous_project_tags', 'delete_tagulous_project_tags', 'view_tagulous_project_tags',
+            ]
         )
         group.permissions.set(add_thing)
         group.save()
