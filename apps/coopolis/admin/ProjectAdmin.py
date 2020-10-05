@@ -40,7 +40,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
 
     form = ProjectStageForm
     empty_value_display = '(cap)'
-    list_display = ('project_field_ellipsis', 'date_start', 'stage_responsible_field_ellipsis', 'stage_type',
+    list_display = ('project_field_ellipsis', 'date_start', 'stage_type', 'stage_responsible_field_ellipsis', 'stage_type',
                     'axis_summary', 'entity', 'subsidy_period', 'project_field')
     list_filter = ('subsidy_period', ('stage_responsible', admin.RelatedOnlyFieldListFilter), 'date_start',
                    'stage_type', 'axis', 'entity', 'project__sector')
@@ -64,6 +64,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
         if len(obj.project.name) > 50:
             return "%s..." % obj.project.name[:50]
         return obj.project.name
+    project_field_ellipsis.short_description = "Fitxa"
 
     def stage_responsible_field_ellipsis(self, obj):
         if obj.stage_responsible and len(str(obj.stage_responsible)) > 15:
