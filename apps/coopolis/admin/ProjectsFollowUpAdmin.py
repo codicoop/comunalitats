@@ -86,34 +86,40 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
                 filter=Q(stages__stage_type=1)
             ),
             'acollida_certificat':
-                Count('stages__scanned_certificate',
-                      filter=(
-                              Q(stages__stage_type=1) &
-                              Q(stages__scanned_certificate__isnull=False) &
-                              ~Q(stages__scanned_certificate__exact=''))
-                      ),
+                Count(
+                    'stages__scanned_certificate',
+                    filter=(
+                            Q(stages__stage_type=1) &
+                            Q(stages__scanned_certificate__isnull=False) &
+                            ~Q(stages__scanned_certificate__exact='')
+                    )
+                ),
             'proces_hores': DistinctSum(
                 'stages__hours',
                 filter=Q(stages__stage_type=2)
             ),
             'proces_certificat':
-                Count('stages__scanned_certificate',
-                      filter=(
-                              Q(stages__stage_type=2) &
-                              Q(stages__scanned_certificate__isnull=False) &
-                              ~Q(stages__scanned_certificate__exact=''))
-                      ),
+                Count(
+                    'stages__scanned_certificate',
+                    filter=(
+                            Q(stages__stage_type=2) &
+                            Q(stages__scanned_certificate__isnull=False) &
+                            ~Q(stages__scanned_certificate__exact='')
+                    )
+                ),
             'constitucio_hores': DistinctSum(
                 'stages__hours',
                 filter=Q(stages__stage_type=6)
             ),
             'constitucio_certificat':
-                Count('stages__scanned_certificate',
-                      filter=(
-                              Q(stages__stage_type=6) &
-                              Q(stages__scanned_certificate__isnull=False) &
-                              ~Q(stages__scanned_certificate__exact=''))
-                      ),
+                Count(
+                    'stages__scanned_certificate',
+                    filter=(
+                            Q(stages__stage_type=6) &
+                            Q(stages__scanned_certificate__isnull=False) &
+                            ~Q(stages__scanned_certificate__exact='')
+                    )
+                ),
             'consolidacio_hores': DistinctSum(
                 'stages__hours',
                 filter=Q(stages__stage_type__in=[7, 8])
@@ -123,7 +129,8 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
                     'stages__scanned_certificate',
                     filter=(
                             Q(stages__stage_type__in=[7, 8]) &
-                            Q(stages__scanned_certificate__isnull=False)
+                            Q(stages__scanned_certificate__isnull=False) &
+                            ~Q(stages__scanned_certificate__exact='')
                     )
                 ),
         }
