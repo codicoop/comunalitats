@@ -443,36 +443,83 @@ class ExportFunctions:
             self.fill_row_data(row)
 
     def actuacions_2018_2019_rows_stages(self):
-        self.stages_obj = ProjectStage.objects.filter(
-            subsidy_period=self.subsidy_period).annotate(dcount=Count('project'))
-        self.number_of_stages = len(self.stages_obj)
-        for item in self.stages_obj:
-            self.row_number += 1
+        """
+        Acompanyaments que han d'aparèixer:
+        - En cas que tingui algun acompanyament de tipus Nova Creació,
+          ha d'aparèixer fent la suma d'hores de tots els acompanyaments
+          d'aquet tipus.
+        - Idem però pels acompanyaments de Consolidació.
+        - Idem però pels acompanyaments d'Incubació.
+        Per tant com a màxim apareixerà 3 vegades.
 
-            axis = self.get_correlation("axis", item.axis)
-            if axis is None:
-                axis = ("", True)
-            subaxis = self.get_correlation("subaxis", item.subaxis)
-            if subaxis is None:
-                subaxis = ("", True)
-            town = item.project.town
-            if town is None or town == "":
-                town = ("", True)
-            row = [
-                axis,
-                subaxis,
-                item.project.name,
-                item.date_start if not None else '',
-                town,
-                item.involved_partners.count(),
-                "No",
-                "",
-                item.entity if item.entity else '',  # Entitat
-                item.stage_organizer if item.stage_organizer else '',  # Organitzadora
-                '(no aplicable)',  # Lloc
-                '(no aplicable)',  # Acció
-            ]
-            self.fill_row_data(row)
+        TIPOLOGIA COVID: Pendent de saber què n'he de fer.
+        """
+        obj = ProjectStage.objects.filter(
+            subsidy_period=self.subsidy_period
+        )
+        stages_groups = {
+            1: 'nova_creacio',
+            2: 'nova_creacio',
+            6: 'nova_creacio',
+            7: 'consolidacio',
+            8: 'consolidacio',
+            9: 'incubacio'
+        }
+        self.stages_obj = {}
+        for item in obj:
+            if int(item.stage_type) not in stages_groups:
+                continue
+            group = stages_groups[int(item.stage_type)]
+            print(group)
+            p_id = item.project.id
+            print(f" project id: {p_id}")
+            if p_id not in self.stages_obj:
+                self.stages_obj.update({
+                    p_id: {}
+                })
+            if group not in self.stages_obj[p_id]:
+                self.stages_obj[p_id].update({
+                    group: {
+                        'obj': item,
+                        'total_hours': 0,
+                    }
+                })
+            if item.hours is None:
+                item.hours = 0
+            self.stages_obj[p_id][group]['total_hours'] += item.hours
+        print(self.stages_obj)
+
+        self.number_of_stages = 0
+        for stage_id, stage in self.stages_obj.items():
+            for group_name, group in stage.items():
+                self.number_of_stages += 1
+                item = group['obj']
+                self.row_number += 1
+
+                axis = self.get_correlation("axis", item.axis)
+                if axis is None:
+                    axis = ("", True)
+                subaxis = self.get_correlation("subaxis", item.subaxis)
+                if subaxis is None:
+                    subaxis = ("", True)
+                town = item.project.town
+                if town is None or town == "":
+                    town = ("", True)
+                row = [
+                    axis,
+                    subaxis,
+                    item.project.name,
+                    item.date_start if not None else '',
+                    town,
+                    item.involved_partners.count(),
+                    "No",
+                    "",
+                    item.entity if item.entity else '',  # Entitat
+                    item.stage_organizer if item.stage_organizer else '',  # Organitzadora
+                    '(no aplicable)',  # Lloc
+                    '(no aplicable)',  # Acció
+                ]
+                self.fill_row_data(row)
 
     def actuacions_2018_2019_rows_nouniversitaris(self):
         obj = self.get_sessions_obj(for_minors=True)
@@ -581,27 +628,32 @@ class ExportFunctions:
 
     def stages_2018_2019_rows(self):
         reference_number = self.number_of_activities
-        for item in self.stages_obj:
-            self.row_number += 1
-            reference_number += 1
-            hours = item.hours if item.hours is not None else ("", True)
-            town = item.project.town if item.project.town is not None else ("", True)
-            crea_consolida = self.get_correlation("stage_type", item.stage_type)
-            row = [
-                f"{reference_number} {item.project.name}",  # Referència.
-                item.project.name,  # Camp no editable, l'ha d'omplir l'excel automàticament.
-                "Entitat",
-                # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat PENDENT.
-                item.project.name,  # "En cas d'entitat (Nom de l'entitat)"
-                "Constituida",  # "En cas d'entitat" Opcions: Constituida/En procés/No finalitzat. PENDENT.
-                crea_consolida if crea_consolida else '',  # "Creació/consolidació".
-                item.date_start if item.date_start else '',
-                town,
-                item.project.description,  # Breu descripció.
-                hours,  # Total hores d'acompanyament.
-                item.date_end if item.date_end else '',
-            ]
-            self.fill_row_data(row)
+
+        self.number_of_stages = 0
+        for p_id, stage in self.stages_obj.items():
+            for group_name, group in stage.items():
+                self.row_number += 1
+                item = group['obj']
+
+                # hours = item.hours if item.hours is not None else ("", True)
+                hours = group['total_hours']
+                town = item.project.town if item.project.town is not None else ("", True)
+                crea_consolida = self.get_correlation("stage_type", item.stage_type)
+                row = [
+                    f"{reference_number} {item.project.name}",  # Referència.
+                    item.project.name,  # Camp no editable, l'ha d'omplir l'excel automàticament.
+                    "Entitat",
+                    # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat PENDENT.
+                    item.project.name,  # "En cas d'entitat (Nom de l'entitat)"
+                    "Constituida",  # "En cas d'entitat" Opcions: Constituida/En procés/No finalitzat. PENDENT.
+                    crea_consolida if crea_consolida else '',  # "Creació/consolidació".
+                    item.date_start if item.date_start else '',
+                    town,
+                    item.project.description,  # Breu descripció.
+                    hours,  # Total hores d'acompanyament.
+                    item.date_end if item.date_end else '',
+                ]
+                self.fill_row_data(row)
 
     def export_founded_projects_2018_2019(self):
         self.worksheet = self.workbook.create_sheet("EntitatCreada")
