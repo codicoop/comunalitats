@@ -1,17 +1,21 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from django.contrib import admin
 from django.conf import settings
 
-from coopolis.models import User, Project, ProjectStage, Derivation, EmploymentInsertion, StagesByAxis, \
+from coopolis.models import (
+    User, Project, ProjectStage, Derivation, EmploymentInsertion,
     ProjectsFollowUp, ProjectsConstituted, ActivityPoll
-from cc_courses.models import Course, Activity, CoursePlace, Entity, Organizer, Cofunding, StrategicLine
+)
+from cc_courses.models import (
+    Course, Activity, CoursePlace, Entity, Organizer, Cofunding, StrategicLine
+)
 from .ActivityAdmin import ActivityAdmin, CofundingAdmin, StrategicLineAdmin
 from .CourseAdmin import CourseAdmin
-from .ProjectAdmin import ProjectAdmin, ProjectStageAdmin, DerivationAdmin, EmploymentInsertionAdmin, \
-    ProjectStageAdminAxis
-from .ProjectsFollowUpAdmin import ProjectsFollowUpAdmin, ProjectsConstitutedAdmin
+from .ProjectAdmin import (
+    ProjectAdmin, ProjectStageAdmin, DerivationAdmin, EmploymentInsertionAdmin
+)
+from .ProjectsFollowUpAdmin import (
+    ProjectsFollowUpAdmin, ProjectsConstitutedAdmin
+)
 from .UserAdmin import UserAdmin
 from .CoursePlaceAdmin import CoursePlaceAdmin
 from .ActivityPollAdmin import ActivityPollAdmin
@@ -20,7 +24,6 @@ from .ActivityPollAdmin import ActivityPollAdmin
 admin.site.register(User, UserAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectStage, ProjectStageAdmin)
-admin.site.register(StagesByAxis, ProjectStageAdminAxis)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Activity, ActivityAdmin)
 admin.site.register(CoursePlace, CoursePlaceAdmin)

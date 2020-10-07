@@ -7,8 +7,10 @@ from constance import config
 from functools import update_wrapper
 from django.conf.urls import url
 
-from coopolis.models import User, Project, ProjectStage, EmploymentInsertion, StagesByAxis
-from coopolis.forms import ProjectFormAdmin, ProjectStageInlineForm, ProjectStageForm
+from coopolis.models import User, Project, ProjectStage, EmploymentInsertion
+from coopolis.forms import (
+    ProjectFormAdmin, ProjectStageInlineForm, ProjectStageForm
+)
 from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 
@@ -285,49 +287,4 @@ class EmploymentInsertionAdmin(admin.ModelAdmin):
     raw_id_fields = ('user', 'project',)
     autocomplete_lookup_fields = {
         'fk': ['user', 'project', ],
-    }
-
-
-class ProjectStageAdminAxis(admin.ModelAdmin):
-    class Media:
-        js = ('js/grappellihacks.js',)
-        css = {
-            'all': ('styles/grappellihacks.css',)
-        }
-
-    empty_value_display = '(cap)'
-    list_display = ('axis_summary', 'entity', 'date_start', 'project_field_ellipsis',
-                    'stage_responsible_field_ellipsis', 'stage_type', 'subsidy_period', 'project_field')
-    list_filter = ('subsidy_period', ('stage_responsible', admin.RelatedOnlyFieldListFilter), 'date_start',
-                   'stage_type', 'axis', 'entity', 'project__sector')
-    actions = ["export_as_csv"]
-    search_fields = ['project__name__unaccent']
-
-    def project_field_ellipsis(self, obj):
-        if len(obj.project.name) > 50:
-            return "%s..." % obj.project.name[:50]
-        return obj.project.name
-
-    def stage_responsible_field_ellipsis(self, obj):
-        if obj.stage_responsible and len(str(obj.stage_responsible)) > 15:
-            return "%s..." % str(obj.stage_responsible)[:15]
-        return obj.stage_responsible
-    stage_responsible_field_ellipsis.short_description = 'Responsable'
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "stage_responsible":
-            kwargs["queryset"] = User.objects.filter(is_staff=True)
-        if db_field.name == "project":
-            kwargs["queryset"] = Project.objects.order_by('name')
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-    def project_field(self, obj):
-        return mark_safe(u'<a href="../../%s/%s/%d/change">%s</a>' % (
-            'coopolis', 'project', obj.project.id, 'Veure'))
-
-    project_field.short_description = 'Projecte'
-
-    raw_id_fields = ('involved_partners',)
-    autocomplete_lookup_fields = {
-        'm2m': ['involved_partners'],
     }
