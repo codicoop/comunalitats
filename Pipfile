@@ -28,6 +28,7 @@ django-mail-queue = "*"
 django-dynamic-form-fields = "*"
 django-logentry-admin = "*"
 django-tagulous = "*"
+django-extensions = "*"
 
 [requires]
 python_version = "3.6"

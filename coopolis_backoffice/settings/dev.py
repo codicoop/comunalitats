@@ -42,6 +42,7 @@ AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
 
 # Application definition
 INSTALLED_APPS = [
+    'django_extensions',
     'maintenance_mode',
     'django.contrib.postgres',
     'django.contrib.auth',

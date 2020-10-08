@@ -1,10 +1,22 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from django.contrib.auth.models import UserManager
+from django.db import models
+
+
+class UserQuerySet(models.QuerySet):
+    def get_num_members_for_project(self, project_id):
+        return self.filter(
+            stage_involved_partners__project_id=project_id
+        ).values(
+            'stage_involved_partners__project_id'
+        ).annotate(
+            count=models.Count('pk', distinct=True)
+        ).order_by().values('count')
 
 
 class CCUserManager(UserManager):
+    def get_queryset(self):
+        return UserQuerySet(self.model, using=self._db)
+
     def create_superuser(self, email, password, **extra_fields):
         return super().create_superuser(email, email, password, **extra_fields)
 

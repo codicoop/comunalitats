@@ -223,22 +223,22 @@ header#grp-header {
       <tbody>
         {% for row in rows %}
         <tr class="grp-row {% cycle 'grp-row-even' 'grp-row-odd' %}">
-          <td>{{ row.id }}</td>
+          <td>{{ row.project.id }}</td>
           <td>
-            {% if row.follow_up_with_date %}
-            <span tooltip="{{ row.get_follow_up_situation_display }}">{{ row.follow_up_with_date }}</span>
+            {% if row.project.follow_up_with_date %}
+            <span tooltip="{{ row.project.get_follow_up_situation_display }}">{{ row.project.follow_up_with_date }}</span>
             {% endif %}
           </td>
-          <td>{{ row.stages.last.stage_organizer|default_if_none:'(cap)' }}</td>
-          <td><a href="{% url 'admin:coopolis_project_change' row.id %}">{{ row.name }}</a></td>
-          <td>{{ row.axis_list|default_if_none:"" }} </td>
-          <td>{{ row.stages.last.stage_responsible|default_if_none:"" }}</td>
+          <td>{{ row.project.last_stage_organizer|default_if_none:'(cap)' }}</td>
+          <td><a href="{% url 'admin:coopolis_project_change' row.project.id %}">{{ row.project.name }}</a></td>
+          <td>{{ row.project.axis_list|default_if_none:"" }} </td>
+          <td>{{ row.project.last_stage_responsible|default_if_none:"" }}</td>
           <td>{{ row.members_h }} / {{ row.members_d }}</td>
           <td>{{ row.members_total }}</td>
-          <td>{{ row.get_sector_display }}</td>
-          <td>{% if row.description %}<span ellipsis-tooltip="{{ row.description }}"></span>{% endif %}</td>
-          <td>{{ row.get_project_status_display|default_if_none:"" }}</td>
-          <td>{{ row.full_town_district|default_if_none:"" }}</td>
+          <td>{{ row.project.get_sector_display }}</td>
+          <td>{% if row.project.description %}<span ellipsis-tooltip="{{ row.project.description }}"></span>{% endif %}</td>
+          <td>{{ row.project.get_project_status_display|default_if_none:"" }}</td>
+          <td>{{ row.project.full_town_district|default_if_none:"" }}</td>
           <td>{{ row.acollida_hores|default_if_none:0 }}</td>
           <td>{% if row.acollida_certificat > 0 %}
             <img src="{% static 'admin/img/icon-yes.svg' %}" alt="1">{% endif %}
@@ -255,10 +255,10 @@ header#grp-header {
           <td>{% if row.consolidacio_certificat > 0 %}
             <img src="{% static 'admin/img/icon-yes.svg' %}" alt="1">{% endif %}
           </td>
-          <td>{{ row.employment_estimation }}</td>
-          <td>{{ row.employment_insertions.all|length }}</td>
-          <td>{{ row.constitution_date|date:"Y.m.d"|default_if_none:"" }}</td>
-          <td>{% if row.other %}<span ellipsis-tooltip="{{ row.other }}" class="ellipsis-tooltip--left"></span>{% endif %}</td>
+          <td>{{ row.project.employment_estimation }}</td>
+          <td>{{ row.project.employment_insertions.all|length }}</td>
+          <td>{{ row.project.constitution_date|date:"Y.m.d"|default_if_none:"" }}</td>
+          <td>{% if row.project.other %}<span ellipsis-tooltip="{{ row.project.other }}" class="ellipsis-tooltip--left"></span>{% endif %}</td>
         </tr>
         {% endfor %}
         <tr class="grp-row totals">

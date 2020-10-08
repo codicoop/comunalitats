@@ -156,6 +156,13 @@ class Project(models.Model):
     last_stage_responsible.fget.short_description = "Últim acompanyament"
 
     @property
+    def last_stage_organizer(self):
+        if not self.stages or self.stages.count() < 1:
+            return None
+        return self.stages.all()[0].stage_organizer
+    last_stage_organizer.fget.short_description = "Última organitzadora"
+
+    @property
     def full_town_district(self):
         if not self.town:
             return None
@@ -295,14 +302,6 @@ class ProjectStage(models.Model):
 
     def __str__(self):
         return f"{str(self.project)}: {self.get_stage_type_display()}"
-
-
-class StagesByAxis(ProjectStage):
-    class Meta:
-        proxy = True
-        verbose_name_plural = "Acompanyaments per Eix"
-        verbose_name = "acompanyament"
-        ordering = ["axis", "subaxis", "entity", "date_start"]
 
 
 class ProjectsFollowUp(Project):

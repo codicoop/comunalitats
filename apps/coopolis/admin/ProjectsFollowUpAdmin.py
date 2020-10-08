@@ -2,8 +2,8 @@ from datetime import datetime
 from urllib.parse import urlencode
 
 from django.contrib import admin
-from django.db.models import Count, Q
-from django.http import HttpResponse
+from django.db.models import Count, Q, Sum, OuterRef, Subquery, IntegerField
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import path, reverse
 from openpyxl import Workbook
 from openpyxl.styles import Font, Border, Side, PatternFill
@@ -11,37 +11,12 @@ from openpyxl.utils import get_column_letter
 
 from .ProjectAdmin import FilterByFounded
 from dataexports.models import SubsidyPeriod
-from coopolis.db_utils import DistinctSum
+from coopolis.models.projects import ProjectStage
+from ..models import User
 
 
-class DefaultedSubsidyPeriodFilter(admin.SimpleListFilter):
-    title = "Convocatòria"
-    parameter_name = 'subsidy_period'
-
-    def lookups(self, request, model_admin):
-        qs = SubsidyPeriod.objects.all()
-        qs.order_by('name')
-        return list(qs.values_list('id', 'name'))
-
-    def choices(self, changelist):
-        for lookup, title in self.lookup_choices:
-            yield {
-                'selected': self.value() == str(lookup),
-                'query_string': changelist.get_query_string({self.parameter_name: lookup}),
-                'display': title,
-            }
-
-    def queryset(self, request, queryset):
-        value = self.value()
-
-        if 'subsidy_period' not in request.GET:
-            current = SubsidyPeriod.get_current()
-            if current:
-                value = current.id
-
-        if value:
-            return queryset.filter(stages__subsidy_period__pk=value)
-        return queryset
+class MissingCurrentSubsidyPeriod(Exception):
+    pass
 
 
 class ProjectsFollowUpAdmin(admin.ModelAdmin):
@@ -56,7 +31,7 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
 
     change_list_template = 'admin/projects_follow_up.html'
     list_filter = (
-        DefaultedSubsidyPeriodFilter, 'follow_up_situation',
+        'subsidy_period', 'follow_up_situation',
         FilterByFounded,
         ('stages__stage_responsible', admin.RelatedOnlyFieldListFilter),
         'project_status',
@@ -66,80 +41,109 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
     list_display = ('name', )
     list_per_page = 99999
 
-    def get_rows(self, qs):
+    def get_rows(self, projects, request):
         ctxt = {}
+        project_ids = {}
+        for project in projects:
+            project_ids.update({project.id: project})
+
+        filtered_subsidy_period = None
+        if 'subsidy_period' in request.GET:
+            filtered_subsidy_period = request.GET['subsidy_period']
+        else:
+            current = SubsidyPeriod.get_current()
+            if current:
+                filtered_subsidy_period = current.id
+
         query = {
-            'members_h': Count(
-                'stages__involved_partners',
-                filter=Q(stages__involved_partners__gender='MALE'),
-                distinct=True),
-            'members_d': Count(
-                'stages__involved_partners',
-                filter=Q(stages__involved_partners__gender='FEMALE'),
-                distinct=True
+            # We need this count just to force the group_by
+            'grouping': Count('project_id'),
+            'members_h': Subquery(
+                User.objects
+                    .filter(gender='MALE')
+                    .get_num_members_for_project(OuterRef('project_id')),
+                output_field=IntegerField()
             ),
-            'members_total': Count(
-                'stages__involved_partners',
-                distinct=True),
-            'acollida_hores': DistinctSum(
-                'stages__hours',
-                filter=Q(stages__stage_type=1)
+            'members_d': Subquery(
+                User.objects
+                    .filter(gender='FEMALE')
+                    .get_num_members_for_project(OuterRef('project_id')),
+                output_field=IntegerField()
+            ),
+            'members_total': Subquery(
+                User.objects
+                    .filter()
+                    .get_num_members_for_project(OuterRef('project_id')),
+                output_field=IntegerField()
+            ),
+            'acollida_hores': Sum(
+                'hours',
+                filter=Q(stage_type=1)
             ),
             'acollida_certificat':
                 Count(
-                    'stages__scanned_certificate',
+                    'scanned_certificate',
                     filter=(
-                            Q(stages__stage_type=1) &
-                            Q(stages__scanned_certificate__isnull=False) &
-                            ~Q(stages__scanned_certificate__exact='')
+                        Q(stage_type=1) &
+                        Q(scanned_certificate__isnull=False) &
+                        ~Q(scanned_certificate__exact='')
                     )
                 ),
-            'proces_hores': DistinctSum(
-                'stages__hours',
-                filter=Q(stages__stage_type=2)
+            'proces_hores': Sum(
+                'hours',
+                filter=Q(stage_type=2)
             ),
             'proces_certificat':
                 Count(
-                    'stages__scanned_certificate',
+                    'scanned_certificate',
                     filter=(
-                            Q(stages__stage_type=2) &
-                            Q(stages__scanned_certificate__isnull=False) &
-                            ~Q(stages__scanned_certificate__exact='')
+                        Q(stage_type=2) &
+                        Q(scanned_certificate__isnull=False) &
+                        ~Q(scanned_certificate__exact='')
                     )
                 ),
-            'constitucio_hores': DistinctSum(
-                'stages__hours',
-                filter=Q(stages__stage_type=6)
+            'constitucio_hores': Sum(
+                'hours',
+                filter=Q(stage_type=6)
             ),
             'constitucio_certificat':
                 Count(
-                    'stages__scanned_certificate',
+                    'scanned_certificate',
                     filter=(
-                            Q(stages__stage_type=6) &
-                            Q(stages__scanned_certificate__isnull=False) &
-                            ~Q(stages__scanned_certificate__exact='')
+                        Q(stage_type=6) &
+                        Q(scanned_certificate__isnull=False) &
+                        ~Q(scanned_certificate__exact='')
                     )
                 ),
-            'consolidacio_hores': DistinctSum(
-                'stages__hours',
-                filter=Q(stages__stage_type__in=[7, 8])
+            'consolidacio_hores': Sum(
+                'hours',
+                filter=Q(stage_type__in=[7, 8])
             ),
             'consolidacio_certificat':
                 Count(
-                    'stages__scanned_certificate',
+                    'scanned_certificate',
                     filter=(
-                            Q(stages__stage_type__in=[7, 8]) &
-                            Q(stages__scanned_certificate__isnull=False) &
-                            ~Q(stages__scanned_certificate__exact='')
+                        Q(stage_type__in=[7, 8]) &
+                        Q(scanned_certificate__isnull=False) &
+                        ~Q(scanned_certificate__exact='')
                     )
                 ),
         }
 
-        # Annotate adds columns to each row with the sum or calculations of
-        # the row:
-        ctxt['rows'] = list(
-            qs.annotate(**query)
+        qs_project_stages = ProjectStage.objects.filter(
+            project_id__in=project_ids
         )
+        if filtered_subsidy_period:
+            qs_project_stages = qs_project_stages.filter(
+                subsidy_period=filtered_subsidy_period
+            )
+
+        # Annotate adds columns to each row with the sum or calculations of
+        qs_project_stages = qs_project_stages.values('project_id').annotate(**query)
+        # Order_by fucks up the group by
+        qs_project_stages = qs_project_stages.order_by()
+
+        ctxt['rows'] = qs_project_stages
 
         # Normally it should be easier to call aggregate to have the totals,
         # but given how complex is it to combine
@@ -161,45 +165,47 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             total_constitutions=0,
         )
         for row in ctxt['rows']:
+            row['project'] = project_ids[row['project_id']]
+            print(row['project'].follow_up_with_date)
             totals['total_members_h'] += (
-                row.members_h if row.members_h else 0
+                row['members_h']if row['members_h']else 0
             )
             totals['total_members_d'] += (
-                row.members_d if row.members_d else 0
+                row['members_d']if row['members_d']else 0
             )
             totals['total_members_total'] += (
-                row.members_total if row.members_total else 0
+                row['members_total']if row['members_total']else 0
             )
             totals['total_acollida_hores'] += (
-                row.acollida_hores if row.acollida_hores else 0
+                row['acollida_hores']if row['acollida_hores']else 0
             )
             totals['total_acollida_certificat'] += (
-                1 if row.acollida_certificat else 0
+                1 if row['acollida_certificat']else 0
             )
             totals['total_proces_hores'] += (
-                row.proces_hores if row.proces_hores else 0
+                row['proces_hores']if row['proces_hores']else 0
             )
             totals['total_proces_certificat'] += (
-                1 if row.proces_certificat else 0
+                1 if row['proces_certificat']else 0
             )
             totals['total_constitucio_hores'] += (
-                row.constitucio_hores if row.constitucio_hores else 0
+                row['constitucio_hores']if row['constitucio_hores']else 0
             )
             totals['total_constitucio_certificat'] += (
-                1 if row.constitucio_certificat else 0
+                1 if row['constitucio_certificat']else 0
             )
             totals['total_consolidacio_hores'] += (
-                row.consolidacio_hores if row.consolidacio_hores else 0
+                row['consolidacio_hores']if row['consolidacio_hores']else 0
             )
             totals['total_consolidacio_certificat'] += (
-                1 if row.consolidacio_certificat else 0
+                1 if row['consolidacio_certificat']else 0
             )
             totals['total_employment_insertions'] += (
-                len(row.employment_insertions.all())
-                if row.employment_insertions else 0
+                len(row['project'].employment_insertions.all())
+                if row['project'].employment_insertions else 0
             )
             totals['total_constitutions'] += (
-                1 if row.constitution_date else 0
+                1 if row['project'].constitution_date else 0
             )
 
         ctxt['totals'] = totals
@@ -213,6 +219,10 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
         return {'spreadsheet_url': url}
 
     def changelist_view(self, request, extra_context=None):
+        # They usually want to use the current period by default.
+        if 'subsidy_period__id__exact' not in request.GET:
+            return self.redirect_to_current_period(request)
+
         response = super().changelist_view(
             request,
             extra_context=extra_context,
@@ -224,14 +234,16 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
         except (AttributeError, KeyError):
             return response
 
-        rows = self.get_rows(qs)
+        # Els filtres fan joins, necessitem el Count per forçar un group by.
+        projects = qs.annotate(Count('id'))
+
+        rows = self.get_rows(projects, request)
         url = self.get_download_url(request)
         response.context_data = {
             **response.context_data,
             **rows,
             **url
         }
-
         return response
 
     def has_delete_permission(self, request, obj=None):
@@ -250,6 +262,25 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             ),
         ]
         return custom_urls + urls
+
+    @staticmethod
+    def redirect_to_current_period(request):
+        current = SubsidyPeriod.get_current()
+        if current:
+            value = str(current.id)
+        else:
+            raise MissingCurrentSubsidyPeriod(
+                "El llistat per defecte es carrega mostrant la convocatòria "
+                "vigent, però ha fallat a l'intentar-la trobar. Si us plau "
+                "revisa que existeixi una convocatòria creada per la data "
+                "actual."
+            )
+        query_string = request.META['QUERY_STRING']
+        value = f"subsidy_period__id__exact={value}"
+        if query_string != '':
+            value = f"&{value}"
+        query_string = query_string + value
+        return HttpResponseRedirect(f"{request.path_info}?{query_string}")
 
     def download_spreadsheet(self, request):
         # Getting queryset with filters applied
