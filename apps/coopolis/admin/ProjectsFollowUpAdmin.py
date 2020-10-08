@@ -166,7 +166,6 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
         )
         for row in ctxt['rows']:
             row['project'] = project_ids[row['project_id']]
-            print(row['project'].follow_up_with_date)
             totals['total_members_h'] += (
                 row['members_h']if row['members_h']else 0
             )
@@ -289,7 +288,10 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
         except (AttributeError, KeyError) as e:
             return request
 
-        rows = self.get_rows(qs)
+        # Els filtres fan joins, necessitem el Count per forçar un group by.
+        projects = qs.annotate(Count('id'))
+
+        rows = self.get_rows(projects, request)
         sheet = FollowUpSpreadsheet(rows['rows'], rows['totals'])
         return sheet.export_seguiment_acompanyaments()
 
@@ -408,40 +410,38 @@ class FollowUpSpreadsheet:
         self.row_number = 1
         for raw_row in self.raw_rows:
             self.row_number += 1
-            stage_organizer = None
-            stage_responsible = None
-            if len(raw_row.stages.all()) > 0:
-                stage_organizer = raw_row.stages.all().last().stage_organizer
-                stage_responsible = raw_row.stages.all().last().stage_responsible
-
+            print(raw_row)
+            stage_organizer = raw_row['project'].last_stage_organizer
+            stage_responsible = raw_row['project'].last_stage_responsible
+            follow_up_situation = \
+                raw_row['project'].get_follow_up_situation_display()
             row = [
-                raw_row.id,
-                raw_row.get_follow_up_situation_display()
-                if raw_row.get_follow_up_situation_display() else '',
+                raw_row['project'].id,
+                follow_up_situation if follow_up_situation else '',
                 stage_organizer if stage_organizer else '',
-                raw_row.name,
-                raw_row.axis_list if raw_row.axis_list else '',
+                raw_row['project'].name,
+                raw_row['project'].axis_list if raw_row['project'].axis_list else '',
                 stage_responsible if stage_responsible else '',
-                raw_row.members_h,
-                raw_row.members_d,
-                raw_row.members_total,
-                raw_row.get_sector_display(),
-                raw_row.description if raw_row.description else '',
-                raw_row.get_project_status_display(),
-                raw_row.full_town_district
-                    if raw_row.full_town_district else '',
-                raw_row.acollida_hores if raw_row.acollida_hores else 0,
-                1 if raw_row.acollida_certificat > 0 else 0,
-                raw_row.proces_hores if raw_row.proces_hores else 0,
-                1 if raw_row.proces_certificat > 0 else 0,
-                raw_row.constitucio_hores if raw_row.constitucio_hores else 0,
-                1 if raw_row.constitucio_certificat > 0 else 0,
-                raw_row.consolidacio_hores if raw_row.consolidacio_hores else 0,
-                1 if raw_row.consolidacio_certificat > 0 else 0,
-                raw_row.employment_estimation,
-                len(raw_row.employment_insertions.all()),
-                raw_row.constitution_date if raw_row.constitution_date else '',
-                raw_row.other if raw_row.other else '',
+                raw_row['members_h'],
+                raw_row['members_d'],
+                raw_row['members_total'],
+                raw_row['project'].get_sector_display(),
+                raw_row['project'].description if raw_row['project'].description else '',
+                raw_row['project'].get_project_status_display(),
+                (raw_row['project'].full_town_district
+                    if raw_row['project'].full_town_district else ''),
+                raw_row['acollida_hores'] if raw_row['acollida_hores'] else 0,
+                1 if raw_row['acollida_certificat'] > 0 else 0,
+                raw_row['proces_hores'] if raw_row['proces_hores'] else 0,
+                1 if raw_row['proces_certificat'] > 0 else 0,
+                raw_row['constitucio_hores'] if raw_row['constitucio_hores'] else 0,
+                1 if raw_row['constitucio_certificat'] > 0 else 0,
+                raw_row['consolidacio_hores'] if raw_row['consolidacio_hores'] else 0,
+                1 if raw_row['consolidacio_certificat'] > 0 else 0,
+                raw_row['project'].employment_estimation,
+                len(raw_row['project'].employment_insertions.all()),
+                raw_row['project'].constitution_date if raw_row['project'].constitution_date else '',
+                raw_row['project'].other if raw_row['project'].other else '',
             ]
             self.fill_row_data(row)
 
