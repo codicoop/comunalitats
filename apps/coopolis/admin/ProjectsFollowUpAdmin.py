@@ -139,7 +139,11 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             )
 
         # Annotate adds columns to each row with the sum or calculations of
-        qs_project_stages = qs_project_stages.values('project_id').annotate(**query)
+        qs_project_stages = (
+            qs_project_stages
+                .values('project_id')
+                .annotate(**query)
+        )
         # Order_by fucks up the group by
         qs_project_stages = qs_project_stages.order_by()
 
@@ -309,8 +313,9 @@ class FollowUpSpreadsheet:
         an encoding error with gunicorn.
         Haven't tried it with a proxy under apache, in theory should
         work."""
+        t = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         response = HttpResponse(
-            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            content_type=t,
         )
         date = datetime.now().strftime('%Y-%m-%d')
         response['Content-Disposition'] = (
@@ -336,7 +341,9 @@ class FollowUpSpreadsheet:
             column_dimensions.font = Font(name="ttf-opensans", size=9)
             column_dimensions.width = column_width
             cell.font = Font(bold=True, name="ttf-opensans", size=9)
-            cell.border = Border(bottom=Side(border_style="thin", color='000000'))
+            cell.border = Border(
+                bottom=Side(border_style="thin", color='000000')
+            )
             cell.value = str(column_title)
 
     def fill_row_data(self, row):
@@ -361,12 +368,18 @@ class FollowUpSpreadsheet:
             if isinstance(cell_value, tuple):
                 error_mark = cell_value[1]
                 if error_mark:
-                    cell.fill = PatternFill(start_color='FFFF0000', end_color='FFFF0000', fill_type='solid')
+                    cell.fill = PatternFill(
+                        start_color='FFFF0000',
+                        end_color='FFFF0000',
+                        fill_type='solid'
+                    )
                 cell_value = cell_value[0]
-            cell.value = cell_value if isinstance(cell_value, int) else str(cell_value)
+            cell.value = (cell_value
+                          if isinstance(cell_value, int) else str(cell_value))
 
     def export_seguiment_acompanyaments(self):
-        """ Each function here called handles the creation of one of the worksheets."""
+        """ Each function here called handles the creation of one of the
+        worksheets."""
         self.export_seguiment_acompanyaments_sheet1()
 
         return self.return_document("seguiment_acompanyaments")
@@ -420,13 +433,15 @@ class FollowUpSpreadsheet:
                 follow_up_situation if follow_up_situation else '',
                 stage_organizer if stage_organizer else '',
                 raw_row['project'].name,
-                raw_row['project'].axis_list if raw_row['project'].axis_list else '',
+                (raw_row['project'].axis_list
+                    if raw_row['project'].axis_list else ''),
                 stage_responsible if stage_responsible else '',
                 raw_row['members_h'],
                 raw_row['members_d'],
                 raw_row['members_total'],
                 raw_row['project'].get_sector_display(),
-                raw_row['project'].description if raw_row['project'].description else '',
+                (raw_row['project'].description
+                    if raw_row['project'].description else ''),
                 raw_row['project'].get_project_status_display(),
                 (raw_row['project'].full_town_district
                     if raw_row['project'].full_town_district else ''),
@@ -434,13 +449,16 @@ class FollowUpSpreadsheet:
                 1 if raw_row['acollida_certificat'] > 0 else 0,
                 raw_row['proces_hores'] if raw_row['proces_hores'] else 0,
                 1 if raw_row['proces_certificat'] > 0 else 0,
-                raw_row['constitucio_hores'] if raw_row['constitucio_hores'] else 0,
+                (raw_row['constitucio_hores']
+                    if raw_row['constitucio_hores'] else 0),
                 1 if raw_row['constitucio_certificat'] > 0 else 0,
-                raw_row['consolidacio_hores'] if raw_row['consolidacio_hores'] else 0,
+                (raw_row['consolidacio_hores']
+                    if raw_row['consolidacio_hores'] else 0),
                 1 if raw_row['consolidacio_certificat'] > 0 else 0,
                 raw_row['project'].employment_estimation,
                 len(raw_row['project'].employment_insertions.all()),
-                raw_row['project'].constitution_date if raw_row['project'].constitution_date else '',
+                (raw_row['project'].constitution_date
+                    if raw_row['project'].constitution_date else ''),
                 raw_row['project'].other if raw_row['project'].other else '',
             ]
             self.fill_row_data(row)
@@ -460,7 +478,9 @@ class ConstitutionDateFilter(admin.SimpleListFilter):
         value = self.value()
         if value:
             period = SubsidyPeriod.objects.get(id=value)
-            return queryset.filter(constitution_date__range=(period.date_start, period.date_end))
+            return queryset.filter(constitution_date__range=(
+                period.date_start, period.date_end)
+            )
         return queryset
 
 
@@ -492,21 +512,33 @@ class ProjectsConstitutedAdmin(admin.ModelAdmin):
             return response
 
         query = {
-            'members_h': Count('stages__involved_partners',
-                               filter=Q(stages__involved_partners__gender='MALE'), distinct=True),
-            'members_d': Count('stages__involved_partners',
-                               filter=Q(stages__involved_partners__gender='FEMALE'), distinct=True),
-            'members_a': Count('stages__involved_partners',
-                               filter=~Q(stages__involved_partners__gender='FEMALE') &
-                                      ~Q(stages__involved_partners__gender='MALE'), distinct=True),
+            'members_h': Count(
+                'stages__involved_partners',
+                filter=Q(stages__involved_partners__gender='MALE'),
+                distinct=True
+            ),
+            'members_d': Count(
+                'stages__involved_partners',
+                filter=Q(stages__involved_partners__gender='FEMALE'),
+                distinct=True
+            ),
+            'members_a': Count(
+                'stages__involved_partners',
+                filter=~Q(stages__involved_partners__gender='FEMALE')
+                       & ~Q(stages__involved_partners__gender='MALE'),
+                distinct=True
+            ),
         }
 
         # Annotate adds columns to each row with the sum or calculations of the row:
         response.context_data['rows'] = list(
-            qs.filter(cif__isnull=False, constitution_date__isnull=False).annotate(**query)
+            qs.filter(
+                cif__isnull=False, constitution_date__isnull=False
+            ).annotate(**query)
         )
 
-        # Normally it should be easier to call aggregate to have the totals, but given how complex is it to combine
+        # Normally it should be easier to call aggregate to have the totals,
+        # but given how complex is it to combine
         # with the ORM filters, I opted for filling the values like this.
         # The original version was: qs.aggregate(**query)
         totals = dict(
