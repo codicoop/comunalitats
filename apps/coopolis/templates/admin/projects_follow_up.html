@@ -197,6 +197,16 @@ header#grp-header {
               <span>Hores / Cert.</span>
             </div>
           </th>
+          {% if totals.show_incubation %}
+          <th class="sticky" colspan="2">
+            <div class="grp-text">
+              <span>Incubació</span>
+            </div>
+            <div class="grp-text">
+              <span>Hores / Cert.</span>
+            </div>
+          </th>
+          {% endif %}
           <th class="sticky">
             <div class="grp-text">
               <span>Insercions previstes</span>
@@ -230,7 +240,7 @@ header#grp-header {
             {% endif %}
           </td>
           <td>{{ row.project.last_stage_organizer|default_if_none:'(cap)' }}</td>
-          <td><a href="{% url 'admin:coopolis_project_change' row.project.id %}">{{ row.project.name }}</a></td>
+          <td><a href="{% url 'admin:coopolis_project_change' row.project.id %}" target="_blank">{{ row.project.name }}</a></td>
           <td>{{ row.project.axis_list|default_if_none:"" }} </td>
           <td>{{ row.project.last_stage_responsible|default_if_none:"" }}</td>
           <td>{{ row.members_h }} / {{ row.members_d }}</td>
@@ -255,6 +265,12 @@ header#grp-header {
           <td>{% if row.consolidacio_certificat > 0 %}
             <img src="{% static 'admin/img/icon-yes.svg' %}" alt="1">{% endif %}
           </td>
+          {% if totals.show_incubation %}
+          <td>{{ row.incubation_hores|default_if_none:0 }}</td>
+          <td>{% if row.incubation_certificat > 0 %}
+            <img src="{% static 'admin/img/icon-yes.svg' %}" alt="1">{% endif %}
+          </td>
+          {% endif %}
           <td>{{ row.project.employment_estimation }}</td>
           <td>{{ row.project.employment_insertions.all|length }}</td>
           <td>{{ row.project.constitution_date|date:"Y.m.d"|default_if_none:"" }}</td>

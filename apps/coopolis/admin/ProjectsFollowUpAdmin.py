@@ -80,54 +80,62 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
                 'hours',
                 filter=Q(stage_type=1)
             ),
-            'acollida_certificat':
-                Count(
-                    'scanned_certificate',
-                    filter=(
-                        Q(stage_type=1) &
-                        Q(scanned_certificate__isnull=False) &
-                        ~Q(scanned_certificate__exact='')
-                    )
-                ),
+            'acollida_certificat': Count(
+                'scanned_certificate',
+                filter=(
+                    Q(stage_type=1) &
+                    Q(scanned_certificate__isnull=False) &
+                    ~Q(scanned_certificate__exact='')
+                )
+            ),
             'proces_hores': Sum(
                 'hours',
                 filter=Q(stage_type=2)
             ),
-            'proces_certificat':
-                Count(
-                    'scanned_certificate',
-                    filter=(
-                        Q(stage_type=2) &
-                        Q(scanned_certificate__isnull=False) &
-                        ~Q(scanned_certificate__exact='')
-                    )
-                ),
+            'proces_certificat': Count(
+                'scanned_certificate',
+                filter=(
+                    Q(stage_type=2) &
+                    Q(scanned_certificate__isnull=False) &
+                    ~Q(scanned_certificate__exact='')
+                )
+            ),
             'constitucio_hores': Sum(
                 'hours',
                 filter=Q(stage_type=6)
             ),
-            'constitucio_certificat':
-                Count(
-                    'scanned_certificate',
-                    filter=(
-                        Q(stage_type=6) &
-                        Q(scanned_certificate__isnull=False) &
-                        ~Q(scanned_certificate__exact='')
-                    )
-                ),
+            'constitucio_certificat': Count(
+                'scanned_certificate',
+                filter=(
+                    Q(stage_type=6) &
+                    Q(scanned_certificate__isnull=False) &
+                    ~Q(scanned_certificate__exact='')
+                )
+            ),
             'consolidacio_hores': Sum(
                 'hours',
                 filter=Q(stage_type__in=[7, 8])
             ),
-            'consolidacio_certificat':
-                Count(
-                    'scanned_certificate',
-                    filter=(
-                        Q(stage_type__in=[7, 8]) &
-                        Q(scanned_certificate__isnull=False) &
-                        ~Q(scanned_certificate__exact='')
-                    )
-                ),
+            'consolidacio_certificat': Count(
+                'scanned_certificate',
+                filter=(
+                    Q(stage_type__in=[7, 8]) &
+                    Q(scanned_certificate__isnull=False) &
+                    ~Q(scanned_certificate__exact='')
+                )
+            ),
+            'incubation_hores': Sum(
+                'hours',
+                filter=Q(stage_type=9)
+            ),
+            'incubation_certificat': Count(
+                'scanned_certificate',
+                filter=(
+                    Q(stage_type=9) &
+                    Q(scanned_certificate__isnull=False) &
+                    ~Q(scanned_certificate__exact='')
+                )
+            ),
         }
 
         qs_project_stages = ProjectStage.objects.filter(
@@ -165,43 +173,53 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             total_constitucio_certificat=0,
             total_consolidacio_hores=0,
             total_consolidacio_certificat=0,
+            total_incubation_hores=0,
+            total_incubation_certificat=0,
             total_employment_insertions=0,
             total_constitutions=0,
+            show_incubation=False
         )
         for row in ctxt['rows']:
+            print(row)
             row['project'] = project_ids[row['project_id']]
             totals['total_members_h'] += (
-                row['members_h']if row['members_h']else 0
+                row['members_h'] if row['members_h'] else 0
             )
             totals['total_members_d'] += (
-                row['members_d']if row['members_d']else 0
+                row['members_d'] if row['members_d'] else 0
             )
             totals['total_members_total'] += (
-                row['members_total']if row['members_total']else 0
+                row['members_total'] if row['members_total'] else 0
             )
             totals['total_acollida_hores'] += (
-                row['acollida_hores']if row['acollida_hores']else 0
+                row['acollida_hores'] if row['acollida_hores'] else 0
             )
             totals['total_acollida_certificat'] += (
-                1 if row['acollida_certificat']else 0
+                1 if row['acollida_certificat'] else 0
             )
             totals['total_proces_hores'] += (
-                row['proces_hores']if row['proces_hores']else 0
+                row['proces_hores'] if row['proces_hores'] else 0
             )
             totals['total_proces_certificat'] += (
-                1 if row['proces_certificat']else 0
+                1 if row['proces_certificat'] else 0
             )
             totals['total_constitucio_hores'] += (
-                row['constitucio_hores']if row['constitucio_hores']else 0
+                row['constitucio_hores'] if row['constitucio_hores'] else 0
             )
             totals['total_constitucio_certificat'] += (
-                1 if row['constitucio_certificat']else 0
+                1 if row['constitucio_certificat'] else 0
             )
             totals['total_consolidacio_hores'] += (
-                row['consolidacio_hores']if row['consolidacio_hores']else 0
+                row['consolidacio_hores'] if row['consolidacio_hores'] else 0
             )
             totals['total_consolidacio_certificat'] += (
-                1 if row['consolidacio_certificat']else 0
+                1 if row['consolidacio_certificat'] else 0
+            )
+            totals['total_incubation_hores'] += (
+                row['incubation_hores'] if row['incubation_hores'] else 0
+            )
+            totals['total_incubation_certificat'] += (
+                1 if row['incubation_certificat'] else 0
             )
             totals['total_employment_insertions'] += (
                 len(row['project'].employment_insertions.all())
@@ -210,6 +228,10 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             totals['total_constitutions'] += (
                 1 if row['project'].constitution_date else 0
             )
+
+        if (totals['total_incubation_certificat'] > 0
+                or totals['total_incubation_hores'] > 0):
+            totals['show_incubation'] = True
 
         ctxt['totals'] = totals
 
@@ -411,6 +433,8 @@ class FollowUpSpreadsheet:
             ("Constitució cert.", 15),
             ("Consolidació H.", 15),
             ("Consolidació cert.", 15),
+            ("Incubació H.", 15),
+            ("Incubació cert.", 15),
             ("Insercions previstes", 15),
             ("Insercions justificades", 15),
             ("Constitució", 15),
@@ -455,6 +479,9 @@ class FollowUpSpreadsheet:
                 (raw_row['consolidacio_hores']
                     if raw_row['consolidacio_hores'] else 0),
                 1 if raw_row['consolidacio_certificat'] > 0 else 0,
+                (raw_row['incubation_hores']
+                    if raw_row['incubation_hores'] else 0),
+                1 if raw_row['incubation_certificat'] > 0 else 0,
                 raw_row['project'].employment_estimation,
                 len(raw_row['project'].employment_insertions.all()),
                 (raw_row['project'].constitution_date
