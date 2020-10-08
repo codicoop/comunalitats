@@ -161,10 +161,16 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         }
 
     form = ProjectFormAdmin
-    list_display = ('id', 'name', 'mail', 'phone', 'registration_date', 'constitution_date', 'stages_field',
-                    'last_stage_responsible',)
-    search_fields = ('id', 'name__unaccent', 'web', 'mail', 'phone', 'registration_date',
-                     'object_finality', 'project_origins', 'solves_necessities', 'social_base', 'sector')
+    list_display = (
+        'id', 'name', 'mail', 'phone', 'registration_date',
+        'constitution_date', 'stages_field', 'last_stage_responsible',
+        '_insertions_count'
+    )
+    search_fields = (
+        'id', 'name__unaccent', 'web', 'mail', 'phone', 'registration_date',
+        'object_finality', 'project_origins', 'solves_necessities',
+        'social_base', 'sector'
+    )
     list_filter = ('registration_date', 'sector', 'project_status',
                    FilterByFounded, 'tags', )
     fieldsets = (
@@ -278,6 +284,12 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
             'url_backoffice': settings.ABSOLUTE_URL
         }
         mail.send()
+
+    def _insertions_count(self, obj):
+        if obj.employment_insertions:
+            return len(obj.employment_insertions.all())
+        return 0
+    _insertions_count.short_description = "Insercions"
 
 
 class DerivationAdmin(admin.ModelAdmin):
