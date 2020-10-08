@@ -180,7 +180,6 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             show_incubation=False
         )
         for row in ctxt['rows']:
-            print(row)
             row['project'] = project_ids[row['project_id']]
             totals['total_members_h'] += (
                 row['members_h'] if row['members_h'] else 0
