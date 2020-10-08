@@ -42,9 +42,12 @@ class ProjectStageAdmin(admin.ModelAdmin):
 
     form = ProjectStageForm
     empty_value_display = '(cap)'
-    list_display = ('project_field_ellipsis', 'date_start', 'stage_type',
-                    'stage_responsible_field_ellipsis', 'stage_type', 'hours',
-                    'axis_summary', 'entity', 'subsidy_period', 'project_field')
+    list_display = (
+        'project_field_ellipsis', 'date_start', 'stage_type',
+        'stage_responsible_field_ellipsis', 'hours', 'axis_summary', 'entity',
+        'subsidy_period', '_has_certificate', '_participants_count',
+        'project_field'
+    )
     list_filter = ('subsidy_period', ('stage_responsible', admin.RelatedOnlyFieldListFilter), 'date_start',
                    'stage_type', 'axis', 'entity', 'project__sector')
     actions = ["export_as_csv"]
@@ -62,6 +65,21 @@ class ProjectStageAdmin(admin.ModelAdmin):
                        'involved_partners', ]
         })
     ]
+
+    def _has_certificate(self, obj):
+        if obj.scanned_certificate:
+            v = (f"<a href=\"{obj.scanned_certificate.url}\" "
+                 f"target=\"_blank\"><img "
+                 f"src=\"/static/admin/img/icon-yes.svg\" alt=\"True\"></a>")
+            return mark_safe(v)
+        return mark_safe(
+            "<img src=\"/static/admin/img/icon-no.svg\" alt=\"True\">"
+        )
+    _has_certificate.short_description = "Certificat"
+
+    def _participants_count(self, obj):
+        return len(obj.involved_partners.all())
+    _participants_count.short_description = "Participants"
 
     def project_field_ellipsis(self, obj):
         if len(obj.project.name) > 50:
