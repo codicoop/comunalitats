@@ -52,12 +52,12 @@ class UserAdmin(admin.ModelAdmin):
                      'cooperativism_knowledge')
     list_filter = ('gender', ('town', admin.RelatedOnlyFieldListFilter), 'district', 'is_staff', 'fake_email',
                    'authorize_communications', )
-    fields = ['id', 'first_name', 'last_name', 'surname2', 'gender', 'id_number', 'email', 'fake_email', 'birthdate',
+    fields = ('id', 'first_name', 'last_name', 'surname2', 'gender', 'id_number', 'email', 'fake_email', 'birthdate',
               'birth_place', 'town', 'district', 'address', 'phone_number', 'educational_level',
               'employment_situation', 'discovered_us', 'project_involved', 'cooperativism_knowledge',
               'authorize_communications', 'project', 'is_staff', 'groups',
-              'is_active', 'date_joined', 'last_login', 'new_password', ]
-    readonly_fields = ['id', 'last_login', 'date_joined', 'project', ]
+              'is_active', 'date_joined', 'last_login', 'new_password', )
+    readonly_fields = ('id', 'last_login', 'date_joined', 'project', )
     actions = ['copy_emails', 'to_csv', ]
     inlines = (ActivityEnrolledInline, )
 
@@ -67,31 +67,44 @@ class UserAdmin(admin.ModelAdmin):
         return None
     project.short_description = 'Projecte'
 
-    def get_fields(self, request, obj=None):
-        if request.user.is_superuser and "is_superuser" not in self.fields:
-            self.fields.append('is_superuser')
+    def get_readonly_fields(self, request, obj=None):
+        fields_t = super().get_readonly_fields(request, obj)
+        fields = list(fields_t)
+        if request.user.is_superuser is False:
+            if 'groups' not in fields:
+                fields.append('groups')
+            if 'is_superuser' not in fields:
+                fields.append('is_superuser')
+            if 'is_staff' not in fields:
+                fields.append('is_staff')
+        print(fields)
+        return fields
 
-        if not request.user.is_superuser:
-            self.readonly_fields.append('groups')
+    def get_fields(self, request, obj=None):
+        fields_t = super().get_fields(request, obj)
+        fields = list(fields_t)
+
+        if "is_superuser" not in fields:
+            fields.append('is_superuser')
 
         # If we are adding a new user, don't show these fields:
-        if obj is None and 'project' in self.fields:
-            self.fields.remove('project')
-            self.fields.remove('id')
-            self.fields.remove('last_login')
+        if obj is None and 'project' in fields:
+            fields.remove('project')
+            fields.remove('id')
+            fields.remove('last_login')
 
         if obj is None:
-            if 'no_welcome_email' not in self.fields:
-                self.fields.append('no_welcome_email')
-            if 'resend_welcome_email' in self.fields:
-                self.fields.remove('resend_welcome_email')
+            if 'no_welcome_email' not in fields:
+                fields.append('no_welcome_email')
+            if 'resend_welcome_email' in fields:
+                fields.remove('resend_welcome_email')
         if obj:
-            if 'no_welcome_email' in self.fields:
-                self.fields.remove('no_welcome_email')
-            if 'resend_welcome_email' not in self.fields:
-                self.fields.append('resend_welcome_email')
+            if 'no_welcome_email' in fields:
+                fields.remove('no_welcome_email')
+            if 'resend_welcome_email' not in fields:
+                fields.append('resend_welcome_email')
 
-        return super().get_fields(request, obj)
+        return fields
 
     def copy_emails(self, request, queryset):
         emails = []
