@@ -311,7 +311,8 @@ class DerivationAdmin(admin.ModelAdmin):
 
 class EmploymentInsertionAdmin(admin.ModelAdmin):
     model = EmploymentInsertion
-    list_display = ('insertion_date', 'project', 'user', 'contract_type', 'duration', 'subsidy_period',)
+    list_display = ('insertion_date', 'project', 'user', 'contract_type',
+                    'subsidy_period',)
     list_filter = ('subsidy_period', 'contract_type', 'insertion_date', )
     search_fields = ('project__name__unaccent', 'user__first_name__unaccent', )
     raw_id_fields = ('user', 'project',)

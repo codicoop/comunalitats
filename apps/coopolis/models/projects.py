@@ -331,17 +331,16 @@ class EmploymentInsertion(models.Model):
     subsidy_period = models.ForeignKey(SubsidyPeriod, verbose_name="convocatòria", null=True, on_delete=models.SET_NULL)
     insertion_date = models.DateField("alta seguretat social")
     CONTRACT_TYPE_CHOICES = (
-        ('autonom', "Autònom -RETA-"),
-        ('general_cpropi', "Règim general - compte propi"),
-        ('general_calie', "Règim general - compte aliè"),
+        (1, "Indefinit"),
+        (2, "Formació i aprenentatge"),
+        (3, "Pràctiques"),
+        (4, "Soci/a cooperativa o societat laboral")
     )
-    contract_type = models.CharField("tipus de contracte", max_length=50, choices=CONTRACT_TYPE_CHOICES)
-    DURATION_CHOICES = (
-        ('indefinit', "Indefinit"),
-        ('obraservei', "Obra i servei"),
-        ('temporal', "Temporal"),
+    contract_type = models.SmallIntegerField(
+        "tipus de contracte",
+        choices=CONTRACT_TYPE_CHOICES,
+        null=True
     )
-    duration = models.CharField("durada", max_length=50, choices=DURATION_CHOICES)
 
     def __str__(self):
         return f"{ self.user.full_name }: { self.get_contract_type_display() }"

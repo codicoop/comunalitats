@@ -1,5 +1,5 @@
 from coopolis.models import ProjectStage, Project, User, EmploymentInsertion
-from cc_courses.models import Activity
+from cc_courses.models import Activity, Organizer
 from dataexports.models import DataExports
 from django.http import HttpResponseNotFound, HttpResponse
 from openpyxl import Workbook
@@ -46,6 +46,8 @@ class ExportFunctions:
         self.number_of_founded_projects = 0
 
         self.correlations = dict()
+        self.organizers = dict()  # Camp per Ateneu / Cercle
+        self.d_organizer = None
 
     def callmethod(self, name):
         if hasattr(self, name):
@@ -169,6 +171,32 @@ class ExportFunctions:
                     cell.fill = PatternFill(start_color='FFFF0000', end_color='FFFF0000', fill_type='solid')
                 cell_value = cell_value[0]
             cell.value = cell_value if isinstance(cell_value, int) else str(cell_value)
+
+    def import_organizers(self):
+        # Not forcing any order because we want it in the same order that
+        # they see (which should be by ID)
+        orgs = Organizer.objects.all()
+        if not orgs:
+            self.organizers.update({
+                0: 'Ateneu'
+            })
+        else:
+            i = 0
+            for org in orgs:
+                if i == 0:
+                    cercle = 'Ateneu'
+                else:
+                    cercle = f"Cercle {i}"
+                self.organizers.update({
+                    org.id: cercle
+                })
+                i += 1
+        self.d_organizer = list(self.organizers.keys())[0]
+
+    def get_organizer(self, organizer):
+        if not organizer:
+            return self.organizers[self.d_organizer]
+        return self.organizers[organizer.id]
 
     """
 
@@ -373,6 +401,8 @@ class ExportFunctions:
         self.import_correlations(settings.BASE_DIR + "/../apps/dataexports/fixtures/correlations_2019.json")
         self.subsidy_period_range = ["2019-11-01", "2020-10-31"]
 
+        self.import_organizers()
+
         """ Each function here called handles the creation of one of the worksheets."""
         self.export_actuacions_2018_2019()
         self.export_stages_2018_2019()
@@ -393,6 +423,7 @@ class ExportFunctions:
             ("Tipus d'actuació", 70),
             ("Nom de l'actuació", 70),
             ("Data inici d'actuació", 16),
+            ("Cercle / Ateneu", 16),
             ("Municipi", 30),
             ("Nombre de participants", 20),
             ("Material de difusió (S/N)", 21),
@@ -431,6 +462,7 @@ class ExportFunctions:
                 subaxis,
                 item.name,
                 item.date_start,
+                self.get_organizer(item.organizer),
                 town,
                 item.enrolled.count(),
                 "No",
@@ -487,7 +519,6 @@ class ExportFunctions:
             if item.hours is None:
                 item.hours = 0
             self.stages_obj[p_id][group]['total_hours'] += item.hours
-        print(self.stages_obj)
 
         self.number_of_stages = 0
         for stage_id, stage in self.stages_obj.items():
@@ -505,11 +536,13 @@ class ExportFunctions:
                 town = item.project.town
                 if town is None or town == "":
                     town = ("", True)
+
                 row = [
                     axis,
                     subaxis,
                     item.project.name,
                     item.date_start if not None else '',
+                    self.get_organizer(item.stage_organizer),
                     town,
                     item.involved_partners.count(),
                     "No",
@@ -538,11 +571,13 @@ class ExportFunctions:
                 town = item.place.town
             if town is None or town == "":
                 town = ("", True)
+
             row = [
                 axis,
                 subaxis,
                 item.name,
                 item.date_start,
+                self.get_organizer(item.organizer),
                 town,
                 item.minors_participants_number,
                 "No",
@@ -589,11 +624,13 @@ class ExportFunctions:
             town = project.town
             if town is None or town == "":
                 town = ("", True)
+
             row = [
                 axis,
                 subaxis,
                 project.name,
                 stage.date_start,
+                self.get_organizer(stage.stage_organizer),
                 town,
                 stage.involved_partners.count(),
                 "No",
@@ -810,12 +847,21 @@ class ExportFunctions:
         self.row_number = 1
 
         columns = [
-            ("Projecte", 40),
-            ("Persona", 40),
-            ("Convocatòria", 20),
-            ("Data alta SS", 20),
-            ("Tipus de contracte", 20),
-            ("Durada", 20),
+            ("Referència", 20),
+            ("Nom actuació", 20),
+            ("Cognoms", 20),
+            ("Nom", 20),
+            ("ID", 20),
+            ("Data alta", 20),
+            ("Data baixa", 20),
+            ("Tipus contracte", 20),
+            ("Gènere", 20),
+            ("Data naixement", 20),
+            ("Població", 20),
+            ("NIF Projecte", 20),
+            ("Nom projecte", 20),
+            ("Cercle / Ateneu", 20),
+            ("[ convocatòria ]", 20),
         ]
         self.create_columns(columns)
 
@@ -826,13 +872,41 @@ class ExportFunctions:
             subsidy_period__date_start__range=self.subsidy_period_range)
         for insertion in obj:
             self.row_number += 1
+            id_number = insertion.user.id_number
+            if not id_number:
+                id_number = ('', True)
+            insertion_date = insertion.insertion_date
+            if not insertion_date:
+                insertion_date = ('', True)
+            contract_type = insertion.get_contract_type_display()
+            if not contract_type:
+                contract_type = ('', True)
+            birthdate = insertion.user.birthdate
+            if not birthdate:
+                birthdate = ('', True)
+            town = insertion.user.town
+            if not town:
+                town = ('', True)
+            cif = insertion.project.cif
+            if not cif:
+                cif = ('', True)
+
             row = [
+                self.row_number,  # Auto ID de la Actuació
+                '',  # Nom actuació
+                insertion.user.surname,
+                insertion.user.first_name,  # Persona
+                id_number,
+                insertion_date,  # Data d'alta SS
+                '',  # Data baixa SS
+                contract_type,  # Tipus de contracte
+                insertion.user.gender if insertion.user.gender else "",
+                birthdate,
+                town,
+                cif,
                 insertion.project.name,  # Projecte
-                insertion.user.full_name,  # Persona
+                '',  # Cercle / Ateneu
                 insertion.subsidy_period,  # Convocatòria
-                insertion.insertion_date,  # Data d'alta SS
-                insertion.get_contract_type_display(),  # Tipus de contracte
-                insertion.get_duration_display(),  # Durada del contracte
             ]
             self.fill_row_data(row)
 
