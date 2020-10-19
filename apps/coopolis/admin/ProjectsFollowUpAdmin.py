@@ -31,7 +31,7 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
 
     change_list_template = 'admin/projects_follow_up.html'
     list_filter = (
-        'subsidy_period', 'follow_up_situation',
+        'stages__subsidy_period', 'follow_up_situation',
         FilterByFounded,
         ('stages__stage_responsible', admin.RelatedOnlyFieldListFilter),
         'project_status',
@@ -40,6 +40,34 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
     show_full_result_count = False
     list_display = ('name', )
     list_per_page = 99999
+
+    def changelist_view(self, request, extra_context=None):
+        # They usually want to use the current period by default.
+        if 'stages__subsidy_period__id__exact' not in request.GET:
+            return self.redirect_to_current_period(request)
+
+        response = super().changelist_view(
+            request,
+            extra_context=extra_context,
+        )
+
+        # Getting queryset with filters applied
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+
+        # Els filtres fan joins, necessitem el Count per forçar un group by.
+        projects = qs.annotate(Count('id'))
+
+        rows = self.get_rows(projects, request)
+        url = self.get_download_url(request)
+        response.context_data = {
+            **response.context_data,
+            **rows,
+            **url
+        }
+        return response
 
     def get_rows(self, projects, request):
         ctxt = {}
@@ -242,34 +270,6 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
         url = f"{url}?{querystring}"
         return {'spreadsheet_url': url}
 
-    def changelist_view(self, request, extra_context=None):
-        # They usually want to use the current period by default.
-        if 'subsidy_period__id__exact' not in request.GET:
-            return self.redirect_to_current_period(request)
-
-        response = super().changelist_view(
-            request,
-            extra_context=extra_context,
-        )
-
-        # Getting queryset with filters applied
-        try:
-            qs = response.context_data['cl'].queryset
-        except (AttributeError, KeyError):
-            return response
-
-        # Els filtres fan joins, necessitem el Count per forçar un group by.
-        projects = qs.annotate(Count('id'))
-
-        rows = self.get_rows(projects, request)
-        url = self.get_download_url(request)
-        response.context_data = {
-            **response.context_data,
-            **rows,
-            **url
-        }
-        return response
-
     def has_delete_permission(self, request, obj=None):
         return False
 
@@ -300,7 +300,7 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
                 "actual."
             )
         query_string = request.META['QUERY_STRING']
-        value = f"subsidy_period__id__exact={value}"
+        value = f"stages__subsidy_period__id__exact={value}"
         if query_string != '':
             value = f"&{value}"
         query_string = query_string + value
