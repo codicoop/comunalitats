@@ -296,6 +296,10 @@ class ExportFunctions:
                 town = item.place.town
             if town is None or town == "":
                 town = ("", True)
+            material_difusio = "No"
+            if item.file1.name:
+                material_difusio = "Sí"
+
 
             row = [
                 axis,
@@ -304,7 +308,7 @@ class ExportFunctions:
                 item.date_start,
                 town,
                 item.enrolled.count(),
-                "No",
+                material_difusio,
                 "",
                 item.cofunded,
                 "Sí" if item.cofunded_ateneu else "No",
@@ -457,6 +461,10 @@ class ExportFunctions:
                 town = item.place.town
             if town is None or town == "":
                 town = ("", True)
+            material_difusio = "No"
+            if item.file1.name:
+                material_difusio = "Sí"
+
             row = [
                 axis,
                 subaxis,
@@ -465,7 +473,7 @@ class ExportFunctions:
                 self.get_organizer(item.organizer),
                 town,
                 item.enrolled.count(),
-                "No",
+                material_difusio,
                 "",
                 item.entity if item.entity else '',  # Entitat
                 item.organizer if item.organizer else '',  # Organitzadora
