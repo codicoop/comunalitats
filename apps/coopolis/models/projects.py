@@ -332,6 +332,7 @@ class EmploymentInsertion(models.Model):
     insertion_date = models.DateField("alta seguretat social")
     CONTRACT_TYPE_CHOICES = (
         (1, "Indefinit"),
+        (5, "Temporal"),
         (2, "Formació i aprenentatge"),
         (3, "Pràctiques"),
         (4, "Soci/a cooperativa o societat laboral")
