@@ -53,7 +53,7 @@ class Organizer(models.Model):
     class Meta:
         verbose_name = "organitzadora"
         verbose_name_plural = "organitzadores"
-        ordering = ['id']
+        ordering = ['name']
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
 
