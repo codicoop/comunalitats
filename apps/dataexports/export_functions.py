@@ -510,9 +510,7 @@ class ExportFunctions:
             if int(item.stage_type) not in stages_groups:
                 continue
             group = stages_groups[int(item.stage_type)]
-            print(group)
             p_id = item.project.id
-            print(f" project id: {p_id}")
             if p_id not in self.stages_obj:
                 self.stages_obj.update({
                     p_id: {}
@@ -522,19 +520,89 @@ class ExportFunctions:
                     group: {
                         'obj': item,
                         'total_hours': 0,
+                        'participants': []
                     }
                 })
             if item.hours is None:
                 item.hours = 0
             self.stages_obj[p_id][group]['total_hours'] += item.hours
 
+            # Aprofitem per omplir les dades dels participants aquí per no
+            # repetir el procés més endavant. La qüestió és que encara que un
+            # participant hagi participat a diversos acompanyaments, aquí
+            # només aparegui una vegada.
+            for participant in item.involved_partners.all():
+                if (participant
+                        not in self.stages_obj[p_id][group]['participants']):
+                    self.stages_obj[p_id][group]['participants'].append(
+                        participant
+                    )
+        """
+        En aquest punt, self.stages_obj té aquesta estructura:
+        160: {
+            'nova_creacio': {
+                'obj': '<ProjectStage: Consell Comarcal Conca de Barberà - Concactiva: 00 Nova creació - acollida>',
+                'total_hours': 3,
+                'participants': [
+                         '<User: Jordi París>', '<User: Francesc Viñas>',
+                         '<User: Carme Pallàs>',
+                         '<User: Pere Picornell Busquets>'
+                ],
+                'row_number': 122
+            }
+        },
+        20: {
+            'consolidacio': {
+                'obj': '<ProjectStage: La Providència SCCL: 04 Consolidació - acompanyament>',
+                'total_hours': 36,
+                'participants': [
+                    '<User: Teresa Trilla Ferré>',
+                    '<User: Marc Trilla Güell>',
+                    '<User: Gerard Nogués Balsells>',
+                    '<User: tais bastida aubareda>'
+                ],
+                'row_number': 126},
+            'nova_creacio': {
+                'obj': '<ProjectStage: La Providència SCCL: 02 Nova creació - constitució>',
+                'total_hours': 7,
+                'participants': [
+                    '<User: Marc Trilla Güell>',
+                    '<User: Esther Perello Piulats>'
+                ],
+                'row_number': 127
+            }
+        }, 
+        
+        És a dir, cada Projecte té un element amb la seva ID, que conté els
+        grups que corresponguin.
+        Cada grup conté:
+            - Una instància de l'objecte ProjectStage (el primer que hagi pillat)
+            - 'total_hours', amb la suma de totes les hores de tots els ProjectStages
+                del mateix grup i projecte.
+        """
+
+        """
+        A continuació el que farem és afegir com a row cada un d'aquests grups.
+        De manera que cada itinerari (creació, consolidació..) de cada projecte
+        tindrà la seva propia fila a Actuacions.
+        
+        En el procés de fer-ho, aprofitem per desar el nº de row dins 
+        self.stages_obj[id_projecte][nom_grup][row_number]
+        per poder-ho fer servir més endavant quan generem els rows de les 
+        persones participants.
+        """
+
         self.number_of_stages = 0
-        for stage_id, stage in self.stages_obj.items():
-            for group_name, group in stage.items():
+        for project_id, project in self.stages_obj.items():
+            for group_name, group in project.items():
                 self.number_of_stages += 1
                 item = group['obj']
                 self.row_number += 1
 
+                # Desant el nº per quan fem el llistat de participants
+                self.stages_obj[project_id][group_name][
+                    'row_number'
+                ] = self.row_number
                 axis = self.get_correlation("axis", item.axis)
                 if axis is None:
                     axis = ("", True)
@@ -783,6 +851,43 @@ class ExportFunctions:
         self.create_columns(columns)
 
         self.participants_2018_2019_rows()
+        self.participants_project_stages_rows()
+
+    def participants_project_stages_rows(self):
+        for project_id, project in self.stages_obj.items():
+            for group_name, group in project.items():
+                for participant in group['participants']:
+                    activity = group['obj']
+                    activity_reference_number = group['row_number']
+                    if participant.gender is None:
+                        gender = ""
+                    else:
+                        gender = self.get_correlation('gender', participant.gender)
+                    if participant.town is None:
+                        town = ""
+                    else:
+                        town = participant.town.name
+
+                    row = [
+                        f"{activity_reference_number} {activity.project.name}",  # Referència.
+                        activity.project.name,  # Nom de l'actuació. Camp automàtic de l'excel.
+                        participant.surname if participant.surname else "",
+                        participant.first_name,
+                        participant.id_number,
+                        gender if gender else "",
+                        participant.birthdate if participant.birthdate else "",
+                        town if town else "",
+                        participant.get_employment_situation_display() if participant.get_employment_situation_display() else "",
+                        participant.get_birth_place_display() if participant.get_birth_place_display() else "",
+                        participant.get_educational_level_display() if participant.get_educational_level_display() else "",
+                        participant.get_discovered_us_display() if participant.get_discovered_us_display() else "",
+                        activity.stage_organizer if activity.stage_organizer else "",
+                        participant.email,
+                        participant.phone_number if participant.phone_number else "",
+                        participant.project if participant.project else "",
+                        participant.project.stages_list if participant.project and participant.project.stages_list else ""
+                    ]
+                    self.fill_row_data(row)
 
     def participants_2018_2019_rows(self):
         activity_reference_number = 0
