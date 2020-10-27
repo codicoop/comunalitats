@@ -868,7 +868,6 @@ class ExportFunctions:
             ("Població", 20),
             ("NIF Projecte", 20),
             ("Nom projecte", 20),
-            ("Cercle / Ateneu", 20),
             ("[ convocatòria ]", 20),
         ]
         self.create_columns(columns)
@@ -900,7 +899,7 @@ class ExportFunctions:
                 cif = ('', True)
 
             row = [
-                self.row_number,  # Auto ID de la Actuació
+                '',  # Deixem referència en blanc pq la posin a ma.
                 '',  # Nom actuació
                 insertion.user.surname,
                 insertion.user.first_name,  # Persona
@@ -913,7 +912,6 @@ class ExportFunctions:
                 town,
                 cif,
                 insertion.project.name,  # Projecte
-                '',  # Cercle / Ateneu
                 insertion.subsidy_period,  # Convocatòria
             ]
             self.fill_row_data(row)
