@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group, Permission
 from datetime import date
 
-from dataexports.models import SubsidyPeriod
+from dataexports.models import SubsidyPeriod, DataExports
 
 
 class Command(BaseCommand):
@@ -14,6 +14,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.add_group_permissions()
         self.normalize_subsidy_periods()
+        self.normalize_exports()
 
     @staticmethod
     def normalize_subsidy_periods():
@@ -63,6 +64,46 @@ class Command(BaseCommand):
             print(msg)
 
     @staticmethod
+    def normalize_exports():
+        print("Normalizing exports...")
+        period2019_2020 = SubsidyPeriod.objects.get(name="2019-2020")
+        exports = (
+            {
+                'name': "Exportació justificació",
+                'subsidy_period': period2019_2020,
+                'function_name': 'export_2019_2020',
+                'ignore_errors': True
+            },
+            {
+                'name': "Cofinançades",
+                'subsidy_period': period2019_2020,
+                'function_name': 'export_cofunded_2019_2020',
+                'ignore_errors': True
+            },
+            {
+                'name': "Memòria dels acompanyaments en fitxer de text",
+                'subsidy_period': period2019_2020,
+                'function_name': 'export_stages_descriptions',
+                'ignore_errors': True
+            },
+        )
+        for export in exports:
+            print(f"Updating or creating {export['function_name']}")
+            obj = DataExports.objects.update_or_create(
+                function_name=export['function_name'],
+                defaults={**export}
+            )
+        print("Deleting old export_2018_2019")
+        try:
+            obj = DataExports.objects.get(function_name='export_2018_2019')
+        except DataExports.DoesNotExist:
+            print("Already deleted.")
+        else:
+            obj.delete()
+            print("It was there, deleting.")
+        print("Done!")
+
+    @staticmethod
     def add_group_permissions():
         # base user
         group, created = Group.objects.get_or_create(name='Permisos base')
@@ -78,16 +119,19 @@ class Command(BaseCommand):
         # formació / sessions
         group, created = Group.objects.get_or_create(name="Gestió d'accions i sessions")
         add_thing = Permission.objects.filter(
-            codename__in=['add_activity', 'change_activity', 'delete_activity', 'view_activity', 'add_course',
-                          'change_course', 'delete_course', 'view_course', 'add_courseplace', 'change_courseplace',
-                          'delete_courseplace', 'view_courseplace', 'view_entity', 'add_organizer',
-                          'change_organizer', 'delete_organizer', 'view_organizer', 'add_attachment',
-                          'change_attachment', 'delete_attachment', 'view_attachment', 'add_source',
-                          'change_source', 'delete_source', 'view_source', 'add_thumbnail', 'change_thumbnail',
-                          'delete_thumbnail', 'view_thumbnail', 'add_thumbnaildimensions',
-                          'change_thumbnaildimensions', 'delete_thumbnaildimensions', 'view_thumbnaildimensions',
-                          'view_activityenrolled', 'delete_activityenrolled', 'change_activityenrolled',
-                          'add_activityenrolled']
+            codename__in=[
+                'add_activity', 'change_activity', 'delete_activity', 'view_activity', 'add_course',
+                'change_course', 'delete_course', 'view_course', 'add_courseplace', 'change_courseplace',
+                'delete_courseplace', 'view_courseplace', 'view_entity', 'add_organizer',
+                'change_organizer', 'delete_organizer', 'view_organizer', 'add_attachment',
+                'change_attachment', 'delete_attachment', 'view_attachment', 'add_source',
+                'change_source', 'delete_source', 'view_source', 'add_thumbnail', 'change_thumbnail',
+                'delete_thumbnail', 'view_thumbnail', 'add_thumbnaildimensions',
+                'change_thumbnaildimensions', 'delete_thumbnaildimensions', 'view_thumbnaildimensions',
+                'view_activityenrolled', 'delete_activityenrolled', 'change_activityenrolled', 'add_activityenrolled',
+                'view_activityresourcefile', 'delete_activityresourcefile', 'change_activityresourcefile', 'add_activityresourcefile',
+                'view_activitypoll',
+            ]
         )
         group.permissions.set(add_thing)
         group.save()
