@@ -729,9 +729,9 @@ class ExportFunctions:
         columns = [
             ("Referència", 20),
             ("Nom actuació", 40),
-            ("Destinatari de l'acompanyament", 28),
+            ("Destinatari de l'acompanyament (revisar)", 45),
             ("En cas d'entitat (nom de l'entitat)", 40),
-            ("En cas d'entitat", 16),
+            ("En cas d'entitat (revisar)", 30),
             ("Creació/consolidació", 18),
             ("Data d'inici", 13),
             ("Localitat", 20),
@@ -749,6 +749,7 @@ class ExportFunctions:
         for p_id, stage in self.stages_obj.items():
             for group_name, group in stage.items():
                 self.row_number += 1
+                reference_number += 1
                 item = group['obj']
 
                 # hours = item.hours if item.hours is not None else ("", True)
@@ -783,7 +784,8 @@ class ExportFunctions:
             ("Nom i cognoms persona de contacte", 30),
             ("Correu electrònic", 12),
             ("Telèfon", 10),
-            ("Economia solidària (S/N)", 10),
+            ("Economia solidària (revisar)", 35),
+            ("Ateneu / Cercle (omplir a ma)", 35),
             ("[Acompanyaments]", 10),
         ]
         self.create_columns(columns)
@@ -823,7 +825,8 @@ class ExportFunctions:
                 project.partners.all()[0].full_name if project.partners.all() else "",
                 project.mail,
                 project.phone,
-                "Sí",
+                "Sí",  # Economia solidària
+                "",  # Ateneu / Cercle
                 project.stages_list
             ]
             self.fill_row_data(row)
@@ -963,7 +966,7 @@ class ExportFunctions:
         self.row_number = 1
 
         columns = [
-            ("Referència", 20),
+            ("Referència (omplir a ma)", 20),
             ("Nom actuació", 20),
             ("Cognoms", 20),
             ("Nom", 20),
@@ -976,6 +979,7 @@ class ExportFunctions:
             ("Població", 20),
             ("NIF Projecte", 20),
             ("Nom projecte", 20),
+            ("Cercle / Ateneu (omplir a ma)", 20),
             ("[ convocatòria ]", 20),
         ]
         self.create_columns(columns)
@@ -1006,6 +1010,11 @@ class ExportFunctions:
             if not cif:
                 cif = ('', True)
 
+            if insertion.user.gender is None:
+                gender = ""
+            else:
+                gender = self.get_correlation('gender', insertion.user.gender)
+
             row = [
                 '',  # Deixem referència en blanc pq la posin a ma.
                 '',  # Nom actuació
@@ -1015,12 +1024,13 @@ class ExportFunctions:
                 insertion_date,  # Data d'alta SS
                 '',  # Data baixa SS
                 contract_type,  # Tipus de contracte
-                insertion.user.gender if insertion.user.gender else "",
+                gender,
                 birthdate,
                 town,
                 cif,
                 insertion.project.name,  # Projecte
                 insertion.subsidy_period,  # Convocatòria
+                '',  # Cercle / Ateneu
             ]
             self.fill_row_data(row)
 
