@@ -599,10 +599,14 @@ class ExportFunctions:
                 item = group['obj']
                 self.row_number += 1
 
-                # Desant el nº per quan fem el llistat de participants
+                # Desant el nº per quan fem el llistat de participants. El
+                # self.row_number conté el row REAL, que com que inclou la fila
+                # de headers, és un més que la que s'assignarà com a
+                # referència.
                 self.stages_obj[project_id][group_name][
                     'row_number'
-                ] = self.row_number
+                ] = self.row_number - 1
+
                 axis = self.get_correlation("axis", item.axis)
                 if axis is None:
                     axis = ("", True)
@@ -742,7 +746,6 @@ class ExportFunctions:
     def stages_2018_2019_rows(self):
         reference_number = self.number_of_activities
 
-        self.number_of_stages = 0
         for p_id, stage in self.stages_obj.items():
             for group_name, group in stage.items():
                 self.row_number += 1
