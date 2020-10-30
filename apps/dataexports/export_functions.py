@@ -624,7 +624,7 @@ class ExportFunctions:
                     item.date_start if not None else '',
                     self.get_organizer(item.stage_organizer),
                     town,
-                    item.involved_partners.count(),
+                    len(group['participants']),  # Nombre de participants
                     "No",
                     "",
                     item.entity if item.entity else '',  # Entitat
@@ -862,9 +862,9 @@ class ExportFunctions:
     def participants_project_stages_rows(self):
         for project_id, project in self.stages_obj.items():
             for group_name, group in project.items():
+                activity = group['obj']
+                activity_reference_number = group['row_number']
                 for participant in group['participants']:
-                    activity = group['obj']
-                    activity_reference_number = group['row_number']
                     if participant.gender is None:
                         gender = ""
                     else:
@@ -893,6 +893,7 @@ class ExportFunctions:
                         participant.project if participant.project else "",
                         participant.project.stages_list if participant.project and participant.project.stages_list else ""
                     ]
+                    self.row_number += 1
                     self.fill_row_data(row)
 
     def participants_2018_2019_rows(self):
