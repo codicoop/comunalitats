@@ -36,7 +36,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-demo
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8001
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8001 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -57,7 +57,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopcamp
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8002
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8002 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -78,7 +78,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopmaresme
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8003
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8003 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -99,7 +99,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-bnord
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8004
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8004 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -121,7 +121,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-ponentcoopera
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8006
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8006 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -142,7 +142,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-vallesoccidental
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8007
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8007 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -163,7 +163,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-catcentral
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8008
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8008 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -185,7 +185,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopsetania
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8010
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8010 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -206,7 +206,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-terresgironines
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8011
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8011 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -227,7 +227,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-hospitalet
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8012
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8012 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
