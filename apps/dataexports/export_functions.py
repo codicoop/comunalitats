@@ -762,7 +762,7 @@ class ExportFunctions:
                     "Entitat",
                     # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat PENDENT.
                     item.project.name,  # "En cas d'entitat (Nom de l'entitat)"
-                    "Constituida",  # "En cas d'entitat" Opcions: Constituida/En procés/No finalitzat. PENDENT.
+                    self.get_correlation("project_status", item.project.project_status),
                     crea_consolida if crea_consolida else '',  # "Creació/consolidació".
                     item.date_start if item.date_start else '',
                     town,

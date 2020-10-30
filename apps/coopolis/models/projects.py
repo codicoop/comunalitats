@@ -50,7 +50,7 @@ class Project(models.Model):
     PROJECT_STATUS_OPTIONS = (
         ("IN_MEDITATION_PROCESS", "En proces de debat/reflexió"),
         ("IN_CONSTITUTION_PROCESS", "En constitució"),
-        ("RUNNING", "En funcionament"),
+        ("RUNNING", "Constituïda"),
         ("DOWN", "Caigut")
     )
     project_status = models.CharField("estat del projecte", max_length=50, blank=True, null=True,

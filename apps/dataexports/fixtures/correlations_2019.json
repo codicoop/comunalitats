@@ -53,5 +53,11 @@
     "6": "Nova creació",
     "7": "Creixement",
     "8": "Creixement"
+  },
+  "project_status": {
+    "IN_MEDITATION_PROCESS": "En procés de constitució",
+    "IN_CONSTITUTION_PROCESS": "En procés de constitució",
+    "RUNNING": "Constituïda",
+    "DOWN": "No finalitzat"
   }
 }
