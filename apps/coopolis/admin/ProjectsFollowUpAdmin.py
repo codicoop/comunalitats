@@ -40,10 +40,11 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
     show_full_result_count = False
     list_display = ('name', )
     list_per_page = 99999
+    subsidy_period_filter_param = 'stages__subsidy_period__id__exact'
 
     def changelist_view(self, request, extra_context=None):
         # They usually want to use the current period by default.
-        if 'stages__subsidy_period__id__exact' not in request.GET:
+        if self.subsidy_period_filter_param not in request.GET:
             return self.redirect_to_current_period(request)
 
         response = super().changelist_view(
@@ -76,8 +77,10 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             project_ids.update({project.id: project})
 
         filtered_subsidy_period = None
-        if 'subsidy_period' in request.GET:
-            filtered_subsidy_period = request.GET['subsidy_period']
+        if self.subsidy_period_filter_param in request.GET:
+            filtered_subsidy_period = request.GET[
+                self.subsidy_period_filter_param
+            ]
         else:
             current = SubsidyPeriod.get_current()
             if current:
@@ -165,7 +168,6 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
                 )
             ),
         }
-
         qs_project_stages = ProjectStage.objects.filter(
             project_id__in=project_ids
         )
@@ -173,6 +175,9 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             qs_project_stages = qs_project_stages.filter(
                 subsidy_period=filtered_subsidy_period
             )
+        print(f"filtered: {filtered_subsidy_period}")
+        for aa in qs_project_stages:
+            print(aa)
 
         # Annotate adds columns to each row with the sum or calculations of
         qs_project_stages = (
