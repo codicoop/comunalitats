@@ -877,21 +877,21 @@ class ExportFunctions:
                     row = [
                         f"{activity_reference_number} {activity.project.name}",  # Referència.
                         activity.project.name,  # Nom de l'actuació. Camp automàtic de l'excel.
-                        participant.surname if participant.surname else "",
+                        participant.surname or "",
                         participant.first_name,
                         participant.id_number,
                         gender if gender else "",
-                        participant.birthdate if participant.birthdate else "",
+                        participant.birthdate or "",
                         town if town else "",
-                        participant.get_employment_situation_display() if participant.get_employment_situation_display() else "",
-                        participant.get_birth_place_display() if participant.get_birth_place_display() else "",
-                        participant.get_educational_level_display() if participant.get_educational_level_display() else "",
-                        participant.get_discovered_us_display() if participant.get_discovered_us_display() else "",
-                        activity.stage_organizer if activity.stage_organizer else "",
+                        participant.get_employment_situation_display() or "",
+                        participant.get_birth_place_display() or "",
+                        participant.get_educational_level_display() or "",
+                        participant.get_discovered_us_display() or "",
+                        activity.stage_organizer or "",
                         participant.email,
-                        participant.phone_number if participant.phone_number else "",
-                        participant.project if participant.project else "",
-                        participant.project.stages_list if participant.project and participant.project.stages_list else ""
+                        participant.phone_number or "",
+                        participant.project or "",
+                        participant.project.stages_list if participant.project and participant.project.stages_list else "",
                     ]
                     self.row_number += 1
                     self.fill_row_data(row)
@@ -922,15 +922,15 @@ class ExportFunctions:
                     gender if gender else "",
                     participant.birthdate if participant.birthdate else "",
                     town if town else "",
-                    participant.get_employment_situation_display() if participant.get_employment_situation_display() else "",
-                    participant.get_birth_place_display() if participant.get_birth_place_display() else "",
-                    participant.get_educational_level_display() if participant.get_educational_level_display() else "",
-                    participant.get_discovered_us_display() if participant.get_discovered_us_display() else "",
+                    participant.get_employment_situation_display() or "",
+                    participant.get_birth_place_display() or "",
+                    participant.get_educational_level_display() or "",
+                    participant.get_discovered_us_display() or "",
                     activity.organizer if activity.organizer else "",
                     participant.email,
-                    participant.phone_number if participant.phone_number else "",
+                    participant.phone_number or "",
                     participant.project if participant.project else "",
-                    participant.project.stages_list if participant.project and participant.project.stages_list else ""
+                    participant.project.stages_list if participant.project and participant.project.stages_list else "",
                 ]
                 self.fill_row_data(row)
 
