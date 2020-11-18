@@ -494,7 +494,7 @@ class ExportFunctions:
 
         TIPOLOGIA COVID: Pendent de saber què n'he de fer.
         """
-        obj = ProjectStage.objects.filter(
+        obj = ProjectStage.objects.order_by('date_start').filter(
             subsidy_period=self.subsidy_period
         )
         stages_groups = {
