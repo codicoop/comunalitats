@@ -415,7 +415,7 @@ class ExportFunctions:
         self.export_nouniversitaris_2018_2019()
         self.export_insercionslaborals_2018_2019()
 
-        return self.return_document("justificacio2018-2019")
+        return self.return_document("justificacio2019-2020")
 
     def export_actuacions_2018_2019(self):
         # Tutorial: https://djangotricks.blogspot.com/2019/02/how-to-export-data-to-xlsx-files.html
