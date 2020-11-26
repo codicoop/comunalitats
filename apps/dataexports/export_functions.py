@@ -49,6 +49,22 @@ class ExportFunctions:
         self.organizers = dict()  # Camp per Ateneu / Cercle
         self.d_organizer = None
 
+        # La majoria d'ateneus volen que hi hagi una sola actuació per un
+        # projecte encara que hagi tingut diferents tipus d'acompanyament.
+        # CoopCamp (i potser algun altre?) volen separar-ho per itineraris,
+        # de manera que hi hagi una actuació per l'itinerari de Nova Creació i
+        # una pel de Consolidació.
+        # Per defecte ho definim per 1 itinerari.
+        self.stages_groups = {
+            1: 'nova_creacio',
+            2: 'nova_creacio',
+            6: 'nova_creacio',
+            7: 'nova_creacio',
+            8: 'nova_creacio',
+            9: 'incubacio'
+        }
+
+
     def callmethod(self, name):
         if hasattr(self, name):
             obj = DataExports.objects.get(function_name=name)
@@ -401,6 +417,17 @@ class ExportFunctions:
 
         return self.return_document("justificacio2018-2019")
 
+    def export_2019_2020_dos_itineraris(self):
+        self.stages_groups = {
+            1: 'nova_creacio',
+            2: 'nova_creacio',
+            6: 'nova_creacio',
+            7: 'consolidacio',
+            8: 'consolidacio',
+            9: 'incubacio'
+        }
+        return self.export_2019_2020()
+
     def export_2019_2020(self):
         self.import_correlations(settings.BASE_DIR + "/../apps/dataexports/fixtures/correlations_2019.json")
         self.subsidy_period_range = ["2019-11-01", "2020-10-31"]
@@ -497,19 +524,11 @@ class ExportFunctions:
         obj = ProjectStage.objects.order_by('date_start').filter(
             subsidy_period=self.subsidy_period
         )
-        stages_groups = {
-            1: 'nova_creacio',
-            2: 'nova_creacio',
-            6: 'nova_creacio',
-            7: 'consolidacio',
-            8: 'consolidacio',
-            9: 'incubacio'
-        }
         self.stages_obj = {}
         for item in obj:
-            if int(item.stage_type) not in stages_groups:
+            if int(item.stage_type) not in self.stages_groups:
                 continue
-            group = stages_groups[int(item.stage_type)]
+            group = self.stages_groups[int(item.stage_type)]
             p_id = item.project.id
             if p_id not in self.stages_obj:
                 self.stages_obj.update({

@@ -75,6 +75,12 @@ class Command(BaseCommand):
                 'ignore_errors': True
             },
             {
+                'name': "Exportació justificació en 2 itineraris",
+                'subsidy_period': period2019_2020,
+                'function_name': 'export_2019_2020_dos_itineraris',
+                'ignore_errors': True
+            },
+            {
                 'name': "Cofinançades",
                 'subsidy_period': period2019_2020,
                 'function_name': 'export_cofunded_2019_2020',
