@@ -61,9 +61,8 @@ class ExportFunctions:
             6: 'nova_creacio',
             7: 'nova_creacio',
             8: 'nova_creacio',
-            9: 'incubacio'
+            9: 'nova_creacio'  # Era Incubació
         }
-
 
     def callmethod(self, name):
         if hasattr(self, name):
