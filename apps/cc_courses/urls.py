@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from django.urls import path
 from .views import CourseDetailView, EnrollActivityView, MyCoursesListView, OptoutActivityView, ActivityDetailView
 from .utils import get_courses_list_view_class

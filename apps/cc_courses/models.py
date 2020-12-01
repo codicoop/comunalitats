@@ -498,9 +498,10 @@ class ActivityEnrolled(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        if self.id is None and not self.activity.is_past_due:
+        if not self.activity.is_past_due:
             is_full = self.activity.remaining_spots < 1
             self.waiting_list = is_full
+            print('here, waiting list value: ', is_full)
 
         super(ActivityEnrolled, self).save(
             force_insert, force_update, using, update_fields

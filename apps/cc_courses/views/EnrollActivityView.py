@@ -1,16 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from django.views import generic
 from django.shortcuts import reverse
-from constance import config
-from django.conf import settings
-from django.template import Template, Context
-from django.core.mail.message import EmailMultiAlternatives
-from django.utils.html import strip_tags
 
 from cc_courses.models import Activity, ActivityEnrolled
-from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 
 class EnrollActivityView(generic.RedirectView):

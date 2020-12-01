@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import DetailView
@@ -12,6 +10,10 @@ class ActivityDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         ret = super(ActivityDetailView, self).get(request, *args, **kwargs)
-        if not self.object.instructions and not self.object.videocall_url and len(self.object.resources.all()) == 0:
+        if (
+                not self.object.instructions
+                and not self.object.videocall_url
+                and len(self.object.resources.all()) == 0
+        ):
             return HttpResponseRedirect(reverse('my_activities'))
-        return super(ActivityDetailView, self).get(request, *args, **kwargs)
+        return ret

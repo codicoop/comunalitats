@@ -1,14 +1,7 @@
-from constance import config
-from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
-from django.template import Context, Template
-from django.urls import reverse
-from django.utils.html import strip_tags
 
 from cc_courses.models import Activity, ActivityEnrolled, Course
-from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 pre_save.connect(Course.pre_save, sender=Course)
 
@@ -47,8 +40,11 @@ def _process_available_spots(activity):
     users will receive e-mails months after the activity, when the Ateneu is
     organizing the information.
     """
-    if (not activity.is_past_due and activity.remaining_spots > 0 and
-            activity.waiting_list_count > 0):
+    if (
+            not activity.is_past_due
+            and activity.remaining_spots > 0
+            and activity.waiting_list_count > 0
+    ):
         # s'han de processar les places lliures i omplir-les amb gent en llista
         # d'espera.
         waiting_list = activity.waiting_list
@@ -59,4 +55,3 @@ def _process_available_spots(activity):
             # Check that it actually is now enrolled
             if enrollment.waiting_list is False:
                 enrollment.send_confirmation_email()
-
