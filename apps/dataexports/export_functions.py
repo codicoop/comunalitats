@@ -1,12 +1,12 @@
-from coopolis.models import ProjectStage, Project, User, EmploymentInsertion
+from coopolis.models import ProjectStage, Project, EmploymentInsertion
 from cc_courses.models import Activity, Organizer
 from dataexports.models import DataExports
 from django.http import HttpResponseNotFound, HttpResponse
 from openpyxl import Workbook
 from datetime import datetime
 from openpyxl.utils import get_column_letter
-from openpyxl.styles import Font, Border, Side, PatternFill, colors
-from django.db.models import Count, Q
+from openpyxl.styles import Font, Border, Side, PatternFill
+from django.db.models import Q
 import json
 from django.conf import settings
 
@@ -69,6 +69,7 @@ class ExportFunctions:
             obj = DataExports.objects.get(function_name=name)
             self.ignore_errors = obj.ignore_errors
             self.subsidy_period = obj.subsidy_period
+            self.subsidy_period_range = obj.subsidy_period.range
             self.workbook = Workbook()
             self.worksheet = self.workbook.active
             return getattr(self, name)()
@@ -430,6 +431,32 @@ class ExportFunctions:
     def export_2019_2020(self):
         self.import_correlations(settings.BASE_DIR + "/../apps/dataexports/fixtures/correlations_2019.json")
         self.subsidy_period_range = ["2019-11-01", "2020-10-31"]
+
+        self.import_organizers()
+
+        """ Each function here called handles the creation of one of the worksheets."""
+        self.export_actuacions_2018_2019()
+        self.export_stages_2018_2019()
+        self.export_founded_projects_2018_2019()
+        self.export_participants_2018_2019()
+        self.export_nouniversitaris_2018_2019()
+        self.export_insercionslaborals_2018_2019()
+
+        return self.return_document("justificacio2019-2020")
+
+    def export_2020_2021_dos_itineraris(self):
+        self.stages_groups = {
+            1: 'nova_creacio',
+            2: 'nova_creacio',
+            6: 'nova_creacio',
+            7: 'consolidacio',
+            8: 'consolidacio',
+            9: 'incubacio'
+        }
+        return self.export_2020_2021()
+
+    def export_2020_2021(self):
+        self.import_correlations(settings.BASE_DIR + "/../apps/dataexports/fixtures/correlations_2019.json")
 
         self.import_organizers()
 

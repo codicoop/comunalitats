@@ -67,6 +67,7 @@ class Command(BaseCommand):
     def normalize_exports():
         print("Normalizing exports...")
         period2019_2020 = SubsidyPeriod.objects.get(name="2019-2020")
+        period2020_2021 = SubsidyPeriod.objects.get(name="2020-2021")
         exports = (
             {
                 'name': "Exportació justificació",
@@ -78,6 +79,18 @@ class Command(BaseCommand):
                 'name': "Exportació justificació en 2 itineraris",
                 'subsidy_period': period2019_2020,
                 'function_name': 'export_2019_2020_dos_itineraris',
+                'ignore_errors': True
+            },
+            {
+                'name': "Exportació justificació",
+                'subsidy_period': period2020_2021,
+                'function_name': 'export_2020_2021',
+                'ignore_errors': True
+            },
+            {
+                'name': "Exportació justificació en 2 itineraris",
+                'subsidy_period': period2020_2021,
+                'function_name': 'export_2020_2021_dos_itineraris',
                 'ignore_errors': True
             },
             {

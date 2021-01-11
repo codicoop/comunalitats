@@ -65,7 +65,7 @@ class DataExports(models.Model):
 
     created = models.DateTimeField(verbose_name="creació", auto_now_add=True)
     subsidy_period = models.ForeignKey(SubsidyPeriod, verbose_name="convocatòria", null=True, on_delete=models.SET_NULL)
-    name = models.CharField("nom", max_length=200, unique=True)
+    name = models.CharField("nom", max_length=200)
     notes = models.TextField("apunts", blank=True, null=True)
     function_name = models.CharField("nom de la funció", max_length=150, unique=True,
                                      help_text="No modifiqueu aquesta dada.")
