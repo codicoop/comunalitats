@@ -236,6 +236,27 @@ services:
     depends_on:
       - db
 
+  # https://serveis.ateneucoopte.org
+  ateneu-terresebre:
+    restart: on-failure
+    container_name: ateneu_terresebre # If changed, update ofelia config and db backups script
+    build:
+      context: ..
+      dockerfile: ./docker-production/Dockerfile
+    environment:
+      - DB_HOST=db
+      - "PYTHONUNBUFFERED=1"
+      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-terresebre
+      - PYTHONPATH=/shared_libraries
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8013 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    volumes:
+      - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
+    ports:
+      - 8013:8013
+    depends_on:
+      - db
+
   # Important: a l'afegir un nou ateneu, actualitzar el depends_on de l'Ofelia.
 
   ofelia:
@@ -255,6 +276,7 @@ services:
       - ateneu-coopsetania
       - ateneu-terresgironines
       - ateneu-hospitalet
+      - ateneu-terresebre
 
   # https://documentacio-backoffice.bcn.coop
   documentacio:
