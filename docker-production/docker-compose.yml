@@ -257,6 +257,27 @@ services:
     depends_on:
       - db
 
+  # https://serveis.acapa.cat
+  ateneu-altpirineu:
+    restart: on-failure
+    container_name: ateneu_altpirineu # If changed, update ofelia config and db backups script
+    build:
+      context: ..
+      dockerfile: ./docker-production/Dockerfile
+    environment:
+      - DB_HOST=db
+      - "PYTHONUNBUFFERED=1"
+      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-altpirineu
+      - PYTHONPATH=/shared_libraries
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8014 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    volumes:
+      - ../:/srv
+      - ../../python_shared_libraries/:/shared_libraries
+    ports:
+      - 8014:8014
+    depends_on:
+      - db
+
   # Important: a l'afegir un nou ateneu, actualitzar el depends_on de l'Ofelia.
 
   ofelia:
@@ -277,6 +298,7 @@ services:
       - ateneu-terresgironines
       - ateneu-hospitalet
       - ateneu-terresebre
+      - ateneu-altpirineu
 
   # https://documentacio-backoffice.bcn.coop
   documentacio:
