@@ -21,4 +21,6 @@ echo "Running normalizedata ateneu_hospitalet"
 docker exec ateneu_hospitalet python manage.py normalizedata
 echo "Running normalizedata ateneu_terresebre"
 docker exec ateneu_terresebre python manage.py normalizedata
+echo "Running normalizedata ateneu_altpirineu"
+docker exec ateneu_altpirineu python manage.py normalizedata
 echo "Tots els normalizedatas tirats, excepte ateneu_demo."

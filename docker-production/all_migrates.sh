@@ -21,4 +21,6 @@ echo "Running migrate ateneu_hospitalet"
 docker exec ateneu_hospitalet python manage.py migrate
 echo "Running migrate ateneu_terresebre"
 docker exec ateneu_terresebre python manage.py migrate
+echo "Running migrate ateneu_altpirineu"
+docker exec ateneu_altpirineu python manage.py migrate
 echo "Tots els migrates tirats, excepte ateneu_demo."
