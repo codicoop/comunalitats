@@ -16,7 +16,7 @@ class ActivityDetailView(DetailView):
                     and not self.object.videocall_url
                     and len(self.object.resources.all()) == 0
                 )
-                or request.user not in self.object.enrolled.all()
+                or request.user not in self.object.confirmed_enrollments.all()
         ):
             return HttpResponseRedirect(reverse('my_activities'))
         return ret
