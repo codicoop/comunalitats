@@ -11,9 +11,12 @@ class ActivityDetailView(DetailView):
     def get(self, request, *args, **kwargs):
         ret = super(ActivityDetailView, self).get(request, *args, **kwargs)
         if (
-                not self.object.instructions
-                and not self.object.videocall_url
-                and len(self.object.resources.all()) == 0
+                (
+                    not self.object.instructions
+                    and not self.object.videocall_url
+                    and len(self.object.resources.all()) == 0
+                )
+                or request.user not in self.object.enrolled.all()
         ):
             return HttpResponseRedirect(reverse('my_activities'))
         return ret
