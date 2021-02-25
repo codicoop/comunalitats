@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
@@ -38,8 +36,11 @@ class ActivityPollView(CreateView):
         new_poll.activity = self.activity_obj
         new_poll.user = self.request.user
         new_poll.save()
-        messages.success(self.request,
-                         f"Enquesta de valoració per {self.activity_obj} enviada correctament. Moltes gràcies!")
+        messages.success(
+            self.request,
+            f"Enquesta de valoració per {self.activity_obj} enviada "
+            f"correctament. Moltes gràcies!"
+        )
         return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
@@ -47,7 +48,7 @@ class ActivityPollView(CreateView):
         ctx['activity'] = self.activity_obj
         ctx['already_answered'] = False
         ctx['fieldsets'] = ctx['form'].get_grouped_fields()
-        # Amb getattr(object, attribute_name) hauria de poder accedir als form.field_name)
+        # Amb getattr(object, attribute_name) hauria de poder accedir als form.field_name)  #noqa
 
         if self.activity_obj.polls.filter(user=self.request.user).count():
             ctx['already_answered'] = True
@@ -55,12 +56,17 @@ class ActivityPollView(CreateView):
 
     def access_granted(self):
         if not self.activity_obj.poll_access_allowed():
-            raise Http404(f"L'Activity {self.activity_obj} no té l'enquesta de valoració oberta en aquests moments.")
-
-        if self.activity_obj.confirmed_enrollments.filter(user=self.request.user).count() < 1:
             raise Http404(
-                f"No pots accedir a l'enquesta de valoració de la sessió {self.activity_obj} "
-                f"perquè no hi estàs inscrit/a.")
+                f"La sessió {self.activity_obj} no té l'enquesta de "
+                f"valoració oberta en aquests moments."
+            )
+
+        if self.activity_obj.confirmed_enrollments.filter(
+                user=self.request.user
+        ).count() < 1:
+            raise Http404(
+                f"No pots accedir a l'enquesta de valoració de la sessió "
+                f"{self.activity_obj} perquè no hi estàs inscrit/a.")
 
         return True
 
@@ -69,10 +75,10 @@ class ActivityPollView(CreateView):
         try:
             obj = Activity.objects.get(id=pk)
         except Activity.DoesNotExist:
-            raise Http404(f"No existeix cap Activity amb la id {pk}.")
+            raise Http404(f"No existeix cap sessió formativa amb aquesta "
+                          f"adreça.")
         return obj
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        # print(form.fields)
         return form
