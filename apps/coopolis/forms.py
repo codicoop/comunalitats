@@ -80,9 +80,11 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
     new_password = forms.CharField(
         label="Canviar contrasenya",
         help_text=(
-            "Les contrasenyes no es poden veure perquè es desen encriptades. "
+            "La contrasenya actual no es pot veure per seguretat. "
             "Però si escrius una contrasenya en aquest camp i deses els "
-            "canvis, l'usuari passarà a tenir aquesta nova contrasenya."
+            "canvis, l'usuari passarà a tenir aquesta nova contrasenya. "
+            "Mentre escrius, la contrasenya és visible per tal que puguis "
+            "copiar-la i enviar-li a l'usuari."
         ),
         max_length=150,
         required=False

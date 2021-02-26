@@ -168,7 +168,7 @@ class UserAdmin(admin.ModelAdmin):
 
         # Override this to set the password to the value in the field if it's
         # changed.
-        if change and form.cleaned_data['new_password'] != '':
+        if form.cleaned_data['new_password'] != '':
             obj.set_password(form.cleaned_data['new_password'])
 
         super().save_model(request, obj, form, change)
