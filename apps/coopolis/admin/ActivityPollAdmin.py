@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 
 
 class ActivityPollAdmin(admin.ModelAdmin):
@@ -28,6 +30,9 @@ class ActivityPollAdmin(admin.ModelAdmin):
     """Disables all editing capabilities."""
     list_display_links = None
 
+    def get_fields(self, request, obj=None):
+        return self.list_display
+
     def get_actions(self, request):
         actions = super().get_actions(request)
         del_action = "delete_selected"
@@ -39,6 +44,12 @@ class ActivityPollAdmin(admin.ModelAdmin):
         return False
 
     def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        else:
+            return False
+
+    def has_change_permission(self, request, obj=None):
         return False
 
     def save_model(self, request, obj, form, change):
@@ -49,3 +60,6 @@ class ActivityPollAdmin(admin.ModelAdmin):
 
     def save_related(self, request, form, formsets, change):
         pass
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        return HttpResponseRedirect(reverse_lazy('admin:index'))
