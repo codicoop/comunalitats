@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.template.response import TemplateResponse
 from django.utils.html import format_html
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import path, reverse
+from django.urls import path, reverse, reverse_lazy
 from django.utils.safestring import mark_safe
 from django_summernote.admin import SummernoteModelAdminMixin
 from constance import config
@@ -81,16 +81,23 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
             'all': ('styles/grappellihacks.css',)
         }
     form = ActivityForm
-    list_display = ('date_start', 'spots', 'remaining_spots', 'name', 'axis_summary', 'attendee_filter_field', 'attendee_list_field',
-                    'send_reminder_field')
-    readonly_fields = ('attendee_list_field', 'attendee_filter_field', 'send_reminder_field', 'activity_poll_field')
+    list_display = (
+        'date_start', 'spots', 'remaining_spots', 'name', 'axis_summary',
+        'attendee_filter_field', 'attendee_list_field', 'send_reminder_field')
+    readonly_fields = (
+        'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',
+        'activity_poll_field', 'activity_poll_link_field', )
     summernote_fields = ('objectives', 'instructions',)
     search_fields = ('date_start', 'name', 'objectives',)
-    list_filter = ('course', 'date_start', 'room', 'entity', 'axis', 'place', 'for_minors', 'cofunded',)
+    list_filter = (
+        'course', 'date_start', 'room', 'entity', 'axis', 'place',
+        'for_minors', 'cofunded',)
     fieldsets = [
         (None, {
-            'fields': ['course', 'name', 'objectives', 'place', 'date_start', 'date_end', 'starting_time',
-                       'ending_time', 'spots', 'axis', 'subaxis', 'entity', 'organizer', 'responsible', 'publish', ]
+            'fields': ['course', 'name', 'objectives', 'place', 'date_start',
+                       'date_end', 'starting_time', 'ending_time', 'spots',
+                       'axis', 'subaxis', 'entity', 'organizer', 'responsible',
+                       'publish', ]
         }),
         ("Documents per la justificació", {
             'classes': ('grp-collapse grp-closed',),
@@ -98,7 +105,8 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         }),
         ('Dades relatives a activitats per menors', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ('for_minors', 'minors_school_name', 'minors_school_cif', 'minors_grade', 'minors_participants_number',
+            'fields': ('for_minors', 'minors_school_name', 'minors_school_cif',
+                       'minors_grade', 'minors_participants_number',
                        'minors_teacher'),
         }),
         ("Instruccions per les participants", {
@@ -106,12 +114,15 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
             'fields': ('videocall_url', 'instructions'),
         }),
         ("Recursos i material formatiu", {
-            'classes': ('placeholder resources-group',),  # Grappelli way for sorting inlines
+            # Grappelli way for sorting inlines
+            'classes': ('placeholder resources-group',),
             'fields': (),
         }),
         ('Accions i llistats', {
             'classes': ('grp-collapse grp-closed',),
-            'fields': ('attendee_list_field', 'attendee_filter_field', 'send_reminder_field', 'activity_poll_field',),
+            'fields': ('attendee_list_field', 'attendee_filter_field',
+                       'send_reminder_field', 'activity_poll_field',
+                       'activity_poll_link_field',),
         })
     ]
     # define the raw_id_fields
@@ -134,14 +145,17 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         """
         For ateneus using room reservations module: Adding the room field.
         """
-        if config.ENABLE_ROOM_RESERVATIONS_MODULE and 'room' not in self.fieldsets[0][1]['fields']:
+        if (
+            config.ENABLE_ROOM_RESERVATIONS_MODULE
+            and 'room' not in self.fieldsets[0][1]['fields']
+        ):
             index = 0
             if 'place' in self.fieldsets[0][1]['fields']:
                 index = self.fieldsets[0][1]['fields'].index('place') + 1
             self.fieldsets[0][1]['fields'].insert(index, 'room')
 
         """
-        For ateneus enabling cofunded options: Adding the Cofinançades fieldset.
+        For ateneus enabling cofunded options: Adding the Cofinançades fieldset
         """
         fs = ('Opcions de cofinançament', {
             'classes': ('grp-collapse grp-closed',),
@@ -198,8 +212,10 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     def attendee_list_field(self, obj):
         if obj.id is None:
             return '-'
-        return format_html('<a href="%s" target="_new">Llista d\'assistencia</a>' % reverse('admin:attendee-list',
-                                                                                            kwargs={'_id': obj.id}))
+        url = reverse_lazy('admin:attendee-list', kwargs={'_id': obj.id})
+        return format_html(
+            f'<a href="{url}" target="_new">Llista d\'assistencia</a>')
+
     attendee_list_field.allow_tags = True
     attendee_list_field.short_description = 'Exportar'
 
@@ -281,10 +297,21 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     def activity_poll_field(self, obj):
         if obj.id is None:
             return '-'
-        url = f"<a href=\"{reverse('admin:coopolis_activitypoll_changelist')}" \
-              f"?activity__id__exact={obj.id}\" target=\"_new\">Resultats de l'enquesta (pestanya nova)</a>"
+        url = reverse_lazy('admin:coopolis_activitypoll_changelist')
+        text = "Resultats de l'enquesta (pestanya nova)"
+        url = (f'<a href="{url}?activity__id__exact={obj.id}"'
+               f'target="_new">{text}</a>')
         return format_html(url)
     activity_poll_field.short_description = "Resultats de l'enquesta"
+
+    def activity_poll_link_field(self, obj):
+        if obj.id is None:
+            return '-'
+        poll_url = reverse('activity_poll', kwargs={'pk': obj.id})
+        poll_url = self.request.build_absolute_uri(poll_url)
+        url = f'<a href="{poll_url}" target="_blank">{poll_url}</a>'
+        return format_html(url)
+    activity_poll_link_field.short_description = "Enllaç a l'enquesta"
 
     def save_formset(self, request, form, formset, change):
         instances = formset.save()
