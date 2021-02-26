@@ -185,9 +185,8 @@ class Activity(models.Model):
         help_text="Si hi ha inscripcions en llista d'espera i augmentes el "
                   "número de places, passaran a confirmades i se'ls hi "
                   "notificarà el canvi. Si redueixes el número de places per "
-                  "sota del total d'inscrites, les que no hi càpiguen passaran"
-                  " a llista d'espera, però no se'ls hi notificarà "
-                  "automàticament. Aquestes autotatitzacions únicament "
+                  "sota del total d'inscrites les que ja estaven confirmades "
+                  "seguiran confirmades. Aquestes autotatitzacions únicament "
                   "s'activen si la sessió té una data futura."
     )
     enrolled = models.ManyToManyField(
@@ -498,7 +497,11 @@ class ActivityEnrolled(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        if self.id is None and not self.activity.is_past_due:
+        # Aquí hi feia un "if not self.id", de manera que l'actualització de
+        # waiting_list només passava a les inscripcions noves, i provocava que
+        # al canviar el nº d'spots, les que ja estaven en llista d'espear no
+        # passessin a confirmades.
+        if not self.activity.is_past_due:
             is_full = self.activity.remaining_spots < 1
             self.waiting_list = is_full
 

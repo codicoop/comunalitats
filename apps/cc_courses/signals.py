@@ -47,8 +47,10 @@ def _process_available_spots(activity):
     users will receive e-mails months after the activity, when the Ateneu is
     organizing the information.
     """
-    if (not activity.is_past_due and activity.remaining_spots > 0 and
-            activity.waiting_list_count > 0):
+    if (
+        not activity.is_past_due and activity.remaining_spots > 0
+        and activity.waiting_list_count > 0
+    ):
         # s'han de processar les places lliures i omplir-les amb gent en llista
         # d'espera.
         waiting_list = activity.waiting_list
@@ -59,4 +61,3 @@ def _process_available_spots(activity):
             # Check that it actually is now enrolled
             if enrollment.waiting_list is False:
                 enrollment.send_confirmation_email()
-
