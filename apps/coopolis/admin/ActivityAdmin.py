@@ -86,7 +86,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         'attendee_filter_field', 'attendee_list_field', 'send_reminder_field')
     readonly_fields = (
         'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',
-        'activity_poll_field', 'activity_poll_link_field', )
+        'activity_poll_field', )
     summernote_fields = ('objectives', 'instructions',)
     search_fields = ('date_start', 'name', 'objectives',)
     list_filter = (
@@ -121,8 +121,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         ('Accions i llistats', {
             'classes': ('grp-collapse grp-closed',),
             'fields': ('attendee_list_field', 'attendee_filter_field',
-                       'send_reminder_field', 'activity_poll_field',
-                       'activity_poll_link_field',),
+                       'send_reminder_field', 'activity_poll_field', ),
         })
     ]
     # define the raw_id_fields
@@ -297,21 +296,18 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     def activity_poll_field(self, obj):
         if obj.id is None:
             return '-'
-        url = reverse_lazy('admin:coopolis_activitypoll_changelist')
-        text = "Resultats de l'enquesta (pestanya nova)"
-        url = (f'<a href="{url}?activity__id__exact={obj.id}"'
-               f'target="_new">{text}</a>')
-        return format_html(url)
-    activity_poll_field.short_description = "Resultats de l'enquesta"
 
-    def activity_poll_link_field(self, obj):
-        if obj.id is None:
-            return '-'
+        poll_status = "Oberta" if obj.poll_access_allowed() else "Tancada"
+        results_url = reverse_lazy('admin:coopolis_activitypoll_changelist')
+        text = "Accés als resultats (pestanya nova)"
+        results_url = (f'<a href="{results_url}?activity__id__exact={obj.id}"'
+                       f'target="_new">{text}</a>')
         poll_url = reverse('activity_poll', kwargs={'pk': obj.id})
         poll_url = self.request.build_absolute_uri(poll_url)
-        url = f'<a href="{poll_url}" target="_blank">{poll_url}</a>'
-        return format_html(url)
-    activity_poll_link_field.short_description = "Enllaç a l'enquesta"
+        poll_url = f'<a href="{poll_url}" target="_blank">{poll_url}</a>'
+        content = f"Estat: {poll_status} | Enllaç: {poll_url} | {results_url}"
+        return format_html(content)
+    activity_poll_field.short_description = "Enquesta"
 
     def save_formset(self, request, form, formset, change):
         instances = formset.save()
