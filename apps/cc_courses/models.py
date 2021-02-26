@@ -365,6 +365,10 @@ class Activity(models.Model):
             waiting_list=False
         ).order_by('date_enrolled')
 
+    def user_is_confirmed(self, user):
+        res = self.confirmed_enrollments.filter(user=user).all()
+        return len(res) > 0
+
     @property
     def absolute_url(self):
         return self.course.absolute_url
@@ -499,6 +503,18 @@ class ActivityEnrolled(models.Model):
         if self.waiting_list or not self.activity.poll_access_allowed():
             return False
         return True
+
+    def can_access_details(self):
+        if (
+            not self.waiting_list
+            and (
+                self.activity.videocall_url
+                or self.activity.instructions
+                or len(self.activity.resources.all()) > 0
+            )
+        ):
+            return True
+        return False
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
