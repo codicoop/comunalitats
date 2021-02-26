@@ -496,6 +496,11 @@ class ActivityEnrolled(models.Model):
         "Recordatori enviat", null=True, blank=True
     )
 
+    def can_access_poll(self):
+        if self.waiting_list or not self.activity.poll_access_allowed():
+            return False
+        return True
+
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         if not self.activity.is_past_due:
