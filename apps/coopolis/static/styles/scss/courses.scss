@@ -51,26 +51,32 @@
     justify-content: space-around;
 
     .course {
-        display: flex;
+        display: block;
         width: 40%;
         border: 1px solid $color-1;
         margin-top: 20px;
         padding: 25px;
         min-width: 300px;
-
-        .course-image {
-            border: 0;
-            width: 150px;
-            height: 100%;
-            background-size: contain;
-            margin-right: 20px;
-            background-repeat: no-repeat;
-        }
+        height: 100%;
 
         .course-data {
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: column;
+
+            .course-image {
+                border: 0;
+                width: 150px;
+                height: 100%;
+                margin-right: 20px;
+            }
+
+            .course-description {
+               display: block;
+            }
+
+        }
+
+        .course-button {
+            display: block;
+            text-align: center;
         }
 
         a {

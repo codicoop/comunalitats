@@ -287,25 +287,26 @@ header .menu .dropdown:hover .dropdown-content {
   justify-content: space-around;
 }
 .courses-container .course {
-  display: flex;
+  display: block;
   width: 40%;
   border: 1px solid #e94e1b;
   margin-top: 20px;
   padding: 25px;
   min-width: 300px;
+  height: 100%;
 }
-.courses-container .course .course-image {
+.courses-container .course .course-data .course-image {
   border: 0;
   width: 150px;
   height: 100%;
-  background-size: contain;
   margin-right: 20px;
-  background-repeat: no-repeat;
 }
-.courses-container .course .course-data {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
+.courses-container .course .course-data .course-description {
+  display: block;
+}
+.courses-container .course .course-button {
+  display: block;
+  text-align: center;
 }
 .courses-container .course a {
   color: initial;

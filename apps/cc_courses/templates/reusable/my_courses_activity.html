@@ -1,12 +1,16 @@
 
         <div class="course">
             <div class="course-data">
-                <h2>Programa / curs: "{{ enrollment.activity.course }}"</h2>
-                <h3>Activitat: {{ enrollment.activity.name }}</h3>
-                <p><strong>Data:</strong> {{ enrollment.activity.date_start }}</p>
-                <p><strong>Horari:</strong> de {{ enrollment.activity.starting_time }} a {{ enrollment.activity.ending_time }}</p>
-                <p><strong>Lloc:</strong> {{ enrollment.activity.place }}</p>
-                <p><strong>Descripció:</strong> {{ enrollment.activity.objectives|safe }}</p>
+                <div class="course-description">
+                    <h2>Programa / curs: "{{ enrollment.activity.course }}"</h2>
+                    <h3>Activitat: {{ enrollment.activity.name }}</h3>
+                    <p><strong>Data:</strong> {{ enrollment.activity.date_start }}</p>
+                    <p><strong>Horari:</strong> de {{ enrollment.activity.starting_time }} a {{ enrollment.activity.ending_time }}</p>
+                    <p><strong>Lloc:</strong> {{ enrollment.activity.place }}</p>
+                    <p><strong>Descripció:</strong> {{ enrollment.activity.objectives|safe }}</p>
+                </div>
+            </div>
+            <div class="course-button">
                 {% if enrollment.activity.videocall_url or enrollment.activity.instructions or enrollment.activity.resources.all %}
                 <a href="{% url 'activity' pk=enrollment.activity.id %}" class="enroll-button">
                     <div style="background-color: #e94e1b;">Instruccions i material</div>

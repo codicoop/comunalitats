@@ -15,16 +15,20 @@
         <div class="courses-container">
             {% for course in future_courses %}
                 <div class="course">
-                    {% if course.banner %}
-                    <a href="{{ course.absolute_url }}"><div class="course-image" style="background-image: url('{{ course.banner.course_list.url }}')"></div></a>
-                    {% endif %}
                     <div class="course-data">
-                        <a href="{{ course.absolute_url }}"><h3>{{ course.title }}</h3></a>
-                        <p>Inici de les sessions: {{ course.date_start }}</p>
-                        <br />
-                        <p>Horaris: {{ course.hours }}</p>
-                        <br />
-                        <p>{{ course.description|safe }}</p>
+                        {% if course.banner %}
+                        <a class="course-image" href="{{ course.absolute_url }}"><img src="{{ course.banner.course_list.url }}" alt=""></a>
+                        {% endif %}
+                        <div class="course-description">
+                            <a href="{{ course.absolute_url }}"><h3>{{ course.title }}</h3></a>
+                            <p>Inici de les sessions: {{ course.date_start }}</p>
+                            <br />
+                            <p>Horaris: {{ course.hours }}</p>
+                            <br />
+                            <p>{{ course.description|safe }}</p>
+                        </div>
+                    </div>
+                    <div class="course-button">
                         <a href="{{ course.absolute_url }}" class="enroll-button">
                             <div>Veure les sessions</div>
                         </a>

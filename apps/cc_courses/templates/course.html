@@ -23,37 +23,41 @@
         {% for activity in activities %}
         <div class="course">
             <div class="course-data">
-                <h3>{{ activity.name }}</h3>
-                <p><strong>Data:</strong> {{ activity.date_start }}</p>
-                <p><strong>Horari:</strong> de {{ activity.starting_time }} a {{ activity.ending_time }}</p>
-                <p><strong>Lloc:</strong> {{ activity.place|default_if_none:"" }}</p>
-                <p><strong>Descripció:</strong> {{ activity.objectives|safe }}</p>
-                {% if activity.is_past_due is False %}
-                    {% if not activity|is_enrolled:user %}
-                <a
-                        id="actButton{{activity.id}}"
-                        href="#"
-                        onclick="javascript:onInscriptionButtonClick(
-                            '{{ activity.id }}',
-                            '{{ activity.name|escapejs }}',
-                            '{% url 'loginsignup' %}?next={{ request.get_full_path }}&act={{activity.id}}',
-                            {% if activity.remaining_spots > 0 %}true{% else %}false{% endif %});"
-                        class="enroll-button"
-                >
-                <div>
-                    {% if activity.remaining_spots > 0 %}
-                    Inscriure-s'hi
-                    {% else %}
-                    Entrar en llista d'espera
+                <div class="course-description">
+                    <h3>{{ activity.name }}</h3>
+                    <p><strong>Data:</strong> {{ activity.date_start }}</p>
+                    <p><strong>Horari:</strong> de {{ activity.starting_time }} a {{ activity.ending_time }}</p>
+                    <p><strong>Lloc:</strong> {{ activity.place|default_if_none:"" }}</p>
+                    <p><strong>Descripció:</strong> {{ activity.objectives|safe }}</p>
+                </div>
+            </div>
+            <div class="course-button">
+                    {% if activity.is_past_due is False %}
+                        {% if not activity|is_enrolled:user %}
+                    <a
+                            id="actButton{{activity.id}}"
+                            href="#"
+                            onclick="javascript:onInscriptionButtonClick(
+                                '{{ activity.id }}',
+                                '{{ activity.name|escapejs }}',
+                                '{% url 'loginsignup' %}?next={{ request.get_full_path }}&act={{activity.id}}',
+                                {% if activity.remaining_spots > 0 %}true{% else %}false{% endif %});"
+                            class="enroll-button"
+                    >
+                    <div>
+                        {% if activity.remaining_spots > 0 %}
+                        Inscriure-s'hi
+                        {% else %}
+                        Entrar en llista d'espera
+                        {% endif %}
+                    </div>
+                    </a>
+                        {% endif %}
+                        {% if user in activity.enrolled.all %}
+                    <p class="margin-block">Ja estàs inscrita a aquesta activitat. Pots veure i gestionar les teves inscripcions a <a href="{% url 'my_activities' %}">Les meves activitats</a>. </p>
+                        {% endif %}
                     {% endif %}
                 </div>
-                </a>
-                    {% endif %}
-                    {% if user in activity.enrolled.all %}
-                <p class="margin-block">Ja estàs inscrita a aquesta activitat. Pots veure i gestionar les teves inscripcions a <a href="{% url 'my_activities' %}">Les meves activitats</a>. </p>
-                    {% endif %}
-                {% endif %}
-            </div>
         </div>
         {% endfor %}
     </div>
