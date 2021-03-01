@@ -43,7 +43,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
     form = ProjectStageForm
     empty_value_display = '(cap)'
     list_display = (
-        'project_field_ellipsis', 'date_start', 'stage_type',
+        'project_field_ellipsis', 'date_start', 'stage_type', 'covid_crisis',
         'stage_responsible_field_ellipsis', 'hours', 'axis_summary', 'entity',
         'subsidy_period', '_has_certificate', '_participants_count',
         'project_field'
@@ -58,7 +58,8 @@ class ProjectStageAdmin(admin.ModelAdmin):
     }
     fieldsets = [
         (None, {
-            'fields': ['project', 'stage_type', 'subsidy_period', 'date_start',
+            'fields': ['project', 'stage_type', 'covid_crisi',
+                       'subsidy_period', 'date_start',
                        'date_end', 'follow_up', 'axis', 'subaxis', 'entity',
                        'stage_organizer', 'stage_responsible',
                        'scanned_signatures', 'scanned_certificate', 'hours',

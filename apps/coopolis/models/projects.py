@@ -261,6 +261,7 @@ class ProjectStage(models.Model):
     stage_type = models.CharField("tipus d'acompanyament", max_length=2,
                                   default=DEFAULT_STAGE_TYPE,
                                   choices=STAGE_TYPE_OPTIONS)
+    covid_crisis = models.BooleanField("Crisi covid", default=False)
     subsidy_period = models.ForeignKey(SubsidyPeriod,
                                        verbose_name="convocatòria", null=True,
                                        on_delete=models.SET_NULL)
