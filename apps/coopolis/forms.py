@@ -286,7 +286,7 @@ class ActivityPollForm(forms.ModelForm):
                     {
                         'name': 'duration',
                         'type': 'stars',
-                        'obj': self.fields.get('hours')
+                        'obj': self.fields.get('duration')
                     },
                     {
                         'name': 'hours',
