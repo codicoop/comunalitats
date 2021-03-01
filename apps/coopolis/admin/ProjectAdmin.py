@@ -48,8 +48,12 @@ class ProjectStageAdmin(admin.ModelAdmin):
         'subsidy_period', '_has_certificate', '_participants_count',
         'project_field'
     )
-    list_filter = ('subsidy_period', ('stage_responsible', admin.RelatedOnlyFieldListFilter), 'date_start',
-                   'stage_type', 'axis', 'entity', 'project__sector')
+    list_filter = (
+        'subsidy_period',
+        ('stage_responsible', admin.RelatedOnlyFieldListFilter),
+        'date_start', 'stage_type', 'covid_crisis', 'axis', 'entity',
+        'project__sector'
+    )
     actions = ["export_as_csv"]
     search_fields = ['project__name__unaccent']
     raw_id_fields = ('involved_partners',)
