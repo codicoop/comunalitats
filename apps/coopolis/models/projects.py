@@ -29,7 +29,8 @@ class Project(models.Model):
         verbose_name_plural = "projectes"
         verbose_name = "projecte"
 
-    partners = models.ManyToManyField('User', verbose_name="sòcies", blank=True, related_name='projects')
+    partners = models.ManyToManyField('User', verbose_name="sòcies",
+                                      blank=True, related_name='projects')
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     SECTORS = (
         ('A', 'Altres'),
@@ -53,51 +54,80 @@ class Project(models.Model):
         ("RUNNING", "Constituïda"),
         ("DOWN", "Caigut")
     )
-    project_status = models.CharField("estat del projecte", max_length=50, blank=True, null=True,
+    project_status = models.CharField("estat del projecte", max_length=50,
+                                      blank=True, null=True,
                                       choices=PROJECT_STATUS_OPTIONS)
     MOTIVATION_OPTIONS = (
         ('COOPERATIVISM_EDUCATION', 'Formació en cooperativisme'),
         ('COOPERATIVE_CREATION', "Constitució d'una cooperativa"),
-        ('TRANSFORM_FROM_ASSOCIATION', "Transformació d'associació a cooperativa"),
+        ('TRANSFORM_FROM_ASSOCIATION',
+         "Transformació d'associació a cooperativa"),
         ('TRANSFORM_FROM_SCP', "Transformació de SCP a cooperativa"),
         ('ENTERPRISE_RELIEF', "Relleu empresarial"),
         ('CONSOLIDATION', "Consolidació"),
         ('OTHER', "Altres"),
     )
-    motivation = models.CharField("petició inicial", max_length=50, blank=True, null=True, choices=MOTIVATION_OPTIONS)
+    motivation = models.CharField("petició inicial", max_length=50, blank=True,
+                                  null=True, choices=MOTIVATION_OPTIONS)
     mail = models.EmailField("correu electrònic")
     phone = models.CharField("telèfon", max_length=25)
-    town = models.ForeignKey(Town, verbose_name="població", on_delete=models.SET_NULL, null=True, blank=True)
-    district = models.TextField("districte", blank=True, null=True, choices=settings.DISTRICTS)
-    number_people = models.IntegerField("número de persones", blank=True, null=True)
-    registration_date = models.DateField("data de registre", blank=True, null=True, default=datetime.date.today)
+    town = models.ForeignKey(Town, verbose_name="població",
+                             on_delete=models.SET_NULL, null=True, blank=True)
+    district = models.TextField("districte", blank=True, null=True,
+                                choices=settings.DISTRICTS)
+    number_people = models.IntegerField("número de persones", blank=True,
+                                        null=True)
+    registration_date = models.DateField("data de registre", blank=True,
+                                         null=True,
+                                         default=datetime.date.today)
     cif = models.CharField("N.I.F.", max_length=11, blank=True, null=True)
-    object_finality = models.TextField("objecte i finalitat", blank=True, null=True)
-    project_origins = models.TextField("orígens del projecte", blank=True, null=True)
-    solves_necessities = models.TextField("quines necessitats resol el vostre projecte?", blank=True, null=True)
-    social_base = models.TextField("compta el vostre projecte amb una base social?", blank=True, null=True)
-    constitution_date = models.DateField("data de constitució", blank=True, null=True)
+    object_finality = models.TextField("objecte i finalitat", blank=True,
+                                       null=True)
+    project_origins = models.TextField("orígens del projecte", blank=True,
+                                       null=True)
+    solves_necessities = models.TextField(
+        "quines necessitats resol el vostre projecte?", blank=True, null=True)
+    social_base = models.TextField(
+        "compta el vostre projecte amb una base social?", blank=True,
+        null=True)
+    constitution_date = models.DateField("data de constitució", blank=True,
+                                         null=True)
     subsidy_period = models.ForeignKey(
-        SubsidyPeriod, verbose_name="convocatòria de la constitució", null=True, blank=True, on_delete=models.SET_NULL,
-        help_text="OPCIONAL. En cas que el projecte s'hagi constituït en una convocatòria posterior a l'ultima "
-                  "intervenció de l'ateneu, podeu indicar-ho aquí, per tal que aparegui a l'informe de Projectes "
-                  "Constituïts. Aquest camp NO farà aparèixer el projecte a l'excel de justificació (per aparèixer a "
+        SubsidyPeriod, verbose_name="convocatòria de la constitució",
+        null=True, blank=True, on_delete=models.SET_NULL,
+        help_text="OPCIONAL. En cas que el projecte s'hagi constituït en una "
+                  "convocatòria posterior a l'ultima "
+                  "intervenció de l'ateneu, podeu indicar-ho aquí, per tal "
+                  "que aparegui a l'informe de Projectes "
+                  "Constituïts. Aquest camp NO farà aparèixer el projecte a "
+                  "l'excel de justificació (per aparèixer a "
                   "l'excel cal crear una Justificació d'Acompanyament)"
     )
-    estatuts = models.FileField("estatuts", blank=True, null=True, storage=PrivateMediaStorage(), max_length=250)
-    viability = models.FileField("pla de viabilitat", blank=True, null=True, storage=PrivateMediaStorage(),
+    estatuts = models.FileField("estatuts", blank=True, null=True,
+                                storage=PrivateMediaStorage(), max_length=250)
+    viability = models.FileField("pla de viabilitat", blank=True, null=True,
+                                 storage=PrivateMediaStorage(),
                                  max_length=250)
-    sostenibility = models.FileField("pla de sostenibilitat", blank=True, null=True, storage=PrivateMediaStorage(),
+    sostenibility = models.FileField("pla de sostenibilitat", blank=True,
+                                     null=True, storage=PrivateMediaStorage(),
                                      max_length=250)
-    derivation = models.ForeignKey(Derivation, verbose_name="derivat", on_delete=models.SET_NULL, blank=True, null=True)
-    derivation_date = models.DateField("data de derivació", blank=True, null=True)
+    derivation = models.ForeignKey(Derivation, verbose_name="derivat",
+                                   on_delete=models.SET_NULL, blank=True,
+                                   null=True)
+    derivation_date = models.DateField("data de derivació", blank=True,
+                                       null=True)
     description = models.TextField("descripció", blank=True, null=True)
-    other = models.CharField("altres", max_length=240, blank=True, null=True,
-                             help_text="Apareix a la taula de Seguiment d'Acompanyaments")
-    employment_estimation = models.PositiveIntegerField("insercions laborals previstes", default=0)
-    follow_up_situation = models.CharField("seguiment", max_length=50, choices=settings.PROJECT_STATUS, blank=True,
+    other = models.CharField(
+        "altres", max_length=240, blank=True, null=True,
+        help_text="Apareix a la taula de Seguiment d'Acompanyaments")
+    employment_estimation = models.PositiveIntegerField(
+        "insercions laborals previstes", default=0)
+    follow_up_situation = models.CharField("seguiment", max_length=50,
+                                           choices=settings.PROJECT_STATUS,
+                                           blank=True,
                                            null=True)
-    follow_up_situation_update = models.DateTimeField("actualització seguiment", blank=True, null=True)
+    follow_up_situation_update = models.DateTimeField(
+        "actualització seguiment", blank=True, null=True)
     tags = tagulous.models.TagField(
         verbose_name="etiquetes",
         force_lowercase=True, blank=True,
@@ -153,6 +183,7 @@ class Project(models.Model):
         if not self.stages or self.stages.count() < 1:
             return None
         return self.stages.all()[0].stage_responsible
+
     last_stage_responsible.fget.short_description = "Últim acompanyament"
 
     @property
@@ -160,6 +191,7 @@ class Project(models.Model):
         if not self.stages or self.stages.count() < 1:
             return None
         return self.stages.all()[0].stage_organizer
+
     last_stage_organizer.fget.short_description = "Última organitzadora"
 
     @property
@@ -174,12 +206,13 @@ class Project(models.Model):
     @property
     def follow_up_with_date(self):
         if self.follow_up_situation_update:
-            return f"{self.follow_up_situation} ({self.follow_up_situation_update.strftime('%d-%m-%Y')})"
+            date = self.follow_up_situation_update.strftime('%d-%m-%Y')
+            return f"{self.follow_up_situation} ({date})"
         return self.follow_up_situation
 
     @staticmethod
     def autocomplete_search_fields():
-        return ('name__icontains', )
+        return ('name__icontains',)
 
     @property
     def partners_activities(self):
@@ -191,6 +224,7 @@ class Project(models.Model):
                     acts.append(activity)
         acts.sort()
         return mark_safe("<br>".join(acts))
+
     partners_activities.fget.short_description = "Sessions"
 
     def save(self, *args, **kw):
@@ -212,7 +246,8 @@ class ProjectStage(models.Model):
 
     DEFAULT_STAGE_TYPE = 1
 
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat",
+    project = models.ForeignKey(Project, on_delete=models.CASCADE,
+                                verbose_name="projecte acompanyat",
                                 related_name="stages")
     STAGE_TYPE_OPTIONS = (
         ('1', "00 Nova creació - acollida"),
@@ -223,18 +258,26 @@ class ProjectStage(models.Model):
         ('9', "05 Incubació"),
         ('10', "06 Crisi Covid"),
     )
-    stage_type = models.CharField("tipus d'acompanyament", max_length=2, default=DEFAULT_STAGE_TYPE,
+    stage_type = models.CharField("tipus d'acompanyament", max_length=2,
+                                  default=DEFAULT_STAGE_TYPE,
                                   choices=STAGE_TYPE_OPTIONS)
-    subsidy_period = models.ForeignKey(SubsidyPeriod, verbose_name="convocatòria", null=True, on_delete=models.SET_NULL)
-    date_start = models.DateField("data d'inici", null=True, blank=True, default=datetime.date.today)
+    subsidy_period = models.ForeignKey(SubsidyPeriod,
+                                       verbose_name="convocatòria", null=True,
+                                       on_delete=models.SET_NULL)
+    date_start = models.DateField("data d'inici", null=True, blank=True,
+                                  default=datetime.date.today)
     date_end = models.DateField("data de finalització", null=True, blank=True)
     follow_up = models.TextField("seguiment", null=True, blank=True)
-    axis = models.CharField("eix", help_text="Eix de la convocatòria on es justificarà.", choices=settings.AXIS_OPTIONS,
+    axis = models.CharField("eix",
+                            help_text="Eix de la convocatòria on es justificarà.",
+                            choices=settings.AXIS_OPTIONS,
                             null=True, blank=True, max_length=1)
-    subaxis = models.CharField("sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
-                               null=True, blank=True, max_length=2, choices=get_subaxis_choices())
-    entity = models.ForeignKey(Entity, verbose_name="qui ho fa", default=None, null=True, blank=True,
-                                  on_delete=models.SET_NULL)
+    subaxis = models.CharField(
+        "sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
+        null=True, blank=True, max_length=2, choices=get_subaxis_choices())
+    entity = models.ForeignKey(Entity, verbose_name="qui ho fa", default=None,
+                               null=True, blank=True,
+                               on_delete=models.SET_NULL)
     # Entity was called "organizer" before, causing confusion, specially because we wanted to add the Organizer field
     # here. We renamed 'organizer' to entity and made a migration for this change (0046_auto...py).
     # Then I added the 'organizer' FK field. Makemigration worked fine, but migrate was throwing an error:
@@ -243,29 +286,45 @@ class ProjectStage(models.Model):
     # or any other reference, also not postgres cache glitches or anything I could identify.
     # Did the experiment of calling it differently and worked.
     # Given that I don't understand the problem, leaving the field with a different name seems the safest option.
-    stage_organizer = models.ForeignKey(Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL, null=True,
-                                  blank=True)
+    stage_organizer = models.ForeignKey(Organizer,
+                                        verbose_name="organitzadora",
+                                        on_delete=models.SET_NULL, null=True,
+                                        blank=True)
     stage_responsible = models.ForeignKey(
-        "User", verbose_name="persona responsable", blank=True, null=True, on_delete=models.SET_NULL,
-        related_name='stage_responsible', help_text="Persona de l'equip al càrrec de l'acompanyament. Per aparèixer "
-        "al desplegable, cal que la persona tingui activada la opció 'Membre del personal'.")
+        "User", verbose_name="persona responsable", blank=True, null=True,
+        on_delete=models.SET_NULL,
+        related_name='stage_responsible',
+        help_text="Persona de l'equip al càrrec de l'acompanyament. Per "
+                  "aparèixer al desplegable, cal que la persona tingui "
+                  "activada la opció 'Membre del personal'.")
     scanned_signatures = models.FileField(
-        "fitxa de projectes (document amb signatures)", blank=True, null=True, storage=PrivateMediaStorage(),
+        "fitxa de projectes (document amb signatures)", blank=True, null=True,
+        storage=PrivateMediaStorage(),
         max_length=250)
     scanned_certificate = models.FileField(
-        "certificat", blank=True, null=True, storage=PrivateMediaStorage(), max_length=250)
+        "certificat", blank=True, null=True, storage=PrivateMediaStorage(),
+        max_length=250)
     hours = models.IntegerField(
-        "número d'hores", help_text="Camp necessari per la justificació.", null=True, blank=True)
+        "número d'hores", help_text="Camp necessari per la justificació.",
+        null=True, blank=True)
     involved_partners = models.ManyToManyField(
-        User, verbose_name="persones involucrades", blank=True, related_name='stage_involved_partners',
-        help_text="Persones que apareixeran a la justificació com a que han participat a l'acompanyament.")
+        User, verbose_name="persones involucrades", blank=True,
+        related_name='stage_involved_partners',
+        help_text="Persones que apareixeran a la justificació com a que han "
+                  "participat a l'acompanyament.")
 
     # cofunding options module
-    cofunded = models.ForeignKey(Cofunding, verbose_name="Cofinançat", on_delete=models.SET_NULL, null=True, blank=True,
+    cofunded = models.ForeignKey(Cofunding, verbose_name="Cofinançat",
+                                 on_delete=models.SET_NULL, null=True,
+                                 blank=True,
                                  related_name='cofunded_projects')
-    cofunded_ateneu = models.BooleanField("Cofinançat amb Ateneus Cooperatius", default=False)
-    strategic_line = models.ForeignKey(StrategicLine, verbose_name="línia estratègica", on_delete=models.SET_NULL,
-                                       blank=True, null=True, related_name='strategic_line_projects')
+    cofunded_ateneu = models.BooleanField("Cofinançat amb Ateneus Cooperatius",
+                                          default=False)
+    strategic_line = models.ForeignKey(StrategicLine,
+                                       verbose_name="línia estratègica",
+                                       on_delete=models.SET_NULL,
+                                       blank=True, null=True,
+                                       related_name='strategic_line_projects')
 
     def axis_summary(self):
         axis = self.axis if self.axis else '(cap)'
@@ -285,8 +344,8 @@ class ProjectStage(models.Model):
                 )
             if self.axis not in self.subaxis:
                 raise ValidationError(
-                    {'subaxis': f"El sub-eix { self.subaxis } no pertany a "
-                                f"l'eix { self.axis }."}
+                    {'subaxis': f"El sub-eix {self.subaxis} no pertany a "
+                                f"l'eix {self.axis}."}
                 )
 
         has_subsidy_period = (self.subsidy_period and
@@ -325,10 +384,14 @@ class EmploymentInsertion(models.Model):
         verbose_name_plural = "insercions laborals"
         ordering = ["-insertion_date"]
 
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat",
+    project = models.ForeignKey(Project, on_delete=models.CASCADE,
+                                verbose_name="projecte acompanyat",
                                 related_name="employment_insertions")
-    user = models.ForeignKey(User, verbose_name="persona", blank=True, null=True, on_delete=models.PROTECT)
-    subsidy_period = models.ForeignKey(SubsidyPeriod, verbose_name="convocatòria", null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, verbose_name="persona", blank=True,
+                             null=True, on_delete=models.PROTECT)
+    subsidy_period = models.ForeignKey(SubsidyPeriod,
+                                       verbose_name="convocatòria", null=True,
+                                       on_delete=models.SET_NULL)
     insertion_date = models.DateField("alta seguretat social")
     CONTRACT_TYPE_CHOICES = (
         (1, "Indefinit"),
@@ -344,4 +407,4 @@ class EmploymentInsertion(models.Model):
     )
 
     def __str__(self):
-        return f"{ self.user.full_name }: { self.get_contract_type_display() }"
+        return f"{self.user.full_name}: {self.get_contract_type_display()}"
