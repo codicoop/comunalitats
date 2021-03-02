@@ -16,31 +16,45 @@ class User(BaseUser):
     REQUIRED_FIELDS = []
     objects = CCUserManager()
 
-    fake_email = models.BooleanField("e-mail inventat", default=False,
-                                     help_text="Marca aquesta casella si el correu és inventat, i desmarca-la si mai "
-                                               "el canvieu pel correu real. Ens ajudarà a mantenir la base de dades"
-                                               "neta.")
-    username = models.CharField(unique=False, null=True, max_length=150, verbose_name="nom d'usuari/a")
-    surname2 = models.CharField("segon cognom", max_length=50, blank=True, null=True)
+    fake_email = models.BooleanField(
+        "e-mail inventat", default=False,
+        help_text="Marca aquesta casella si el correu és inventat, i "
+                  "desmarca-la si mai el canvieu pel correu real. Ens ajudarà "
+                  "a mantenir la base de dadesneta."
+    )
+    username = models.CharField(unique=False, null=True, max_length=150,
+                                verbose_name="nom d'usuari/a")
+    surname2 = models.CharField("segon cognom", max_length=50, blank=True,
+                                null=True)
     id_number = models.CharField("DNI/NIE/Passaport", null=True, max_length=11)
+    cannot_share_id = models.BooleanField(
+        "Si degut a la teva situació legal et suposa un inconvenient"
+        " indicar el DNI, deixa'l en blanc i marca aquesta casella",
+        default=False,
+    )
     GENDERS = (
         ('OTHER', 'Altre'),
         ('FEMALE', 'Dona'),
         ('MALE', 'Home')
     )
-    gender = models.CharField("gènere", blank=True, null=True, choices=GENDERS, max_length=10)
+    gender = models.CharField("gènere", blank=True, null=True, choices=GENDERS,
+                              max_length=10)
     BIRTH_PLACES = (
         ("BARCELONA", "Barcelona"),
         ("CATALUNYA", "Catalunya"),
         ("ESPANYA", "Espanya"),
         ("OTHER", "Altre")
     )
-    birth_place = models.TextField("lloc de naixement", blank=True, null=True, choices=BIRTH_PLACES)
+    birth_place = models.TextField("lloc de naixement", blank=True, null=True,
+                                   choices=BIRTH_PLACES)
     birthdate = models.DateField("data de naixement", blank=True, null=True)
-    town = models.ForeignKey(Town, verbose_name="població", on_delete=models.SET_NULL, null=True, blank=False)
-    district = models.TextField("districte", blank=True, null=True, choices=settings.DISTRICTS)
+    town = models.ForeignKey(Town, verbose_name="població",
+                             on_delete=models.SET_NULL, null=True, blank=False)
+    district = models.TextField("districte", blank=True, null=True,
+                                choices=settings.DISTRICTS)
     address = models.CharField("adreça", max_length=250, blank=True, null=True)
-    phone_number = models.CharField("telèfon", max_length=25, blank=True, null=True)
+    phone_number = models.CharField("telèfon", max_length=25, blank=True,
+                                    null=True)
     STUDY_LEVELS = (
         ('MASTER', 'Màster / Postgrau'),
         ('HIGH_SCHOOL', 'Secundària'),
@@ -49,28 +63,35 @@ class User(BaseUser):
         ('UNIVERSITY', 'Estudis universitaris'),
         ('ELEMENTARY_SCHOOL', 'Primària')
     )
-    educational_level = models.TextField("nivell d'estudis", blank=True, null=True, choices=STUDY_LEVELS)
+    educational_level = models.TextField("nivell d'estudis", blank=True,
+                                         null=True, choices=STUDY_LEVELS)
     EMPLOYMENT_OPTIONS = (
         ('SELF_EMPLOYED', 'En actiu per compte propi'),
         ('UNEMPLOYMENT_BENEFIT_RECEIVER', 'Perceptora de prestacions socials'),
         ('UNEMPLOYMENT_BENEFIT_REQUESTED', "Demandant d'ocupació"),
         ('EMPLOYED_WORKER', 'En actiu per compte aliè')
     )
-    employment_situation = models.TextField("situació laboral", blank=True, null=True, choices=EMPLOYMENT_OPTIONS)
+    employment_situation = models.TextField(
+        "situació laboral", blank=True, null=True, choices=EMPLOYMENT_OPTIONS)
     DISCOVERED_US_OPTIONS = (
         ('INTERNET', 'Per internet i xarxes socials'),
         ('FRIEND', "A través d'un conegut"),
         ('PREVIOUS_ACTIVITY', "Per una activitat de l'ateneu"),
         ('OTHER', 'Altres')
     )
-    discovered_us = models.TextField("com ens has conegut", blank=True, null=True, choices=DISCOVERED_US_OPTIONS)
-    project_involved = models.CharField("si participes a un projecte cooperatiu o de l'ESS, indica'ns-el", blank=True,
-                                        null=True, max_length=240)
-    cooperativism_knowledge = models.TextField("coneixements previs",
-                                               help_text="Tens coneixements / formació / experiència en "
-                                                         "cooperativisme? Quina? Cursos realitzats?",
-                                               blank=True, null=True)
-    authorize_communications = models.BooleanField("autoritza comunicació publicitària", default=False)
+    discovered_us = models.TextField("com ens has conegut", blank=True,
+                                     null=True, choices=DISCOVERED_US_OPTIONS)
+    project_involved = models.CharField(
+        "si participes a un projecte cooperatiu o de l'ESS, indica'ns-el",
+        blank=True, null=True, max_length=240)
+    cooperativism_knowledge = models.TextField(
+        "coneixements previs",
+        help_text="Tens coneixements / formació / experiència en "
+                  "cooperativisme? Quina? Cursos realitzats?",
+        blank=True, null=True
+    )
+    authorize_communications = models.BooleanField(
+        "autoritza comunicació publicitària", default=False)
 
     @staticmethod
     def autocomplete_search_fields():
