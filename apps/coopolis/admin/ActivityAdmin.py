@@ -11,6 +11,30 @@ import modelclone
 from coopolis.forms import ActivityForm, ActivityEnrolledForm
 from cc_courses.models import Activity, ActivityEnrolled, ActivityResourceFile
 from coopolis.models import User
+from dataexports.models import SubsidyPeriod
+
+
+class FilterBySubsidyPeriod(admin.SimpleListFilter):
+    """
+    Allows Activities to be filtered according to their date_start using a
+    dropdown with the subsidy periods.
+    """
+    title = "Convocatòria"
+    parameter_name = 'subsidy_period'
+
+    def lookups(self, request, model_admin):
+        qs = SubsidyPeriod.objects.all()
+        qs.order_by('name')
+        return list(qs.values_list('id', 'name'))
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value:
+            period = SubsidyPeriod.objects.get(id=value)
+            return queryset.filter(date_start__range=(
+                period.date_start, period.date_end)
+            )
+        return queryset
 
 
 class CofundingAdmin(admin.ModelAdmin):
@@ -90,6 +114,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     summernote_fields = ('objectives', 'instructions',)
     search_fields = ('date_start', 'name', 'objectives',)
     list_filter = (
+        FilterBySubsidyPeriod,
         'course', 'date_start', 'room', 'entity', 'axis', 'place',
         'for_minors', 'cofunded',)
     fieldsets = [
