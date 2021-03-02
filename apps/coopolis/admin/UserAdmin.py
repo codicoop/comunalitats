@@ -77,7 +77,6 @@ class UserAdmin(admin.ModelAdmin):
                 fields.append('is_superuser')
             if 'is_staff' not in fields:
                 fields.append('is_staff')
-        print(fields)
         return fields
 
     def get_fields(self, request, obj=None):
