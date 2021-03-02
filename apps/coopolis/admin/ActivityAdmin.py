@@ -215,16 +215,20 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         """
         fields_list contains every m2m record that was in the Inline.
 
-        Filtering for the "activityenrolled_set" just in case we add more inlines in the future.
+            Filtering for the "activityenrolled_set" just in case we add more
+        inlines in the future.
 
         :param related_name: contains activityenrolled_set
-        :param fields_list: contains [{'user': 897, 'user_comments': None}, {'user': 898, 'user_comments': None}, ETC.
+        :param fields_list: contains [{'user': 897, 'user_comments': None},
+        {'user': 898, 'user_comments': None}, ETC.
         :return: empty list
         """
-        return list() if related_name == "activityenrolled_set" else fields_list
+        matches_name = related_name == "activityenrolled_set"
+        return list() if matches_name else fields_list
 
     def render_change_form(self, request, context, *args, **kwargs):
-        """ modelclone not showing Save button because of a bug. This workarounds it. """
+        """ modelclone not showing Save button because of a bug.
+        This workarounds it. """
         kwargs['add'] = True
         return super().render_change_form(request, context, *args, **kwargs)
 
@@ -250,15 +254,20 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         temp = loader.get_template('admin/attendee_list.html')
         content = temp.render(
             {
-                'assistants': Activity.objects.get(pk=_id).enrolled.filter(enrollments__waiting_list=False),
+                'assistants': Activity.objects.get(pk=_id).enrolled.filter(
+                    enrollments__waiting_list=False),
                 'activity': Activity.objects.get(pk=_id),
                 'footer_image': config.ATTENDEE_LIST_FOOTER_IMG,
             }
         )
 
-        pdf = weasyprint.HTML(string=content.encode('utf-8'), base_url=request.build_absolute_uri())
+        pdf = weasyprint.HTML(
+            string=content.encode('utf-8'),
+            base_url=request.build_absolute_uri()
+        )
 
-        response = HttpResponse(pdf.write_pdf(), content_type='application/pdf')
+        response = HttpResponse(
+            pdf.write_pdf(), content_type='application/pdf')
         response['Content-Disposition'] = 'filename="llista_assistencia.pdf"'
         return response
 
@@ -266,8 +275,9 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         if obj.id is None:
             return '-'
         base_url = reverse('admin:coopolis_user_changelist')
-        return mark_safe(u'<a href="%s?enrolled_activities__exact=%d">Inscrites i en llista d\'espera</a>' % (
-            base_url, obj.id))
+        return mark_safe(
+            u'<a href="%s?enrolled_activities__exact=%d">Inscrites i '
+            u'en llista d\'espera</a>' % (base_url, obj.id))
 
     attendee_filter_field.short_description = 'Llistat'
 
@@ -281,7 +291,8 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     send_reminder_field.short_description = "Recordatori"
 
     def send_reminder(self, request, _id):
-        # Confirmation page in admin inspired by: https://gist.github.com/rsarai/d475c766871f40e52b8b4d1b12dedea2
+        # Confirmation page in admin inspired by:
+        # https://gist.github.com/rsarai/d475c766871f40e52b8b4d1b12dedea2
         obj = Activity.objects.get(id=_id)
         if request.method == 'POST':
             if 'preview' in request.POST:
