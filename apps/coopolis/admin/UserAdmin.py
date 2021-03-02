@@ -46,24 +46,35 @@ class UserAdmin(admin.ModelAdmin):
 
     form = MySignUpAdminForm
     empty_value_display = '(cap)'
-    list_display = ('date_joined', 'first_name', 'last_name', 'id_number', 'email', 'project',
-                    'enrolled_activities_count')
-    search_fields = ('id_number', 'last_name__unaccent', 'first_name__unaccent', 'email', 'phone_number',
-                     'cooperativism_knowledge')
-    list_filter = ('gender', ('town', admin.RelatedOnlyFieldListFilter), 'district', 'is_staff', 'fake_email',
-                   'authorize_communications', )
-    fields = ('id', 'first_name', 'last_name', 'surname2', 'gender', 'id_number', 'email', 'fake_email', 'birthdate',
-              'birth_place', 'town', 'district', 'address', 'phone_number', 'educational_level',
-              'employment_situation', 'discovered_us', 'project_involved', 'cooperativism_knowledge',
-              'authorize_communications', 'project', 'is_staff', 'groups',
-              'is_active', 'date_joined', 'last_login', 'new_password', )
+    list_display = (
+        'date_joined', 'first_name', 'last_name', 'id_number', 'email',
+        'project', 'enrolled_activities_count'
+    )
+    search_fields = (
+        'id_number', 'last_name__unaccent', 'first_name__unaccent', 'email',
+        'phone_number', 'cooperativism_knowledge'
+    )
+    list_filter = (
+        'gender', ('town', admin.RelatedOnlyFieldListFilter), 'district',
+        'is_staff', 'fake_email', 'authorize_communications',
+    )
+    fields = (
+        'id', 'first_name', 'last_name', 'surname2', 'gender', 'id_number',
+        'cannot_share_id', 'email', 'fake_email', 'birthdate', 'birth_place',
+        'town', 'district', 'address', 'phone_number', 'educational_level',
+        'employment_situation', 'discovered_us', 'project_involved',
+        'cooperativism_knowledge', 'authorize_communications', 'project',
+        'is_staff', 'groups', 'is_active', 'date_joined', 'last_login',
+        'new_password',
+    )
     readonly_fields = ('id', 'last_login', 'date_joined', 'project', )
     actions = ['copy_emails', 'to_csv', ]
     inlines = (ActivityEnrolledInline, )
 
     def project(self, obj):
         if obj.project:
-            return mark_safe(f"<a href=\"../../../project/{ obj.project.id }/change/\">{ obj.project }</a>")
+            return mark_safe(f"<a href=\"../../../project/{ obj.project.id }"
+                             f"/change/\">{ obj.project }</a>")
         return None
     project.short_description = 'Projecte'
 
@@ -109,13 +120,18 @@ class UserAdmin(admin.ModelAdmin):
         emails = []
         for user in queryset:
             emails.append(user.email)
-        # self.message_user(request, "%s successfully marked as published." % message_bit)
-        html = f"<p>La majoria d'aplicacions separen els correus amb comes, però d'altres amb punt i coma; " \
-               f"selecciona i copia el que necessitis.</p>" \
-               f"<p><em>Recorda: triple clic per seleccionar-ho tot, CTRL+C per copiar i CTRL+V per enganxar. En Mac, " \
-               f"CMD en comptes de CTRL.</em></p>" \
-               f"<textarea cols=\"150\" rows=\"10\">{', '.join(emails)}</textarea><br><br>" \
-               f"<textarea cols=\"150\" rows=\"10\">{'; '.join(emails)}</textarea><br>"
+        html = (
+            f"<p>La majoria d'aplicacions separen els correus amb comes, "
+               f"però d'altres amb punt i coma; "
+               f"selecciona i copia el que necessitis.</p>"
+               f"<p><em>Recorda: triple clic per seleccionar-ho tot, CTRL+C "
+            f"per copiar i CTRL+V per enganxar. En Mac, "
+               f"CMD en comptes de CTRL.</em></p>"
+               f"<textarea cols=\"150\" rows=\"10\">{', '.join(emails)}"
+            f"</textarea><br><br>"
+               f"<textarea cols=\"150\" rows=\"10\">{'; '.join(emails)}"
+            f"</textarea><br>"
+        )
         return HttpResponse(html)
     copy_emails.short_description = 'Copiar tots els e-mails'
 
@@ -160,8 +176,10 @@ class UserAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         # Sending welcome e-mail only if we're creating a new account.
         #  and form.cleaned_data['resend_welcome_email']
-        send_welcome = (change and form.cleaned_data['resend_welcome_email'] is True) or \
-                       (not change and form.cleaned_data['no_welcome_email'] is False)
+        resend_welcome_email = form.cleaned_data['resend_welcome_email']
+        no_welcome_email = form.cleaned_data['no_welcome_email']
+        send_welcome = (change and resend_welcome_email is True) or \
+                       (not change and no_welcome_email is False)
         if send_welcome:
             self.send_welcome_email(form.cleaned_data['email'])
 
@@ -182,6 +200,6 @@ class UserAdmin(admin.ModelAdmin):
             'ateneu_nom': config.PROJECT_FULL_NAME,
             'url_backoffice': settings.ABSOLUTE_URL,
             'url_accions': f"{settings.ABSOLUTE_URL}{reverse('courses')}",
-            'url_projecte': f"{settings.ABSOLUTE_URL}{reverse('project_info')}",
+            'url_projecte': f"{settings.ABSOLUTE_URL}{reverse('project_info')}"
         }
         mail.send()
