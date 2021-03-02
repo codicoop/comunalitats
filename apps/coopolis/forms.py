@@ -64,18 +64,27 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
         label="He llegit i accepto", required=True)
     authorize_communications = forms.BooleanField(
         label="Accepto rebre informació sobre els serveis", required=False)
-    id_number = forms.CharField(label="DNI/NIE/Passaport", required=False)
-    cannot_share_id = forms.BooleanField(
-        label="Si degut a la teva situació legal et suposa un inconvenient "
-              "indicar el DNI, deixa'l en blanc i marca aquesta casella",
-        required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['id_number'].required = False
         if "accept_conditions" in self.fields:
-            self.fields['accept_conditions'].help_text = mark_safe(config.CONTENT_SIGNUP_LEGAL1)
+            self.fields['accept_conditions'].help_text = mark_safe(
+                config.CONTENT_SIGNUP_LEGAL1)
         if "accept_conditions2" in self.fields:
-            self.fields['accept_conditions2'].help_text = mark_safe(config.CONTENT_SIGNUP_LEGAL2)
+            self.fields['accept_conditions2'].help_text = mark_safe(
+                config.CONTENT_SIGNUP_LEGAL2)
+
+    def clean(self):
+        super().clean()
+        cannot_share_id = self.cleaned_data.get('cannot_share_id')
+        id_number = self.cleaned_data.get('id_number')
+        if not id_number and not cannot_share_id:
+            msg = ("Necessitem el DNI, NIF o passaport per justificar la "
+                   "participació davant dels organismes públics que financen "
+                   "aquestes activitats.")
+            self.add_error('id_number', msg)
+        return self.cleaned_data
 
 
 class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
