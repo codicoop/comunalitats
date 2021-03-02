@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, ReadOnlyPasswordHashField
+from django.contrib.auth.forms import (
+    UserCreationForm, ReadOnlyPasswordHashField
+)
 from coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
 from constance import config
@@ -22,10 +21,14 @@ class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ('name', 'sector', 'web', 'project_status', 'motivation', 'mail', 'phone', 'town', 'district',
-                       'number_people', 'estatuts', 'viability', 'sostenibility', 'object_finality', 'project_origins',
-                       'solves_necessities', 'social_base')
-        exclude = ['cif', 'registration_date', 'constitution_date', 'partners',]
+        fields = (
+            'name', 'sector', 'web', 'project_status', 'motivation', 'mail',
+            'phone', 'town', 'district', 'number_people', 'estatuts',
+            'viability', 'sostenibility', 'object_finality', 'project_origins',
+            'solves_necessities', 'social_base'
+        )
+        exclude = ('cif', 'registration_date', 'constitution_date',
+                   'partners', )
 
 
 class ProjectFormAdmin(ProjectForm):
@@ -37,28 +40,38 @@ class ProjectFormAdmin(ProjectForm):
 class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
-                  'birth_place', 'town', 'district', 'address', 'gender', 'educational_level',
-                  'employment_situation', 'discovered_us', 'project_involved', 'password1', 'password2',
-                  'authorize_communications']
+        fields = (
+            'first_name', 'last_name', 'surname2', 'id_number',
+            'cannot_share_id', 'email',
+            'phone_number', 'birthdate', 'birth_place', 'town', 'district',
+            'address', 'gender', 'educational_level', 'employment_situation',
+            'discovered_us', 'project_involved', 'password1', 'password2',
+            'authorize_communications'
+        )
 
     required_css_class = "required"
     first_name = forms.CharField(label="Nom", max_length=30)
     last_name = forms.CharField(label="Cognom", max_length=30, required=True)
     email = forms.EmailField(
-        label="Correu electrònic", max_length=254, help_text='Requerit, ha de ser una adreça vàlida.')
-    birthdate = forms.DateField(label="Data de naixement", required=True, widget=XDSoftDatePickerInput())
+        label="Correu electrònic", max_length=254,
+        help_text='Requerit, ha de ser una adreça vàlida.')
+    birthdate = forms.DateField(
+        label="Data de naixement", required=True,
+        widget=XDSoftDatePickerInput())
     accept_conditions = forms.BooleanField(
         label="He llegit i accepto", required=True)
     accept_conditions2 = forms.BooleanField(
         label="He llegit i accepto", required=True)
-    authorize_communications = forms.BooleanField(label="Accepto rebre informació sobre els serveis", required=False)
+    authorize_communications = forms.BooleanField(
+        label="Accepto rebre informació sobre els serveis", required=False)
+    id_number = forms.CharField(label="DNI/NIE/Passaport", required=False)
+    cannot_share_id = forms.BooleanField(
+        label="Si degut a la teva situació legal et suposa un inconvenient "
+              "indicar el DNI, deixa'l en blanc i marca aquesta casella",
+        required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if 'username' in self.fields:
-            self.fields.pop('username')
-
         if "accept_conditions" in self.fields:
             self.fields['accept_conditions'].help_text = mark_safe(config.CONTENT_SIGNUP_LEGAL1)
         if "accept_conditions2" in self.fields:
@@ -72,9 +85,12 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
     """
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
-                  'birth_place', 'town', 'district', 'address', 'gender', 'educational_level',
-                  'employment_situation', 'discovered_us', 'project_involved', ]
+        fields = (
+            'first_name', 'last_name', 'surname2', 'id_number', 'email',
+            'phone_number', 'birthdate', 'birth_place', 'town',
+            'district', 'address', 'gender', 'educational_level',
+            'employment_situation', 'discovered_us', 'project_involved',
+        )
 
     password = ReadOnlyPasswordHashField()
     new_password = forms.CharField(
@@ -91,13 +107,18 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
     )
     first_name = forms.CharField(label="Nom", max_length=30)
     last_name = forms.CharField(label="Cognom", max_length=30, required=False)
-    no_welcome_email = forms.BooleanField(label="No enviar correu de benvinguda",
-                                          help_text="Al crear un compte per defecte s'enviarà un correu de notificació "
-                                                    "amb l'enllaç al back-office i instruccions. Si marqueu aquesta "
-                                                    "casella, no s'enviarà.", required=False)
-    resend_welcome_email = forms.BooleanField(label="Reenviar correu de benvinguda", required=False,
-                                              help_text="Marca aquesta casella si desitges tornar a enviar la "
-                                                        "notificació de creació de nou compte.")
+    no_welcome_email = forms.BooleanField(
+        label="No enviar correu de benvinguda",
+        help_text="Al crear un compte per defecte s'enviarà un correu de"
+                  " notificació amb l'enllaç al back-office i instruccions. "
+                  "Si marqueu aquesta casella, no s'enviarà.",
+        required=False
+    )
+    resend_welcome_email = forms.BooleanField(
+        label="Reenviar correu de benvinguda", required=False,
+        help_text="Marca aquesta casella si desitges tornar a enviar la "
+                  "notificació de creació de nou compte."
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -133,7 +154,8 @@ class ProjectStageInlineForm(forms.ModelForm):
         model = ProjectStage
         fields = '__all__'
 
-    # S'ha de processar això: settings.SUBAXIS_OPTIONS per convertir-ho en una llista, eliminant el 1r nivell
+    # S'ha de processar això: settings.SUBAXIS_OPTIONS per convertir-ho en una
+    # llista, eliminant el 1r nivell
 
     choices = [
         (None, '---------')
@@ -153,12 +175,18 @@ class ProjectStageForm(forms.ModelForm):
         widgets = {
             'subaxis': DynamicChoicesWidget(
                 depends_field='axis',
-                model=ProjectStage,  # This is supposed to be the model of a FK, but our subaxis field is not a FK
-                                     # but a dictionary in the settings. Turns out that it only wants the model to
-                                     # take its name and use it as identifier when rendering the HTML, so now that
-                                     # get_item_choices() is not using the model to return the values, we can put here
-                                     # any model, as a workaround.
-                                     # Best quality solution would be modify the library to make it model-optional.
+                # This is supposed to be the model of a FK, but our subaxis
+                # field is not a FK
+                # but a dictionary in the settings. Turns out that it only
+                # wants the model to
+                # take its name and use it as identifier when rendering the
+                # HTML, so now that
+                # get_item_choices() is not using the model to return the
+                # values, we can put here
+                # any model, as a workaround.
+                # Best quality solution would be modify the library to make it
+                # model-optional.
+                model=ProjectStage,
                 callback=get_item_choices,
                 no_value_disable=True,
                 include_empty_choice=True,
@@ -170,19 +198,29 @@ class ProjectStageForm(forms.ModelForm):
 class ActivityForm(forms.ModelForm):
     class Meta:
         model = Activity
-        fields = ('course', 'name', 'objectives', 'place', 'date_start', 'date_end', 'starting_time', 'ending_time',
-                  'spots', 'enrolled', 'entity', 'organizer', 'axis', 'subaxis',
-                  'photo1', 'photo2', 'publish', 'for_minors', 'minors_school_name', 'minors_school_cif',
-                  'minors_grade', 'minors_participants_number', 'minors_teacher', 'room', )
+        fields = (
+            'course', 'name', 'objectives', 'place', 'date_start', 'date_end',
+            'starting_time', 'ending_time', 'spots', 'enrolled', 'entity',
+            'organizer', 'axis', 'subaxis', 'photo1', 'photo2', 'publish',
+            'for_minors', 'minors_school_name', 'minors_school_cif',
+            'minors_grade', 'minors_participants_number', 'minors_teacher',
+            'room',
+        )
         widgets = {
             'subaxis': DynamicChoicesWidget(
                 depends_field='axis',
-                model=Activity,  # This is supposed to be the model of a FK, but our subaxis field is not a FK
-                                     # but a dictionary in the settings. Turns out that it only wants the model to
-                                     # take its name and use it as identifier when rendering the HTML, so now that
-                                     # get_item_choices() is not using the model to return the values, we can put here
-                                     # any model, as a workaround.
-                                     # Best quality solution would be modify the library to make it model-optional.
+                # This is supposed to be the model of a FK, but our subaxis
+                # field is not a FK
+                # but a dictionary in the settings. Turns out that it only
+                # wants the model to
+                # take its name and use it as identifier when rendering the
+                # HTML, so now that
+                # get_item_choices() is not using the model to return the
+                # values, we can put here
+                # any model, as a workaround.
+                # Best quality solution would be modify the library to make it
+                # model-optional.
+                model=Activity,
                 callback=get_item_choices,
                 no_value_disable=True,
                 include_empty_choice=True,
@@ -199,35 +237,57 @@ class ActivityForm(forms.ModelForm):
         change = True if self.instance.pk else False
         obj = self.instance
         # Si és una nova sessió i s'ha seleccionat self.room:
-        # Si estem editant una sessió que no tenia una reserva, i ara sí que n'ha de tenir:
-        if self.cleaned_data['room'] and (not change or
-                                          (change and not obj.room_reservation and self.cleaned_data['room'])):
+        # Si estem editant una sessió que no tenia una reserva, i ara sí que
+        # n'ha de tenir:
+        if (
+            self.cleaned_data['room']
+            and (
+                not change
+                or (
+                    change
+                    and not obj.room_reservation
+                    and self.cleaned_data['room']
+                )
+            )
+        ):
             # Activity.clean() already checked the availability.
             reservation_obj = self.create_update_reservation()
             obj.room_reservation = reservation_obj
 
-        # Si estem editant una sessió que ja tenia una reserva però han deseleccionat la sala:
+        # Si estem editant una sessió que ja tenia una reserva però han
+        # deseleccionat la sala:
         if change and obj.room_reservation and not self.cleaned_data['room']:
             if obj.room_reservation:
                 self.delete_reservation()
 
-        # Si estem editant una sessió que ja tenia reserva i que n'ha de continuar tenint:
+        # Si estem editant una sessió que ja tenia reserva i que n'ha de
+        # continuar tenint:
         if change and obj.room_reservation and self.cleaned_data['room']:
-            reservation_obj = self.create_update_reservation(obj.room_reservation)
+            reservation_obj = self.create_update_reservation(
+                obj.room_reservation)
             obj.room_reservation = reservation_obj
 
     def create_update_reservation(self, inst=None):
-        date_end = self.cleaned_data['date_end'] if self.cleaned_data['date_end'] else self.cleaned_data['date_start']
+        date_end = self.cleaned_data['date_start']
+        if self.cleaned_data['date_end']:
+            date_end = self.cleaned_data['date_end']
         values = {
             'title': self.cleaned_data['name'],
-            'start': make_aware(datetime.combine(self.cleaned_data['date_start'], self.cleaned_data['starting_time'])),
-            'end': make_aware(datetime.combine(date_end, self.cleaned_data['ending_time'])),
+            'start': make_aware(
+                datetime.combine(
+                    self.cleaned_data['date_start'],
+                    self.cleaned_data['starting_time']
+                )
+            ),
+            'end': make_aware(
+                datetime.combine(date_end, self.cleaned_data['ending_time'])),
             'room': self.cleaned_data['room'],
             'responsible': self.request.user,
             'created_by': self.request.user
         }
         pk = inst.id if inst else None
-        obj, created = Reservation.objects.update_or_create(id=pk, defaults=values)
+        obj, created = Reservation.objects.update_or_create(
+            id=pk, defaults=values)
         return obj
 
     def delete_reservation(self):
@@ -258,25 +318,31 @@ class ActivityPollForm(forms.ModelForm):
         model = ActivityPoll
         fields = (
             # Organització
-            'duration', 'hours', 'information', 'on_schedule', 'included_resources', 'space_adequation',
+            'duration', 'hours', 'information', 'on_schedule',
+            'included_resources', 'space_adequation',
             # Continguts
             'contents',
             # Metodologia
-            'methodology_fulfilled_objectives', 'methodology_better_results', 'participation_system',
+            'methodology_fulfilled_objectives', 'methodology_better_results',
+            'participation_system',
             # Valoració de la persona formadora
-            'teacher_has_knowledge', 'teacher_resolved_doubts', 'teacher_has_communication_skills',
+            'teacher_has_knowledge', 'teacher_resolved_doubts',
+            'teacher_has_communication_skills',
             # Utilitat del curs
-            'expectations_satisfied', 'adquired_new_tools', 'met_new_people', 'wanted_start_cooperative',
+            'expectations_satisfied', 'adquired_new_tools', 'met_new_people',
+            'wanted_start_cooperative',
             'wants_start_cooperative_now',
             # Valoració global
-            'general_satisfaction', 'also_interested_in', 'heard_about_it', 'comments'
+            'general_satisfaction', 'also_interested_in', 'heard_about_it',
+            'comments'
         )
         TRUE_FALSE_CHOICES = (
             (True, 'Yes'),
             (False, 'No')
         )
         widgets = {
-            'wants_start_cooperative_now': forms.Select(choices=TRUE_FALSE_CHOICES)
+            'wants_start_cooperative_now': forms.Select(
+                choices=TRUE_FALSE_CHOICES)
         }
 
     def get_grouped_fields(self):
@@ -324,7 +390,8 @@ class ActivityPollForm(forms.ModelForm):
                     {
                         'name': 'methodology_fulfilled_objectives',
                         'type': 'stars',
-                        'obj': self.fields.get('methodology_fulfilled_objectives')
+                        'obj': self.fields.get(
+                            'methodology_fulfilled_objectives')
                     },
                     {
                         'name': 'methodology_better_results',
@@ -353,7 +420,8 @@ class ActivityPollForm(forms.ModelForm):
                     {
                         'name': 'teacher_has_communication_skills',
                         'type': 'stars',
-                        'obj': self.fields.get('teacher_has_communication_skills')
+                        'obj': self.fields.get(
+                            'teacher_has_communication_skills')
                     },
                 ]
             }),

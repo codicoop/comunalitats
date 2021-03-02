@@ -1,11 +1,8 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from django.urls import reverse
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django import urls
-from django.core.mail import send_mail
 from django.conf import settings
 from constance import config
 
