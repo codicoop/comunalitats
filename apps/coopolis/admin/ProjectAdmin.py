@@ -62,7 +62,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
     }
     fieldsets = [
         (None, {
-            'fields': ['project', 'stage_type', 'covid_crisi',
+            'fields': ['project', 'stage_type', 'covid_crisis',
                        'subsidy_period', 'date_start',
                        'date_end', 'follow_up', 'axis', 'subaxis', 'entity',
                        'stage_organizer', 'stage_responsible',
