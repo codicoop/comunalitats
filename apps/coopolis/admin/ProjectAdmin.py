@@ -51,8 +51,8 @@ class ProjectStageAdmin(admin.ModelAdmin):
     list_filter = (
         'subsidy_period',
         ('stage_responsible', admin.RelatedOnlyFieldListFilter),
-        'date_start', 'stage_type', 'covid_crisis', 'axis', 'entity',
-        'project__sector'
+        'date_start', 'stage_type', 'covid_crisis', 'axis', 'stage_organizer',
+        'entity', 'project__sector'
     )
     actions = ["export_as_csv"]
     search_fields = ['project__name__unaccent']
