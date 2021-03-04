@@ -1,3 +1,4 @@
+import tagulous.models
 from django.conf import settings
 from django.db import models
 
@@ -92,11 +93,22 @@ class User(BaseUser):
     )
     authorize_communications = models.BooleanField(
         "autoritza comunicació publicitària", default=False)
+    tags = tagulous.models.TagField(
+        verbose_name="etiquetes",
+        force_lowercase=True, blank=True,
+        help_text="Prioritza les etiquetes que apareixen auto-completades. Si "
+                  "escrius una etiqueta amb un espai creurà que son dues "
+                  "etiquetes, per evitar-ho escriu-la entre cometes dobles, "
+                  "\"etiqueta amb espais\"."
+    )
 
     @staticmethod
     def autocomplete_search_fields():
-        filter_by = "id__iexact", "email__icontains", "first_name__icontains", "id_number__contains", \
-                    "last_name__icontains", "surname2__icontains"
+        filter_by = (
+            "id__iexact", "email__icontains", "first_name__icontains",
+            "id_number__contains", "last_name__icontains",
+            "surname2__icontains"
+        )
         return filter_by
 
     def enrolled_activities_count(self):
@@ -126,7 +138,10 @@ class User(BaseUser):
         if self.last_name:
             surname = self.last_name
         if self.surname2:
-            surname = f"{surname} {self.surname2}" if surname else self.surname2
+            if surname:
+                surname = f"{surname} {self.surname2}"
+            else:
+                surname = self.surname2
         return surname
 
     def __str__(self):

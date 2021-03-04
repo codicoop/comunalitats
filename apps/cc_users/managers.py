@@ -1,5 +1,6 @@
 from django.contrib.auth.models import UserManager
 from django.db import models
+from tagulous.models import TaggedManager
 
 
 class UserQuerySet(models.QuerySet):
@@ -13,7 +14,7 @@ class UserQuerySet(models.QuerySet):
         ).order_by().values('count')
 
 
-class CCUserManager(UserManager):
+class CCUserManager(TaggedManager, UserManager):
     def get_queryset(self):
         return UserQuerySet(self.model, using=self._db)
 
