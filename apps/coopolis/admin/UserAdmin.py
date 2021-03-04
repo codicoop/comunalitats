@@ -56,7 +56,7 @@ class UserAdmin(admin.ModelAdmin):
     )
     list_filter = (
         'gender', ('town', admin.RelatedOnlyFieldListFilter), 'district',
-        'is_staff', 'fake_email', 'authorize_communications',
+        'is_staff', 'fake_email', 'authorize_communications', 'tags',
     )
     fields = (
         'id', 'first_name', 'last_name', 'surname2', 'gender', 'id_number',
@@ -64,7 +64,7 @@ class UserAdmin(admin.ModelAdmin):
         'town', 'district', 'address', 'phone_number', 'educational_level',
         'employment_situation', 'discovered_us', 'project_involved',
         'cooperativism_knowledge', 'authorize_communications', 'project',
-        'is_staff', 'groups', 'is_active', 'date_joined', 'last_login',
+        'tags', 'is_staff', 'groups', 'is_active', 'date_joined', 'last_login',
         'new_password',
     )
     readonly_fields = ('id', 'last_login', 'date_joined', 'project', )
