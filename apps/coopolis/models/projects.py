@@ -2,6 +2,7 @@ import datetime
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Sum
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 import tagulous.models
@@ -373,6 +374,17 @@ class ProjectStage(models.Model):
     axis_summary.short_description = "Eix - Subeix"
     axis_summary.admin_order_field = 'axis'
 
+    def hours_sum(self):
+        total_qs = self.stage_sessions.aggregate(
+            total_sum=Sum('hours')
+        )
+        total = 0 if not total_qs['total_sum'] else total_qs['total_sum']
+        # if len(self.stage_sessions.all() > 0):
+        print('suma = ', total)
+        return total
+
+    hours_sum.short_description = "Suma d'hores"
+
     def clean(self):
         super().clean()
         if self.subaxis:
@@ -408,7 +420,7 @@ class ProjectStageSession(models.Model):
         verbose_name_plural = "Sessions d'acompanyament"
 
     project_stage = models.ForeignKey(
-        ProjectStage, on_delete=models.CASCADE, related_name="project_stages",
+        ProjectStage, on_delete=models.CASCADE, related_name="stage_sessions",
         verbose_name="justificació d'acompanyament"
     )
     session_responsible = models.ForeignKey(

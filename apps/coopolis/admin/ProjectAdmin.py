@@ -72,15 +72,18 @@ class ProjectStageAdmin(admin.ModelAdmin):
     }
     fieldsets = [
         (None, {
-            'fields': ['project', 'stage_type',
-                       'covid_crisis', 'subsidy_period', 'date_start',
-                       'date_end', 'follow_up', 'axis', 'subaxis', 'entity',
+            'fields': ['project', 'stage_type', 'covid_crisis',
+                       'subsidy_period', 'axis', 'subaxis', 'entity',
                        'stage_organizer', 'stage_responsible',
-                       'scanned_signatures', 'scanned_certificate', 'hours',
-                       'involved_partners', ]
+                       'scanned_signatures', 'scanned_certificate',
+                       'involved_partners', 'hours_sum']
+        }),
+        ("Camps obsolets en procés de migrar al nou sistema", {
+            'fields': ['date_start', 'date_end', 'hours', 'follow_up', ]
         })
     ]
     inlines = (ProjectStageSessionsInline, )
+    readonly_fields = ('hours_sum', )
 
     def _has_certificate(self, obj):
         if obj.scanned_certificate:
