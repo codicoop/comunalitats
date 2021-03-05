@@ -282,8 +282,18 @@ class ProjectStage(models.Model):
         SubsidyPeriod, verbose_name="convocatòria", null=True,
         on_delete=models.SET_NULL)
     date_start = models.DateField(
-        "data d'inici", null=True, blank=True, default=datetime.date.today)
-    date_end = models.DateField("data de finalització", null=True, blank=True)
+        "[obsolet] data d'inici", null=True, blank=True,
+        default=datetime.date.today,
+        help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, l'inici i finalització"
+                  " de l'acompanyament es calcularà a partir de les dates de "
+                  "les Sessions d'Acompanyament."
+    )
+    date_end = models.DateField(
+        "[obsolet] data de finalització", null=True, blank=True,
+        help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, l'inici i finalització"
+                  " de l'acompanyament es calcularà a partir de les dates de "
+                  "les Sessions d'Acompanyament."
+    )
     follow_up = models.TextField(
         "[obsolet] Seguiment", null=True, blank=True,
         help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, cal que el seguiment "
@@ -400,6 +410,17 @@ class ProjectStageSession(models.Model):
     project_stage = models.ForeignKey(
         ProjectStage, on_delete=models.CASCADE, related_name="project_stages",
         verbose_name="justificació d'acompanyament"
+    )
+    session_responsible = models.ForeignKey(
+        "User", verbose_name="persona facilitadora", blank=True, null=True,
+        on_delete=models.SET_NULL,
+        related_name='stage_sessions',
+        help_text="Persona de l'equip que ha facilitat la sessió. Per "
+                  "aparèixer al desplegable, cal que la persona tingui "
+                  "activada la opció 'Membre del personal'.")
+    date = models.DateField(
+        "data", null=True, blank=True,
+        default=datetime.date.today,
     )
     hours = models.IntegerField(
         "número d'hores", help_text="Camp necessari per la justificació.",
