@@ -1,4 +1,4 @@
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django_object_actions import DjangoObjectActions
 from django.contrib import admin
 from django.utils.safestring import mark_safe
@@ -175,11 +175,37 @@ class ProjectStagesInline(admin.StackedInline):
     show_change_link = True
     can_delete = False
     empty_value_display = '(cap)'
-
     raw_id_fields = ('involved_partners',)
     autocomplete_lookup_fields = {
         'm2m': ['involved_partners'],
     }
+    fieldsets = (
+        (None, {
+            'fields': ['project', 'stage_type', 'covid_crisis',
+                       'subsidy_period', 'axis', 'subaxis', 'entity',
+                       'stage_organizer', 'stage_responsible',
+                       'scanned_signatures', 'scanned_certificate',
+                       'involved_partners', 'hours_sum',
+                       'stage_sessions_field', ]
+        }),
+        ("Camps obsolets en procés de migrar al nou sistema", {
+            'fields': ['date_start', 'date_end', 'hours', 'follow_up', ]
+        })
+    )
+    readonly_fields = ('hours_sum', 'stage_sessions_field', )
+
+    def stage_sessions_field(self, obj):
+        count = obj.sessions_count()
+        url = reverse_lazy(
+            'admin:coopolis_projectstage_change',
+            kwargs={'object_id': obj.id}
+        )
+        url = (f'<a href="{url}#stage_sessions-group">Anar a la fitxa de la '
+               f'Justificació (per veure i editar les sessions)</a>')
+        txt = f"{count} - {url}"
+        return mark_safe(txt)
+
+    stage_sessions_field.short_description = "Sessions d'acompanyament"
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "stage_responsible":

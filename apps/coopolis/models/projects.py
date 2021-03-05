@@ -379,11 +379,12 @@ class ProjectStage(models.Model):
             total_sum=Sum('hours')
         )
         total = 0 if not total_qs['total_sum'] else total_qs['total_sum']
-        # if len(self.stage_sessions.all() > 0):
-        print('suma = ', total)
         return total
-
     hours_sum.short_description = "Suma d'hores"
+
+    def sessions_count(self):
+        return len(self.stage_sessions.all())
+    sessions_count.short_description = "Nº sessions"
 
     def clean(self):
         super().clean()
