@@ -11,6 +11,7 @@ from coopolis.models import User, Project, ProjectStage, EmploymentInsertion
 from coopolis.forms import (
     ProjectFormAdmin, ProjectStageInlineForm, ProjectStageForm
 )
+from coopolis.models.projects import ProjectStageSession
 from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 
@@ -31,6 +32,15 @@ class FilterByFounded(admin.SimpleListFilter):
         if value == 'Yes':
             return queryset.filter(cif__isnull=False, constitution_date__isnull=False)
         return queryset
+
+
+class ProjectStageSessionsInline(admin.StackedInline):
+    model = ProjectStageSession
+    extra = 0
+    min_num = 0
+    show_change_link = False
+    can_delete = True
+    empty_value_display = '(cap)'
 
 
 class ProjectStageAdmin(admin.ModelAdmin):
@@ -70,6 +80,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
                        'involved_partners', ]
         })
     ]
+    inlines = (ProjectStageSessionsInline, )
 
     def _has_certificate(self, obj):
         if obj.scanned_certificate:

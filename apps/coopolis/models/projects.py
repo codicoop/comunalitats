@@ -404,8 +404,8 @@ class ProjectStage(models.Model):
 
 class ProjectStageSession(models.Model):
     class Meta:
-        verbose_name = "sessió d'acompanyament"
-        verbose_name_plural = "sessions d'acompanyament"
+        verbose_name = "Sessió d'acompanyament"
+        verbose_name_plural = "Sessions d'acompanyament"
 
     project_stage = models.ForeignKey(
         ProjectStage, on_delete=models.CASCADE, related_name="project_stages",
@@ -419,13 +419,17 @@ class ProjectStageSession(models.Model):
                   "aparèixer al desplegable, cal que la persona tingui "
                   "activada la opció 'Membre del personal'.")
     date = models.DateField(
-        "data", null=True, blank=True,
+        "data",
         default=datetime.date.today,
     )
     hours = models.IntegerField(
         "número d'hores", help_text="Camp necessari per la justificació.",
         null=True, blank=True)
     follow_up = models.TextField("seguiment", null=True, blank=True)
+
+    def __str__(self):
+        return (f"Sessió d'acompanyament del {self.date} per "
+                f"{self.project_stage.project.name}")
 
 
 class ProjectsFollowUp(Project):
