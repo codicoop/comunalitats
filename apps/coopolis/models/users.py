@@ -1,4 +1,4 @@
-import tagulous.models
+from tagulous.models import TagField
 from django.conf import settings
 from django.db import models
 
@@ -93,7 +93,7 @@ class User(BaseUser):
     )
     authorize_communications = models.BooleanField(
         "autoritza comunicació publicitària", default=False)
-    tags = tagulous.models.TagField(
+    tags = TagField(
         verbose_name="etiquetes",
         force_lowercase=True, blank=True,
         help_text="Prioritza les etiquetes que apareixen auto-completades. Si "
