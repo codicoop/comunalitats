@@ -72,7 +72,9 @@ class Command(BaseCommand):
                 stage_types_report = list()
                 for stage_type, stages in stage_types.items():
                     stage_type_report = f"<h3>Processant el tipus {stage_type}</h3>"
-                    date = f"<strong>{stages[0].date_start.strftime('%d.%m.%Y')}</strong>"
+                    date = '-'
+                    if stages[0].date_start:
+                        date = f"<strong>{stages[0].date_start.strftime('%d.%m.%Y')}</strong>"
                     url = self.get_obj_url(stages[0])
                     stage_type_report += f"""
                     <p>Sessió d'acompanyament principal: {date} {url}</p>
