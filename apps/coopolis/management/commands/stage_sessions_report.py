@@ -214,11 +214,8 @@ class Command(BaseCommand):
         return ", ".join(names)
 
     def migrate(self):
-        # MERGING: Aquesta versió no conté la migració real ja que està pensada
-        # per una branch com la que hi ha a producció, sense els canvis de
-        # l'últim sprint.
-        # La versió que conté la migració real és a la branch
-        # projectstage_sessions, que està basada en la branch sprint_2021_03.
+        # MERGING: Aquesta versió que sí que fa la migració real i que, per
+        # tant, necessita l'última versió de la app per funcionar.
         periods = self.get_subsidy_periods()
         for period in periods:
             self.stdout.write(f"<h1>Migrant convocatòria {period}</h1>")
