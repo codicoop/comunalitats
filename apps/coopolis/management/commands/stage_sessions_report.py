@@ -93,7 +93,9 @@ class Command(BaseCommand):
                     """
 
                     for stage in stages:
-                        date = f"<strong>{stage.date_start.strftime('%d.%m.%Y')}</strong>"
+                        date = '-'
+                        if stage.date_start:
+                            date = f"<strong>{stage.date_start.strftime('%d.%m.%Y')}</strong>"
                         url = self.get_obj_url(stage, date)
                         stage_type_report += f"""
                         <tr>
