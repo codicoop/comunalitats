@@ -22,7 +22,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         data_consolidation_pending, report = self.make_report()
         if data_consolidation_pending:
-            print(report)
+            self.stdout.write(report)
         else:
             if options['migrate']:
                 self.migrate()
@@ -45,7 +45,7 @@ class Command(BaseCommand):
               contactaré quan estigui a punt.</li>
             </ul>
             """
-            print(report)
+            self.stdout.write(report)
 
     def make_report(self):
         data_consolidation_pending = False
@@ -62,9 +62,9 @@ class Command(BaseCommand):
         """
         periods = self.get_subsidy_periods()
         for period in periods:
-            print(f"<h1>Convocatòria {period}</h1>")
+            self.stdout.write(f"<h1>Convocatòria {period}</h1>")
             projects = self.get_projects(period)
-            print(f'<p>Total projects: {len(projects)}</p>')
+            self.stdout.write(f'<p>Total projects: {len(projects)}</p>')
             for project, values in projects.items():
                 stage_types = values['stage_types']
                 project_obj = values['obj']
@@ -217,15 +217,15 @@ class Command(BaseCommand):
         # projectstage_sessions, que està basada en la branch sprint_2021_03.
         periods = self.get_subsidy_periods()
         for period in periods:
-            print(f"<h1>Migrant convocatòria {period}</h1>")
+            self.stdout.write(f"<h1>Migrant convocatòria {period}</h1>")
             projects = self.get_projects(period)
-            print(f'<p>Total projects: {len(projects)}</p>')
+            self.stdout.write(f'<p>Total projects: {len(projects)}</p>')
             for project, values in projects.items():
                 stage_types = values['stage_types']
                 for stage_type, stages in stage_types.items():
-                    print(f"<h3>Processant el tipus {stage_type}</h3>")
+                    self.stdout.write(f"<h3>Processant el tipus {stage_type}</h3>")
                     for stage in stages:
-                        print(f"""TO DO amb {stage}:
+                        self.stdout.write(f"""TO DO amb {stage}:
                         - Crear StageSession amb les hores, text, etc. dins 
                          l'stage principal.
                         - Afegir els Participants d'aquest stage a l'stage 
