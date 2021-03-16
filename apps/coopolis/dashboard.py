@@ -117,6 +117,7 @@ class MyDashboard(Dashboard):
             links_children.append(['Gestió de textos del back-office', 'constance/config'])
             links_children.append(["Registre d'e-mails enviats", 'mailqueue/mailermessage/'])
             links_children.append(["Registre d'activitat al panell d'administració", 'admin/logentry/'])
+            links_children.append(["[TEMPORAL] INFORME MIGRACIÓ", '/admin/stages_migration_report/'])
 
         self.children.append(modules.LinkList(
             title='Enllaços',
