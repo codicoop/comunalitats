@@ -41,8 +41,7 @@ class Command(BaseCommand):
                      f" té dades pendents per revisar.")
                 self.stdout.write(m)
                 return
-            self.migrate()
-            return
+            report = self.migrate()
 
         self.stdout.write(report)
 
@@ -113,7 +112,7 @@ class Command(BaseCommand):
                     if self.has_data_coherence(stages) is False:
                         stage_types_report.append(stage_type_report)
                 if len(stage_types_report) > 0:
-                    project_report = f'<h2>Processant el projecte {url}</h2>'
+                    project_report = f'<h2>Processant el projecte {project_obj.name} {url}</h2>'
                     report += project_report
                     report += "".join(stage_types_report)
                     data_consolidation_pending = True
@@ -250,7 +249,11 @@ class Command(BaseCommand):
                     ### DADES QUE S'HAN D'ACTUALITZAR A LA MAIN_STAGE
                     # Obtenir list de tots els participants.
                     participants = self.get_all_participants(stages)
-                    report += f"<p>Participants: {participants}</p>"
+                    participants_name = []
+                    for participant in participants:
+                        participants_name.append(participant.get_full_name())
+                    participants_str = ", ".join(participants_name)
+                    report += f"<p>Participants: {participants_str}</p>"
 
                     for stage in stages:
                         # Per cada stage:
@@ -263,18 +266,19 @@ class Command(BaseCommand):
                         new_session.follow_up = stage.follow_up
                         new_session.date = stage.date_start
                         new_session.session_responsible = stage.stage_responsible
-                        ######new_session.save()
+                        new_session.save()
 
                         if stage.scanned_certificate:
                             main_stage.scanned_certificate = stage.scanned_certificate
                         if stage.scanned_signatures:
                             main_stage.scanned_signatures = stage.scanned_signatures
 
-                        #####stage.delete()
+                        if stage is not main_stage:
+                            stage.delete()
 
                     # main_stage ara conté els últims fitxers que s'hagin
                     # trobat a algun dels stages.
-                    ######main_stage.save()
+                    main_stage.save()
         return report
 
     @staticmethod
@@ -282,5 +286,5 @@ class Command(BaseCommand):
         participants = set()
         for stage in stages:
             if len(stage.involved_partners.all()) > 0:
-                participants.update(stage.involved_partners)
+                participants.update(stage.involved_partners.all())
         return participants
