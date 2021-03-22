@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand
 from django.urls import reverse
 
 from coopolis.models import ProjectStage
+from coopolis.models.projects import ProjectStageSession
 from dataexports.models import SubsidyPeriod
 
 
@@ -18,34 +19,32 @@ class Command(BaseCommand):
             help='Checks if the data is suitable for migrating and performs '
                  'the migration.',
         )
+        parser.add_argument(
+            '--check',
+            action='store_true',
+            help='Checks if the data is suitable for migrating.',
+        )
 
     def handle(self, *args, **options):
         data_consolidation_pending, report = self.make_report()
-        if data_consolidation_pending:
-            self.stdout.write(report)
-        else:
-            if options['migrate']:
-                self.migrate()
+        if options['check']:
+            if data_consolidation_pending:
+                m = f"{settings.PROJECT_NAME}: té dades pendents per revisar."
+            else:
+                m = f"{settings.PROJECT_NAME}: dades OK, pot migrar."
+            self.stdout.write(m)
+            return
 
-            report = """
-            <h2>Totes les justificacions d'acompanyament tenen les dades 
-            consolidades i podran ser migrades. Gràcies!</h2>
-            <p><strong>Propers passos:</strong></p>
-            <ul>
-              <li>És molt important que en les properes setmanes us assegureu 
-              que tothom de l'equip que toqui justificacions d'acompanyament 
-              mantingui les dades consolidades, per tal que quan arribi el dia
-              que executem la migració, funcioni correctament.</li>
-              <li>Si us plau avisa al Pere (pere@codi.coop) de que heu acabat 
-              aquest procés.</li>
-              <li>Quan la resta d'ateneus implicats hagin acabat el procés
-              podrem continuar amb la migració.</li>
-              <li>Abans de fer la migració amb les dades reals, farem una
-              simulació al servidor de proves que haurem de verificar. Ja us
-              contactaré quan estigui a punt.</li>
-            </ul>
-            """
-            self.stdout.write(report)
+        if options['migrate']:
+            if data_consolidation_pending:
+                m = (f"No és possible fer la migració, {settings.PROJECT_NAME}"
+                     f" té dades pendents per revisar.")
+                self.stdout.write(m)
+                return
+            self.migrate()
+            return
+
+        self.stdout.write(report)
 
     def make_report(self):
         data_consolidation_pending = False
@@ -62,9 +61,9 @@ class Command(BaseCommand):
         """
         periods = self.get_subsidy_periods()
         for period in periods:
-            self.stdout.write(f"<h1>Convocatòria {period}</h1>")
+            report += f"<h1>Convocatòria {period}</h1>"
             projects = self.get_projects(period)
-            self.stdout.write(f'<p>Total projects: {len(projects)}</p>')
+            report += f'<p>Total projects: {len(projects)}</p>'
             for project, values in projects.items():
                 stage_types = values['stage_types']
                 project_obj = values['obj']
@@ -217,19 +216,71 @@ class Command(BaseCommand):
         # MERGING: Aquesta versió que sí que fa la migració real i que, per
         # tant, necessita l'última versió de la app per funcionar.
         periods = self.get_subsidy_periods()
+        report = ""
         for period in periods:
-            self.stdout.write(f"<h1>Migrant convocatòria {period}</h1>")
+            report += f"<h1>Migrant convocatòria {period}</h1>"
             projects = self.get_projects(period)
-            self.stdout.write(f'<p>Total projects: {len(projects)}</p>')
+            report += f'<p>Total projects: {len(projects)}</p>'
             for project, values in projects.items():
                 stage_types = values['stage_types']
                 for stage_type, stages in stage_types.items():
-                    self.stdout.write(f"<h3>Processant el tipus {stage_type}</h3>")
+                    report += f"<h3>Processant el tipus {stage_type}</h3>"
+                    main_stage = stages[0]
+
+                    if len(main_stage.stage_sessions.all()):
+                        if len(stages) < 2:
+                            report += (
+                                "<p>JA CONTÉ StageSessions, i té"
+                                f"{len(stages)} Stages. Skipping."
+                            )
+                        else:
+                            report += (
+                                '<h1 style="color: red">JA CONTÉ StageSessions,'
+                                f' i té {len(stages)} Stages. Skipping, però '
+                                f's\'ha de processar a ma!.'
+                            )
+                        continue
+
+                    date = '-'
+                    if main_stage.date_start:
+                        date = f"<strong>{main_stage.date_start.strftime('%d.%m.%Y')}</strong>"
+                    url = self.get_obj_url(stages[0])
+                    report += f"<p>Sessió d'acompanyament principal: {date} {url}</p>"
+
+                    ### DADES QUE S'HAN D'ACTUALITZAR A LA MAIN_STAGE
+                    # Obtenir list de tots els participants.
+                    participants = self.get_all_participants(stages)
+                    report += f"<p>Participants: {participants}</p>"
+
                     for stage in stages:
-                        self.stdout.write(f"""TO DO amb {stage}:
-                        - Crear StageSession amb les hores, text, etc. dins 
-                         l'stage principal.
-                        - Afegir els Participants d'aquest stage a l'stage 
-                        principal (els que no hi siguin ja). 
-                        - Eliminar aquest stage (si no és el principal).
-                        """)
+                        # Per cada stage:
+                        # - Crear una stagesession
+                        # - Update main_stage amb dades útils (eix, documents...)
+                        # - Eliminar la Stage (excepte la primera).
+                        new_session = ProjectStageSession()
+                        new_session.project_stage = main_stage
+                        new_session.hours = stage.hours
+                        new_session.follow_up = stage.follow_up
+                        new_session.date = stage.date_start
+                        new_session.session_responsible = stage.stage_responsible
+                        ######new_session.save()
+
+                        if stage.scanned_certificate:
+                            main_stage.scanned_certificate = stage.scanned_certificate
+                        if stage.scanned_signatures:
+                            main_stage.scanned_signatures = stage.scanned_signatures
+
+                        #####stage.delete()
+
+                    # main_stage ara conté els últims fitxers que s'hagin
+                    # trobat a algun dels stages.
+                    ######main_stage.save()
+        return report
+
+    @staticmethod
+    def get_all_participants(stages):
+        participants = set()
+        for stage in stages:
+            if len(stage.involved_partners.all()) > 0:
+                participants.update(stage.involved_partners)
+        return participants
