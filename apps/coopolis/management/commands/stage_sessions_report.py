@@ -87,6 +87,7 @@ class Command(BaseCommand):
                       <td>Organitzadora</td>
                       <td>Fitxa projectes</td>
                       <td>Certificat</td>
+                      <td>Participants</td>
                     </tr>
                     """
 
@@ -105,6 +106,7 @@ class Command(BaseCommand):
                           <td>{stage.stage_organizer}</td>
                           <td>{stage.scanned_signatures}</td>
                           <td>{stage.scanned_certificate}</td>
+                          <td>{self.get_involved_partners_str(stage)}</td>
                         </tr>
                         """
                     stage_type_report += '</table>'
@@ -253,7 +255,17 @@ class Command(BaseCommand):
                     for participant in participants:
                         participants_name.append(participant.get_full_name())
                     participants_str = ", ".join(participants_name)
-                    report += f"<p>Participants: {participants_str}</p>"
+                    report += f"<p>Participants totals: {participants_str}</p>"
+                    main_participants = len(main_stage.involved_partners.all())
+                    total_participants = len(participants)
+                    if main_participants != total_participants:
+                        report += f"""
+                        <p><strong>S'ha fet MERGE de participants.</strong></p>
+                        <p>Participants main: {self.get_involved_partners_str(
+                            main_stage
+                        )}</p>
+                        """
+                        main_stage.involved_partners.set(participants)
 
                     for stage in stages:
                         # Per cada stage:
