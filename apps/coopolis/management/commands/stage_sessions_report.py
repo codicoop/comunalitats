@@ -84,7 +84,6 @@ class Command(BaseCommand):
                       <td>Tipus</td>
                       <td>Eix</td>
                       <td>Organitzadora</td>
-                      <td>Fitxa projectes</td>
                       <td>Certificat</td>
                       <td>Participants</td>
                     </tr>
@@ -102,7 +101,6 @@ class Command(BaseCommand):
                           <td>{stage.get_stage_type_display()}</td>
                           <td>{stage.axis_summary()}</td>
                           <td>{stage.stage_organizer}</td>
-                          <td>{stage.scanned_signatures}</td>
                           <td>{stage.scanned_certificate}</td>
                           <td>{self.get_involved_partners_str(stage)}</td>
                         </tr>
