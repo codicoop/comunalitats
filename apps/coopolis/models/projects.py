@@ -362,7 +362,7 @@ class ProjectStage(models.Model):
         "[obsolet] Fitxa de projectes (document amb signatures)", blank=True,
         null=True, storage=PrivateMediaStorage(), max_length=250)
     scanned_certificate = models.FileField(
-        "[obsolet] Certificat", blank=True, null=True,
+        "Certificat", blank=True, null=True,
         storage=PrivateMediaStorage(), max_length=250)
     hours = models.IntegerField(
         "[obsolet] Número d'hores",
