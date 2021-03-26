@@ -83,7 +83,6 @@ class Command(BaseCommand):
                       <td>Projecte</td>
                       <td>Tipus</td>
                       <td>Eix</td>
-                      <td>Entitat</td>
                       <td>Organitzadora</td>
                       <td>Fitxa projectes</td>
                       <td>Certificat</td>
@@ -102,7 +101,6 @@ class Command(BaseCommand):
                           <td>{project}</td>
                           <td>{stage.get_stage_type_display()}</td>
                           <td>{stage.axis_summary()}</td>
-                          <td>{stage.entity}</td>
                           <td>{stage.stage_organizer}</td>
                           <td>{stage.scanned_signatures}</td>
                           <td>{stage.scanned_certificate}</td>
@@ -125,7 +123,6 @@ class Command(BaseCommand):
     def has_data_coherence(stages):
         axises = set()
         subaxises = set()
-        entities = set()
         organizers = set()
         signatures = set()
         certificates = set()
@@ -134,8 +131,6 @@ class Command(BaseCommand):
                 axises.add(stage.axis)
             if stage.subaxis:
                 subaxises.add(stage.subaxis)
-            if stage.entity:
-                entities.add(stage.entity)
             if stage.stage_organizer:
                 organizers.add(stage.stage_organizer)
             if stage.scanned_signatures:
@@ -145,7 +140,6 @@ class Command(BaseCommand):
         if (
             len(axises) > 1
             or len(subaxises) > 1
-            or len(entities) > 1
             or len(organizers) > 1
             or len(signatures) > 1
             or len(certificates) > 1
@@ -277,6 +271,7 @@ class Command(BaseCommand):
                         new_session.hours = stage.hours
                         new_session.follow_up = stage.follow_up
                         new_session.date = stage.date_start
+                        new_session.entity = stage.entity
                         new_session.session_responsible = stage.stage_responsible
                         new_session.save()
 
