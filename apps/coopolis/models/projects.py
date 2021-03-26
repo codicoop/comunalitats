@@ -262,10 +262,12 @@ class ProjectFile(models.Model):
 
     image = models.FileField("fitxer", storage=PublicMediaStorage())
     name = models.CharField(
-        "nom del fitxer",
+        "Etiqueta",
         max_length=120,
         null=False,
-        blank=False
+        blank=False,
+        help_text="Els fitxers antics tenen com a etiqueta el propi nom de "
+                  "l'arxiu, però aquí hi pot anar qualsevol text descriptiu."
     )
     project = models.ForeignKey(
         Project,
