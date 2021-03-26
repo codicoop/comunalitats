@@ -10,7 +10,7 @@ import tagulous.models
 from cc_courses.models import Entity, Organizer, Cofunding, StrategicLine
 from coopolis.helpers import get_subaxis_choices
 from coopolis.models import Town, User
-from coopolis.storage_backends import PrivateMediaStorage
+from coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from dataexports.models import SubsidyPeriod
 
 
@@ -249,6 +249,29 @@ class StageSubtype(models.Model):
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True,
                             null=False)
+
+    def __str__(self):
+        return self.name
+
+
+class ProjectFile(models.Model):
+    class Meta:
+        verbose_name = "fitxer"
+        verbose_name_plural = "fitxers"
+        ordering = ["name"]
+
+    image = models.FileField("fitxer", storage=PublicMediaStorage())
+    name = models.CharField(
+        "nom del fitxer",
+        max_length=120,
+        null=False,
+        blank=False
+    )
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name="files"
+    )
 
     def __str__(self):
         return self.name
