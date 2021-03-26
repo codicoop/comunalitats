@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from django.urls import reverse
 
 from coopolis.models import ProjectStage
-from coopolis.models.projects import ProjectStageSession
+from coopolis.models.projects import ProjectStageSession, ProjectFile
 from dataexports.models import SubsidyPeriod
 
 
@@ -124,7 +124,6 @@ class Command(BaseCommand):
         axises = set()
         subaxises = set()
         organizers = set()
-        signatures = set()
         certificates = set()
         for stage in stages:
             if stage.axis:
@@ -133,15 +132,12 @@ class Command(BaseCommand):
                 subaxises.add(stage.subaxis)
             if stage.stage_organizer:
                 organizers.add(stage.stage_organizer)
-            if stage.scanned_signatures:
-                signatures.add(stage.scanned_signatures)
             if stage.scanned_certificate:
                 certificates.add(stage.scanned_certificate)
         if (
             len(axises) > 1
             or len(subaxises) > 1
             or len(organizers) > 1
-            or len(signatures) > 1
             or len(certificates) > 1
         ):
             return False
@@ -217,6 +213,7 @@ class Command(BaseCommand):
             projects = self.get_projects(period)
             report += f'<p>Total projects: {len(projects)}</p>'
             for project, values in projects.items():
+                project_obj = values['obj']
                 stage_types = values['stage_types']
                 for stage_type, stages in stage_types.items():
                     report += f"<h3>Processant el tipus {stage_type}</h3>"
@@ -278,7 +275,11 @@ class Command(BaseCommand):
                         if stage.scanned_certificate:
                             main_stage.scanned_certificate = stage.scanned_certificate
                         if stage.scanned_signatures:
-                            main_stage.scanned_signatures = stage.scanned_signatures
+                            ProjectFile.objects.create(
+                                image=stage.scanned_signatures,
+                                name=stage.scanned_signatures.name,
+                                project=project_obj
+                            )
 
                         if stage is not main_stage:
                             stage.delete()
