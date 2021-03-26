@@ -73,13 +73,14 @@ class ProjectStageAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {
             'fields': ['project', 'stage_type', 'covid_crisis',
-                       'subsidy_period', 'axis', 'subaxis', 'entity',
+                       'subsidy_period', 'axis', 'subaxis',
                        'stage_organizer', 'stage_responsible',
-                       'scanned_signatures', 'scanned_certificate',
+                       'scanned_certificate',
                        'involved_partners', 'hours_sum']
         }),
         ("Camps obsolets en procés de migrar al nou sistema", {
-            'fields': ['date_start', 'date_end', 'hours', 'follow_up', ]
+            'fields': ['date_start', 'date_end', 'hours', 'follow_up',
+                       'scanned_signatures', 'entity', ]
         })
     ]
     inlines = (ProjectStageSessionsInline, )
@@ -182,14 +183,15 @@ class ProjectStagesInline(admin.StackedInline):
     fieldsets = (
         (None, {
             'fields': ['project', 'stage_type', 'covid_crisis',
-                       'subsidy_period', 'axis', 'subaxis', 'entity',
+                       'subsidy_period', 'axis', 'subaxis',
                        'stage_organizer', 'stage_responsible',
-                       'scanned_signatures', 'scanned_certificate',
+                       'scanned_certificate',
                        'involved_partners', 'hours_sum',
                        'stage_sessions_field', ]
         }),
         ("Camps obsolets en procés de migrar al nou sistema", {
-            'fields': ['date_start', 'date_end', 'hours', 'follow_up', ]
+            'fields': ['date_start', 'date_end', 'hours', 'follow_up',
+                       'scanned_signatures', 'entity', ]
         })
     )
     readonly_fields = ('hours_sum', 'stage_sessions_field', )
