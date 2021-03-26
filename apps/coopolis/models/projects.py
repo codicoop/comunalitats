@@ -359,12 +359,11 @@ class ProjectStage(models.Model):
                   "aparèixer al desplegable, cal que la persona tingui "
                   "activada la opció 'Membre del personal'.")
     scanned_signatures = models.FileField(
-        "fitxa de projectes (document amb signatures)", blank=True, null=True,
-        storage=PrivateMediaStorage(),
-        max_length=250)
+        "[obsolet] Fitxa de projectes (document amb signatures)", blank=True,
+        null=True, storage=PrivateMediaStorage(), max_length=250)
     scanned_certificate = models.FileField(
-        "certificat", blank=True, null=True, storage=PrivateMediaStorage(),
-        max_length=250)
+        "[obsolet] Certificat", blank=True, null=True,
+        storage=PrivateMediaStorage(), max_length=250)
     hours = models.IntegerField(
         "[obsolet] Número d'hores",
         help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, cal que les hores "
