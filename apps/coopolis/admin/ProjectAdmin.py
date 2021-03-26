@@ -11,7 +11,7 @@ from coopolis.models import User, Project, ProjectStage, EmploymentInsertion
 from coopolis.forms import (
     ProjectFormAdmin, ProjectStageInlineForm, ProjectStageForm
 )
-from coopolis.models.projects import ProjectStageSession
+from coopolis.models.projects import ProjectStageSession, ProjectFile
 from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 
@@ -227,6 +227,15 @@ class EmploymentInsertionInline(admin.TabularInline):
     }
 
 
+class ProjectFileInline(admin.TabularInline):
+    class Media:
+        js = ('js/grappellihacks.js',)
+
+    classes = ('grp-collapse', 'grp-closed')
+    model = ProjectFile
+    extra = 0
+
+
 class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     class Media:
         js = ('js/grappellihacks.js',)
@@ -268,7 +277,8 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     actions = ["export_as_csv"]
     change_actions = ('print', )
     print_template = 'admin/my_test/myentry/review.html'
-    inlines = (ProjectStagesInline, EmploymentInsertionInline,)
+    inlines = (ProjectFileInline, ProjectStagesInline,
+               EmploymentInsertionInline,)
     raw_id_fields = ('partners',)
     autocomplete_lookup_fields = {
         'm2m': ['partners'],
