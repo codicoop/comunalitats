@@ -238,6 +238,18 @@ class Project(models.Model):
         return self.name
 
 
+class StageSubtype(models.Model):
+    class Meta:
+        verbose_name = "subtipus"
+        verbose_name_plural = "subtipus"
+
+    name = models.CharField("nom", max_length=200, blank=False, unique=True,
+                            null=False)
+
+    def __str__(self):
+        return self.name
+
+
 class ProjectStage(models.Model):
     class Meta:
         verbose_name = "justificació d'acompanyament"
@@ -261,6 +273,10 @@ class ProjectStage(models.Model):
     stage_type = models.CharField("tipus d'acompanyament", max_length=2,
                                   default=DEFAULT_STAGE_TYPE,
                                   choices=STAGE_TYPE_OPTIONS)
+    stage_subtype = models.ForeignKey(
+        StageSubtype, verbose_name="subtipus", default=None, null=True,
+        blank=True, on_delete=models.SET_NULL
+    )
     covid_crisis = models.BooleanField("Crisi covid", default=False)
     subsidy_period = models.ForeignKey(SubsidyPeriod,
                                        verbose_name="convocatòria", null=True,
