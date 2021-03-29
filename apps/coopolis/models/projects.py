@@ -262,15 +262,10 @@ class ProjectStage(models.Model):
                                 verbose_name="projecte acompanyat",
                                 related_name="stages")
     STAGE_TYPE_OPTIONS = (
-        ('1', "00 Nova creació - acollida"),
-        ('2', "01 Nova creació - procés"),
-        ('6', "02 Nova creació - constitució"),
-        ('7', "03 Consolidació - 1a acollida"),
-        ('8', "04 Consolidació - acompanyament"),
-        ('9', "05 Incubació"),
-        ('10', "06 Crisi Covid"),
         ('11', "Creació"),
         ('12', "Consolidació"),
+        ('9', "Incubació"),
+        ('10', "[obsolet] Crisi Covid"),
     )
     stage_type = models.CharField("tipus d'acompanyament", max_length=2,
                                   default=DEFAULT_STAGE_TYPE,
