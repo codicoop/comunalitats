@@ -164,7 +164,10 @@ class Project(models.Model):
             return None
         stages = []
         for stage in self.stages.all():
-            stages.append(stage.get_stage_type_display())
+            name = stage.get_stage_type_display()
+            if stage.stage_subtype:
+                name = f"{name} ({stage.stage_subtype.name})"
+            stages.append(name)
         stages.sort()
         return "; ".join(stages)
 
