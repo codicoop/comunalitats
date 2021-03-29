@@ -269,6 +269,8 @@ class ProjectStage(models.Model):
         ('8', "04 Consolidació - acompanyament"),
         ('9', "05 Incubació"),
         ('10', "06 Crisi Covid"),
+        ('11', "Creació"),
+        ('12', "Consolidació"),
     )
     stage_type = models.CharField("tipus d'acompanyament", max_length=2,
                                   default=DEFAULT_STAGE_TYPE,
