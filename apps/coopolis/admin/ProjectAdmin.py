@@ -62,8 +62,8 @@ class ProjectStageAdmin(admin.ModelAdmin):
     }
     fieldsets = [
         (None, {
-            'fields': ['project', 'stage_type', 'covid_crisis',
-                       'subsidy_period', 'date_start',
+            'fields': ['project', 'stage_type', 'stage_subtype',
+                       'covid_crisis', 'subsidy_period', 'date_start',
                        'date_end', 'follow_up', 'axis', 'subaxis', 'entity',
                        'stage_organizer', 'stage_responsible',
                        'scanned_signatures', 'scanned_certificate', 'hours',
@@ -324,3 +324,20 @@ class EmploymentInsertionAdmin(admin.ModelAdmin):
     autocomplete_lookup_fields = {
         'fk': ['user', 'project', ],
     }
+
+
+class StageSubtypeAdmin(admin.ModelAdmin):
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+
+    def has_add_permission(self, request):
+        if request.user.is_superuser:
+            return True
+        return False
