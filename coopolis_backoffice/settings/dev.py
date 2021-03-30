@@ -28,15 +28,18 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# Local strings (creating vars here to avoid compilation problems if running in single-tenant mode)
+# Local strings (creating vars here to avoid compilation problems if running
+# in single-tenant mode)
 PROJECT_NAME = ""
 ADMIN_HEADER = ""
 GRAPPELLI_ADMIN_TITLE = ""
-# For single-tenant mode, you have to fill the database settings here or make sure that
+# For single-tenant mode, you have to fill the database settings here or make
+# sure that
 # the settings module environment variable is set to a file that does it:
 DATABASES = {}
 
-# Base folder for custom function to upload private or public files to Wasabi/S3 providers. Without trailing slash.
+# Base folder for custom function to upload private or public files to
+# Wasabi/S3 providers. Without trailing slash.
 AWS_PUBLIC_MEDIA_LOCATION = 'media/public'
 AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
 
@@ -194,66 +197,84 @@ CONSTANCE_CONFIG = {
                "d'acompanyament.", bool),
     # Courses
     'CONTENT_COURSES_INTRODUCTION': (
-        "Des de Coòpolis disposem d’una oferta regular de formació en economia social i cooperativisme per a tots els "
-        "públics, tant per a aquelles persones que tenen ganes d’apropar-se a l’economia social i solidària, com per "
-        "a aquelles persones o col·lectius que estan pensant en constituir el seu propi projecte econòmic. A més de "
-        "les activitats a l’espai Coòpolis de Can Batlló, també oferim formacions descentralitzades en altres espais "
-        "comunitaris i seus de l’economia social i solidària barcelonina.",
+        "Des de Coòpolis disposem d’una oferta regular de formació en economia"
+        " social i cooperativisme per a tots els públics, tant per a aquelles "
+        "persones que tenen ganes d’apropar-se a l’economia social i "
+        "solidària, com per a aquelles persones o col·lectius que estan "
+        "pensant en constituir el seu propi projecte econòmic. A més de les "
+        "activitats a l’espai Coòpolis de Can Batlló, també oferim formacions"
+        " descentralitzades en altres espais comunitaris i seus de l’economia "
+        "social i solidària barcelonina.",
         "Formació: text d'introducció a la franja blava"),
     # Project
     'CONTENT_PROJECT_INTRODUCTION': (
-        "<p>Des de Coòpolis acompanyem projectes en la seva posada en marxa i constitució com a cooperatives, en aquells "
-        "aspectes centrals per a la seva activitat i facilitem eines i recursos per a la seva consolidació i "
-        "creixement. També dissenyem itineraris per a la transformació d’associacions i altres formes d’empreses a "
+        "<p>Des de Coòpolis acompanyem projectes en la seva posada en marxa i "
+        "constitució com a cooperatives, en aquells aspectes centrals per a la"
+        " seva activitat i facilitem eines i recursos per a la seva "
+        "consolidació i creixement. També dissenyem itineraris per a la "
+        "transformació d’associacions i altres formes d’empreses a "
         "cooperatives.</p>",
         "Apartat Projecte: text d'introducció a la franja blava."),
     'CONTENT_PROJECT_TITLE': (
         "Assessorament de projectes",
         "Apartat Projecte: text d'encapçalament"),
     'CONTENT_PROJECT_INFO': (
-        "<p>Per sol·licitar acompanyament per al teu projecte, accedeix amb el teu compte o crea'n un amb els "
-        "formularis que hi ha a continuació.</p>",
-        "Aartat Projecte: Text que es mostra a l'apartat si hi accedeix sense haver fet login"),
+        "<p>Per sol·licitar acompanyament per al teu projecte, accedeix amb "
+        "el teu compte o crea'n un amb els formularis que hi ha a "
+        "continuació.</p>",
+        "Aartat Projecte: Text que es mostra a l'apartat si hi accedeix sense "
+        "haver fet login"),
     'CONTENT_PROJECT_NEW': (
         "<p>Omple el següent formulari per sol·licitar un acompanyament.</p>",
-        "Apartat Projecte: Text que es mostra al formulari per sol·licitar un acompanyament"),
+        "Apartat Projecte: Text que es mostra al formulari per sol·licitar "
+        "un acompanyament"),
     # Home
     'CONTENT_HOME_COURSES_TITLE': (
         "Formació i activitats",
         "Portada, títol del bloc que informa sobre la formació."),
     'CONTENT_HOME_COURSES_TEXT': (
-        "Disposem d’una oferta regular de formació en economia solidària i cooperativisme per a tots els públics, tant "
-        "per a aquelles persones que tenen ganes d’apropar-se a l’ESS per primera vegada, els col·lectius que estan "
-        "engegant un projecte, i cooperatives que volen consolidar la seva activitat incorporant nous coneixements "
+        "Disposem d’una oferta regular de formació en economia solidària i "
+        "cooperativisme per a tots els públics, tant per a aquelles persones "
+        "que tenen ganes d’apropar-se a l’ESS per primera vegada, els "
+        "col·lectius que estan engegant un projecte, i cooperatives que volen "
+        "consolidar la seva activitat incorporant nous coneixements "
         "especialitzats.",
         "Portada, títol del bloc que informa sobre la formació."),
     'CONTENT_HOME_INTRODUCTION': (
-        "<p><strong>Benvingudes a la web de gestió d’inscripcions i acompanyaments de Coòpolis!</strong></p>"
-        "<p>Cal que us doneu d’alta amb les vostres dades personals, i podreu realitzar les inscripcions de les "
-        "formacions, i sol·licitar assessorament per a la creació de projectes cooperatius.</p>"
-        "<p><em>(*Si teniu dificultats, podeu escriure un correu a <a href=\"mailto:inscripcions@bcn.coop\">"
+        "<p><strong>Benvingudes a la web de gestió d’inscripcions i "
+        "acompanyaments de Coòpolis!</strong></p><p>Cal que us doneu d’alta "
+        "amb les vostres dades personals, i podreu realitzar les inscripcions "
+        "de les formacions, i sol·licitar assessorament per a la creació de "
+        "projectes cooperatius.</p><p><em>(*Si teniu dificultats, podeu "
+        "escriure un correu a <a href=\"mailto:inscripcions@bcn.coop\">"
         "inscripcions@bcn.coop</a> o trucar a Coòpolis)</em></p>",
         "Text d'introducció de la home."),
     "CONTENT_HOME_PROJECTS_TITLE": (
         "Acompanyament de projectes",
-        "Portada: títol del bloc que informa sobre l'acompanyament de projectes."),
+        "Portada: títol del bloc que informa sobre l'acompanyament de "
+        "projectes."),
     "CONTENT_HOME_PROJECTS_TEXT": (
-        "Des de Coòpolis acompanyem projectes en la seva posada en marxa i constitució com a cooperatives, en aquells "
-        "aspectes centrals per a la seva activitat i facilitem eines i recursos per a la seva consolidació i "
-        "creixement. També dissenyem itineraris per a la transformació d’associacions i altres formes d’empreses a "
+        "Des de Coòpolis acompanyem projectes en la seva posada en marxa i "
+        "constitució com a cooperatives, en aquells aspectes centrals per a la"
+        " seva activitat i facilitem eines i recursos per a la seva "
+        "consolidació i creixement. També dissenyem itineraris per a la "
+        "transformació d’associacions i altres formes d’empreses a "
         "cooperatives.",
         "Portada: bloc que informa sobre l'acompanyament de projectes."),
     # Sign up
     'CONTENT_SIGNUP_LEGAL1': (
-        "La participació en les activitats de Coòpolis, Ateneu Cooperatiu de Barcelona, està subjecta a un seguit de "
-        "condicions que entre altres aspectes recullen el tractament que es farà de les vostres dades segons la nova "
-        "Llei del RGPT i el permís per utilitzar la vostra imatge per a arxiu i difusió de l'activitat, i mai amb cap "
-        "ús comercial.",
+        "La participació en les activitats de Coòpolis, Ateneu Cooperatiu de "
+        "Barcelona, està subjecta a un seguit de condicions que entre altres "
+        "aspectes recullen el tractament que es farà de les vostres dades "
+        "segons la nova Llei del RGPT i el permís per utilitzar la vostra "
+        "imatge per a arxiu i difusió de l'activitat, i mai amb cap ús "
+        "comercial.",
         'Casella per acceptar #1.'),
     'CONTENT_SIGNUP_LEGAL2': (
-        "Sóc coneixedor/a del caràcter de subvenció pública amb la qual es finança l’actuació en la qual vull "
-        "participar, mitjançant el cofinançament del Ministeri d’Ocupació i Seguretat Social, i l’Ajuntament de "
-        "Barcelona.",
+        "Sóc coneixedor/a del caràcter de subvenció pública amb la qual es "
+        "finança l’actuació en la qual vull participar, mitjançant el "
+        "cofinançament del Ministeri d’Ocupació i Seguretat Social, i "
+        "l’Ajuntament de Barcelona.",
         'Casella per acceptar #2.'),
     # E-mails
     'EMAIL_NEW_PROJECT': (
@@ -266,7 +287,8 @@ CONSTANCE_CONFIG = {
         "Cos del correu que s'envia quan algú sol·licita un acompanyament."),
     'EMAIL_NEW_PROJECT_SUBJECT': (
         "Nova sol·licitud d'acompanyament: {}",
-        "Assumpte del correu que s'envia quan algú sol·licita un acompanyament."),
+        "Assumpte del correu que s'envia quan algú sol·licita un "
+        "acompanyament."),
     'EMAIL_ENROLLMENT_CONFIRMATION': (
         "Inscripció a l'activitat: {} <br />"
         "<br />Dades de l'activitat:<br />"
@@ -274,9 +296,10 @@ CONSTANCE_CONFIG = {
         "Horari: de {} a {}<br />"
         "Lloc: {}<br />"
         "<br />"
-        "Les places son limitades. Si finalment no pots assistir-hi, si us plau anul·la la "
-        "teva inscripció. Per fer-ho, pots gestionar les teves inscripcions accedint al "
-        "back-office de Coòpolis amb el teu correu i contrasenya <a href=\"{}\">aquí</a> "
+        "Les places son limitades. Si finalment no pots assistir-hi, si us "
+        "plau anul·la la teva inscripció. Per fer-ho, pots gestionar les "
+        "teves inscripcions accedint al back-office de Coòpolis amb el teu "
+        "correu i contrasenya <a href=\"{}\">aquí</a> "
         "o bé contactar-nos al correu electrònic {}, o trucar-nos al {}.",
         "Cos del correu que s'envia quan algú s'inscriu a una activitat"),
     'EMAIL_ENROLLMENT_CONFIRMATION_SUBJECT': (
@@ -284,34 +307,44 @@ CONSTANCE_CONFIG = {
         "Assumpte del correu que s'envia quan algú s'inscriu a una activitat"),
     'EMAIL_ENROLLMENT_WAITING_LIST': (
         "Inscripció en llista d'espera.",
-        "Cos del correu que s'envia quan algú s'inscriu a una activitat i entra en llista d'espera."),
+        "Cos del correu que s'envia quan algú s'inscriu a una activitat i "
+        "entra en llista d'espera."),
     'EMAIL_ENROLLMENT_WAITING_LIST_SUBJECT': (
         "Ets en llista d'espera per l'activitat: {}",
-        "Assumpte del correu que s'envia quan algú s'inscriu a una activitat i entra en llista d'espera."),
+        "Assumpte del correu que s'envia quan algú s'inscriu a una activitat "
+        "i entra en llista d'espera."),
     'EMAIL_ENROLLMENT_REMINDER': (
         "",
         "Cos del correu de recordatori que s'envia a tothom que s'ha inscrit"
-        "a una activitat mitjançant el botó per enviar el recordatori a tothom."),
+        "a una activitat mitjançant el botó per enviar el recordatori a "
+        "tothom."),
     'EMAIL_ENROLLMENT_REMINDER_SUBJECT': (
         "Recordatori d'inscripció a l'activitat: {}",
-        "Assumpte del correu de recordatori que s'envia a tothom que s'ha inscrit"
-        "a una activitat mitjançant el botó per enviar el recordatori a tothom."),
+        "Assumpte del correu de recordatori que s'envia a tothom que s'ha "
+        "inscrita una activitat mitjançant el botó per enviar el recordatori "
+        "a tothom."),
     'EMAIL_SIGNUP_WELCOME_SUBJECT': (
         "Nou compte creat a Coòpolis",
-        "Assumpte del missatge de benvinguda que s'envia al crear un compte nou."),
+        "Assumpte del missatge de benvinguda que s'envia al crear un compte "
+        "nou."),
     'EMAIL_SIGNUP_WELCOME': (
         "Benvingut/da a Coòpolis!<br />"
         "<br />"
-        "<em>Estàs rebent aquest correu perquè s'ha completat un registre a la plataforma serveis.bcn.coop.<br />"
-        "Si aquest registre no l'has fet tu o cap altra persona amb qui comparteixis aquest compte, ignora aquest"
-        "correu o avisa'ns per tal que l'eliminem de la base de dades.</em><br />"
+        "<em>Estàs rebent aquest correu perquè s'ha completat un registre a la"
+        " plataforma serveis.bcn.coop.<br />"
+        "Si aquest registre no l'has fet tu o cap altra persona amb qui "
+        "comparteixis aquest compte, ignora aquest"
+        "correu o avisa'ns per tal que l'eliminem de la base de dades."
+        "</em><br />"
         "<br />"
         "Amb el teu compte pots:<br />"
         "- Inscriure't a les sessions formatives, que trobaràs "
         "<a href=\"https://serveis.bcn.coop/program/\">aquí</a>.<br />"
         "- Si esteu iniciant o teniu en marxa un projecte cooperatiu, podeu "
-        "<a href=\"https://serveis.bcn.coop/project/new/\">sol·licitar un acompanyament</a>.<br />"
-        "- Consultar o editar les dades del teu perfil i recuperar la contrassenya. Més informació a "
+        "<a href=\"https://serveis.bcn.coop/project/new/\">sol·licitar un "
+        "acompanyament</a>.<br />"
+        "- Consultar o editar les dades del teu perfil i recuperar la "
+        "contrassenya. Més informació a "
         "<a href=\"https://serveis.bcn.coop\">serveis.bcn.coop</a>.<br />"
         "<br />"
         "L'equip de Coòpolis.<br />"
@@ -319,13 +352,16 @@ CONSTANCE_CONFIG = {
         "Missatge de benvinguda que s'envia quan algú crea un compte."),
     'EMAIL_ADDED_TO_PROJECT_SUBJECT': (
         "Has estat afegit com a participant del projecte {}",
-        "Assumpte del missatge de notificació d'haver estat afegit a un projecte."),
+        "Assumpte del missatge de notificació d'haver estat afegit a un "
+        "projecte."),
     'EMAIL_ADDED_TO_PROJECT': (
-        "Has estat afegit com a participant al projecte acompanyat per Coòpolis:<br />"
+        "Has estat afegit com a participant al projecte acompanyat per "
+        "Coòpolis:<br />"
         "{}<br />"
         "<br />"
         "Per veure i modificar la fitxa del vostre projecte, accedeix a "
-        "<a href=\"https://serveis.bcn.coop/project/info/\">l'apartat Projectes</a> de la plataforma de Coòpolis amb el"
+        "<a href=\"https://serveis.bcn.coop/project/info/\">l'apartat "
+        "Projectes</a> de la plataforma de Coòpolis amb el"
         "teu e-mail i contrasenya.<br />"
         "Si necessites la contrasenya, trobaràs l'opció per fer-ho a "
         "<a href=\"https://serveis.bcn.coop\">serveis.bcn.coop</a>.<br />"
@@ -337,53 +373,76 @@ CONSTANCE_CONFIG = {
         "Reinici de contrasenya a serveis.bcn.coop",
         "Mail enviat quan es reinicia la contrassenya: assumpte."),
     'MAIL_PASSWORD_RESET': (
-        "Has rebut aquest correu perquè hi ha hagut una sol·licitud de reinici de contrasenya del teu compte a "
-        "serveis.bcn.coop.<br /><br />"
-        "Si has fet tu la sol·licitud, si us plau obre el següent enllaç i escull una contrasenya nova: "
-        "(password_reset_url)<br />"
-        "Si no has fet tu la sol·licitud, senzillament ignora aquest correu.<br /><br />"
-        "El teu nom d'usuari, en cas que l'hagis oblidat: (username)<br /><br />"
-        "Gràcies per fer servir la nostra plataforma,<br />"
-        "L'equip de Coòpolis",
-        "Mail enviat quan es reinicia la contrassenya: cos. Ha d'incloure en algun lloc (username) i "
-        "(password_reset_url) per poder mostrar el link i el nom d'usuari."),
+        "Has rebut aquest correu perquè hi ha hagut una sol·licitud de reinici"
+        " de contrasenya del teu compte a serveis.bcn.coop.<br /><br />Si has "
+        "fet tu la sol·licitud, si us plau obre el següent enllaç i escull una"
+        " contrasenya nova: (password_reset_url)<br />Si no has fet tu la "
+        "sol·licitud, senzillament ignora aquest correu.<br /><br />El teu "
+        "nom d'usuari, en cas que l'hagis oblidat: (username)<br /><br />"
+        "Gràcies per fer servir la nostra plataforma,<br />L'equip de "
+        "Coòpolis",
+        "Mail enviat quan es reinicia la contrassenya: cos. Ha d'incloure en "
+        "algun lloc (username) i (password_reset_url) per poder mostrar el "
+        "link i el nom d'usuari."),
     # Configuration
     'EMAIL_FROM_ENROLLMENTS': (
-        'formacio@bcn.coop', "És el remitent del correu que rep la gent a l'inscriure's a una sessió. Quan s'envia un "
-                             "recordatori a tothom inscrit a una sessió, s'envia a aquest compte i posa en còpia "
-                             "oculta els correus de la gent."),
+        'formacio@bcn.coop',
+        "És el remitent del correu que rep la gent a l'inscriure's a una "
+        "sessió. Quan s'envia un recordatori a tothom inscrit a una sessió, "
+        "s'envia a aquest compte i posa en còpia oculta els correus de la "
+        "gent."),
     'EMAIL_FROM_PROJECTS': (
-        'suport@bcn.coop', "Quan algú sol·licita un acompanyament es genera un correu per notificar-ho a l'equip, que "
-                           "s'envia a aquest compte. Aquest camp, a diferència dels altres, permet indicar diversos "
-                           "comptes, separant-los per comes."),
-    'EMAIL_TO_DEBUG': ('p.picornell@gmail.com', 'Correu per fer tests del codi.'),
+        'suport@bcn.coop',
+        "Quan algú sol·licita un acompanyament es genera un correu per "
+        "notificar-ho a l'equip, que s'envia a aquest compte. Aquest camp, a "
+        "diferència dels altres, permet indicar diversos comptes, separant-los"
+        " per comes."),
+    'EMAIL_TO_DEBUG': (
+        'p.picornell@gmail.com', 'Correu per fer tests del codi.'),
     'PROJECT_NAME': ("Ateneu", "Nom curt de l'ateneu."),
-    'PROJECT_FULL_NAME': ("Ateneu cooperatiu", "Nom llarg, p.ex.: 'Coòpolis. Ateneu cooperatiu de Barcelona'. També "
-                                               "hi podeu posar el mateix que al nom curt, si voleu."),
+    'PROJECT_FULL_NAME': (
+        "Ateneu cooperatiu",
+        "Nom llarg, p.ex.: 'Coòpolis. Ateneu cooperatiu de Barcelona'. També "
+        "hi podeu posar el mateix que al nom curt, si voleu."),
     'PROJECT_CONTACT_URL': (
-        "https://bcn.coop/contacte/", "Enllaç a la pàgina de contacte de l'ateneu, apareix a peu de pàgina."),
+        "https://bcn.coop/contacte/",
+        "Enllaç a la pàgina de contacte de l'ateneu, apareix a peu de "
+        "pàgina."),
     'PROJECT_LEGAL_URL': (
         "https://bcn.coop/avis-legal-i-proteccio-de-dades/",
-        "Enllaç a la pàgina de les condicions legals de l'ateneu. Apareix a: missatge d'acceptar cookies, peu de "
-        "pàgina, i al text d'acceptació de condicions legals del formulari d'alta."),
+        "Enllaç a la pàgina de les condicions legals de l'ateneu. Apareix a: "
+        "missatge d'acceptar cookies, peu de pàgina, i al text d'acceptació "
+        "de condicions legals del formulari d'alta."),
     'PROJECT_WEBSITE_URL': (
-        "https://bcn.coop", "Enllaç a la pàgina principal de l'ateneu. Apareix al menú principal."),
+        "https://bcn.coop",
+        "Enllaç a la pàgina principal de l'ateneu. Apareix al menú "
+        "principal."),
     'CONTACT_PHONE_NUMBER': (
-        "93 432 00 63", "Apareix al correu que s'envia a la gent que s'inscriu a activitats, perquè sàpiguen on "
-                        "contactar si tenen dubtes. De la mateixa manera apareix al correu que s'envia quan envieu "
-                        "un recordatori a tota la gent inscrita a una sessió."),
+        "93 432 00 63",
+        "Apareix al correu que s'envia a la gent que s'inscriu a activitats, "
+        "perquè sàpiguen on contactar si tenen dubtes. De la mateixa manera "
+        "apareix al correu que s'envia quan envieu un recordatori a tota la "
+        "gent inscrita a una sessió."),
     'PROJECT_FACEBOOK_URL': (
-        "", "Si s'indica la URL del perfil de Facebook, apareixerà a la plantilla dels correus electrònics."),
+        "",
+        "Si s'indica la URL del perfil de Facebook, apareixerà a la plantilla "
+        "dels correus electrònics."),
     'PROJECT_TWITTER_URL': (
-        "", "Si s'indica la URL del perfil de Twitter, apareixerà a la plantilla dels correus electrònics."),
+        "",
+        "Si s'indica la URL del perfil de Twitter, apareixerà a la plantilla "
+        "dels correus electrònics."),
     'PROJECT_INSTAGRAM_URL': (
-        "", "Si s'indica la URL del perfil d'Instagram, apareixerà a la plantilla dels correus electrònics."),
+        "",
+        "Si s'indica la URL del perfil d'Instagram, apareixerà a la plantilla "
+        "dels correus electrònics."),
     'CONTACT_EMAIL': (
         "coopolis@bcn.coop",
-        "Apareix al correu que s'envia a la persona que s'ha inscrit a una sessió (i al de recordatori que s'envia"
-        "massivament des de l'admin) per indicar que si tenen dubtes, escriguin a aquest correu."),
+        "Apareix al correu que s'envia a la persona que s'ha inscrit a una "
+        "sessió (i al de recordatori que s'enviamassivament des de l'admin) "
+        "per indicar que si tenen dubtes, escriguin a aquest correu."),
     'ATTENDEE_LIST_FOOTER_IMG': (
-        "https://s3.eu-central-1.wasabisys.com/ateneus-coopolis/local/peu_signatures_pdf.png",
+        "https://s3.eu-central-1.wasabisys.com/ateneus-coopolis/local"
+        "/peu_signatures_pdf.png",
         "URL de l'imatge pel peu de pàgina del llistat d'assistència."),
 }
 CONSTANCE_CONFIG_FIELDSETS = {
@@ -458,23 +517,25 @@ SUBAXIS_OPTIONS = {
         ('A1', "A.1 Reunions de la taula territorial"),
         ('A2', "A.2 Diagnosi entitats socials del territori"),
         ('A3', "A.3 Elaboració catàleg bones pràctiques"),
-        ('A4', "A.4 Jornades per presentar experiències de bones pràctiques o jornades sectorials i/o d'interès per al "
-               "territori"),
+        ('A4', "A.4 Jornades per presentar experiències de bones pràctiques o "
+               "jornades sectorials i/o d'interès per al territori"),
         ('A5', "A.5 Assistència a fires, actes per visibilitzar el programa"),
         ('A6', "A.6 Publicitat en mitjans de comunicació.  Web del programa"),
         ('A7', "A.7 Altres")
     },
     'B': {
-        ('B1', "B.1 Accions de suport a la inserció laboral i a la creació de cooperatives i societats laborals "
-               "(concursos de projectes cooperatius o altres accions)"),
+        ('B1', "B.1 Accions de suport a la inserció laboral i a la creació de "
+               "cooperatives i societats laborals (concursos de projectes "
+               "cooperatius o altres accions)"),
         ('B2', "B.2 Tallers sensibilització o dinamització"),
         ('B3', "B.3 Acompanyament a empreses i entitats"),
         ('B4', "B.4 Altres"),
     },
     'C': {
-        ('C1', "C.1 Tallers de dinamització adreçats al teixit associatiu i a empreses"),
-        ('C2', "C.2 Tallers de dinamització adreçats a professionals que s'agrupen per prestar serveis de manera "
-               "conjunta"),
+        ('C1', "C.1 Tallers de dinamització adreçats al teixit associatiu i a "
+               "empreses"),
+        ('C2', "C.2 Tallers de dinamització adreçats a professionals que "
+               "s'agrupen per prestar serveis de manera conjunta"),
         ('C3', "C.3 Acompanyament a mida per a la creació o transformació"),
         ('C4', "C.4 Altres"),
     },
@@ -487,12 +548,14 @@ SUBAXIS_OPTIONS = {
     'E': {
         ('E1', "E.1 Tallers a joves"),
         ('E2', "E.2 Atenció individual professorat"),
-        ('E3', "E.3 Complementàries (recursos, eines, productes, publicacions sectorials pròpies )"),
+        ('E3', "E.3 Complementàries (recursos, eines, productes, publicacions "
+               "sectorials pròpies )"),
         ('E4', "E.4 Altres"),
     },
     'F': {
         ('F1', "F.1 Pla d'actuació"),
-        ('F2', "F.2 Tallers de creació de cooperatives o societats laborals, o transformació d'associacions, altres entitats"),
+        ('F2', "F.2 Tallers de creació de cooperatives o societats laborals, "
+               "o transformació d'associacions, altres entitats"),
         ('F3', "F.3 Altres"),
     }
 }
@@ -518,7 +581,8 @@ PROJECT_STATUS = (
 )
 CALENDAR_COLOR_FOR_ACTIVITIES_OUTSIDE = '#808080'
 
-# Grappeli (https://django-grappelli.readthedocs.io/en/latest/customization.html)
+# Grappeli
+# (https://django-grappelli.readthedocs.io/en/latest/customization.html)
 GRAPPELLI_SWITCH_USER = False
 GRAPPELLI_INDEX_DASHBOARD = 'coopolis.dashboard.MyDashboard'
 
@@ -532,14 +596,16 @@ THUMBNAIL_DEFAULT_STORAGE = 'cc_lib.storages.MediaStorage'
 # MAIL-QUEUE SETTINGS
 MAILQUEUE_CELERY = False
 
-# Enable the mail queue. If this is set to False, the mail queue will be disabled and emails will be
+# Enable the mail queue. If this is set to False, the mail queue will be
+# disabled and emails will be
 # sent immediately instead.
 MAILQUEUE_QUEUE_UP = True
 
 # Maximum amount of emails to send during each queue run
 MAILQUEUE_LIMIT = 10
 
-# If MAILQUEUE_STORAGE is set to True, will ignore your default storage settings
-# and use Django's filesystem storage instead (stores them in MAILQUEUE_ATTACHMENT_DIR)
+# If MAILQUEUE_STORAGE is set to True, will ignore your default storage
+# settings and use Django's filesystem storage instead (stores them in
+# MAILQUEUE_ATTACHMENT_DIR)
 MAILQUEUE_STORAGE = False
 MAILQUEUE_ATTACHMENT_DIR = 'mailqueue-attachments'
