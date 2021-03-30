@@ -270,6 +270,10 @@ header#grp-header {
           <td>{{ totals.total_creacio_certificat }}</td>
           <td>{{ totals.total_consolidacio_hores|default_if_none:0 }}</td>
           <td>{{ totals.total_consolidacio_certificat }}</td>
+          {% if totals.show_incubation %}
+          <td>{{ totals.total_incubation_hores|default_if_none:0 }}</td>
+          <td>{{ totals.total_incubation_certificat }}</td>
+          {% endif %}
           <td>-</td>
           <td>{{ totals.total_employment_insertions }}</td>
           <td>{{ totals.total_constitutions }}</td>
