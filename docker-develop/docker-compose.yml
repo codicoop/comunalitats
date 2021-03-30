@@ -1,43 +1,31 @@
-version: "3.3"
+version: "3.5"
+
+networks:
+  develop_ateneus:
+    name: develop_ateneus
 
 services:
 
   # http://coopolis-develop.codi.coop
-  coopolis:
-    container_name: develop_coopolis_app # If changed, update ofelia config
+  ateneu-coopolis:
+    container_name: develop_ateneus_coopolis # If changed, update ofelia config
     build:
       context: ..
       dockerfile: ./docker-develop/Dockerfile
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.server_develop
+      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopolis
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:5001 --reload
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
     depends_on:
       - db
+    networks:
+      - develop_ateneus
     #entrypoint: ["sh", "-c", "sleep 2073600"]
-
-  # http://segon_ateneu-develop.codi.coop
-  segon_ateneu:
-    container_name: develop_coopolis_segon_ateneu
-    build:
-      context: ..
-      dockerfile: ./docker-develop/Dockerfile
-    environment:
-      - DB_HOST=db
-      - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.segon_ateneu
-      - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000
-    volumes:
-      - ../:/srv
-      - ../../python_shared_libraries/:/shared_libraries
-    depends_on:
-      - db
 
   db:
     container_name: develop_coopolis_db
@@ -46,6 +34,8 @@ services:
       - /srv/postgres-data/coopolis-develop2:/var/lib/postgresql/data/
     environment:
       - POSTGRES_PASSWORD=mysecretpassword
+    networks:
+      - develop_ateneus
 
   nginx:
     container_name: develop_coopolis_nginx
@@ -54,10 +44,11 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d
       - ../:/srv
     ports:
-      - 8002:80
+      - 5001-5013
     depends_on:
       - coopolis
-      - segon_ateneu
+    networks:
+      - develop_ateneus
 
   ofelia:
     container_name: develop_coopolis_ofelia
@@ -68,3 +59,5 @@ services:
     depends_on:
       - coopolis
       - segon_ateneu
+    networks:
+      - develop_ateneus
