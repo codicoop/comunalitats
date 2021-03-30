@@ -43,7 +43,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
     form = ProjectStageForm
     empty_value_display = '(cap)'
     list_display = (
-        'project_field_ellipsis', 'date_start', 'stage_type', 'stage_subtype',
+        'project_field_ellipsis', 'date_start', 'stage_type',
         'covid_crisis', 'stage_responsible_field_ellipsis', 'hours',
         'axis_summary', 'entity', 'subsidy_period', '_has_certificate',
         '_participants_count', 'project_field'
@@ -51,7 +51,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
     list_filter = (
         'subsidy_period',
         ('stage_responsible', admin.RelatedOnlyFieldListFilter),
-        'date_start', 'stage_type', 'stage_subtype', 'covid_crisis', 'axis',
+        'date_start', 'stage_type', 'covid_crisis', 'axis',
         'stage_organizer', 'entity', 'project__sector'
     )
     actions = ["export_as_csv"]
@@ -62,7 +62,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
     }
     fieldsets = [
         (None, {
-            'fields': ['project', 'stage_type', 'stage_subtype',
+            'fields': ['project', 'stage_type',
                        'covid_crisis', 'subsidy_period', 'date_start',
                        'date_end', 'follow_up', 'axis', 'subaxis', 'entity',
                        'stage_organizer', 'stage_responsible',
@@ -111,17 +111,46 @@ class ProjectStageAdmin(admin.ModelAdmin):
     project_field.short_description = 'Projecte'
 
     def get_fieldsets(self, request, obj=None):
-        """
-        For ateneus enabling cofunded options: Adding the Cofinançades fieldset.
-        """
+        fieldsets = super().get_fieldsets(request, obj)
+
+        # For ateneus enabling cofunded options: Adding the Cofinançades
+        # fieldset.
         fs = ('Opcions de cofinançament', {
             'classes': ('grp-collapse grp-closed',),
             'fields': ('cofunded', 'cofunded_ateneu', 'strategic_line',),
         })
         if config.ENABLE_COFUNDED_OPTIONS and fs not in self.fieldsets:
-            self.fieldsets.insert(1, fs)
+            fieldsets.insert(1, fs)
 
-        return self.fieldsets
+        # For ateneus enabling stage_subtype: Adding the Subtype field.
+        if config.ENABLE_STAGE_SUBTYPES is True:
+            fieldsets[0][1]['fields'] = self._get_fields_with_type(
+                fieldsets[0][1]['fields']
+            )
+
+        return fieldsets
+
+    def get_fields(self, request, obj=None):
+        return self._get_fields_with_type(super().get_fields(request, obj))
+
+    def get_list_display(self, request):
+        return self._get_fields_with_type(super().get_list_display(request))
+
+    def get_list_filter(self, request):
+        return self._get_fields_with_type(super().get_list_filter(request))
+
+    @staticmethod
+    def _get_fields_with_type(fields):
+        fields = list(fields)
+        if (
+            config.ENABLE_STAGE_SUBTYPES is True
+            and 'stage_subtype' not in fields
+        ):
+            type_index = 0
+            if 'stage_type' in fields:
+                type_index = fields.index('stage_type') + 1
+            fields.insert(type_index, 'stage_subtype')
+        return fields
 
 
 class ProjectStagesInline(admin.StackedInline):
