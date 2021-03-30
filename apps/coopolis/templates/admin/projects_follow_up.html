@@ -167,23 +167,7 @@ header#grp-header {
           </th>
           <th class="sticky" colspan="2">
             <div class="grp-text">
-              <span>Acollida</span>
-            </div>
-            <div class="grp-text">
-              <span>Hores / Cert.</span>
-            </div>
-          </th>
-          <th class="sticky" colspan="2">
-            <div class="grp-text">
-              <span>Procés</span>
-            </div>
-            <div class="grp-text">
-              <span>Hores / Cert.</span>
-            </div>
-          </th>
-          <th class="sticky" colspan="2">
-            <div class="grp-text">
-              <span>Constitució</span>
+              <span>Creació</span>
             </div>
             <div class="grp-text">
               <span>Hores / Cert.</span>
@@ -249,16 +233,8 @@ header#grp-header {
           <td>{% if row.project.description %}<span ellipsis-tooltip="{{ row.project.description }}"></span>{% endif %}</td>
           <td>{{ row.project.get_project_status_display|default_if_none:"" }}</td>
           <td>{{ row.project.full_town_district|default_if_none:"" }}</td>
-          <td>{{ row.acollida_hores|default_if_none:0 }}</td>
-          <td>{% if row.acollida_certificat > 0 %}
-            <img src="{% static 'admin/img/icon-yes.svg' %}" alt="1">{% endif %}
-          </td>
-          <td>{{ row.proces_hores|default_if_none:0 }}</td>
-          <td>{% if row.proces_certificat > 0 %}
-            <img src="{% static 'admin/img/icon-yes.svg' %}" alt="1">{% endif %}
-          </td>
-          <td>{{ row.constitucio_hores|default_if_none:0 }}</td>
-          <td>{% if row.constitucio_certificat > 0 %}
+          <td>{{ row.creacio_hores|default_if_none:0 }}</td>
+          <td>{% if row.creacio_certificat > 0 %}
             <img src="{% static 'admin/img/icon-yes.svg' %}" alt="1">{% endif %}
           </td>
           <td>{{ row.consolidacio_hores|default_if_none:0 }}</td>
@@ -290,12 +266,8 @@ header#grp-header {
           <td>-</td>
           <td>-</td>
           <td>-</td>
-          <td>{{ totals.total_acollida_hores|default_if_none:0 }}</td>
-          <td>{{ totals.total_acollida_certificat }}</td>
-          <td>{{ totals.total_proces_hores|default_if_none:0 }}</td>
-          <td>{{ totals.total_proces_certificat }}</td>
-          <td>{{ totals.total_constitucio_hores|default_if_none:0 }}</td>
-          <td>{{ totals.total_constitucio_certificat }}</td>
+          <td>{{ totals.total_creacio_hores|default_if_none:0 }}</td>
+          <td>{{ totals.total_creacio_certificat }}</td>
           <td>{{ totals.total_consolidacio_hores|default_if_none:0 }}</td>
           <td>{{ totals.total_consolidacio_certificat }}</td>
           <td>-</td>

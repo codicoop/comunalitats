@@ -107,50 +107,26 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
                     .get_num_members_for_project(OuterRef('project_id')),
                 output_field=IntegerField()
             ),
-            'acollida_hores': Sum(
+            'creacio_hores': Sum(
                 'hours',
-                filter=Q(stage_type=1)
+                filter=Q(stage_type=11)
             ),
-            'acollida_certificat': Count(
+            'creacio_certificat': Count(
                 'scanned_certificate',
                 filter=(
-                    Q(stage_type=1) &
-                    Q(scanned_certificate__isnull=False) &
-                    ~Q(scanned_certificate__exact='')
-                )
-            ),
-            'proces_hores': Sum(
-                'hours',
-                filter=Q(stage_type=2)
-            ),
-            'proces_certificat': Count(
-                'scanned_certificate',
-                filter=(
-                    Q(stage_type=2) &
-                    Q(scanned_certificate__isnull=False) &
-                    ~Q(scanned_certificate__exact='')
-                )
-            ),
-            'constitucio_hores': Sum(
-                'hours',
-                filter=Q(stage_type=6)
-            ),
-            'constitucio_certificat': Count(
-                'scanned_certificate',
-                filter=(
-                    Q(stage_type=6) &
+                    Q(stage_type=11) &
                     Q(scanned_certificate__isnull=False) &
                     ~Q(scanned_certificate__exact='')
                 )
             ),
             'consolidacio_hores': Sum(
                 'hours',
-                filter=Q(stage_type__in=[7, 8])
+                filter=Q(stage_type=12)
             ),
             'consolidacio_certificat': Count(
                 'scanned_certificate',
                 filter=(
-                    Q(stage_type__in=[7, 8]) &
+                    Q(stage_type=12) &
                     Q(scanned_certificate__isnull=False) &
                     ~Q(scanned_certificate__exact='')
                 )
@@ -175,9 +151,6 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             qs_project_stages = qs_project_stages.filter(
                 subsidy_period=filtered_subsidy_period
             )
-        print(f"filtered: {filtered_subsidy_period}")
-        for aa in qs_project_stages:
-            print(aa)
 
         # Annotate adds columns to each row with the sum or calculations of
         qs_project_stages = (
@@ -198,12 +171,8 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             total_members_h=0,
             total_members_d=0,
             total_members_total=0,
-            total_acollida_hores=0,
-            total_acollida_certificat=0,
-            total_proces_hores=0,
-            total_proces_certificat=0,
-            total_constitucio_hores=0,
-            total_constitucio_certificat=0,
+            total_creacio_hores=0,
+            total_creacio_certificat=0,
             total_consolidacio_hores=0,
             total_consolidacio_certificat=0,
             total_incubation_hores=0,
@@ -223,23 +192,11 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             totals['total_members_total'] += (
                 row['members_total'] if row['members_total'] else 0
             )
-            totals['total_acollida_hores'] += (
-                row['acollida_hores'] if row['acollida_hores'] else 0
+            totals['total_creacio_hores'] += (
+                row['creacio_hores'] if row['creacio_hores'] else 0
             )
-            totals['total_acollida_certificat'] += (
-                1 if row['acollida_certificat'] else 0
-            )
-            totals['total_proces_hores'] += (
-                row['proces_hores'] if row['proces_hores'] else 0
-            )
-            totals['total_proces_certificat'] += (
-                1 if row['proces_certificat'] else 0
-            )
-            totals['total_constitucio_hores'] += (
-                row['constitucio_hores'] if row['constitucio_hores'] else 0
-            )
-            totals['total_constitucio_certificat'] += (
-                1 if row['constitucio_certificat'] else 0
+            totals['total_creacio_certificat'] += (
+                1 if row['creacio_certificat'] else 0
             )
             totals['total_consolidacio_hores'] += (
                 row['consolidacio_hores'] if row['consolidacio_hores'] else 0
@@ -429,12 +386,8 @@ class FollowUpSpreadsheet:
             ("Descripció", 60),
             ("Estat", 20),
             ("Territori", 20),
-            ("Acollida H.", 15),
-            ("Acollida cert.", 15),
-            ("Procés H.", 15),
-            ("Procés cert.", 15),
-            ("Constitució H.", 15),
-            ("Constitució cert.", 15),
+            ("Creació H.", 15),
+            ("Creació cert.", 15),
             ("Consolidació H.", 15),
             ("Consolidació cert.", 15),
             ("Incubació H.", 15),
@@ -473,13 +426,9 @@ class FollowUpSpreadsheet:
                 raw_row['project'].get_project_status_display(),
                 (raw_row['project'].full_town_district
                     if raw_row['project'].full_town_district else ''),
-                raw_row['acollida_hores'] if raw_row['acollida_hores'] else 0,
-                1 if raw_row['acollida_certificat'] > 0 else 0,
-                raw_row['proces_hores'] if raw_row['proces_hores'] else 0,
-                1 if raw_row['proces_certificat'] > 0 else 0,
-                (raw_row['constitucio_hores']
-                    if raw_row['constitucio_hores'] else 0),
-                1 if raw_row['constitucio_certificat'] > 0 else 0,
+                (raw_row['creacio_hores']
+                    if raw_row['creacio_hores'] else 0),
+                1 if raw_row['creacio_certificat'] > 0 else 0,
                 (raw_row['consolidacio_hores']
                     if raw_row['consolidacio_hores'] else 0),
                 1 if raw_row['consolidacio_certificat'] > 0 else 0,
