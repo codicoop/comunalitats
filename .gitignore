@@ -11,3 +11,4 @@ Pipfile.lock
 # Using this for pyenv in development environment.
 .python-version
 /docker-production/settings/
+/docker-develop/django-settings/

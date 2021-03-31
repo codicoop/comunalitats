@@ -2,14 +2,12 @@
 
 from django.db import migrations
 
-from cc_courses.models import Activity
-from coopolis.models import ProjectStage
-
 
 def migrate2020subaxis(apps, schema_editor):
     print('')
     # migrating activities's subaxis C3 to C4
-    qs = Activity.objects.filter(subaxis='C3')
+    activity_obj = apps.get_model('cc_courses', 'Activity')
+    qs = activity_obj.objects.filter(subaxis='C3')
     for obj in qs:
         obj.subaxis = 'C4'
         obj.save()
@@ -17,7 +15,8 @@ def migrate2020subaxis(apps, schema_editor):
     print('Sessions del sub-eix C3 passades a C4.')
 
     # migrating projectstages's subaxis C3 to C4
-    qs = ProjectStage.objects.filter(subaxis='C3')
+    project_stage_obj = apps.get_model('coopolis', 'ProjectStage')
+    qs = project_stage_obj.objects.filter(subaxis='C3')
     for obj in qs:
         obj.subaxis = 'C4'
         obj.save()
