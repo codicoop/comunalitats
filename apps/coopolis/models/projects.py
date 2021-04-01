@@ -1,4 +1,6 @@
 import datetime
+
+from constance import config
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -435,8 +437,16 @@ class ProjectStage(models.Model):
                     {'date_end': "La data de finalització ha d'estar dins del "
                                  "període de la convocatòria seleccionada."})
 
+    def get_full_type_str(self):
+        txt = self.get_stage_type_display()
+        if config.ENABLE_STAGE_SUBTYPES and self.stage_subtype:
+            txt = f"{txt} ({self.stage_subtype.name})"
+        return txt
+
     def __str__(self):
-        return f"{str(self.project)}: {self.get_stage_type_display()}"
+        txt = (f"{str(self.project)}: {self.get_full_type_str()} "
+               f"[{str(self.subsidy_period)}]")
+        return txt
 
 
 class ProjectStageSession(models.Model):
