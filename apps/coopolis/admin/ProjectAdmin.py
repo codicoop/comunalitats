@@ -78,10 +78,6 @@ class ProjectStageAdmin(admin.ModelAdmin):
                        'scanned_certificate',
                        'involved_partners', 'hours_sum']
         }),
-        ("Camps obsolets en procés de migrar al nou sistema", {
-            'fields': ['date_start', 'date_end', 'hours', 'follow_up',
-                       'scanned_signatures', 'entity', ]
-        })
     ]
     inlines = (ProjectStageSessionsInline, )
     readonly_fields = ('hours_sum', )
@@ -189,10 +185,6 @@ class ProjectStagesInline(admin.StackedInline):
                        'involved_partners', 'hours_sum',
                        'stage_sessions_field', ]
         }),
-        ("Camps obsolets en procés de migrar al nou sistema", {
-            'fields': ['date_start', 'date_end', 'hours', 'follow_up',
-                       'scanned_signatures', 'entity', ]
-        })
     )
     readonly_fields = ('hours_sum', 'stage_sessions_field', )
 
