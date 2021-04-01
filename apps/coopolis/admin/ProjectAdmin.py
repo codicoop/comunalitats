@@ -139,23 +139,23 @@ class ProjectStageAdmin(admin.ModelAdmin):
 
         # For ateneus enabling stage_subtype: Adding the Subtype field.
         if config.ENABLE_STAGE_SUBTYPES is True:
-            fieldsets[0][1]['fields'] = self._get_fields_with_type(
+            fieldsets[0][1]['fields'] = self.get_fields_with_type(
                 fieldsets[0][1]['fields']
             )
 
         return fieldsets
 
     def get_fields(self, request, obj=None):
-        return self._get_fields_with_type(super().get_fields(request, obj))
+        return self.get_fields_with_type(super().get_fields(request, obj))
 
     def get_list_display(self, request):
-        return self._get_fields_with_type(super().get_list_display(request))
+        return self.get_fields_with_type(super().get_list_display(request))
 
     def get_list_filter(self, request):
-        return self._get_fields_with_type(super().get_list_filter(request))
+        return self.get_fields_with_type(super().get_list_filter(request))
 
     @staticmethod
-    def _get_fields_with_type(fields):
+    def get_fields_with_type(fields):
         fields = list(fields)
         if (
             config.ENABLE_STAGE_SUBTYPES is True
@@ -215,6 +215,17 @@ class ProjectStagesInline(admin.StackedInline):
         if db_field.name == "project":
             kwargs["queryset"] = Project.objects.order_by('name')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+
+        # For ateneus enabling stage_subtype: Adding the Subtype field.
+        if config.ENABLE_STAGE_SUBTYPES is True:
+            fieldsets[0][1]['fields'] = ProjectStageAdmin.get_fields_with_type(
+                fieldsets[0][1]['fields']
+            )
+
+        return fieldsets
 
 
 class EmploymentInsertionInline(admin.TabularInline):
