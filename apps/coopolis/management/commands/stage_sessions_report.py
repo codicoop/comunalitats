@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
@@ -68,47 +70,50 @@ class Command(BaseCommand):
                 project_obj = values['obj']
                 url = self.get_obj_url(project_obj)
                 stage_types_report = list()
-                for stage_type, stages in stage_types.items():
+                for stage_type, stage_subtypes in stage_types.items():
                     stage_type_report = f"<h3>Processant el tipus {stage_type}</h3>"
-                    date = '-'
-                    if stages[0].date_start:
-                        date = f"<strong>{stages[0].date_start.strftime('%d.%m.%Y')}</strong>"
-                    url = self.get_obj_url(stages[0])
-                    stage_type_report += f"""
-                    <p>Sessió d'acompanyament principal: {date} {url}</p>
-                    <p>Total de sessions: {len(stages)}</p>
-                    <table>
-                    <tr>
-                      <td>Data</td>
-                      <td>Projecte</td>
-                      <td>Tipus</td>
-                      <td>Eix</td>
-                      <td>Organitzadora</td>
-                      <td>Certificat</td>
-                      <td>Participants</td>
-                    </tr>
-                    """
+                    for stage_subtype, stages in stage_subtypes['stage_subtypes'].items():
+                        stage_type_report += f"<h4>Processant el subtipus {stage_subtype}</h4>"
 
-                    for stage in stages:
                         date = '-'
-                        if stage.date_start:
-                            date = f"<strong>{stage.date_start.strftime('%d.%m.%Y')}</strong>"
-                        url = self.get_obj_url(stage, date)
+                        if stages[0].date_start:
+                            date = f"<strong>{stages[0].date_start.strftime('%d.%m.%Y')}</strong>"
+                        url = self.get_obj_url(stages[0])
                         stage_type_report += f"""
+                        <p>Sessió d'acompanyament principal: {date} {url}</p>
+                        <p>Total de sessions: {len(stages)}</p>
+                        <table>
                         <tr>
-                          <td>{url}</td>
-                          <td>{project}</td>
-                          <td>{stage.get_stage_type_display()}</td>
-                          <td>{stage.axis_summary()}</td>
-                          <td>{stage.stage_organizer}</td>
-                          <td>{stage.scanned_certificate}</td>
-                          <td>{self.get_involved_partners_str(stage)}</td>
+                          <td>Data</td>
+                          <td>Projecte</td>
+                          <td>Tipus</td>
+                          <td>Eix</td>
+                          <td>Organitzadora</td>
+                          <td>Certificat</td>
+                          <td>Participants</td>
                         </tr>
                         """
-                    stage_type_report += '</table>'
 
-                    if self.has_data_coherence(stages) is False:
-                        stage_types_report.append(stage_type_report)
+                        for stage in stages:
+                            date = '-'
+                            if stage.date_start:
+                                date = f"<strong>{stage.date_start.strftime('%d.%m.%Y')}</strong>"
+                            url = self.get_obj_url(stage, date)
+                            stage_type_report += f"""
+                            <tr>
+                              <td>{url}</td>
+                              <td>{project}</td>
+                              <td>{stage.get_stage_type_display()}</td>
+                              <td>{stage.axis_summary()}</td>
+                              <td>{stage.stage_organizer}</td>
+                              <td>{stage.scanned_certificate}</td>
+                              <td>{self.get_involved_partners_str(stage)}</td>
+                            </tr>
+                            """
+                        stage_type_report += '</table>'
+
+                        if self.has_data_coherence(stages) is False:
+                            stage_types_report.append(stage_type_report)
                 if len(stage_types_report) > 0:
                     project_report = f'<h2>Processant el projecte {project_obj.name} {url}</h2>'
                     report += project_report
@@ -160,20 +165,34 @@ class Command(BaseCommand):
         for stage in stages:
             pname = stage.project.name
             stype = stage.get_stage_type_display()
+            ssubtype = None
+            if stage.stage_subtype:
+                ssubtype = stage.stage_subtype.name
             if pname not in projects:
                 projects[pname] = {
                     'obj': stage.project,
                     'stage_types': {
-                        stype: [stage, ],
+                        stype: {
+                            'stage_subtypes': {
+                                ssubtype: [stage, ],
+                            },
+                        },
                     },
                 }
             else:
                 if stype not in projects[pname]['stage_types']:
-                    projects[pname]['stage_types'][stype] = [stage, ]
+                    projects[pname]['stage_types'][stype] = {
+                        'stage_subtypes': {
+                            ssubtype: [stage, ],
+                        },
+                    }
                 else:
-                    projects[pname]['stage_types'][stype].append(
-                        stage
-                    )
+                    if ssubtype not in projects[pname]['stage_types'][stype]['stage_subtypes']:
+                        projects[pname]['stage_types'][stype]['stage_subtypes'][ssubtype] = [stage, ]
+                    else:
+                        projects[pname]['stage_types'][stype]['stage_subtypes'][ssubtype].append(
+                            stage
+                        )
         return projects
 
     def get_obj_url(self, model_obj, label=None):
@@ -214,6 +233,20 @@ class Command(BaseCommand):
                 project_obj = values['obj']
                 stage_types = values['stage_types']
                 for stage_type, stages in stage_types.items():
+                    # Ara el que volem és que:
+                    # A. IF config.subtypes activats: el procés segueix com fins ara ja que els agruparà només per TIPUS
+                    # B. ELSE: Els hem d'agrupar PER TIPUS + SUBTIPUS.
+                    #
+                    #
+                    # No tinc clar com fer lo del subtipus.
+                    # Ara a les dades ens arriba ['stage_types'] que conté cada un dels tipus i els subtipus a dins.
+                    # El més fàcil seria detectar això a get_projects i que en aquest cas els stage_types ja siguin
+                    # els que toquen no?
+                    # O que també hi vinguin els stage_subtypes?
+                    #
+                    # El subtipus el tenim a stage.subtype
+                    #
+                    # .
                     report += f"<h3>Processant el tipus {stage_type}</h3>"
                     main_stage = stages[0]
 
