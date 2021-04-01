@@ -458,6 +458,7 @@ class ProjectStageSession(models.Model):
     date = models.DateField(
         "data",
         default=datetime.date.today,
+        null=True, blank=False
     )
     hours = models.IntegerField(
         "número d'hores", help_text="Camp necessari per la justificació.",
