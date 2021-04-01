@@ -263,13 +263,17 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
                    FilterByFounded, 'tags', )
     fieldsets = (
         ("Dades que s'omplen des de la web", {
-            'fields': ['name', 'sector', 'web', 'project_status', 'motivation', 'mail', 'phone', 'town', 'district',
-                       'number_people', 'estatuts', 'viability', 'sostenibility', 'object_finality', 'project_origins',
+            'fields': ['name', 'sector', 'web', 'project_status', 'motivation',
+                       'mail', 'phone', 'town', 'district', 'number_people',
+                       'estatuts', 'viability', 'sostenibility',
+                       'object_finality', 'project_origins',
                        'solves_necessities', 'social_base']
         }),
         ("Dades internes gestionades per l'ateneu", {
-            'fields': ['partners', 'registration_date', 'cif', 'constitution_date', 'subsidy_period', 'derivation',
-                       'derivation_date', 'description', 'employment_estimation', 'other', 'follow_up_situation',
+            'fields': ['partners', 'registration_date', 'cif',
+                       'constitution_date', 'subsidy_period', 'derivation',
+                       'derivation_date', 'description',
+                       'employment_estimation', 'other', 'follow_up_situation',
                        'follow_up_situation_update', 'tags']
         }),
         ("Activitats a les que s'han inscrit sòcies del projecte", {
@@ -301,7 +305,8 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         info = self.model._meta.app_label, self.model._meta.model_name
 
         my_urls = [
-            url(r'(?P<id>\d+)/print/$', wrap(self.print), name='%s_%s_print' % info),
+            url(r'(?P<id>\d+)/print/$', wrap(self.print),
+                name='%s_%s_print' % info),
         ]
 
         return my_urls + urls
@@ -327,7 +332,8 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     def stages_field(self, obj):
         if obj.stages_list:
             return mark_safe(
-                f"<a href=\"../../coopolis/projectstage?project__exact={ obj.id }\">{ obj.stages_list }</a>")
+                f"<a href=\"../../coopolis/projectstage?project__exact"
+                f"={ obj.id }\">{ obj.stages_list }</a>")
         return None
 
     stages_field.short_description = 'Acompanyaments'
@@ -350,13 +356,15 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
                     current_partners_list.add(partner.pk)
                 current_partners_list = set(sorted(current_partners_list))
 
-                new_partners_list = post_partners_list.difference(current_partners_list)
+                new_partners_list = post_partners_list.difference(
+                    current_partners_list)
             else:
                 new_partners_list = post_partners_list
 
             new_partner_objects = User.objects.filter(pk__in=new_partners_list)
             for new_partner in new_partner_objects:
-                self.send_added_to_project_email(new_partner.email, request.POST['name'])
+                self.send_added_to_project_email(new_partner.email,
+                                                 request.POST['name'])
 
         super().save_model(request, obj, form, change)
 
@@ -369,7 +377,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         mail.body_strings = {
             'ateneu_nom': config.PROJECT_FULL_NAME,
             'projecte_nom': project_name,
-            'url_projectes': f"{settings.ABSOLUTE_URL}{reverse('project_info')}",
+            'url_projectes': settings.ABSOLUTE_URL + reverse('project_info'),
             'url_backoffice': settings.ABSOLUTE_URL
         }
         mail.send()
