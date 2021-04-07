@@ -1,4 +1,4 @@
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django_object_actions import DjangoObjectActions
 from django.contrib import admin
 from django.utils.safestring import mark_safe
@@ -11,6 +11,7 @@ from coopolis.models import User, Project, ProjectStage, EmploymentInsertion
 from coopolis.forms import (
     ProjectFormAdmin, ProjectStageInlineForm, ProjectStageForm
 )
+from coopolis.models.projects import ProjectStageSession, ProjectFile
 from coopolis_backoffice.custom_mail_manager import MyMailTemplate
 
 
@@ -31,6 +32,15 @@ class FilterByFounded(admin.SimpleListFilter):
         if value == 'Yes':
             return queryset.filter(cif__isnull=False, constitution_date__isnull=False)
         return queryset
+
+
+class ProjectStageSessionsInline(admin.StackedInline):
+    model = ProjectStageSession
+    extra = 0
+    min_num = 0
+    show_change_link = False
+    can_delete = True
+    empty_value_display = '(cap)'
 
 
 class ProjectStageAdmin(admin.ModelAdmin):
@@ -62,14 +72,15 @@ class ProjectStageAdmin(admin.ModelAdmin):
     }
     fieldsets = [
         (None, {
-            'fields': ['project', 'stage_type',
-                       'covid_crisis', 'subsidy_period', 'date_start',
-                       'date_end', 'follow_up', 'axis', 'subaxis', 'entity',
+            'fields': ['project', 'stage_type', 'covid_crisis',
+                       'subsidy_period', 'axis', 'subaxis',
                        'stage_organizer', 'stage_responsible',
-                       'scanned_signatures', 'scanned_certificate', 'hours',
-                       'involved_partners', ]
-        })
+                       'scanned_certificate',
+                       'involved_partners', 'hours_sum']
+        }),
     ]
+    inlines = (ProjectStageSessionsInline, )
+    readonly_fields = ('hours_sum', )
 
     def _has_certificate(self, obj):
         if obj.scanned_certificate:
@@ -124,23 +135,23 @@ class ProjectStageAdmin(admin.ModelAdmin):
 
         # For ateneus enabling stage_subtype: Adding the Subtype field.
         if config.ENABLE_STAGE_SUBTYPES is True:
-            fieldsets[0][1]['fields'] = self._get_fields_with_type(
+            fieldsets[0][1]['fields'] = self.get_fields_with_type(
                 fieldsets[0][1]['fields']
             )
 
         return fieldsets
 
     def get_fields(self, request, obj=None):
-        return self._get_fields_with_type(super().get_fields(request, obj))
+        return self.get_fields_with_type(super().get_fields(request, obj))
 
     def get_list_display(self, request):
-        return self._get_fields_with_type(super().get_list_display(request))
+        return self.get_fields_with_type(super().get_list_display(request))
 
     def get_list_filter(self, request):
-        return self._get_fields_with_type(super().get_list_filter(request))
+        return self.get_fields_with_type(super().get_list_filter(request))
 
     @staticmethod
-    def _get_fields_with_type(fields):
+    def get_fields_with_type(fields):
         fields = list(fields)
         if (
             config.ENABLE_STAGE_SUBTYPES is True
@@ -161,11 +172,34 @@ class ProjectStagesInline(admin.StackedInline):
     show_change_link = True
     can_delete = False
     empty_value_display = '(cap)'
-
     raw_id_fields = ('involved_partners',)
     autocomplete_lookup_fields = {
         'm2m': ['involved_partners'],
     }
+    fieldsets = (
+        (None, {
+            'fields': ['project', 'stage_type', 'covid_crisis',
+                       'subsidy_period', 'axis', 'subaxis',
+                       'stage_organizer', 'stage_responsible',
+                       'scanned_certificate',
+                       'involved_partners', 'hours_sum',
+                       'stage_sessions_field', ]
+        }),
+    )
+    readonly_fields = ('hours_sum', 'stage_sessions_field', )
+
+    def stage_sessions_field(self, obj):
+        count = obj.sessions_count()
+        url = reverse_lazy(
+            'admin:coopolis_projectstage_change',
+            kwargs={'object_id': obj.id}
+        )
+        url = (f'<a href="{url}#stage_sessions-group">Anar a la fitxa de la '
+               f'Justificació (per veure i editar les sessions)</a>')
+        txt = f"{count} - {url}"
+        return mark_safe(txt)
+
+    stage_sessions_field.short_description = "Sessions d'acompanyament"
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "stage_responsible":
@@ -173,6 +207,17 @@ class ProjectStagesInline(admin.StackedInline):
         if db_field.name == "project":
             kwargs["queryset"] = Project.objects.order_by('name')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+
+        # For ateneus enabling stage_subtype: Adding the Subtype field.
+        if config.ENABLE_STAGE_SUBTYPES is True:
+            fieldsets[0][1]['fields'] = ProjectStageAdmin.get_fields_with_type(
+                fieldsets[0][1]['fields']
+            )
+
+        return fieldsets
 
 
 class EmploymentInsertionInline(admin.TabularInline):
@@ -185,6 +230,15 @@ class EmploymentInsertionInline(admin.TabularInline):
     autocomplete_lookup_fields = {
         'fk': ['user']
     }
+
+
+class ProjectFileInline(admin.TabularInline):
+    class Media:
+        js = ('js/grappellihacks.js',)
+
+    classes = ('grp-collapse', 'grp-closed')
+    model = ProjectFile
+    extra = 0
 
 
 class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
@@ -209,13 +263,17 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
                    FilterByFounded, 'tags', )
     fieldsets = (
         ("Dades que s'omplen des de la web", {
-            'fields': ['name', 'sector', 'web', 'project_status', 'motivation', 'mail', 'phone', 'town', 'district',
-                       'number_people', 'estatuts', 'viability', 'sostenibility', 'object_finality', 'project_origins',
+            'fields': ['name', 'sector', 'web', 'project_status', 'motivation',
+                       'mail', 'phone', 'town', 'district', 'number_people',
+                       'estatuts', 'viability', 'sostenibility',
+                       'object_finality', 'project_origins',
                        'solves_necessities', 'social_base']
         }),
         ("Dades internes gestionades per l'ateneu", {
-            'fields': ['partners', 'registration_date', 'cif', 'constitution_date', 'subsidy_period', 'derivation',
-                       'derivation_date', 'description', 'employment_estimation', 'other', 'follow_up_situation',
+            'fields': ['partners', 'registration_date', 'cif',
+                       'constitution_date', 'subsidy_period', 'derivation',
+                       'derivation_date', 'description',
+                       'employment_estimation', 'other', 'follow_up_situation',
                        'follow_up_situation_update', 'tags']
         }),
         ("Activitats a les que s'han inscrit sòcies del projecte", {
@@ -228,7 +286,8 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     actions = ["export_as_csv"]
     change_actions = ('print', )
     print_template = 'admin/my_test/myentry/review.html'
-    inlines = (ProjectStagesInline, EmploymentInsertionInline,)
+    inlines = (ProjectFileInline, ProjectStagesInline,
+               EmploymentInsertionInline,)
     raw_id_fields = ('partners',)
     autocomplete_lookup_fields = {
         'm2m': ['partners'],
@@ -246,7 +305,8 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         info = self.model._meta.app_label, self.model._meta.model_name
 
         my_urls = [
-            url(r'(?P<id>\d+)/print/$', wrap(self.print), name='%s_%s_print' % info),
+            url(r'(?P<id>\d+)/print/$', wrap(self.print),
+                name='%s_%s_print' % info),
         ]
 
         return my_urls + urls
@@ -272,7 +332,8 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     def stages_field(self, obj):
         if obj.stages_list:
             return mark_safe(
-                f"<a href=\"../../coopolis/projectstage?project__exact={ obj.id }\">{ obj.stages_list }</a>")
+                f"<a href=\"../../coopolis/projectstage?project__exact"
+                f"={ obj.id }\">{ obj.stages_list }</a>")
         return None
 
     stages_field.short_description = 'Acompanyaments'
@@ -295,13 +356,15 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
                     current_partners_list.add(partner.pk)
                 current_partners_list = set(sorted(current_partners_list))
 
-                new_partners_list = post_partners_list.difference(current_partners_list)
+                new_partners_list = post_partners_list.difference(
+                    current_partners_list)
             else:
                 new_partners_list = post_partners_list
 
             new_partner_objects = User.objects.filter(pk__in=new_partners_list)
             for new_partner in new_partner_objects:
-                self.send_added_to_project_email(new_partner.email, request.POST['name'])
+                self.send_added_to_project_email(new_partner.email,
+                                                 request.POST['name'])
 
         super().save_model(request, obj, form, change)
 
@@ -314,7 +377,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         mail.body_strings = {
             'ateneu_nom': config.PROJECT_FULL_NAME,
             'projecte_nom': project_name,
-            'url_projectes': f"{settings.ABSOLUTE_URL}{reverse('project_info')}",
+            'url_projectes': settings.ABSOLUTE_URL + reverse('project_info'),
             'url_backoffice': settings.ABSOLUTE_URL
         }
         mail.send()

@@ -1,9 +1,11 @@
+from constance import config
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 from django.urls import reverse
 
 from coopolis.models import ProjectStage
+from coopolis.models.projects import ProjectStageSession, ProjectFile
 from dataexports.models import SubsidyPeriod
 
 
@@ -18,34 +20,36 @@ class Command(BaseCommand):
             help='Checks if the data is suitable for migrating and performs '
                  'the migration.',
         )
+        parser.add_argument(
+            '--check',
+            action='store_true',
+            help='Checks if the data is suitable for migrating.',
+        )
+        parser.add_argument(
+            '--dry-run',
+            action='store_true',
+            help='Disables any change in the database.',
+        )
 
     def handle(self, *args, **options):
         data_consolidation_pending, report = self.make_report()
-        if data_consolidation_pending:
-            self.stdout.write(report)
-        else:
-            if options['migrate']:
-                self.migrate()
+        if options['check']:
+            if data_consolidation_pending:
+                m = f"{settings.PROJECT_NAME}: té dades pendents per revisar."
+            else:
+                m = f"{settings.PROJECT_NAME}: dades OK, pot migrar."
+            self.stdout.write(m)
+            return
 
-            report = """
-            <h2>Totes les justificacions d'acompanyament tenen les dades 
-            consolidades i podran ser migrades. Gràcies!</h2>
-            <p><strong>Propers passos:</strong></p>
-            <ul>
-              <li>És molt important que en les properes setmanes us assegureu 
-              que tothom de l'equip que toqui justificacions d'acompanyament 
-              mantingui les dades consolidades, per tal que quan arribi el dia
-              que executem la migració, funcioni correctament.</li>
-              <li>Si us plau avisa al Pere (pere@codi.coop) de que heu acabat 
-              aquest procés.</li>
-              <li>Quan la resta d'ateneus implicats hagin acabat el procés
-              podrem continuar amb la migració.</li>
-              <li>Abans de fer la migració amb les dades reals, farem una
-              simulació al servidor de proves que haurem de verificar. Ja us
-              contactaré quan estigui a punt.</li>
-            </ul>
-            """
-            self.stdout.write(report)
+        if options['migrate']:
+            if data_consolidation_pending:
+                m = (f"No és possible fer la migració, {settings.PROJECT_NAME}"
+                     f" té dades pendents per revisar.")
+                self.stdout.write(m)
+                return
+            report = self.migrate(options['dry_run'])
+
+        self.stdout.write(report)
 
     def make_report(self):
         data_consolidation_pending = False
@@ -62,59 +66,60 @@ class Command(BaseCommand):
         """
         periods = self.get_subsidy_periods()
         for period in periods:
-            self.stdout.write(f"<h1>Convocatòria {period}</h1>")
+            report += f"<h1>Convocatòria {period}</h1>"
             projects = self.get_projects(period)
-            self.stdout.write(f'<p>Total projects: {len(projects)}</p>')
+            report += f'<p>Total projects: {len(projects)}</p>'
             for project, values in projects.items():
                 stage_types = values['stage_types']
                 project_obj = values['obj']
                 url = self.get_obj_url(project_obj)
                 stage_types_report = list()
-                for stage_type, stages in stage_types.items():
-                    stage_type_report = f"<h3>Processant el tipus {stage_type}</h3>"
-                    date = '-'
-                    if stages[0].date_start:
-                        date = f"<strong>{stages[0].date_start.strftime('%d.%m.%Y')}</strong>"
-                    url = self.get_obj_url(stages[0])
-                    stage_type_report += f"""
-                    <p>Sessió d'acompanyament principal: {date} {url}</p>
-                    <p>Total de sessions: {len(stages)}</p>
-                    <table>
-                    <tr>
-                      <td>Data</td>
-                      <td>Projecte</td>
-                      <td>Tipus</td>
-                      <td>Eix</td>
-                      <td>Entitat</td>
-                      <td>Organitzadora</td>
-                      <td>Fitxa projectes</td>
-                      <td>Certificat</td>
-                    </tr>
-                    """
+                for stage_type, stage_subtypes in stage_types.items():
+                    stage_type_report = f"<h3>Processant el tipus: {stage_type}</h3>"
+                    for stage_subtype, stages in stage_subtypes['stage_subtypes'].items():
+                        stage_type_report += f"<h4>Processant el subtipus: {stage_subtype}</h4>"
 
-                    for stage in stages:
                         date = '-'
-                        if stage.date_start:
-                            date = f"<strong>{stage.date_start.strftime('%d.%m.%Y')}</strong>"
-                        url = self.get_obj_url(stage, date)
+                        if stages[0].date_start:
+                            date = f"<strong>{stages[0].date_start.strftime('%d.%m.%Y')}</strong>"
+                        url = self.get_obj_url(stages[0])
                         stage_type_report += f"""
+                        <p>Sessió d'acompanyament principal: {date} {url}</p>
+                        <p>Total de sessions: {len(stages)}</p>
+                        <table>
                         <tr>
-                          <td>{url}</td>
-                          <td>{project}</td>
-                          <td>{stage.get_stage_type_display()}</td>
-                          <td>{stage.axis_summary()}</td>
-                          <td>{stage.entity}</td>
-                          <td>{stage.stage_organizer}</td>
-                          <td>{stage.scanned_signatures}</td>
-                          <td>{stage.scanned_certificate}</td>
+                          <td>Data</td>
+                          <td>Projecte</td>
+                          <td>Tipus</td>
+                          <td>Eix</td>
+                          <td>Organitzadora</td>
+                          <td>Certificat</td>
+                          <td>Participants</td>
                         </tr>
                         """
-                    stage_type_report += '</table>'
 
-                    if self.has_data_coherence(stages) is False:
-                        stage_types_report.append(stage_type_report)
+                        for stage in stages:
+                            date = '-'
+                            if stage.date_start:
+                                date = f"<strong>{stage.date_start.strftime('%d.%m.%Y')}</strong>"
+                            url = self.get_obj_url(stage, date)
+                            stage_type_report += f"""
+                            <tr>
+                              <td>{url}</td>
+                              <td>{project}</td>
+                              <td>{stage.get_stage_type_display()}</td>
+                              <td>{stage.axis_summary()}</td>
+                              <td>{stage.stage_organizer}</td>
+                              <td>{stage.scanned_certificate}</td>
+                              <td>{self.get_involved_partners_str(stage)}</td>
+                            </tr>
+                            """
+                        stage_type_report += '</table>'
+
+                        if self.has_data_coherence(stages) is False:
+                            stage_types_report.append(stage_type_report)
                 if len(stage_types_report) > 0:
-                    project_report = f'<h2>Processant el projecte {url}</h2>'
+                    project_report = f'<h2>Processant el projecte: {project_obj.name} {url}</h2>'
                     report += project_report
                     report += "".join(stage_types_report)
                     data_consolidation_pending = True
@@ -125,29 +130,21 @@ class Command(BaseCommand):
     def has_data_coherence(stages):
         axises = set()
         subaxises = set()
-        entities = set()
         organizers = set()
-        signatures = set()
         certificates = set()
         for stage in stages:
             if stage.axis:
                 axises.add(stage.axis)
             if stage.subaxis:
                 subaxises.add(stage.subaxis)
-            if stage.entity:
-                entities.add(stage.entity)
             if stage.stage_organizer:
                 organizers.add(stage.stage_organizer)
-            if stage.scanned_signatures:
-                signatures.add(stage.scanned_signatures)
             if stage.scanned_certificate:
                 certificates.add(stage.scanned_certificate)
         if (
             len(axises) > 1
             or len(subaxises) > 1
-            or len(entities) > 1
             or len(organizers) > 1
-            or len(signatures) > 1
             or len(certificates) > 1
         ):
             return False
@@ -172,20 +169,36 @@ class Command(BaseCommand):
         for stage in stages:
             pname = stage.project.name
             stype = stage.get_stage_type_display()
+            ssubtype = None
+            if stage.stage_subtype:
+                ssubtype = stage.stage_subtype.name
+            if not config.ENABLE_STAGE_SUBTYPES:
+                ssubtype = 'cap'
             if pname not in projects:
                 projects[pname] = {
                     'obj': stage.project,
                     'stage_types': {
-                        stype: [stage, ],
+                        stype: {
+                            'stage_subtypes': {
+                                ssubtype: [stage, ],
+                            },
+                        },
                     },
                 }
             else:
                 if stype not in projects[pname]['stage_types']:
-                    projects[pname]['stage_types'][stype] = [stage, ]
+                    projects[pname]['stage_types'][stype] = {
+                        'stage_subtypes': {
+                            ssubtype: [stage, ],
+                        },
+                    }
                 else:
-                    projects[pname]['stage_types'][stype].append(
-                        stage
-                    )
+                    if ssubtype not in projects[pname]['stage_types'][stype]['stage_subtypes']:
+                        projects[pname]['stage_types'][stype]['stage_subtypes'][ssubtype] = [stage, ]
+                    else:
+                        projects[pname]['stage_types'][stype]['stage_subtypes'][ssubtype].append(
+                            stage
+                        )
         return projects
 
     def get_obj_url(self, model_obj, label=None):
@@ -213,26 +226,103 @@ class Command(BaseCommand):
                 names.append(partner.get_full_name())
         return ", ".join(names)
 
-    def migrate(self):
-        # MERGING: Aquesta versió no conté la migració real ja que està pensada
-        # per una branch com la que hi ha a producció, sense els canvis de
-        # l'últim sprint.
-        # La versió que conté la migració real és a la branch
-        # projectstage_sessions, que està basada en la branch sprint_2021_03.
+    def migrate(self, dry_run):
+        # MERGING: Aquesta versió que sí que fa la migració real i que, per
+        # tant, necessita l'última versió de la app per funcionar.
         periods = self.get_subsidy_periods()
+        report = ""
         for period in periods:
-            self.stdout.write(f"<h1>Migrant convocatòria {period}</h1>")
+            report += f"<h1>Migrant convocatòria {period}</h1>"
             projects = self.get_projects(period)
-            self.stdout.write(f'<p>Total projects: {len(projects)}</p>')
+            report += f'<p>Total projects: {len(projects)}</p>'
             for project, values in projects.items():
+                project_obj = values['obj']
                 stage_types = values['stage_types']
-                for stage_type, stages in stage_types.items():
-                    self.stdout.write(f"<h3>Processant el tipus {stage_type}</h3>")
-                    for stage in stages:
-                        self.stdout.write(f"""TO DO amb {stage}:
-                        - Crear StageSession amb les hores, text, etc. dins 
-                         l'stage principal.
-                        - Afegir els Participants d'aquest stage a l'stage 
-                        principal (els que no hi siguin ja). 
-                        - Eliminar aquest stage (si no és el principal).
-                        """)
+                for stage_type, stage_subtypes in stage_types.items():
+                    report += f"<h3>Processant el tipus: {stage_type}</h3>"
+                    for stage_subtype, stages in stage_subtypes['stage_subtypes'].items():
+                        report += f"<h4>Processant el subtipus: {stage_subtype}</h4>"
+
+                        main_stage = stages[0]
+
+                        if len(main_stage.stage_sessions.all()):
+                            if len(stages) < 2:
+                                report += (
+                                    "<p>JA CONTÉ StageSessions, i té"
+                                    f"{len(stages)} Stages. Skipping."
+                                )
+                            else:
+                                report += (
+                                    '<h1 style="color: red">JA CONTÉ StageSessions,'
+                                    f' i té {len(stages)} Stages. Skipping, però '
+                                    f's\'ha de processar a ma!.'
+                                )
+                            continue
+
+                        date = '-'
+                        if main_stage.date_start:
+                            date = f"<strong>{main_stage.date_start.strftime('%d.%m.%Y')}</strong>"
+                        url = self.get_obj_url(stages[0])
+                        report += f"<p>Sessió d'acompanyament principal: {date} {url}</p>"
+
+                        ### DADES QUE S'HAN D'ACTUALITZAR A LA MAIN_STAGE
+                        # Obtenir list de tots els participants.
+                        participants = self.get_all_participants(stages)
+                        participants_name = []
+                        for participant in participants:
+                            participants_name.append(participant.get_full_name())
+                        participants_str = ", ".join(participants_name)
+                        report += f"<p>Participants totals: {participants_str}</p>"
+                        main_participants = len(main_stage.involved_partners.all())
+                        total_participants = len(participants)
+                        if main_participants != total_participants:
+                            report += f"""
+                            <p><strong>S'ha fet MERGE de participants.</strong></p>
+                            <p>Participants main: {self.get_involved_partners_str(
+                                main_stage
+                            )}</p>
+                            """
+                            if not dry_run:
+                                main_stage.involved_partners.set(participants)
+
+                        for stage in stages:
+                            new_session = ProjectStageSession()
+                            new_session.project_stage = main_stage
+                            new_session.hours = stage.hours
+                            new_session.follow_up = stage.follow_up
+                            new_session.date = stage.date_start
+                            new_session.entity = stage.entity
+                            new_session.session_responsible = stage.stage_responsible
+                            if not dry_run:
+                                new_session.save()
+
+                            if stage.scanned_certificate:
+                                main_stage.scanned_certificate = stage.scanned_certificate
+                            if stage.scanned_signatures:
+                                if not dry_run:
+                                    ProjectFile.objects.create(
+                                        image=stage.scanned_signatures,
+                                        name=stage.scanned_signatures.name,
+                                        project=project_obj
+                                    )
+
+                            if stage is not main_stage:
+                                if not dry_run:
+                                    stage.delete()
+
+                        if not config.ENABLE_STAGE_SUBTYPES:
+                            main_stage.stage_subtype = None
+
+                        # main_stage ara conté els últims fitxers que s'hagin
+                        # trobat a algun dels stages.
+                        if not dry_run:
+                            main_stage.save()
+        return report
+
+    @staticmethod
+    def get_all_participants(stages):
+        participants = set()
+        for stage in stages:
+            if len(stage.involved_partners.all()) > 0:
+                participants.update(stage.involved_partners.all())
+        return participants

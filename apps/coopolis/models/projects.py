@@ -1,7 +1,10 @@
 import datetime
+
+from constance import config
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Sum
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 import tagulous.models
@@ -9,7 +12,7 @@ import tagulous.models
 from cc_courses.models import Entity, Organizer, Cofunding, StrategicLine
 from coopolis.helpers import get_subaxis_choices
 from coopolis.models import Town, User
-from coopolis.storage_backends import PrivateMediaStorage
+from coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from dataexports.models import SubsidyPeriod
 
 
@@ -253,6 +256,31 @@ class StageSubtype(models.Model):
         return self.name
 
 
+class ProjectFile(models.Model):
+    class Meta:
+        verbose_name = "fitxer"
+        verbose_name_plural = "fitxers"
+        ordering = ["name"]
+
+    image = models.FileField("fitxer", storage=PublicMediaStorage())
+    name = models.CharField(
+        "Etiqueta",
+        max_length=120,
+        null=False,
+        blank=False,
+        help_text="Els fitxers antics tenen com a etiqueta el propi nom de "
+                  "l'arxiu, però aquí hi pot anar qualsevol text descriptiu."
+    )
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name="files"
+    )
+
+    def __str__(self):
+        return self.name
+
+
 class ProjectStage(models.Model):
     class Meta:
         verbose_name = "justificació d'acompanyament"
@@ -261,9 +289,9 @@ class ProjectStage(models.Model):
 
     DEFAULT_STAGE_TYPE = 1
 
-    project = models.ForeignKey(Project, on_delete=models.CASCADE,
-                                verbose_name="projecte acompanyat",
-                                related_name="stages")
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat",
+        related_name="stages")
     STAGE_TYPE_OPTIONS = (
         ('11', "Creació"),
         ('12', "Consolidació"),
@@ -278,35 +306,55 @@ class ProjectStage(models.Model):
         blank=True, on_delete=models.SET_NULL
     )
     covid_crisis = models.BooleanField("Crisi covid", default=False)
-    subsidy_period = models.ForeignKey(SubsidyPeriod,
-                                       verbose_name="convocatòria", null=True,
-                                       on_delete=models.SET_NULL)
-    date_start = models.DateField("data d'inici", null=True, blank=True,
-                                  default=datetime.date.today)
-    date_end = models.DateField("data de finalització", null=True, blank=True)
-    follow_up = models.TextField("seguiment", null=True, blank=True)
-    axis = models.CharField("eix",
-                            help_text="Eix de la convocatòria on es justificarà.",
-                            choices=settings.AXIS_OPTIONS,
-                            null=True, blank=True, max_length=1)
+    subsidy_period = models.ForeignKey(
+        SubsidyPeriod, verbose_name="convocatòria", null=True,
+        on_delete=models.SET_NULL)
+    date_start = models.DateField(
+        "[obsolet] data d'inici", null=True, blank=True,
+        default=datetime.date.today,
+        help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, l'inici i finalització"
+                  " de l'acompanyament es calcularà a partir de les dates de "
+                  "les Sessions d'Acompanyament."
+    )
+    date_end = models.DateField(
+        "[obsolet] data de finalització", null=True, blank=True,
+        help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, l'inici i finalització"
+                  " de l'acompanyament es calcularà a partir de les dates de "
+                  "les Sessions d'Acompanyament."
+    )
+    follow_up = models.TextField(
+        "[obsolet] Seguiment", null=True, blank=True,
+        help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, cal que el seguiment "
+                  "el poseu en el nou format, mitjançant 'Sessions "
+                  "d'acompanyament'."
+    )
+    axis = models.CharField(
+        "eix", help_text="Eix de la convocatòria on es justificarà.",
+        choices=settings.AXIS_OPTIONS, null=True, blank=True, max_length=1)
     subaxis = models.CharField(
         "sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
         null=True, blank=True, max_length=2, choices=get_subaxis_choices())
-    entity = models.ForeignKey(Entity, verbose_name="entitat", default=None,
-                               null=True, blank=True,
-                               on_delete=models.SET_NULL)
-    # Entity was called "organizer" before, causing confusion, specially because we wanted to add the Organizer field
-    # here. We renamed 'organizer' to entity and made a migration for this change (0046_auto...py).
-    # Then I added the 'organizer' FK field. Makemigration worked fine, but migrate was throwing an error:
-    #   django.db.utils.ProgrammingError: relation "coopolis_projectstage_organizer_id_26459182" already exists
-    # In the database everything was correct, not a field or a key in coopolis_projectstage table called 'organizer'
-    # or any other reference, also not postgres cache glitches or anything I could identify.
+    entity = models.ForeignKey(
+        Entity, verbose_name="[obsolet] Entitat", default=None, null=True,
+        blank=True, on_delete=models.SET_NULL)
+    # Entity was called "organizer" before, causing confusion, specially
+    # because we wanted to add the Organizer field
+    # here. We renamed 'organizer' to entity and made a migration for this
+    # change (0046_auto...py).
+    # Then I added the 'organizer' FK field. Makemigration worked fine, but
+    # migrate was throwing an error:
+    #   django.db.utils.ProgrammingError: relation
+    #   "coopolis_projectstage_organizer_id_26459182" already exists
+    # In the database everything was correct, not a field or a key in
+    # coopolis_projectstage table called 'organizer'
+    # or any other reference, also not postgres cache glitches or anything I
+    # could identify.
     # Did the experiment of calling it differently and worked.
-    # Given that I don't understand the problem, leaving the field with a different name seems the safest option.
-    stage_organizer = models.ForeignKey(Organizer,
-                                        verbose_name="organitzadora",
-                                        on_delete=models.SET_NULL, null=True,
-                                        blank=True)
+    # Given that I don't understand the problem, leaving the field with a
+    # different name seems the safest option.
+    stage_organizer = models.ForeignKey(
+        Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL,
+        null=True, blank=True)
     stage_responsible = models.ForeignKey(
         "User", verbose_name="persona responsable", blank=True, null=True,
         on_delete=models.SET_NULL,
@@ -315,15 +363,18 @@ class ProjectStage(models.Model):
                   "aparèixer al desplegable, cal que la persona tingui "
                   "activada la opció 'Membre del personal'.")
     scanned_signatures = models.FileField(
-        "fitxa de projectes (document amb signatures)", blank=True, null=True,
-        storage=PrivateMediaStorage(),
-        max_length=250)
+        "[obsolet] Fitxa de projectes (document amb signatures)", blank=True,
+        null=True, storage=PrivateMediaStorage(), max_length=250)
     scanned_certificate = models.FileField(
-        "certificat", blank=True, null=True, storage=PrivateMediaStorage(),
-        max_length=250)
+        "Certificat", blank=True, null=True,
+        storage=PrivateMediaStorage(), max_length=250)
     hours = models.IntegerField(
-        "número d'hores", help_text="Camp necessari per la justificació.",
-        null=True, blank=True)
+        "[obsolet] Número d'hores",
+        help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, cal que les hores "
+                  "les poseu en el nou format, mitjançant 'Sessions "
+                  "d'acompanyament'.",
+        null=True, blank=True
+    )
     involved_partners = models.ManyToManyField(
         User, verbose_name="persones involucrades", blank=True,
         related_name='stage_involved_partners',
@@ -331,17 +382,15 @@ class ProjectStage(models.Model):
                   "participat a l'acompanyament.")
 
     # cofunding options module
-    cofunded = models.ForeignKey(Cofunding, verbose_name="Cofinançat",
-                                 on_delete=models.SET_NULL, null=True,
-                                 blank=True,
-                                 related_name='cofunded_projects')
-    cofunded_ateneu = models.BooleanField("Cofinançat amb Ateneus Cooperatius",
-                                          default=False)
-    strategic_line = models.ForeignKey(StrategicLine,
-                                       verbose_name="línia estratègica",
-                                       on_delete=models.SET_NULL,
-                                       blank=True, null=True,
-                                       related_name='strategic_line_projects')
+    cofunded = models.ForeignKey(
+        Cofunding, verbose_name="Cofinançat", on_delete=models.SET_NULL,
+        null=True, blank=True, related_name='cofunded_projects')
+    cofunded_ateneu = models.BooleanField(
+        "Cofinançat amb Ateneus Cooperatius", default=False)
+    strategic_line = models.ForeignKey(
+        StrategicLine, verbose_name="línia estratègica",
+        on_delete=models.SET_NULL, blank=True, null=True,
+        related_name='strategic_line_projects')
 
     def axis_summary(self):
         axis = self.axis if self.axis else '(cap)'
@@ -350,6 +399,18 @@ class ProjectStage(models.Model):
 
     axis_summary.short_description = "Eix - Subeix"
     axis_summary.admin_order_field = 'axis'
+
+    def hours_sum(self):
+        total_qs = self.stage_sessions.aggregate(
+            total_sum=Sum('hours')
+        )
+        total = 0 if not total_qs['total_sum'] else total_qs['total_sum']
+        return total
+    hours_sum.short_description = "Suma d'hores"
+
+    def sessions_count(self):
+        return len(self.stage_sessions.all())
+    sessions_count.short_description = "Nº sessions"
 
     def clean(self):
         super().clean()
@@ -376,8 +437,50 @@ class ProjectStage(models.Model):
                     {'date_end': "La data de finalització ha d'estar dins del "
                                  "període de la convocatòria seleccionada."})
 
+    def get_full_type_str(self):
+        txt = self.get_stage_type_display()
+        if config.ENABLE_STAGE_SUBTYPES and self.stage_subtype:
+            txt = f"{txt} ({self.stage_subtype.name})"
+        return txt
+
     def __str__(self):
-        return f"{str(self.project)}: {self.get_stage_type_display()}"
+        txt = (f"{str(self.project)}: {self.get_full_type_str()} "
+               f"[{str(self.subsidy_period)}]")
+        return txt
+
+
+class ProjectStageSession(models.Model):
+    class Meta:
+        verbose_name = "Sessió d'acompanyament"
+        verbose_name_plural = "Sessions d'acompanyament"
+
+    project_stage = models.ForeignKey(
+        ProjectStage, on_delete=models.CASCADE, related_name="stage_sessions",
+        verbose_name="justificació d'acompanyament"
+    )
+    session_responsible = models.ForeignKey(
+        "User", verbose_name="persona facilitadora", blank=True, null=True,
+        on_delete=models.SET_NULL,
+        related_name='stage_sessions',
+        help_text="Persona de l'equip que ha facilitat la sessió. Per "
+                  "aparèixer al desplegable, cal que la persona tingui "
+                  "activada la opció 'Membre del personal'.")
+    date = models.DateField(
+        "data",
+        default=datetime.date.today,
+        null=True, blank=False
+    )
+    hours = models.IntegerField(
+        "número d'hores", help_text="Camp necessari per la justificació.",
+        null=True, blank=True)
+    follow_up = models.TextField("seguiment", null=True, blank=True)
+    entity = models.ForeignKey(
+        Entity, verbose_name="Entitat", default=None, null=True, blank=True,
+        on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return (f"Sessió d'acompanyament del {self.date} per "
+                f"{self.project_stage.project.name}")
 
 
 class ProjectsFollowUp(Project):
