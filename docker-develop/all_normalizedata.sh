@@ -1,5 +1,22 @@
 #!/bin/bash
-echo "Running normalizedata develop_coopolis_app"
-docker exec develop_coopolis_app python manage.py normalizedata
-echo "Running normalizedata develop_coopolis_segon_ateneu"
-docker exec develop_coopolis_segon_ateneu python manage.py normalizedata
+declare -A ateneus=(
+  ["ateneu_catcentral"]="ateneus_catcentral"
+  ["ateneu_vallesoccidental"]="ateneus_vallesoccidental"
+  ["ateneu_bnord"]="ateneus_bnord"
+  ["ateneu_ponentcoopera"]="ateneus_ponentcoopera"
+  ["ateneu_coopolis"]="coopolis"
+  ["ateneu_coopmaresme"]="ateneus_coopmaresme"
+  ["ateneu_coopcamp"]="ateneus_coopcamp"
+  ["ateneu_coopsetania"]="ateneus_coopsetania"
+  ["ateneu_terresgironines"]="ateneus_terresgironines"
+  ["ateneu_hospitalet"]="ateneus_hospitalet"
+  ["ateneu_terresebre"]="ateneus_terresebre"
+  ["ateneu_altpirineu"]="ateneus_altpirineu"
+)
+
+for ateneu in "${!ateneus[@]}"
+do
+  :
+  printf "Running migrate %s\n" "$ateneu"
+  docker exec "$ateneu" python manage.py normalizedata
+done
