@@ -1,5 +1,5 @@
 #!/bin/bash
-postgres_container="postgres"
+postgres_container="develop_ateneus_db"
 dumps_path="../dumps"
 declare -A ateneus=(
   ["ateneu_catcentral"]="ateneus_catcentral"
