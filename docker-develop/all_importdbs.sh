@@ -24,6 +24,6 @@ do
   printf "Eliminada base de dades: %s\n" "${ateneus[$ateneu]}"
   docker exec "$postgres_container" createdb "${ateneus[$ateneu]}" -U postgres
   printf "Re-creada base de dades: %s\n" "${ateneus[$ateneu]}"
-  cat "$dumps_path"/"${ateneus[$ateneu]}".sql | docker exec "$postgres_container" psql -d "${ateneus[$ateneu]}" -U postgres
+  docker exec "$postgres_container" psql -d "${ateneus[$ateneu]}" -U postgres -f "$dumps_path"/"${ateneus[$ateneu]}".sql
   printf "Importada la base de dades: %s\n" "${ateneus[$ateneu]}"
 done
