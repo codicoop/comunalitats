@@ -1,7 +1,6 @@
 #!/bin/bash
 postgres_container="develop_ateneus_db"
-# It will be executed inside the container, in which the working dir is /srv
-dumps_path="./dumps"
+dumps_path="../dumps"
 declare -A ateneus=(
   ["ateneu_catcentral"]="ateneus_catcentral"
   ["ateneu_vallesoccidental"]="ateneus_vallesoccidental"
@@ -25,6 +24,6 @@ do
   printf "Eliminada base de dades: %s\n" "${ateneus[$ateneu]}"
   docker exec "$postgres_container" createdb "${ateneus[$ateneu]}" -U postgres
   printf "Re-creada base de dades: %s\n" "${ateneus[$ateneu]}"
-  docker exec "$postgres_container" psql -d "${ateneus[$ateneu]}" -U postgres -f "$dumps_path"/"${ateneus[$ateneu]}".sql
+  cat "$dumps_path"/"${ateneus[$ateneu]}".sql | docker exec -i "$postgres_container" psql -d "${ateneus[$ateneu]}" -U postgres
   printf "Importada la base de dades: %s\n" "${ateneus[$ateneu]}"
 done
