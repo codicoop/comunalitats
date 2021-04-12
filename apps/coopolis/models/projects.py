@@ -262,10 +262,14 @@ class ProjectFile(models.Model):
         verbose_name_plural = "fitxers"
         ordering = ["name"]
 
-    image = models.FileField("fitxer", storage=PublicMediaStorage())
+    image = models.FileField(
+        "fitxer",
+        storage=PublicMediaStorage(),
+        max_length=250
+    )
     name = models.CharField(
         "Etiqueta",
-        max_length=120,
+        max_length=250,
         null=False,
         blank=False,
         help_text="Els fitxers antics tenen com a etiqueta el propi nom de "
