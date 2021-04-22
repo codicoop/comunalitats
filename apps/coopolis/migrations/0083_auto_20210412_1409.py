@@ -23,7 +23,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='projectstage',
             name='date_start',
-            field=models.DateField(blank=True, default=datetime.date.today, help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, l'inici i finalització de l'acompanyament es calcularà a partir de les dates de les Sessions d'Acompanyament.", null=True, verbose_name="[obsolet] data d'inici"),
+            field=models.DateField(auto_now_add=True,
+                                   verbose_name="data d'inici"),
         ),
         migrations.AlterField(
             model_name='projectstage',

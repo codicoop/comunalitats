@@ -314,11 +314,8 @@ class ProjectStage(models.Model):
         SubsidyPeriod, verbose_name="convocatòria", null=True,
         on_delete=models.SET_NULL)
     date_start = models.DateField(
-        "[obsolet] data d'inici", null=True, blank=True,
-        default=datetime.date.today,
-        help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, l'inici i finalització"
-                  " de l'acompanyament es calcularà a partir de les dates de "
-                  "les Sessions d'Acompanyament."
+        "data d'inici", null=False, blank=False,
+        auto_now_add=True
     )
     date_end = models.DateField(
         "[obsolet] data de finalització", null=True, blank=True,
