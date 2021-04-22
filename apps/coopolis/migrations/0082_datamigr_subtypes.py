@@ -44,6 +44,19 @@ def migrate_to_stage_subtype(apps, schema_editor):
     print("Acompanyaments: migració a Subtipus feta.")
 
 
+def stage_date_start_normalization(apps, schema_editor):
+    print('')
+    stage_model = apps.get_model('coopolis', 'ProjectStage')
+
+    stages = stage_model.objects.filter(date_start=None)
+
+    for stage in stages:
+        stage.date_start = stage.subsidy_period.date_start
+        stage.save()
+        print(f"Acompanyament sense data actualitzat: {stage} ")
+    print("Acompanyaments: normalització de date_start acabada.")
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -52,4 +65,5 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(migrate_to_stage_subtype),
+        migrations.RunPython(stage_date_start_normalization),
     ]

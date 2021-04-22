@@ -54,15 +54,15 @@ class ProjectStageAdmin(admin.ModelAdmin):
     empty_value_display = '(cap)'
     list_display = (
         'project_field_ellipsis', 'date_start', 'stage_type',
-        'covid_crisis', 'stage_responsible_field_ellipsis', 'hours',
-        'axis_summary', 'entity', 'subsidy_period', '_has_certificate',
+        'covid_crisis', 'stage_responsible_field_ellipsis',
+        'axis_summary', 'subsidy_period', '_has_certificate',
         '_participants_count', 'project_field'
     )
     list_filter = (
         'subsidy_period',
         ('stage_responsible', admin.RelatedOnlyFieldListFilter),
         'date_start', 'stage_type', 'covid_crisis', 'axis',
-        'stage_organizer', 'entity', 'project__sector'
+        'stage_organizer', 'project__sector'
     )
     actions = ["export_as_csv"]
     search_fields = ['project__name__unaccent']
@@ -76,11 +76,11 @@ class ProjectStageAdmin(admin.ModelAdmin):
                        'subsidy_period', 'axis', 'subaxis',
                        'stage_organizer', 'stage_responsible',
                        'scanned_certificate',
-                       'involved_partners', 'hours_sum']
+                       'involved_partners', 'hours_sum', 'date_start']
         }),
     ]
     inlines = (ProjectStageSessionsInline, )
-    readonly_fields = ('hours_sum', )
+    readonly_fields = ('hours_sum', 'date_start', )
 
     def _has_certificate(self, obj):
         if obj.scanned_certificate:
