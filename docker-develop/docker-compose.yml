@@ -13,7 +13,7 @@ services:
       context: ..
       dockerfile: ./docker-develop/Dockerfile
     environment:
-      - DB_HOST=db
+      - DB_HOST=develop_ateneus_db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-coopolis
       - PYTHONPATH=/shared_libraries
@@ -22,7 +22,7 @@ services:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
     depends_on:
-      - db
+      - develop_ateneus_db
     networks:
       - develop_ateneus_network
     #entrypoint: ["sh", "-c", "sleep 2073600"]
@@ -34,7 +34,7 @@ services:
       context: ..
       dockerfile: ./docker-develop/Dockerfile
     environment:
-      - DB_HOST=db
+      - DB_HOST=develop_ateneus_db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-coopcamp
       - PYTHONPATH=/shared_libraries
@@ -43,7 +43,7 @@ services:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
     depends_on:
-      - db
+      - develop_ateneus_db
     networks:
       - develop_ateneus_network
 
@@ -54,7 +54,7 @@ services:
       context: ..
       dockerfile: ./docker-develop/Dockerfile
     environment:
-      - DB_HOST=db
+      - DB_HOST=develop_ateneus_db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-coopmaresme
       - PYTHONPATH=/shared_libraries
@@ -63,7 +63,7 @@ services:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
     depends_on:
-      - db
+      - develop_ateneus_db
     networks:
       - develop_ateneus_network
 
@@ -74,7 +74,7 @@ services:
       context: ..
       dockerfile: ./docker-develop/Dockerfile
     environment:
-      - DB_HOST=db
+      - DB_HOST=develop_ateneus_db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-bnord
       - PYTHONPATH=/shared_libraries
@@ -83,7 +83,7 @@ services:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
     depends_on:
-      - db
+      - develop_ateneus_db
     networks:
       - develop_ateneus_network
 
@@ -94,7 +94,7 @@ services:
       context: ..
       dockerfile: ./docker-develop/Dockerfile
     environment:
-      - DB_HOST=db
+      - DB_HOST=develop_ateneus_db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-ponentcoopera
       - PYTHONPATH=/shared_libraries
@@ -103,7 +103,7 @@ services:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
     depends_on:
-      - db
+      - develop_ateneus_db
     networks:
       - develop_ateneus_network
 
@@ -114,7 +114,7 @@ services:
       context: ..
       dockerfile: ./docker-develop/Dockerfile
     environment:
-      - DB_HOST=db
+      - DB_HOST=develop_ateneus_db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-vallesoccidental
       - PYTHONPATH=/shared_libraries
@@ -123,7 +123,7 @@ services:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
     depends_on:
-      - db
+      - develop_ateneus_db
     networks:
       - develop_ateneus_network
 
@@ -134,7 +134,7 @@ services:
       context: ..
       dockerfile: ./docker-develop/Dockerfile
     environment:
-      - DB_HOST=db
+      - DB_HOST=develop_ateneus_db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-catcentral
       - PYTHONPATH=/shared_libraries
@@ -143,7 +143,7 @@ services:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
     depends_on:
-      - db
+      - develop_ateneus_db
     networks:
       - develop_ateneus_network
 
@@ -154,7 +154,7 @@ services:
       context: ..
       dockerfile: ./docker-develop/Dockerfile
     environment:
-      - DB_HOST=db
+      - DB_HOST=develop_ateneus_db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-coopsetania
       - PYTHONPATH=/shared_libraries
@@ -163,7 +163,7 @@ services:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
     depends_on:
-      - db
+      - develop_ateneus_db
     networks:
       - develop_ateneus_network
 
@@ -174,7 +174,7 @@ services:
       context: ..
       dockerfile: ./docker-develop/Dockerfile
     environment:
-      - DB_HOST=db
+      - DB_HOST=develop_ateneus_db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-terresgironines
       - PYTHONPATH=/shared_libraries
@@ -183,7 +183,7 @@ services:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
     depends_on:
-      - db
+      - develop_ateneus_db
     networks:
       - develop_ateneus_network
 
@@ -194,7 +194,7 @@ services:
       context: ..
       dockerfile: ./docker-develop/Dockerfile
     environment:
-      - DB_HOST=db
+      - DB_HOST=develop_ateneus_db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-hospitalet
       - PYTHONPATH=/shared_libraries
@@ -203,7 +203,7 @@ services:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
     depends_on:
-      - db
+      - develop_ateneus_db
     networks:
       - develop_ateneus_network
 
@@ -214,7 +214,7 @@ services:
       context: ..
       dockerfile: ./docker-develop/Dockerfile
     environment:
-      - DB_HOST=db
+      - DB_HOST=develop_ateneus_db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-terresebre
       - PYTHONPATH=/shared_libraries
@@ -223,7 +223,7 @@ services:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
     depends_on:
-      - db
+      - develop_ateneus_db
     networks:
       - develop_ateneus_network
 
@@ -234,7 +234,7 @@ services:
       context: ..
       dockerfile: ./docker-develop/Dockerfile
     environment:
-      - DB_HOST=db
+      - DB_HOST=develop_ateneus_db
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-altpirineu
       - PYTHONPATH=/shared_libraries
@@ -243,11 +243,11 @@ services:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
     depends_on:
-      - db
+      - develop_ateneus_db
     networks:
       - develop_ateneus_network
 
-  db:
+  develop_ateneus_db:
     container_name: develop_ateneus_db
     image: postgres:11
     volumes:
@@ -257,7 +257,7 @@ services:
     networks:
       - develop_ateneus_network
 
-  nginx:
+  develop_ateneus_nginx:
     container_name: develop_ateneus_nginx
     image: nginx
     volumes:
