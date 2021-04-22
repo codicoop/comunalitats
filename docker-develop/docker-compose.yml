@@ -250,8 +250,6 @@ services:
   develop_ateneus_db:
     container_name: develop_ateneus_db
     image: postgres:11
-    volumes:
-      - /srv/postgres-data/coopolis-develop2:/var/lib/postgresql/data/
     environment:
       - POSTGRES_PASSWORD=mysecretpassword
     networks:
