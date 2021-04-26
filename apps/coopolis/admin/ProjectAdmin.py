@@ -241,6 +241,18 @@ class ProjectFileInline(admin.TabularInline):
     extra = 0
 
 
+class ProjectFileAdmin(admin.ModelAdmin):
+    list_display = ('name', 'project_field',)
+
+    def project_field(self, obj):
+        return mark_safe(u'<a href="../../%s/%s/%d/change">%s</a>' % (
+            'coopolis', 'project', obj.project.id, obj.project.name))
+    project_field.short_description = 'Projecte'
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
 class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     class Media:
         js = ('js/grappellihacks.js',)
