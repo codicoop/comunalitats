@@ -165,6 +165,7 @@ class Command(BaseCommand):
                 # Justificacions d'acompanyament
                 'add_projectstagetype', 'change_projectstagetype', 'delete_projectstagetype', 'view_projectstagetype', 'view_projectstagetype',
                 'add_projectstage', 'change_projectstage', 'delete_projectstage', 'view_projectstage',
+                'add_projectstagesession', 'change_projectstagesession', 'delete_projectstagesession', 'view_projectstagesession',
                 # Insercions laborals
                 'add_employmentinsertion', 'change_employmentinsertion', 'delete_employmentinsertion', 'view_employmentinsertion',
                 # Seguiment de projectes
