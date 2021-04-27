@@ -42,6 +42,11 @@ class ProjectStageSessionsInline(admin.StackedInline):
     can_delete = True
     empty_value_display = '(cap)'
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "session_responsible":
+            kwargs["queryset"] = User.objects.filter(is_staff=True)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 
 class ProjectStageAdmin(admin.ModelAdmin):
     class Media:
