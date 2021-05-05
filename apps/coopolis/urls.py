@@ -50,6 +50,8 @@ urlpatterns += [
     path('users/password_reset/',
          CustomPasswordResetView.as_view(), name='password_reset'),
     path('reservations/', include('apps.facilities_reservations.urls')),
+    path('activities/<pk>/poll',
+         ActivityPollView.as_view(), name='deprecated_activity_poll'),
     path('activities/<uuid>/poll',
          ActivityPollView.as_view(), name='activity_poll'),
 

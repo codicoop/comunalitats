@@ -61,12 +61,21 @@ class ActivityPollView(CreateView):
 
     def get_activity_object(self):
         uuid = self.kwargs.get('uuid')
-        try:
-            obj = Activity.objects.get(uuid=uuid)
-        except Activity.DoesNotExist:
-            raise Http404(f"No existeix cap sessió formativa amb aquesta "
-                          f"adreça.")
-        return obj
+        pk = self.kwargs.get('pk')
+        if uuid:
+            try:
+                obj = Activity.objects.get(uuid=uuid)
+            except Activity.DoesNotExist:
+                raise Http404(f"No existeix cap sessió formativa amb aquesta "
+                              f"adreça.")
+            return obj
+        else:
+            try:
+                obj = Activity.objects.get(pk=pk)
+            except Activity.DoesNotExist:
+                raise Http404(f"No existeix cap sessió formativa amb aquesta "
+                              f"adreça.")
+            return obj
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
