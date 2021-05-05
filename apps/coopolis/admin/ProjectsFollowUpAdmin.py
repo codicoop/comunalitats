@@ -11,7 +11,7 @@ from openpyxl.utils import get_column_letter
 
 from .ProjectAdmin import FilterByFounded
 from dataexports.models import SubsidyPeriod
-from coopolis.models.projects import ProjectStage
+from coopolis.models.projects import ProjectStage, ProjectStageSession
 from ..models import User
 
 
@@ -86,6 +86,16 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             if current:
                 filtered_subsidy_period = current.id
 
+        subquery_creacio_hores = ProjectStageSession.objects.filter(
+            project_stage=OuterRef('pk')
+        ).values(
+            'project_stage__pk'
+        ).annotate(
+            creacio_hores_sum=Sum('hours')
+        ).values(
+            'creacio_hores_sum'
+        )
+
         query = {
             # We need this count just to force the group_by
             'grouping': Count('project_id'),
@@ -107,9 +117,8 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
                     .get_num_members_for_project(OuterRef('project_id')),
                 output_field=IntegerField()
             ),
-            'creacio_hores': Sum(
-                'hours',
-                filter=Q(stage_type=11)
+            'creacio_hores': Subquery(
+                subquery_creacio_hores
             ),
             'creacio_certificat': Count(
                 'scanned_certificate',
