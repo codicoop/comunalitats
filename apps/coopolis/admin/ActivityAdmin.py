@@ -338,7 +338,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         text = "Accés als resultats (pestanya nova)"
         results_url = (f'<a href="{results_url}?activity__id__exact={obj.id}"'
                        f'target="_new">{text}</a>')
-        poll_url = reverse('activity_poll', kwargs={'pk': obj.id})
+        poll_url = reverse('activity_poll', kwargs={'uuid': obj.uuid})
         poll_url = self.request.build_absolute_uri(poll_url)
         poll_url = f'<a href="{poll_url}" target="_blank">{poll_url}</a>'
         content = f"Estat: {poll_status} | Enllaç: {poll_url} | {results_url}"
