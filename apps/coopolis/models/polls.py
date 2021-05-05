@@ -1,18 +1,12 @@
 from django.db import models
 
-from ..models import User
-
 
 class ActivityPoll(models.Model):
     class Meta:
         verbose_name = "enquesta de valoració"
         verbose_name_plural = "enquestes de valoració"
-        constraints = [
-            models.UniqueConstraint(fields=['activity', 'user'], name='unique_answer'),
-        ]
 
     activity = models.ForeignKey('cc_courses.Activity', on_delete=models.CASCADE, related_name="polls")
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     created = models.DateTimeField(verbose_name="creació", auto_now_add=True)
 
     # Organització
