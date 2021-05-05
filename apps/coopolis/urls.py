@@ -50,7 +50,7 @@ urlpatterns += [
     path('users/password_reset/',
          CustomPasswordResetView.as_view(), name='password_reset'),
     path('reservations/', include('apps.facilities_reservations.urls')),
-    path('activities/<pk>/poll',
+    path('activities/<uuid>/poll',
          ActivityPollView.as_view(), name='activity_poll'),
 
     path('admin/stages_migration_report/',
