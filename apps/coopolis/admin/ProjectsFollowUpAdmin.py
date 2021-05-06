@@ -11,7 +11,7 @@ from openpyxl.utils import get_column_letter
 
 from .ProjectAdmin import FilterByFounded
 from dataexports.models import SubsidyPeriod
-from coopolis.models.projects import ProjectStage, ProjectStageSession
+from coopolis.models.projects import ProjectStage
 from ..models import User
 
 
