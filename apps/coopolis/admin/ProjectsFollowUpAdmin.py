@@ -108,7 +108,7 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
                 output_field=IntegerField()
             ),
             'creacio_hores': Sum(
-                'hours',
+                'stage_sessions__hours',
                 filter=Q(stage_type=11)
             ),
             'creacio_certificat': Count(
@@ -120,7 +120,7 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
                 )
             ),
             'consolidacio_hores': Sum(
-                'hours',
+                'stage_sessions__hours',
                 filter=Q(stage_type=12)
             ),
             'consolidacio_certificat': Count(
@@ -183,6 +183,7 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
         )
         for row in ctxt['rows']:
             row['project'] = project_ids[row['project_id']]
+
             totals['total_members_h'] += (
                 row['members_h'] if row['members_h'] else 0
             )
