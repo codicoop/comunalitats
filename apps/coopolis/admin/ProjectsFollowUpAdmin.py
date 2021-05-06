@@ -86,16 +86,6 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             if current:
                 filtered_subsidy_period = current.id
 
-        subquery_creacio_hores = ProjectStageSession.objects.filter(
-            project_stage=OuterRef('pk')
-        ).values(
-            'project_stage__pk'
-        ).annotate(
-            creacio_hores_sum=Sum('hours')
-        ).values(
-            'creacio_hores_sum'
-        )
-
         query = {
             # We need this count just to force the group_by
             'grouping': Count('project_id'),
@@ -117,8 +107,9 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
                     .get_num_members_for_project(OuterRef('project_id')),
                 output_field=IntegerField()
             ),
-            'creacio_hores': Subquery(
-                subquery_creacio_hores
+            'creacio_hores': Sum(
+                'stage_sessions__hours',
+                filter=Q(stage_type=11)
             ),
             'creacio_certificat': Count(
                 'scanned_certificate',
@@ -129,7 +120,7 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
                 )
             ),
             'consolidacio_hores': Sum(
-                'hours',
+                'stage_sessions__hours',
                 filter=Q(stage_type=12)
             ),
             'consolidacio_certificat': Count(
@@ -192,6 +183,7 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
         )
         for row in ctxt['rows']:
             row['project'] = project_ids[row['project_id']]
+
             totals['total_members_h'] += (
                 row['members_h'] if row['members_h'] else 0
             )
