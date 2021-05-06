@@ -17,7 +17,7 @@
                 </a>
                 {% endif %}
                 {% if enrollment.can_access_poll %}
-                <a href="{% url 'activity_poll' pk=enrollment.activity.id %}" class="enroll-button">
+                <a href="{% url 'activity_poll' uuid=enrollment.activity.uuid %}" class="enroll-button">
                     <div style="background-color: #e94e1b;">Enquesta de valoració</div>
                 </a>
                 {% endif %}

@@ -1,3 +1,5 @@
+import uuid
+
 from constance import config
 from django.db import models
 from django.shortcuts import reverse
@@ -164,6 +166,7 @@ class Activity(models.Model):
         verbose_name_plural = "sessions"
         ordering = ["date_start"]
 
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
