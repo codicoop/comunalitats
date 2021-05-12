@@ -79,14 +79,26 @@ class ActivityEnrolledInline(admin.TabularInline):
     form = ActivityEnrolledForm
     extra = 0
     fields = ['user', 'date_enrolled', 'waiting_list', 'user_comments',
-              'send_enrollment_email', 'reminder_sent', ]
+              'send_enrollment_email', 'reminder_sent',
+              'open_user_details_field', ]
     readonly_fields = (
-        'date_enrolled', 'waiting_list', 'user_comments', 'reminder_sent'
+        'date_enrolled', 'waiting_list', 'user_comments', 'reminder_sent',
+        'open_user_details_field',
     )
     raw_id_fields = ('user',)
     autocomplete_lookup_fields = {
         'fk': ['user']
     }
+
+    def open_user_details_field(self, obj):
+        if obj.id is None:
+            return '-'
+        url = reverse(
+            'admin:coopolis_user_change', kwargs={'object_id': obj.user.id})
+        return format_html(
+            f'<a href="{url}" target="_blank">Fitxa {obj.user.first_name}</a>')
+    open_user_details_field.allow_tags = True
+    open_user_details_field.short_description = 'Fitxa'
 
 
 class ActivityResourcesInlineAdmin(admin.TabularInline):
