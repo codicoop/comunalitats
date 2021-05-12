@@ -67,7 +67,7 @@ class DataExports(models.Model):
     subsidy_period = models.ForeignKey(SubsidyPeriod, verbose_name="convocatòria", null=True, on_delete=models.SET_NULL)
     name = models.CharField("nom", max_length=200)
     notes = models.TextField("apunts", blank=True, null=True)
-    function_name = models.CharField("nom de la funció", max_length=150, unique=True,
+    function_name = models.CharField("nom de la funció", max_length=150,
                                      help_text="No modifiqueu aquesta dada.")
     ignore_errors = models.BooleanField(
         "Ignorar errors", help_text="Si s'activa, es podràn generar els excels de justificació encara que hi hagi "

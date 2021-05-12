@@ -66,37 +66,16 @@ class Command(BaseCommand):
     @staticmethod
     def normalize_exports():
         print("Normalizing exports...")
+        print("Cleaning up existing exports.")
+        DataExports.objects.all().delete()
+
         period2019_2020 = SubsidyPeriod.objects.get(name="2019-2020")
         period2020_2021 = SubsidyPeriod.objects.get(name="2020-2021")
         exports = (
             {
-                'name': "Exportació justificació",
-                'subsidy_period': period2019_2020,
-                'function_name': 'export_2019_2020',
-                'ignore_errors': True
-            },
-            {
-                'name': "Exportació justificació en 2 itineraris",
-                'subsidy_period': period2019_2020,
-                'function_name': 'export_2019_2020_dos_itineraris',
-                'ignore_errors': True
-            },
-            {
-                'name': "Exportació justificació",
-                'subsidy_period': period2020_2021,
-                'function_name': 'export_2020_2021',
-                'ignore_errors': True
-            },
-            {
-                'name': "Exportació justificació en 2 itineraris",
-                'subsidy_period': period2020_2021,
-                'function_name': 'export_2020_2021_dos_itineraris',
-                'ignore_errors': True
-            },
-            {
                 'name': "Cofinançades",
                 'subsidy_period': period2019_2020,
-                'function_name': 'export_cofunded_2019_2020',
+                'function_name': 'export_cofunded',
                 'ignore_errors': True
             },
             {
@@ -105,21 +84,46 @@ class Command(BaseCommand):
                 'function_name': 'export_stages_descriptions',
                 'ignore_errors': True
             },
+            {
+                'name': "Exportació justificació",
+                'subsidy_period': period2019_2020,
+                'function_name': 'export',
+                'ignore_errors': True
+            },
+            {
+                'name': "Exportació justificació en 2 itineraris",
+                'subsidy_period': period2019_2020,
+                'function_name': 'export_dos_itineraris',
+                'ignore_errors': True
+            },
+            {
+                'name': "Cofinançades",
+                'subsidy_period': period2020_2021,
+                'function_name': 'export_cofunded',
+                'ignore_errors': True
+            },
+            {
+                'name': "Memòria dels acompanyaments en fitxer de text",
+                'subsidy_period': period2020_2021,
+                'function_name': 'export_stages_descriptions',
+                'ignore_errors': True
+            },
+            {
+                'name': "Exportació justificació",
+                'subsidy_period': period2020_2021,
+                'function_name': 'export',
+                'ignore_errors': True
+            },
+            {
+                'name': "Exportació justificació en 2 itineraris",
+                'subsidy_period': period2020_2021,
+                'function_name': 'export_dos_itineraris',
+                'ignore_errors': True
+            },
         )
         for export in exports:
             print(f"Updating or creating {export['function_name']}")
-            obj = DataExports.objects.update_or_create(
-                function_name=export['function_name'],
-                defaults={**export}
-            )
-        print("Deleting old export_2018_2019")
-        try:
-            obj = DataExports.objects.get(function_name='export_2018_2019')
-        except DataExports.DoesNotExist:
-            print("Already deleted.")
-        else:
-            obj.delete()
-            print("It was there, deleting.")
+            DataExports.objects.create(**export)
         print("Done!")
 
     @staticmethod

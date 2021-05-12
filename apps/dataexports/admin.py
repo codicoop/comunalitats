@@ -53,7 +53,7 @@ class DataExportsAdmin(admin.ModelAdmin):
         from dataexports.export_functions import ExportFunctions
         obj = DataExports.objects.get(id=_id)
         instance = ExportFunctions()
-        return instance.callmethod(obj.function_name)
+        return instance.callmethod(obj)
 
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser and settings.DEBUG:
