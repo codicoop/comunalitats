@@ -9,7 +9,8 @@ from django.conf.urls import url
 
 from coopolis.models import User, Project, ProjectStage, EmploymentInsertion
 from coopolis.forms import (
-    ProjectFormAdmin, ProjectStageInlineForm, ProjectStageForm
+    ProjectFormAdmin, ProjectStageInlineForm, ProjectStageForm,
+    EmploymentInsertionInlineFormSet
 )
 from coopolis.models.projects import ProjectStageSession, ProjectFile
 from coopolis_backoffice.custom_mail_manager import MyMailTemplate
@@ -230,6 +231,7 @@ class EmploymentInsertionInline(admin.TabularInline):
         js = ('js/grappellihacks.js',)
 
     model = EmploymentInsertion
+    formset = EmploymentInsertionInlineFormSet
     extra = 0
     raw_id_fields = ('user',)
     autocomplete_lookup_fields = {

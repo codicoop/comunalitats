@@ -504,15 +504,17 @@ class EmploymentInsertion(models.Model):
         verbose_name_plural = "insercions laborals"
         ordering = ["-insertion_date"]
 
-    project = models.ForeignKey(Project, on_delete=models.CASCADE,
-                                verbose_name="projecte acompanyat",
-                                related_name="employment_insertions")
-    user = models.ForeignKey(User, verbose_name="persona", blank=True,
-                             null=True, on_delete=models.PROTECT)
-    subsidy_period = models.ForeignKey(SubsidyPeriod,
-                                       verbose_name="convocatòria", null=True,
-                                       on_delete=models.SET_NULL)
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat",
+        related_name="employment_insertions")
+    user = models.ForeignKey(
+        User, verbose_name="persona", blank=True, null=True,
+        on_delete=models.PROTECT)
+    subsidy_period = models.ForeignKey(
+        SubsidyPeriod, verbose_name="convocatòria", null=True,
+        on_delete=models.SET_NULL)
     insertion_date = models.DateField("alta seguretat social")
+    end_date = models.DateField("baixa seg. social", null=True, blank=True)
     CONTRACT_TYPE_CHOICES = (
         (1, "Indefinit"),
         (5, "Temporal"),
@@ -525,6 +527,9 @@ class EmploymentInsertion(models.Model):
         choices=CONTRACT_TYPE_CHOICES,
         null=True
     )
+    organizer = models.ForeignKey(
+        Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL,
+        null=True, blank=False)
 
     def __str__(self):
         return f"{self.user.full_name}: {self.get_contract_type_display()}"

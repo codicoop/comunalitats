@@ -176,6 +176,8 @@ class Command(BaseCommand):
                 'view_projectsconstituted', 'view_projectsfollowup',
                 # Etiquetes
                 'add_tagulous_project_tags', 'change_tagulous_project_tags', 'delete_tagulous_project_tags', 'view_tagulous_project_tags',
+                # Fitxers
+                'add_projectfile', 'change_projectfile', 'delete_projectfile', 'view_projectfile',
             ]
         )
         group.permissions.set(add_thing)
