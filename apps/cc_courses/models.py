@@ -416,9 +416,11 @@ class Activity(models.Model):
         return obj
 
     def poll_access_allowed(self):
-        # Si la data actual és superior o igual a la data d'inici, mostrem
-        # l'enquesta.
-        if timezone.now().date() >= self.date_start:
+         # Si la data actual és superior o igual a la data i hora d'inici,
+        # mostrem  l'enquesta.
+        naive_datetime = datetime.combine(self.date_start, self.starting_time)
+        aware_datetime = timezone.make_aware(naive_datetime)
+        if timezone.now() >= aware_datetime:
             return True
         return False
 
