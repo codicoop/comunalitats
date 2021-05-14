@@ -439,8 +439,7 @@ class ExportJustification:
                 hours = group['total_hours']
                 town = item.project.town \
                     if item.project.town is not None else ("", True)
-                crea_consolida = self.export_manager.get_correlation(
-                    "stage_type", item.stage_type)
+                crea_consolida = item.get_stage_type_display()
                 row = [
                     f"{reference_number} {item.project.name}",  # Referència.
                     item.project.name,
