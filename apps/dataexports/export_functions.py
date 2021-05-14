@@ -1,6 +1,7 @@
 from django.http import HttpResponseNotFound
 
 from dataexports.exports.cofunded import ExportJustificationCofunded
+from dataexports.exports.covid_hours import ExportCovidHours
 from dataexports.exports.justification import ExportJustification
 from dataexports.exports.justification_2_itineraris import (
     ExportJustification2Itineraris
@@ -45,4 +46,8 @@ class ExportFunctions:
 
     def export_cofunded(self, export_obj):
         controller = ExportJustificationCofunded(export_obj)
+        return controller.export()
+
+    def export_covid_hours(self, export_obj):
+        controller = ExportCovidHours(export_obj)
         return controller.export()

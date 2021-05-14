@@ -86,7 +86,7 @@ class ExportJustification:
         self.export_nouniversitaris()
         self.export_insercionslaborals()
 
-        return self.export_manager.return_document("justificacio2020-21")
+        return self.export_manager.return_document("justificacio")
 
     def export_actuacions(self):
         # Tutorial: https://djangotricks.blogspot.com/2019/02/how-to-export-
@@ -156,6 +156,11 @@ class ExportJustification:
             ]
             self.export_manager.fill_row_data(row)
 
+    def get_stages_obj(self):
+        return ProjectStage.objects.order_by('date_start').filter(
+            subsidy_period=self.export_manager.subsidy_period
+        )
+
     def actuacions_rows_stages(self):
         """
         Acompanyaments que han d'aparèixer:
@@ -166,9 +171,7 @@ class ExportJustification:
         A banda hi ha l'exportació en 2 itineraris, on s'hi separaran els de
         Creació i els de Consolidació.
         """
-        obj = ProjectStage.objects.order_by('date_start').filter(
-            subsidy_period=self.export_manager.subsidy_period
-        )
+        obj = self.get_stages_obj()
         self.stages_obj = {}
         for item in obj:
             if int(item.stage_type) not in self.stages_groups:

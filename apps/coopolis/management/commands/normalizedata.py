@@ -97,6 +97,12 @@ class Command(BaseCommand):
                 'ignore_errors': True
             },
             {
+                'name': "Hores acompanyaments covid",
+                'subsidy_period': period2019_2020,
+                'function_name': 'export_covid_hours',
+                'ignore_errors': True
+            },
+            {
                 'name': "Cofinançades",
                 'subsidy_period': period2020_2021,
                 'function_name': 'export_cofunded',
@@ -118,6 +124,12 @@ class Command(BaseCommand):
                 'name': "Exportació justificació en 2 itineraris",
                 'subsidy_period': period2020_2021,
                 'function_name': 'export_dos_itineraris',
+                'ignore_errors': True
+            },
+            {
+                'name': "Hores acompanyaments covid",
+                'subsidy_period': period2020_2021,
+                'function_name': 'export_covid_hours',
                 'ignore_errors': True
             },
         )
