@@ -78,9 +78,9 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
 
         filtered_subsidy_period = None
         if self.subsidy_period_filter_param in request.GET:
-            filtered_subsidy_period = request.GET[
+            filtered_subsidy_period = int(request.GET[
                 self.subsidy_period_filter_param
-            ]
+            ])
         else:
             current = SubsidyPeriod.get_current()
             if current:
@@ -163,6 +163,24 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
 
         ctxt['rows'] = qs_project_stages
 
+        for key, row in enumerate(ctxt['rows']):
+            ctxt['rows'][key]['project'] = project_ids[row['project_id']]
+            ctxt['rows'][key]['employment_insertions'] = len(
+                row['project'].employment_insertions.filter(
+                    subsidy_period=filtered_subsidy_period
+                )
+            )
+            ctxt['rows'][key]['constituted'] = 0
+            project_subsidy = ctxt['rows'][key]['project'].subsidy_period
+            if project_subsidy:
+                project_subsidy = project_subsidy.id
+                if (
+                    ctxt['rows'][key]['project'].constitution_date
+                    and project_subsidy == filtered_subsidy_period
+                    and ctxt['rows'][key]['project'].cif
+                ):
+                    ctxt['rows'][key]['constituted'] = 1
+
         # Normally it should be easier to call aggregate to have the totals,
         # but given how complex is it to combine
         # with the ORM filters, I opted for filling the values like this.
@@ -182,8 +200,6 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             show_incubation=False
         )
         for row in ctxt['rows']:
-            row['project'] = project_ids[row['project_id']]
-
             totals['total_members_h'] += (
                 row['members_h'] if row['members_h'] else 0
             )
@@ -211,13 +227,10 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             totals['total_incubation_certificat'] += (
                 1 if row['incubation_certificat'] else 0
             )
-            totals['total_employment_insertions'] += (
-                len(row['project'].employment_insertions.all())
-                if row['project'].employment_insertions else 0
-            )
-            totals['total_constitutions'] += (
-                1 if row['project'].constitution_date else 0
-            )
+            totals['total_employment_insertions'] += row[
+                'employment_insertions'
+            ]
+            totals['total_constitutions'] += row['constituted']
 
         if (totals['total_incubation_certificat'] > 0
                 or totals['total_incubation_hores'] > 0):

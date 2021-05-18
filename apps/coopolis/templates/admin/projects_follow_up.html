@@ -248,9 +248,13 @@ header#grp-header {
           </td>
           {% endif %}
           <td>{{ row.project.employment_estimation }}</td>
-          <td>{{ row.project.employment_insertions.all|length }}</td>
-          <td>{{ row.project.constitution_date|date:"Y.m.d"|default_if_none:"" }}</td>
-          <td>{% if row.project.other %}<span ellipsis-tooltip="{{ row.project.other }}" class="ellipsis-tooltip--left"></span>{% endif %}</td>
+          <td>{{ row.employment_insertions }}</td>
+          <td>{% if row.constituted %}Sí{% else %}No{% endif %}</td>
+          <td>
+            {% if row.project.other %}
+            <span ellipsis-tooltip="{{ row.project.other }}" class="ellipsis-tooltip--left"></span>
+            {% endif %}
+          </td>
         </tr>
         {% endfor %}
         <tr class="grp-row totals">
