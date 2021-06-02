@@ -145,14 +145,14 @@ class ExportJustification:
                 item.name,
                 item.date_start,
                 self.get_organizer(item.organizer),
-                town,
+                str(town),
                 item.enrolled.count(),
                 material_difusio,
                 "",
-                item.entity if item.entity else '',  # Entitat
-                item.organizer if item.organizer else '',  # Organitzadora
-                item.place if item.place else '',  # Lloc
-                item.course,  # Acció
+                str(item.entity) if item.entity else '',  # Entitat
+                str(item.organizer) if item.organizer else '',  # Organitzadora
+                str(item.place) if item.place else '',  # Lloc
+                str(item.course),  # Acció
             ]
             self.export_manager.fill_row_data(row)
 
@@ -283,7 +283,7 @@ class ExportJustification:
                     "subaxis", item.subaxis)
                 if subaxis is None:
                     subaxis = ("", True)
-                town = item.project.town
+                town = str(item.project.town)
                 if town is None or town == "":
                     town = ("", True)
 
@@ -297,8 +297,8 @@ class ExportJustification:
                     len(group['participants']),  # Nombre de participants
                     "No",
                     "",
-                    item.entity if item.entity else '',  # Entitat
-                    item.stage_organizer if item.stage_organizer else '',
+                    str(item.entity) if item.entity else '',  # Entitat
+                    str(item.stage_organizer) if item.stage_organizer else '',
                     # Organitzadora
                     '(no aplicable)',  # Lloc
                     '(no aplicable)',  # Acció
@@ -330,14 +330,14 @@ class ExportJustification:
                 item.name,
                 item.date_start,
                 self.get_organizer(item.organizer),
-                town,
+                str(town),
                 item.minors_participants_number,
                 "No",
                 "",
-                item.entity if item.entity else '',  # Entitat
-                item.organizer if item.organizer else '',  # Organitzadora
-                item.place if item.place else '',  # Lloc
-                item.course,  # Acció
+                str(item.entity) if item.entity else '',  # Entitat
+                str(item.entity) if item.organizer else '',  # Organitzadora
+                str(item.place) if item.place else '',  # Lloc
+                str(item.course),  # Acció
             ]
             self.export_manager.fill_row_data(row)
 
@@ -382,7 +382,7 @@ class ExportJustification:
                 "subaxis", stage.subaxis)
             if subaxis is None:
                 subaxis = ("", True)
-            town = project.town
+            town = str(project.town)
             if town is None or town == "":
                 town = ("", True)
 
@@ -437,7 +437,7 @@ class ExportJustification:
 
                 # hours = item.hours if item.hours is not None else ("", True)
                 hours = group['total_hours']
-                town = item.project.town \
+                town = str(item.project.town) \
                     if item.project.town is not None else ("", True)
                 crea_consolida = item.get_stage_type_display()
                 row = [
@@ -591,10 +591,10 @@ class ExportJustification:
                         participant.get_birth_place_display() or "",
                         participant.get_educational_level_display() or "",
                         participant.get_discovered_us_display() or "",
-                        activity.stage_organizer or "",
+                        str(activity.stage_organizer) or "",
                         participant.email,
                         participant.phone_number or "",
-                        participant.project or "",
+                        str(participant.project) or "",
                         participant.project.stages_list if participant.project and participant.project.stages_list else "",
                     ]
                     self.export_manager.row_number += 1
@@ -634,10 +634,10 @@ class ExportJustification:
                     participant.get_birth_place_display() or "",
                     participant.get_educational_level_display() or "",
                     participant.get_discovered_us_display() or "",
-                    activity.organizer if activity.organizer else "",
+                    str(activity.organizer) if activity.organizer else "",
                     participant.email,
                     participant.phone_number or "",
-                    participant.project if participant.project else "",
+                    str(participant.project) if participant.project else "",
                     participant.project.stages_list if participant.project and participant.project.stages_list else "",
                 ]
                 self.export_manager.fill_row_data(row)
@@ -720,7 +720,7 @@ class ExportJustification:
             birthdate = insertion.user.birthdate
             if not birthdate:
                 birthdate = ('', True)
-            town = insertion.user.town
+            town = str(insertion.user.town)
             if not town:
                 town = ('', True)
             cif = insertion.project.cif
@@ -747,7 +747,7 @@ class ExportJustification:
                 town,
                 cif,
                 insertion.project.name,  # Projecte
-                insertion.subsidy_period,  # Convocatòria
+                str(insertion.subsidy_period),  # Convocatòria
                 '',  # Cercle / Ateneu
             ]
             self.export_manager.fill_row_data(row)

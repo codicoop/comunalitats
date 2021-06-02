@@ -7,6 +7,7 @@ from dataexports.exports.justification_2_itineraris import (
     ExportJustification2Itineraris
 )
 from dataexports.exports.memory import ExportMemory
+from dataexports.exports.stages_details import ExportStagesDetails
 
 
 class ExportFunctions:
@@ -50,4 +51,8 @@ class ExportFunctions:
 
     def export_covid_hours(self, export_obj):
         controller = ExportCovidHours(export_obj)
+        return controller.export()
+
+    def export_stages_details(self, export_obj):
+        controller = ExportStagesDetails(export_obj)
         return controller.export()
