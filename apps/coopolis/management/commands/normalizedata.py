@@ -1,5 +1,5 @@
 # From: https://docs.djangoproject.com/en/2.1/howto/custom-management-commands/
-
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group, Permission
 from datetime import date
@@ -71,7 +71,7 @@ class Command(BaseCommand):
 
         period2019_2020 = SubsidyPeriod.objects.get(name="2019-2020")
         period2020_2021 = SubsidyPeriod.objects.get(name="2020-2021")
-        exports = (
+        exports = [
             {
                 'name': "Cofinançades",
                 'subsidy_period': period2019_2020,
@@ -132,7 +132,13 @@ class Command(BaseCommand):
                 'function_name': 'export_covid_hours',
                 'ignore_errors': True
             },
-        )
+            {
+                'name': "Detall dels acompanyaments",
+                'subsidy_period': period2020_2021,
+                'function_name': 'export_stages_details',
+                'ignore_errors': True
+            },
+        ]
         for export in exports:
             print(f"Updating or creating {export['function_name']}")
             DataExports.objects.create(**export)
