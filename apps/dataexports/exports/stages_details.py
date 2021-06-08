@@ -299,6 +299,8 @@ class StageTypesDataManager(StageDetailsDataManager):
                 continue
             s_type_name = self.stage_types[s_type]["name"]
             s_subtype = int(user["project_stage__stage_subtype"])
+            if not user["session_responsible__first_name"]:
+                user["session_responsible__first_name"] = "(sense nom)"
             subset = [
                 user["session_responsible__first_name"],
                 self.none_as_zero(
@@ -348,6 +350,7 @@ class StageTypesDataManager(StageDetailsDataManager):
             qs
                 .values(
                     "session_responsible__first_name",
+                    "session_responsible__last_name",
                     "project_stage__stage_subtype",
                     "project_stage__stage_subtype__name",
                     "project_stage__stage_type",
@@ -415,7 +418,7 @@ class StageTypesDataManager(StageDetailsDataManager):
         uncert = self.none_as_zero(
             item[f"hours_{stage_type['name']}_uncertified"]
         )
-        subtype_name = self.stage_subtypes[item['stage_subtype']]
+        subtype_name = self.stage_subtypes.get(item['stage_subtype'], "(cap)")
         return [
             f"{stage_type['verbose_name']} - {subtype_name}",
             cert + uncert,
@@ -483,7 +486,10 @@ class CirclesPerUserDataManager(StageDetailsDataManager):
         )
         qs = (
             qs
-                .values('session_responsible__first_name')
+                .values(
+                    "session_responsible__id",
+                    "session_responsible__first_name"
+                )
                 .annotate(**query)
         )
         qs = qs.order_by()
@@ -525,6 +531,8 @@ class CirclesPerUserDataManager(StageDetailsDataManager):
         base_template = self.get_base_data_structure()
         circles = [x for x in base_template.keys()]
         for item in data:
+            if not item["session_responsible__id"]:
+                item["session_responsible__first_name"] = "(sense usuari)"
             for circle in circles:
                 base_template[circle]["values"].append(
                     self.fill_user_data(circle, item)
@@ -558,6 +566,12 @@ class CirclesDataManager(StageDetailsDataManager):
             "D": [
                 "Eix D",
                 110,  # Bases Convo
+                0,  # Justificades
+                0,  # Sense certificat
+            ],
+            None: [
+                "sense eix",
+                0,  # Bases Convo
                 0,  # Justificades
                 0,  # Sense certificat
             ],
@@ -599,6 +613,12 @@ class CirclesDataManager(StageDetailsDataManager):
                 0,  # Justificades
                 0,  # Sense certificat
             ],
+            None: [
+                "sense eix",
+                0,  # Bases Convo
+                0,  # Justificades
+                0,  # Sense certificat
+            ],
             "insertions": [
                 "insercions",
                 8,  # Bases Convo
@@ -632,8 +652,14 @@ class CirclesDataManager(StageDetailsDataManager):
                 0,  # Sense certificat
             ],
             "D": [
-                "Eix C",
+                "Eix D",
                 "1 a 20h",  # Bases Convo
+                0,  # Justificades
+                0,  # Sense certificat
+            ],
+            None: [
+                "sense eix",
+                0,  # Bases Convo
                 0,  # Justificades
                 0,  # Sense certificat
             ],
