@@ -396,8 +396,8 @@ class ExportJustification:
                 stage.involved_partners.count(),
                 "No",
                 "",
-                stage.entity if stage.entity else '',  # Entitat
-                stage.stage_organizer if stage.stage_organizer else '',
+                str(stage.entity) if stage.entity else '',  # Entitat
+                str(stage.stage_organizer) if stage.stage_organizer else '',
                 # Organitzadora
                 '(no aplicable)',  # Lloc
                 '(no aplicable)',  # Acció

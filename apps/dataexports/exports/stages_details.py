@@ -211,6 +211,9 @@ class StageTypesDataManager(StageDetailsDataManager):
             self.stage_subtypes.update({
                 subtype.pk: subtype.name
             })
+        self.stage_subtypes.update({
+            0: "Sense subtipus"
+        })
 
     def get_data(self):
         creation_totals_data = self.get_totals_data(
@@ -298,7 +301,9 @@ class StageTypesDataManager(StageDetailsDataManager):
             if s_type not in self.stage_types:
                 continue
             s_type_name = self.stage_types[s_type]["name"]
-            s_subtype = int(user["project_stage__stage_subtype"])
+            s_subtype = int(user["project_stage__stage_subtype"]) \
+                if user["project_stage__stage_subtype"] else 0
+
             if not user["session_responsible__first_name"]:
                 user["session_responsible__first_name"] = "(sense nom)"
             subset = [
@@ -307,10 +312,16 @@ class StageTypesDataManager(StageDetailsDataManager):
                     user["sessions_number"]
                 ),
                 self.none_as_zero(
-                    user[f"hours_{s_type_name}_{s_subtype}_certified"]
+                    user.get(
+                        f"hours_{s_type_name}_{s_subtype}_certified",
+                        "n/a"
+                    )
                 ),
                 self.none_as_zero(
-                    user[f"hours_{s_type_name}_{s_subtype}_uncertified"]
+                    user.get(
+                        f"hours_{s_type_name}_{s_subtype}_uncertified",
+                        "n/a",
+                    )
                 ),
                 0,
             ]

@@ -47,11 +47,11 @@ class ExportCovidHours:
                 stage.project.name,
                 stage.date_start,
                 stage.get_stage_type_display(),
-                stage.stage_responsible,
+                str(stage.stage_responsible),
                 stage.hours_sum(),
                 stage.axis_summary(),
-                stage.subsidy_period,
+                str(stage.subsidy_period),
                 len(stage.involved_partners.all()),
-                stage.stage_organizer,
+                str(stage.stage_organizer),
             ]
             self.export_manager.fill_row_data(row)
