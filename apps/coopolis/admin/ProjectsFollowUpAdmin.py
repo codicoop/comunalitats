@@ -11,7 +11,7 @@ from openpyxl.utils import get_column_letter
 
 from .ProjectAdmin import FilterByFounded
 from dataexports.models import SubsidyPeriod
-from coopolis.models.projects import ProjectStage
+from coopolis.models.projects import ProjectStage, ProjectsFollowUp
 from ..models import User
 
 
@@ -19,6 +19,7 @@ class MissingCurrentSubsidyPeriod(Exception):
     pass
 
 
+@admin.register(ProjectsFollowUp)
 class ProjectsFollowUpAdmin(admin.ModelAdmin):
     """
     Inspired in: https://medium.com/@hakibenita/how-to-turn-django-admin-into-a-lightweight-dashboard-a0e0bbf609ad
@@ -161,7 +162,7 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
         # Order_by fucks up the group by
         qs_project_stages = qs_project_stages.order_by()
 
-        ctxt['rows'] = qs_project_stages
+        ctxt["rows"] = qs_project_stages
 
         for key, row in enumerate(ctxt['rows']):
             ctxt['rows'][key]['project'] = project_ids[row['project_id']]
@@ -180,6 +181,8 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
                     and ctxt['rows'][key]['project'].cif
                 ):
                     ctxt['rows'][key]['constituted'] = 1
+
+        ctxt["rows"] = self.sort_rows(ctxt["rows"])
 
         # Normally it should be easier to call aggregate to have the totals,
         # but given how complex is it to combine
@@ -239,6 +242,38 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
         ctxt['totals'] = totals
 
         return ctxt
+
+    @staticmethod
+    def sort_rows(rows: list) -> list:
+        """
+        The user needs to apply ordering at the resulting report but we cannot
+        rely on the ORM to do it, because if you apply an ordering to the
+        annotated queryset that return the rows it stops working.
+
+        Also, the ordering that we want is related to Project but the queryset
+        with the annotated results queries ProjectStage.
+
+        With this method, in order to modify the ordering you need to change
+        the ordered_key composition.
+        If instead of:
+        ordered_key = f"{project.project_status}_{project.id}"
+
+        You want to sort them by sector, you'll do:
+        ordered_key = project.sector
+
+        :param rows: All the project stages from the annotation queryset.
+        :return: List with the same items but sorted differently
+        """
+        ordered_rows = {}
+        for key, row in enumerate(rows):
+            ordered_key = f"{row['project'].project_status}_{row['project'].id}"
+            ordered_rows.update({
+                ordered_key: rows[key]
+            })
+        rows = []
+        for row in sorted(ordered_rows):
+            rows.append(ordered_rows[row])
+        return rows
 
     def get_download_url(self, request):
         querystring = urlencode(request.GET)
