@@ -132,7 +132,7 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
                 )
             ),
             'incubation_hores': Sum(
-                'hours',
+                'stage_sessions__hours',
                 filter=Q(stage_type=9)
             ),
             'incubation_certificat': Count(

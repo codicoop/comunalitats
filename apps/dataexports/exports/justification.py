@@ -37,8 +37,8 @@ class ExportJustification:
         return Activity.objects.filter(
             Q(
                 date_start__range=self.export_manager.subsidy_period.range,
-                for_minors=for_minors) &
-            (
+                for_minors=for_minors
+            ) & (
                 Q(cofunded__isnull=True) | (
                     Q(cofunded__isnull=False) & Q(cofunded_ateneu=True)
                 )
@@ -109,6 +109,8 @@ class ExportJustification:
             ("[Organitzadora]", 20),
             ("[Lloc]", 20),
             ("[Acció]", 20),
+            ("[Cofinançat]", 20),
+            ("[Cofinançat amb AACC]", 20),
         ]
         self.export_manager.create_columns(columns)
         self.actuacions_rows_activities()
@@ -130,11 +132,9 @@ class ExportJustification:
                 "subaxis", item.subaxis)
             if subaxis is None:
                 subaxis = ("", True)
-            town = None
-            if item.place is not None:
-                town = item.place.town
-            if town is None or town == "":
-                town = ("", True)
+            town = ("", True)
+            if item.place is not None and item.place.town:
+                town = str(item.place.town)
             material_difusio = "No"
             if item.file1.name:
                 material_difusio = "Sí"
@@ -145,7 +145,7 @@ class ExportJustification:
                 item.name,
                 item.date_start,
                 self.get_organizer(item.organizer),
-                str(town),
+                town,
                 item.enrolled.count(),
                 material_difusio,
                 "",
@@ -153,6 +153,8 @@ class ExportJustification:
                 str(item.organizer) if item.organizer else '',  # Organitzadora
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
+                str(item.cofunded),  # Cofinançat
+                "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
             ]
             self.export_manager.fill_row_data(row)
 
@@ -248,9 +250,7 @@ class ExportJustification:
             - Una instància de l'objecte ProjectStage (el primer que hagi pillat)
             - 'total_hours', amb la suma de totes les hores de tots els ProjectStages
                 del mateix grup i projecte.
-        """
 
-        """
         A continuació el que farem és afegir com a row cada un d'aquests grups.
         De manera que cada itinerari (creació, consolidació..) de cada projecte
         tindrà la seva propia fila a Actuacions.
@@ -283,9 +283,9 @@ class ExportJustification:
                     "subaxis", item.subaxis)
                 if subaxis is None:
                     subaxis = ("", True)
-                town = str(item.project.town)
-                if town is None or town == "":
-                    town = ("", True)
+                town = ("", True)
+                if item.project.town:
+                    town = str(item.project.town)
 
                 row = [
                     axis,
@@ -298,10 +298,12 @@ class ExportJustification:
                     "No",
                     "",
                     str(item.entity) if item.entity else '',  # Entitat
-                    str(item.stage_organizer) if item.stage_organizer else '',
                     # Organitzadora
+                    str(item.stage_organizer) if item.stage_organizer else '',
                     '(no aplicable)',  # Lloc
                     '(no aplicable)',  # Acció
+                    str(item.cofunded),  # Cofinançat
+                    "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
                 ]
                 self.export_manager.fill_row_data(row)
 
@@ -318,11 +320,12 @@ class ExportJustification:
                 "subaxis", item.subaxis)
             if subaxis is None:
                 subaxis = ("", True)
-            town = None
-            if item.place is not None:
-                town = item.place.town
-            if town is None or town == "":
-                town = ("", True)
+            town = ("", True)
+            if item.place.town:
+                town = str(item.place.town)
+            material_difusio = "No"
+            if item.file1.name:
+                material_difusio = "Sí"
 
             row = [
                 axis,
@@ -330,14 +333,16 @@ class ExportJustification:
                 item.name,
                 item.date_start,
                 self.get_organizer(item.organizer),
-                str(town),
+                town,
                 item.minors_participants_number,
-                "No",
+                material_difusio,
                 "",
                 str(item.entity) if item.entity else '',  # Entitat
                 str(item.entity) if item.organizer else '',  # Organitzadora
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
+                str(item.cofunded),  # Cofinançat
+                "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
             ]
             self.export_manager.fill_row_data(row)
 
@@ -382,9 +387,9 @@ class ExportJustification:
                 "subaxis", stage.subaxis)
             if subaxis is None:
                 subaxis = ("", True)
-            town = str(project.town)
-            if town is None or town == "":
-                town = ("", True)
+            town = ("", True)
+            if project.town:
+                town = str(project.town)
 
             row = [
                 axis,
@@ -401,6 +406,8 @@ class ExportJustification:
                 # Organitzadora
                 '(no aplicable)',  # Lloc
                 '(no aplicable)',  # Acció
+                str(stage.cofunded),  # Cofinançat
+                "Sí" if stage.cofunded_ateneu else "No",  # Cofinançat amb AACC
             ]
             self.export_manager.fill_row_data(row)
 
@@ -437,9 +444,11 @@ class ExportJustification:
 
                 # hours = item.hours if item.hours is not None else ("", True)
                 hours = group['total_hours']
-                town = str(item.project.town) \
-                    if item.project.town is not None else ("", True)
+                town = ("", True)
+                if item.project.town:
+                    town = str(item.project.town)
                 crea_consolida = item.get_stage_type_display()
+
                 row = [
                     f"{reference_number} {item.project.name}",  # Referència.
                     item.project.name,
@@ -571,9 +580,8 @@ class ExportJustification:
                     else:
                         gender = self.export_manager.get_correlation(
                             'gender', participant.gender)
-                    if participant.town is None:
-                        town = ""
-                    else:
+                    town = ""
+                    if participant.town:
                         town = participant.town.name
 
                     row = [
@@ -586,7 +594,7 @@ class ExportJustification:
                         participant.id_number,
                         gender if gender else "",
                         participant.birthdate or "",
-                        town if town else "",
+                        town,
                         participant.get_employment_situation_display() or "",
                         participant.get_birth_place_display() or "",
                         participant.get_educational_level_display() or "",
@@ -614,9 +622,8 @@ class ExportJustification:
                 else:
                     gender = self.export_manager.get_correlation(
                         'gender', participant.gender)
-                if participant.town is None:
-                    town = ""
-                else:
+                town = ""
+                if participant.town:
                     town = participant.town.name
 
                 row = [
@@ -629,7 +636,7 @@ class ExportJustification:
                     participant.id_number,
                     gender if gender else "",
                     participant.birthdate if participant.birthdate else "",
-                    town if town else "",
+                    town,
                     participant.get_employment_situation_display() or "",
                     participant.get_birth_place_display() or "",
                     participant.get_educational_level_display() or "",
@@ -720,9 +727,9 @@ class ExportJustification:
             birthdate = insertion.user.birthdate
             if not birthdate:
                 birthdate = ('', True)
-            town = str(insertion.user.town)
-            if not town:
-                town = ('', True)
+            town = ('', True)
+            if insertion.user.town:
+                town = str(insertion.user.town)
             cif = insertion.project.cif
             if not cif:
                 cif = ('', True)

@@ -313,7 +313,7 @@ class ProjectStage(models.Model):
         SubsidyPeriod, verbose_name="convocatòria", null=True,
         on_delete=models.SET_NULL)
     date_start = models.DateField(
-        "data d'inici", null=False, blank=False,
+        "data creació acompanyament", null=False, blank=False,
         auto_now_add=True
     )
     date_end = models.DateField(
@@ -470,9 +470,12 @@ class ProjectStageSession(models.Model):
         default=datetime.date.today,
         null=True, blank=False
     )
-    hours = models.IntegerField(
-        "número d'hores", help_text="Camp necessari per la justificació.",
-        null=True, blank=True)
+    hours = models.FloatField(
+        "número d'hores",
+        help_text="Camp necessari per la justificació.",
+        null=True,
+        blank=True,
+    )
     follow_up = models.TextField("seguiment", null=True, blank=True)
     entity = models.ForeignKey(
         Entity, verbose_name="Entitat", default=None, null=True, blank=True,

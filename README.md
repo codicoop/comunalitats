@@ -96,3 +96,11 @@ https://gitlab.com/dannosaur/django-dynamic-form-fields
 
 Enables dropdowns that filter its content according to another dropdown.
 We use them when selecting Axis and Sub-axis.
+
+# Commands
+
+Added two commands for the monitoring dashboard:
+
+`python manage.py mailqueue --pending`
+`python manage.py mailqueue --sent-24`
+

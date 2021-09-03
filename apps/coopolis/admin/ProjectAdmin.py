@@ -1,4 +1,5 @@
 from django.urls import reverse, reverse_lazy
+from django.utils import formats
 from django_object_actions import DjangoObjectActions
 from django.contrib import admin
 from django.utils.safestring import mark_safe
@@ -82,11 +83,12 @@ class ProjectStageAdmin(admin.ModelAdmin):
                        'subsidy_period', 'axis', 'subaxis',
                        'stage_organizer', 'stage_responsible',
                        'scanned_certificate',
-                       'involved_partners', 'hours_sum', 'date_start']
+                       'involved_partners', 'hours_sum', 'date_start',
+                       "earliest_session_field", ]
         }),
     ]
     inlines = (ProjectStageSessionsInline, )
-    readonly_fields = ('hours_sum', 'date_start', )
+    readonly_fields = ('hours_sum', 'date_start', "earliest_session_field", )
 
     def _has_certificate(self, obj):
         if obj.scanned_certificate:
@@ -126,6 +128,14 @@ class ProjectStageAdmin(admin.ModelAdmin):
         return mark_safe(u'<a href="../../%s/%s/%d/change">%s</a>' % (
             'coopolis', 'project', obj.project.id, 'Veure'))
     project_field.short_description = 'Projecte'
+
+    def earliest_session_field(self, obj):
+        try:
+            session = obj.stage_sessions.earliest("date")
+        except obj.DoesNotExist:
+            return "No hi ha cap sessió d'acompanyament."
+        return formats.localize(session.date)
+    earliest_session_field.short_description = 'Primera sessió'
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = super().get_fieldsets(request, obj)
