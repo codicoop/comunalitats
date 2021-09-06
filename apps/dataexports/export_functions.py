@@ -2,6 +2,7 @@ from django.http import HttpResponseNotFound
 
 from dataexports.exports.cofunded import ExportJustificationCofunded
 from dataexports.exports.covid_hours import ExportCovidHours
+from dataexports.exports.files import ExportFiles
 from dataexports.exports.justification import ExportJustification
 from dataexports.exports.justification_2_itineraris import (
     ExportJustification2Itineraris
@@ -55,4 +56,8 @@ class ExportFunctions:
 
     def export_stages_details(self, export_obj):
         controller = ExportStagesDetails(export_obj)
+        return controller.export()
+
+    def export_files_zip(self, export_obj):
+        controller = ExportFiles(export_obj)
         return controller.export()
