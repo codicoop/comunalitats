@@ -17,7 +17,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-coopolis
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload --timeout 300
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -259,7 +259,8 @@ services:
     container_name: develop_ateneus_nginx
     image: nginx
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx_sites:/etc/nginx/conf.d
       - ../:/srv
     ports:
        - 5001-5012:81-92
