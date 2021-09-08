@@ -4,6 +4,9 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group, Permission
 from datetime import date
 
+from django.db import IntegrityError
+from django_q.tasks import schedule
+
 from dataexports.models import SubsidyPeriod, DataExports
 
 
@@ -15,6 +18,7 @@ class Command(BaseCommand):
         self.add_group_permissions()
         self.normalize_subsidy_periods()
         self.normalize_exports()
+        self.create_schedules()
 
     @staticmethod
     def normalize_subsidy_periods():
@@ -228,3 +232,20 @@ class Command(BaseCommand):
         group.permissions.set(add_thing)
         group.save()
         print('Permisos del grup Fer i modificar reserves d\'espais actualitzats.')
+
+    def create_schedules(self):
+        try:
+            schedule(
+                "apps.coopolis.tasks.mailqueue_send_command",
+                name="send_queued_emails",
+                schedule_type="I",
+                minutes=1,
+            )
+            self.stdout.write(
+                "CREADA: Tasca de django-q per l'enviament dels correus de la cua."
+            )
+        except IntegrityError:
+            self.stdout.write(
+                "JA EXISTENT: Tasca de django-q per l'enviament dels correus "
+                "de la cua."
+            )

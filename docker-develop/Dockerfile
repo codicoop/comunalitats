@@ -1,17 +1,9 @@
-FROM python:3.6-alpine
+FROM python:3.6-slim
 COPY docker-develop/requirements.txt /srv/requirements.txt
 
 WORKDIR /srv
 
 RUN pip install --upgrade pip
-RUN apk update
-RUN apk add --virtual build-deps gcc python3-dev musl-dev
-RUN apk add jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev
-RUN apk add jpeg-dev zlib-dev py-pillow
-RUN apk add postgresql-dev
-RUN apk add --no-cache libffi-dev
-RUN pip install -r /srv/requirements.txt
-# Weasyprint installation for Alpine:
-RUN apk --update --upgrade add gcc musl-dev jpeg-dev zlib-dev libffi-dev cairo-dev pango-dev gdk-pixbuf-dev
-# Installing font for PDFs:
-RUN apk --update add fontconfig ttf-opensans
+RUN apt-get update
+RUN apt-get install -y python3-pip python3-cffi python3-brotli libpango-1.0-0 libpangoft2-1.0-0 libcairo2-dev  libpangocairo-1.0-0
+RUN pip install -r /srv/requirements.txt --no-cache-dir

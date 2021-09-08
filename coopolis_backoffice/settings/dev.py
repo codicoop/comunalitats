@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'mailqueue',
     'mailing_manager',
     'django.contrib.humanize',
+    "django_q",
 ]
 
 MIDDLEWARE = [
@@ -609,3 +610,11 @@ MAILQUEUE_LIMIT = 10
 # MAILQUEUE_ATTACHMENT_DIR)
 MAILQUEUE_STORAGE = False
 MAILQUEUE_ATTACHMENT_DIR = 'mailqueue-attachments'
+
+# Django-Q
+Q_CLUSTER = {
+    "name": "ateneus-backoffice",
+    "orm": "default",  # Use Django's ORM + database for broker
+    "timeout": 30,
+    "workers": 1,
+}

@@ -97,6 +97,18 @@ https://gitlab.com/dannosaur/django-dynamic-form-fields
 Enables dropdowns that filter its content according to another dropdown.
 We use them when selecting Axis and Sub-axis.
 
+## Django-Q
+
+Package for handling scheduled tasks.
+We're using it in a very simple way to execute the *mailqueue* command
+`send_queued_messages`.
+
+This tutorial is helpful to understand the setup:
+https://mattsegal.dev/simple-scheduled-tasks.html
+
+Then, the process is launched by having one docker container instance for each
+ateneu, each suffixed as "automation".
+
 # Commands
 
 Added two commands for the monitoring dashboard:

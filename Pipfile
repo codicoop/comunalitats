@@ -29,6 +29,7 @@ django-dynamic-form-fields = "*"
 django-logentry-admin = "*"
 django-tagulous = "*"
 django-extensions = "*"
+django-q = "*"
 
 [requires]
 python_version = "3.6"
