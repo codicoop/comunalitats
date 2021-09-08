@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.template.response import TemplateResponse
+from django.utils import formats
 from django.utils.html import format_html
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import path, reverse, reverse_lazy
@@ -220,6 +221,11 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
                 self.admin_site.admin_view(self.send_reminder),
                 name='send-activity-reminder'
             ),
+            path(
+                r'<_id>/send-poll/',
+                self.admin_site.admin_view(self.send_poll),
+                name='send-activity-poll'
+            ),
         ]
         return custom_urls + urls
 
@@ -353,9 +359,42 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         poll_url = reverse('activity_poll', kwargs={'uuid': obj.uuid})
         poll_url = self.request.build_absolute_uri(poll_url)
         poll_url = f'<a href="{poll_url}" target="_blank">{poll_url}</a>'
-        content = f"Estat: {poll_status} | Enllaç: {poll_url} | {results_url}"
+
+        send_poll_url = reverse(
+            'admin:send-activity-poll', kwargs={'_id': obj.id}
+        )
+        send_poll_url = self.request.build_absolute_uri(send_poll_url)
+        send_poll_url = f'<a href="{send_poll_url}">Enviar enquesta</a>'
+        poll_sent_date = formats.localize(obj.poll_sent) if obj.poll_sent else "Mai"
+        poll_sent_text = f"Última data d'enviament de l'enquesta: {poll_sent_date}"
+
+        content = (
+            f"Estat: {poll_status}<br>"
+            f"Enllaç: {poll_url}<br>"
+            f"Resultats: {results_url}<br>"
+            f"Enviament: {send_poll_url} ({poll_sent_text})"
+        )
         return format_html(content)
     activity_poll_field.short_description = "Enquesta"
+
+    def send_poll(self, request, _id):
+        obj = Activity.objects.get(id=_id)
+        if request.method == 'POST':
+            if 'send' in request.POST or 'send_all' in request.POST:
+                obj.send_poll_email()
+                self.message_user(
+                    request,
+                    "Recordatoris enviats correctament."
+                )
+                return HttpResponseRedirect("../../")
+
+        context = {
+            **self.admin_site.each_context(request),
+            'obj': obj,
+            'opts': self.model._meta,
+        }
+        return TemplateResponse(
+            request, 'admin/poll_sending.html', context)
 
     def save_formset(self, request, form, formset, change):
         instances = formset.save()

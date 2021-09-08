@@ -344,6 +344,11 @@ class Activity(models.Model):
             "sinó arrossegarà molta informació de formateig que "
             "probablement farà que el correu es vegi malament."
     )
+    poll_sent = models.DateTimeField(
+        "data d'enviament de l'enquesta",
+        null=True,
+        blank=True,
+    )
 
     objects = models.Manager()
     published = Published()
@@ -448,6 +453,49 @@ class Activity(models.Model):
         if user in self.enrolled.all():
             raise EnrollToActivityNotValidException()
         self.enrolled.add(user)
+        self.save()
+
+    def get_poll_email(self, user):
+        mail = MyMailTemplate('EMAIL_ENROLLMENT_POLL')
+        mail.subject_strings = {
+            'activitat_nom': self.name
+        }
+        absolute_url_activity = (
+            settings.ABSOLUTE_URL +
+            reverse('activity', args=[self.uuid])
+        )
+        absolute_url_poll = (
+            settings.ABSOLUTE_URL +
+            reverse(
+                'activity_poll', kwargs={'uuid': self.uuid}
+            )
+        )
+        mail.body_strings = {
+            'activitat_nom': self.name,
+            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'persona_nom': user.first_name,
+            'activitat_data_inici':
+                self.date_start.strftime("%d-%m-%Y"),
+            'activitat_hora_inici':
+                self.starting_time.strftime("%H:%M"),
+            'activitat_lloc': self.place,
+            'absolute_url_activity': absolute_url_activity,
+            'absolute_url_poll': absolute_url_poll,
+            'absolute_url_my_activities':
+                f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
+            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
+        }
+        return mail
+
+    def send_poll_email(self):
+        enrollments = self.confirmed_enrollments
+        for enrollment in enrollments:
+            if enrollment.user.fake_email:
+                continue
+            mail = self.get_poll_email(enrollment.user)
+            mail.to = enrollment.user.email
+            mail.send()
+        self.poll_sent = datetime.now()
         self.save()
 
 
@@ -583,7 +631,7 @@ class ActivityEnrolled(models.Model):
         }
         absolute_url_activity = (
             settings.ABSOLUTE_URL +
-            reverse('activity',  args=[activity.id])
+            reverse('activity',  args=[activity.uuid])
         )
         mail.body_strings = {
             'activitat_nom': activity.name,
