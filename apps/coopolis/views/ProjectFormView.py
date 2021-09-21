@@ -1,19 +1,15 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from django.views import generic
 from django import urls
 from django.http import HttpResponseRedirect
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
-from django.core.mail import send_mail
-from django.conf import settings
 from constance import config
 
 from coopolis.models import Project
 from coopolis.forms import ProjectForm
 from coopolis.views import LoginSignupContainerView
 from coopolis_backoffice.custom_mail_manager import MyMailTemplate
+
 
 class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
     model = Project
@@ -59,8 +55,12 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
         }
         mail.send()
 
-        messages.success(self.request, "S'ha enviat una sol·licitud d'acompanyament del projecte. En els propers dies "
-                                       "et contactarà una persona de l'ateneu per concertar una primera reunió.")
+        messages.success(
+            self.request,
+            "S'ha enviat una sol·licitud d'acompanyament del projecte. En els"
+            " propers dies et contactarà una persona de l'ateneu per concertar"
+            " una primera reunió."
+        )
         return HttpResponseRedirect(self.get_success_url())
 
     def get(self, request):

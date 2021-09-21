@@ -24,8 +24,12 @@
         {% endif %}
         {% if form.errors %}
         <div class="message-container">
-            <p class="error-message">No s'ha pogut completar el registre, si us plau, revisa els errors del formulari.
+            <p class="error-message">No s'ha pogut completar el registre, si
+                us plau, revisa els errors del formulari.
             </p>
+            {% for error in form.non_field_errors %}
+            <p class="error-message">{{ error }}</p>
+            {% endfor %}
         </div>
         {% endif %}
         <h1>Dades del vostre projecte</h1>
@@ -34,34 +38,42 @@
             <div class="flex-space-between">
                 <div class="flex-column" style="width: 49%">
                     <p>
+                        {{ form.name.errors }}
                         {{ form.name.label_tag }}
                         {{ form.name }}
                     </p>
                     <p>
+                        {{ form.sector.errors }}
                         {{ form.sector.label_tag }}
                         {{ form.sector }}
                     </p>
                     <p>
+                        {{ form.web.errors }}
                         {{ form.web.label_tag }}
                         {{ form.web }}
                     </p>
                     <p>
+                        {{ form.project_status.errors }}
                         {{ form.project_status.label_tag }}
                         {{ form.project_status }}
                     </p>
                     <p>
+                        {{ form.motivation.errors }}
                         {{ form.motivation.label_tag }}
                         {{ form.motivation }}
                     </p>
                     <p>
+                        {{ form.mail.errors }}
                         {{ form.mail.label_tag }}
                         {{ form.mail }}
                     </p>
                     <p>
+                        {{ form.phone.errors }}
                         {{ form.phone.label_tag }}
                         {{ form.phone }}
                     </p>
                     <p>
+                        {{ form.town.errors }}
                         {{ form.town.label_tag }}
                         {{ form.town }}
                     </p>
@@ -71,36 +83,44 @@
                         {{ form.district }}
                     </p>
                     <p>
+                        {{ form.number_people.errors }}
                         {{ form.number_people.label_tag }}
                         {{ form.number_people }}
                     </p>
                     <p>
+                        {{ form.estatuts.errors }}
                         {{ form.estatuts.label_tag }}
                         {{ form.estatuts }}
                     </p>
                     <p>
+                        {{ form.viability.errors }}
                         {{ form.viability.label_tag }}
                         {{ form.viability }}
                     </p>
                     <p>
+                        {{ form.sostenibility.errors }}
                         {{ form.sostenibility.label_tag }}
                         {{ form.sostenibility }}
                     </p>
                     <p>
+                        {{ form.object_finality.errors }}
                         {{ form.object_finality.label_tag }}
                         {{ form.object_finality }}
                     </p>
                 </div>
                 <div class="flex-column" style="width: 49%">
                     <p>
+                        {{ form.project_origins.errors }}
                         {{ form.project_origins.label_tag }}
                         {{ form.project_origins }}
                     </p>
                     <p>
+                        {{ form.solves_necessities.errors }}
                         {{ form.solves_necessities.label_tag }}
                         {{ form.solves_necessities }}
                     </p>
                     <p>
+                        {{ form.social_base.errors }}
                         {{ form.social_base.label_tag }}
                         {{ form.social_base }}
                     </p>
