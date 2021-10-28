@@ -1,7 +1,6 @@
 version: "3.3"
 
 services:
-
   # http://serveis.bcn.coop
   coopolis:
     restart: on-failure
@@ -24,45 +23,45 @@ services:
       - db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
 
-  coopolis-automation:
-    restart: on-failure
-    container_name: coopolis_automation
-    build:
-      context: ..
-      dockerfile: ./docker-production/Dockerfile
-    environment:
-      - DB_HOST=db
-      - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.server_production
-      - PYTHONPATH=/shared_libraries
-    command: python manage.py qcluster
-    volumes:
-      - ../:/srv
-      - ../../python_shared_libraries/:/shared_libraries
-    depends_on:
-      - db
-      - coopolis
+#  coopolis-automation:
+#    restart: on-failure
+#    container_name: coopolis_automation
+#    build:
+#      context: ..
+#      dockerfile: ./docker-production/Dockerfile
+#    environment:
+#      - DB_HOST=db
+#      - "PYTHONUNBUFFERED=1"
+#      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.server_production
+#      - PYTHONPATH=/shared_libraries
+#    command: python manage.py qcluster
+#    volumes:
+#      - ../:/srv
+#      - ../../python_shared_libraries/:/shared_libraries
+#    depends_on:
+#      - db
+#      - coopolis
 
-  # http://ateneu-demo.codi.coop
-  ateneu-demo:
-    restart: on-failure
-    container_name: ateneu_demo
-    build:
-      context: ..
-      dockerfile: ./docker-production/Dockerfile
-    environment:
-      - DB_HOST=db
-      - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-demo
-      - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8001 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
-    volumes:
-      - ../:/srv
-      - ../../python_shared_libraries/:/shared_libraries
-    ports:
-      - 8001:8001
-    depends_on:
-      - db
+#  # http://ateneu-demo.codi.coop
+#  ateneu-demo:
+#    restart: on-failure
+#    container_name: ateneu_demo
+#    build:
+#      context: ..
+#      dockerfile: ./docker-production/Dockerfile
+#    environment:
+#      - DB_HOST=db
+#      - "PYTHONUNBUFFERED=1"
+#      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-demo
+#      - PYTHONPATH=/shared_libraries
+#    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8001 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+#    volumes:
+#      - ../:/srv
+#      - ../../python_shared_libraries/:/shared_libraries
+#    ports:
+#      - 8001:8001
+#    depends_on:
+#      - db
 
   # https://serveis.coopcamp.cat
   ateneu-coopcamp:
@@ -85,24 +84,24 @@ services:
     depends_on:
       - db
 
-  coopcamp-automation:
-    restart: on-failure
-    container_name: coopcamp_automation
-    build:
-      context: ..
-      dockerfile: ./docker-production/Dockerfile
-    environment:
-      - DB_HOST=db
-      - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopcamp
-      - PYTHONPATH=/shared_libraries
-    command: python manage.py qcluster
-    volumes:
-      - ../:/srv
-      - ../../python_shared_libraries/:/shared_libraries
-    depends_on:
-      - db
-      - ateneu-coopcamp
+#  coopcamp-automation:
+#    restart: on-failure
+#    container_name: coopcamp_automation
+#    build:
+#      context: ..
+#      dockerfile: ./docker-production/Dockerfile
+#    environment:
+#      - DB_HOST=db
+#      - "PYTHONUNBUFFERED=1"
+#      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopcamp
+#      - PYTHONPATH=/shared_libraries
+#    command: python manage.py qcluster
+#    volumes:
+#      - ../:/srv
+#      - ../../python_shared_libraries/:/shared_libraries
+#    depends_on:
+#      - db
+#      - ateneu-coopcamp
 
   # https://serveis.coopmaresme.cat
   ateneu-coopmaresme:
@@ -125,24 +124,24 @@ services:
     depends_on:
       - db
 
-  coopmaresme-automation:
-    restart: on-failure
-    container_name: coopmaresme_automation
-    build:
-      context: ..
-      dockerfile: ./docker-production/Dockerfile
-    environment:
-      - DB_HOST=db
-      - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopmaresme
-      - PYTHONPATH=/shared_libraries
-    command: python manage.py qcluster
-    volumes:
-      - ../:/srv
-      - ../../python_shared_libraries/:/shared_libraries
-    depends_on:
-      - db
-      - ateneu-coopmaresme
+#  coopmaresme-automation:
+#    restart: on-failure
+#    container_name: coopmaresme_automation
+#    build:
+#      context: ..
+#      dockerfile: ./docker-production/Dockerfile
+#    environment:
+#      - DB_HOST=db
+#      - "PYTHONUNBUFFERED=1"
+#      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopmaresme
+#      - PYTHONPATH=/shared_libraries
+#    command: python manage.py qcluster
+#    volumes:
+#      - ../:/srv
+#      - ../../python_shared_libraries/:/shared_libraries
+#    depends_on:
+#      - db
+#      - ateneu-coopmaresme
 
   # https://serveis.ateneubnord.cat
   ateneu-bnord:
@@ -165,24 +164,24 @@ services:
     depends_on:
       - db
 
-  bnord-automation:
-    restart: on-failure
-    container_name: bnord_automation
-    build:
-      context: ..
-      dockerfile: ./docker-production/Dockerfile
-    environment:
-      - DB_HOST=db
-      - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-bnord
-      - PYTHONPATH=/shared_libraries
-    command: python manage.py qcluster
-    volumes:
-      - ../:/srv
-      - ../../python_shared_libraries/:/shared_libraries
-    depends_on:
-      - db
-      - ateneu-bnord
+#  bnord-automation:
+#    restart: on-failure
+#    container_name: bnord_automation
+#    build:
+#      context: ..
+#      dockerfile: ./docker-production/Dockerfile
+#    environment:
+#      - DB_HOST=db
+#      - "PYTHONUNBUFFERED=1"
+#      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-bnord
+#      - PYTHONPATH=/shared_libraries
+#    command: python manage.py qcluster
+#    volumes:
+#      - ../:/srv
+#      - ../../python_shared_libraries/:/shared_libraries
+#    depends_on:
+#      - db
+#      - ateneu-bnord
 
   # https://serveis.ponentcoopera.cat
   # Ens saltem el port 8005 perquè hi ha l'antic back-office (java) allà.
@@ -206,24 +205,24 @@ services:
     depends_on:
       - db
 
-  ponentcoopera-automation:
-    restart: on-failure
-    container_name: ponentcoopera_automation
-    build:
-      context: ..
-      dockerfile: ./docker-production/Dockerfile
-    environment:
-      - DB_HOST=db
-      - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-ponentcoopera
-      - PYTHONPATH=/shared_libraries
-    command: python manage.py qcluster
-    volumes:
-      - ../:/srv
-      - ../../python_shared_libraries/:/shared_libraries
-    depends_on:
-      - db
-      - ateneu-ponentcoopera
+#  ponentcoopera-automation:
+#    restart: on-failure
+#    container_name: ponentcoopera_automation
+#    build:
+#      context: ..
+#      dockerfile: ./docker-production/Dockerfile
+#    environment:
+#      - DB_HOST=db
+#      - "PYTHONUNBUFFERED=1"
+#      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-ponentcoopera
+#      - PYTHONPATH=/shared_libraries
+#    command: python manage.py qcluster
+#    volumes:
+#      - ../:/srv
+#      - ../../python_shared_libraries/:/shared_libraries
+#    depends_on:
+#      - db
+#      - ateneu-ponentcoopera
 
   # https://serveis.ateneucooperatiuvalles.org
   ateneu-vallesoccidental:
@@ -246,24 +245,24 @@ services:
     depends_on:
       - db
 
-  vallesoccidental-automation:
-    restart: on-failure
-    container_name: vallesoccidental_automation
-    build:
-      context: ..
-      dockerfile: ./docker-production/Dockerfile
-    environment:
-      - DB_HOST=db
-      - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-vallesoccidental
-      - PYTHONPATH=/shared_libraries
-    command: python manage.py qcluster
-    volumes:
-      - ../:/srv
-      - ../../python_shared_libraries/:/shared_libraries
-    depends_on:
-      - db
-      - ateneu-vallesoccidental
+#  vallesoccidental-automation:
+#    restart: on-failure
+#    container_name: vallesoccidental_automation
+#    build:
+#      context: ..
+#      dockerfile: ./docker-production/Dockerfile
+#    environment:
+#      - DB_HOST=db
+#      - "PYTHONUNBUFFERED=1"
+#      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-vallesoccidental
+#      - PYTHONPATH=/shared_libraries
+#    command: python manage.py qcluster
+#    volumes:
+#      - ../:/srv
+#      - ../../python_shared_libraries/:/shared_libraries
+#    depends_on:
+#      - db
+#      - ateneu-vallesoccidental
 
   # https://serveis.coopcatcentral.cat
   ateneu-catcentral:
@@ -286,24 +285,24 @@ services:
     depends_on:
       - db
 
-  catcentral-automation:
-    restart: on-failure
-    container_name: catcentral_automation
-    build:
-      context: ..
-      dockerfile: ./docker-production/Dockerfile
-    environment:
-      - DB_HOST=db
-      - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-catcentral
-      - PYTHONPATH=/shared_libraries
-    command: python manage.py qcluster
-    volumes:
-      - ../:/srv
-      - ../../python_shared_libraries/:/shared_libraries
-    depends_on:
-      - db
-      - ateneu-catcentral
+#  catcentral-automation:
+#    restart: on-failure
+#    container_name: catcentral_automation
+#    build:
+#      context: ..
+#      dockerfile: ./docker-production/Dockerfile
+#    environment:
+#      - DB_HOST=db
+#      - "PYTHONUNBUFFERED=1"
+#      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-catcentral
+#      - PYTHONPATH=/shared_libraries
+#    command: python manage.py qcluster
+#    volumes:
+#      - ../:/srv
+#      - ../../python_shared_libraries/:/shared_libraries
+#    depends_on:
+#      - db
+#      - ateneu-catcentral
 
   # https://serveis.coopsetania.cat
   # Nota: no té el port 8009 perquè l'ocupa el java
@@ -327,24 +326,24 @@ services:
     depends_on:
       - db
 
-  coopsetania-automation:
-    restart: on-failure
-    container_name: coopsetania_automation
-    build:
-      context: ..
-      dockerfile: ./docker-production/Dockerfile
-    environment:
-      - DB_HOST=db
-      - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopsetania
-      - PYTHONPATH=/shared_libraries
-    command: python manage.py qcluster
-    volumes:
-      - ../:/srv
-      - ../../python_shared_libraries/:/shared_libraries
-    depends_on:
-      - db
-      - ateneu-coopsetania
+#  coopsetania-automation:
+#    restart: on-failure
+#    container_name: coopsetania_automation
+#    build:
+#      context: ..
+#      dockerfile: ./docker-production/Dockerfile
+#    environment:
+#      - DB_HOST=db
+#      - "PYTHONUNBUFFERED=1"
+#      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopsetania
+#      - PYTHONPATH=/shared_libraries
+#    command: python manage.py qcluster
+#    volumes:
+#      - ../:/srv
+#      - ../../python_shared_libraries/:/shared_libraries
+#    depends_on:
+#      - db
+#      - ateneu-coopsetania
 
   # https://serveis.ateneucoopgi.org
   ateneu-terresgironines:
@@ -367,24 +366,24 @@ services:
     depends_on:
       - db
 
-  terresgironines-automation:
-    restart: on-failure
-    container_name: terresgironines_automation
-    build:
-      context: ..
-      dockerfile: ./docker-production/Dockerfile
-    environment:
-      - DB_HOST=db
-      - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-terresgironines
-      - PYTHONPATH=/shared_libraries
-    command: python manage.py qcluster
-    volumes:
-      - ../:/srv
-      - ../../python_shared_libraries/:/shared_libraries
-    depends_on:
-      - db
-      - ateneu-terresgironines
+#  terresgironines-automation:
+#    restart: on-failure
+#    container_name: terresgironines_automation
+#    build:
+#      context: ..
+#      dockerfile: ./docker-production/Dockerfile
+#    environment:
+#      - DB_HOST=db
+#      - "PYTHONUNBUFFERED=1"
+#      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-terresgironines
+#      - PYTHONPATH=/shared_libraries
+#    command: python manage.py qcluster
+#    volumes:
+#      - ../:/srv
+#      - ../../python_shared_libraries/:/shared_libraries
+#    depends_on:
+#      - db
+#      - ateneu-terresgironines
 
   # https://serveis.ateneulh.coop
   ateneu-hospitalet:
@@ -407,24 +406,24 @@ services:
     depends_on:
       - db
 
-  hospitalet-automation:
-    restart: on-failure
-    container_name: hospitalet_automation
-    build:
-      context: ..
-      dockerfile: ./docker-production/Dockerfile
-    environment:
-      - DB_HOST=db
-      - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-hospitalet
-      - PYTHONPATH=/shared_libraries
-    command: python manage.py qcluster
-    volumes:
-      - ../:/srv
-      - ../../python_shared_libraries/:/shared_libraries
-    depends_on:
-      - db
-      - ateneu-hospitalet
+#  hospitalet-automation:
+#    restart: on-failure
+#    container_name: hospitalet_automation
+#    build:
+#      context: ..
+#      dockerfile: ./docker-production/Dockerfile
+#    environment:
+#      - DB_HOST=db
+#      - "PYTHONUNBUFFERED=1"
+#      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-hospitalet
+#      - PYTHONPATH=/shared_libraries
+#    command: python manage.py qcluster
+#    volumes:
+#      - ../:/srv
+#      - ../../python_shared_libraries/:/shared_libraries
+#    depends_on:
+#      - db
+#      - ateneu-hospitalet
 
   # https://serveis.ateneucoopte.org
   ateneu-terresebre:
@@ -447,24 +446,24 @@ services:
     depends_on:
       - db
 
-  terresebre-automation:
-    restart: on-failure
-    container_name: terresebre_automation
-    build:
-      context: ..
-      dockerfile: ./docker-production/Dockerfile
-    environment:
-      - DB_HOST=db
-      - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-terresebre
-      - PYTHONPATH=/shared_libraries
-    command: python manage.py qcluster
-    volumes:
-      - ../:/srv
-      - ../../python_shared_libraries/:/shared_libraries
-    depends_on:
-      - db
-      - ateneu-terresebre
+#  terresebre-automation:
+#    restart: on-failure
+#    container_name: terresebre_automation
+#    build:
+#      context: ..
+#      dockerfile: ./docker-production/Dockerfile
+#    environment:
+#      - DB_HOST=db
+#      - "PYTHONUNBUFFERED=1"
+#      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-terresebre
+#      - PYTHONPATH=/shared_libraries
+#    command: python manage.py qcluster
+#    volumes:
+#      - ../:/srv
+#      - ../../python_shared_libraries/:/shared_libraries
+#    depends_on:
+#      - db
+#      - ateneu-terresebre
 
   # https://serveis.acapa.cat
   ateneu-altpirineu:
@@ -487,24 +486,24 @@ services:
     depends_on:
       - db
 
-  altpirineu-automation:
-    restart: on-failure
-    container_name: altpirineu_automation
-    build:
-      context: ..
-      dockerfile: ./docker-production/Dockerfile
-    environment:
-      - DB_HOST=db
-      - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-altpirineu
-      - PYTHONPATH=/shared_libraries
-    command: python manage.py qcluster
-    volumes:
-      - ../:/srv
-      - ../../python_shared_libraries/:/shared_libraries
-    depends_on:
-      - db
-      - ateneu-altpirineu
+#  altpirineu-automation:
+#    restart: on-failure
+#    container_name: altpirineu_automation
+#    build:
+#      context: ..
+#      dockerfile: ./docker-production/Dockerfile
+#    environment:
+#      - DB_HOST=db
+#      - "PYTHONUNBUFFERED=1"
+#      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-altpirineu
+#      - PYTHONPATH=/shared_libraries
+#    command: python manage.py qcluster
+#    volumes:
+#      - ../:/srv
+#      - ../../python_shared_libraries/:/shared_libraries
+#    depends_on:
+#      - db
+#      - ateneu-altpirineu
 
   # https://documentacio-backoffice.bcn.coop
   documentacio:
