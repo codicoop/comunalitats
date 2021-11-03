@@ -53,6 +53,11 @@ class Command(BaseCommand):
                 'date_start': date(2020, 11, 1),
                 'date_end': date(2021, 10, 31)
             },
+            {
+                'name': '2021-2024',
+                'date_start': date(2021, 11, 1),
+                'date_end': date(2024, 10, 31)
+            },
         )
         for period in periods:
             obj, created = SubsidyPeriod.objects.get_or_create(
@@ -75,6 +80,7 @@ class Command(BaseCommand):
 
         period2019_2020 = SubsidyPeriod.objects.get(name="2019-2020")
         period2020_2021 = SubsidyPeriod.objects.get(name="2020-2021")
+        period2021_2024 = SubsidyPeriod.objects.get(name="2021-2024")
         exports = [
             {
                 'name': "Cofinançades",
@@ -140,6 +146,54 @@ class Command(BaseCommand):
                 'name': "Detall dels acompanyaments",
                 'subsidy_period': period2020_2021,
                 'function_name': 'export_stages_details',
+                'ignore_errors': True
+            },
+            {
+                'name': "Resultats enquestes de satisfacció",
+                'subsidy_period': period2020_2021,
+                'function_name': 'export_polls',
+                'ignore_errors': True
+            },
+            {
+                'name': "Cofinançades",
+                'subsidy_period': period2021_2024,
+                'function_name': 'export_cofunded',
+                'ignore_errors': True
+            },
+            {
+                'name': "Memòria dels acompanyaments en fitxer de text",
+                'subsidy_period': period2021_2024,
+                'function_name': 'export_stages_descriptions',
+                'ignore_errors': True
+            },
+            {
+                'name': "Exportació justificació",
+                'subsidy_period': period2021_2024,
+                'function_name': 'export',
+                'ignore_errors': True
+            },
+            {
+                'name': "Exportació justificació en 2 itineraris",
+                'subsidy_period': period2021_2024,
+                'function_name': 'export_dos_itineraris',
+                'ignore_errors': True
+            },
+            {
+                'name': "Hores acompanyaments covid",
+                'subsidy_period': period2021_2024,
+                'function_name': 'export_covid_hours',
+                'ignore_errors': True
+            },
+            {
+                'name': "Detall dels acompanyaments",
+                'subsidy_period': period2021_2024,
+                'function_name': 'export_stages_details',
+                'ignore_errors': True
+            },
+            {
+                'name': "Resultats enquestes de satisfacció",
+                'subsidy_period': period2021_2024,
+                'function_name': 'export_polls',
                 'ignore_errors': True
             },
         ]

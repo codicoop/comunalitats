@@ -29,6 +29,7 @@ class SubsidyPeriodAdmin(admin.ModelAdmin):
 class DataExportsAdmin(admin.ModelAdmin):
     list_display = ('name', 'subsidy_period', 'export_data_field',)
     readonly_fields = ('created',)
+    list_filter = (("subsidy_period", admin.RelatedOnlyFieldListFilter), )
 
     def get_urls(self):
         urls = super().get_urls()
