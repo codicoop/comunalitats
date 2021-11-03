@@ -321,7 +321,7 @@ class ExportJustification:
             if subaxis is None:
                 subaxis = ("", True)
             town = ("", True)
-            if item.place.town:
+            if item.place and item.place.town:
                 town = str(item.place.town)
             material_difusio = "No"
             if item.file1.name:

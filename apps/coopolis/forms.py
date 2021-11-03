@@ -437,6 +437,11 @@ class ActivityPollForm(forms.ModelForm):
                         'obj': self.fields.get('on_schedule')
                     },
                     {
+                        'name': 'included_resources',
+                        'type': 'stars',
+                        'obj': self.fields.get('included_resources')
+                    },
+                    {
                         'name': 'space_adequation',
                         'type': 'stars',
                         'obj': self.fields.get('space_adequation')

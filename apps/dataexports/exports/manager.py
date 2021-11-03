@@ -134,6 +134,14 @@ class ExcelExportManager(ExportManager):
                 cell_value = cell_value[0]
             cell.value = cell_value
 
+    def fill_row_from_factory(self, row_factory):
+        self.row_number += 1
+        self.fill_row_data(row_factory.get_columns())
+        if row_factory.get_format_method():
+            getattr(self, row_factory.get_format_method()[0])(
+                row_factory.get_format_method()[1]
+            )
+
     def format_row(self, row_num, prop_name, obj):
         """
         Applies the given format to the given property to each of the cells of
@@ -150,6 +158,12 @@ class ExcelExportManager(ExportManager):
     def format_cell(self, col_num, row_num, prop_name, obj):
         cell = self.worksheet.cell(column=col_num, row=row_num)
         setattr(cell, prop_name, obj)
+
+    def format_cell_bold(self, col_num, row_num: int = None):
+        if not row_num:
+            row_num = self.row_number
+        format_obj = Font(bold=True, name="ttf-opensans", size=9)
+        self.format_cell(col_num, row_num, "font", format_obj)
 
     def format_row_header(self, row_num: int = None):
         if not row_num:

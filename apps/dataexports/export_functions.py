@@ -7,6 +7,7 @@ from dataexports.exports.justification_2_itineraris import (
     ExportJustification2Itineraris
 )
 from dataexports.exports.memory import ExportMemory
+from dataexports.exports.polls import ExportPolls
 from dataexports.exports.stages_details import ExportStagesDetails
 
 
@@ -55,4 +56,8 @@ class ExportFunctions:
 
     def export_stages_details(self, export_obj):
         controller = ExportStagesDetails(export_obj)
+        return controller.export()
+
+    def export_polls(self, export_obj):
+        controller = ExportPolls(export_obj)
         return controller.export()
