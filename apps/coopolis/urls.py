@@ -52,8 +52,6 @@ urlpatterns += [
     path('reservations/', include('apps.facilities_reservations.urls')),
     path('activities/<uuid:uuid>/poll',
          ActivityPollView.as_view(), name='activity_poll'),
-    path('activities/<int:pk>/poll',
-         ActivityPollView.as_view(), name='deprecated_activity_poll'),
 
     path('admin/stages_migration_report/',
          StagesMigrationReportView.as_view()),
