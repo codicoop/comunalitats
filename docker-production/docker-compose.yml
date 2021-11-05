@@ -12,9 +12,9 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.server_production
+      - DJANGO_SETTINGS_MODULE=conf.settings.server_production
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -33,7 +33,7 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.server_production
+      - DJANGO_SETTINGS_MODULE=conf.settings.server_production
       - PYTHONPATH=/shared_libraries
     command: python manage.py qcluster
     volumes:
@@ -53,9 +53,9 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-demo
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-demo
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8001 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8001 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -74,9 +74,9 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopcamp
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-coopcamp
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8002 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8002 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -94,7 +94,7 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopcamp
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-coopcamp
       - PYTHONPATH=/shared_libraries
     command: python manage.py qcluster
     volumes:
@@ -114,9 +114,9 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopmaresme
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-coopmaresme
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8003 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8003 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -134,7 +134,7 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopmaresme
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-coopmaresme
       - PYTHONPATH=/shared_libraries
     command: python manage.py qcluster
     volumes:
@@ -154,9 +154,9 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-bnord
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-bnord
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8004 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8004 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -174,7 +174,7 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-bnord
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-bnord
       - PYTHONPATH=/shared_libraries
     command: python manage.py qcluster
     volumes:
@@ -195,9 +195,9 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-ponentcoopera
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-ponentcoopera
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8006 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8006 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -215,7 +215,7 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-ponentcoopera
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-ponentcoopera
       - PYTHONPATH=/shared_libraries
     command: python manage.py qcluster
     volumes:
@@ -235,9 +235,9 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-vallesoccidental
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-vallesoccidental
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8007 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8007 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -255,7 +255,7 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-vallesoccidental
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-vallesoccidental
       - PYTHONPATH=/shared_libraries
     command: python manage.py qcluster
     volumes:
@@ -275,9 +275,9 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-catcentral
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-catcentral
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8008 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8008 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -295,7 +295,7 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-catcentral
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-catcentral
       - PYTHONPATH=/shared_libraries
     command: python manage.py qcluster
     volumes:
@@ -316,9 +316,9 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopsetania
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-coopsetania
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8010 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8010 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -336,7 +336,7 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-coopsetania
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-coopsetania
       - PYTHONPATH=/shared_libraries
     command: python manage.py qcluster
     volumes:
@@ -356,9 +356,9 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-terresgironines
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-terresgironines
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8011 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8011 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -376,7 +376,7 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-terresgironines
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-terresgironines
       - PYTHONPATH=/shared_libraries
     command: python manage.py qcluster
     volumes:
@@ -396,9 +396,9 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-hospitalet
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-hospitalet
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8012 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8012 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -416,7 +416,7 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-hospitalet
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-hospitalet
       - PYTHONPATH=/shared_libraries
     command: python manage.py qcluster
     volumes:
@@ -436,9 +436,9 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-terresebre
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-terresebre
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8013 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8013 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -456,7 +456,7 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-terresebre
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-terresebre
       - PYTHONPATH=/shared_libraries
     command: python manage.py qcluster
     volumes:
@@ -476,9 +476,9 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-altpirineu
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-altpirineu
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8014 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8014 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -496,7 +496,7 @@ services:
     environment:
       - DB_HOST=db
       - "PYTHONUNBUFFERED=1"
-      - DJANGO_SETTINGS_MODULE=coopolis_backoffice.settings.ateneu-altpirineu
+      - DJANGO_SETTINGS_MODULE=conf.settings.ateneu-altpirineu
       - PYTHONPATH=/shared_libraries
     command: python manage.py qcluster
     volumes:

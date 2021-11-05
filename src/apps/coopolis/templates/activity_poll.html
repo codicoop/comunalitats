@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" type="text/css">
+<link rel="stylesheet" href="{% static 'styles/stars-rating.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb">
+  <span><a href="{% url 'home' %}">Inici</a> > <a href="{% url 'my_activities' %}">Els meus cursos</a> > {{ activity.name }}</span>
+</div>
+<div class="page-content">
+
+  <h1>{{ activity }}</h1>
+
+  <h2>Enquesta anònima de valoració</h2>
+
+  {% if already_answered %}
+  <em>Ja has omplert anteriorment l'enquesta de valoració anònima per aquesta activitat. Moltes gràcies!</em>
+  {% else %}
+  <form method="post">{% csrf_token %}
+    <div class="poll">
+
+      {% for fieldset in fieldsets %}
+      <div class="poll__fieldset">
+        <h3>{{ fieldset.0 }}</h3>
+        {% for field in fieldset.1.fields %}
+        <div class="poll__item{% if field.type == 'text' %} poll__item--text{% endif %}">
+          {% if field.type == 'stars' %}
+          <div>{{ field.obj.label }}</div>
+          <fieldset class="rating">
+            <input type="radio" id="id_{{ field.name }}_3" name="{{ field.name }}" value="4"/>
+            <label class="full" for="id_{{ field.name }}_3" title="(4) Molt bé"></label>
+            <input type="radio" id="id_{{ field.name }}_2" name="{{ field.name }}" value="3"/>
+            <label class="full" for="id_{{ field.name }}_2" title="(3) Bé"></label>
+            <input type="radio" id="id_{{ field.name }}_1" name="{{ field.name }}" value="2"/>
+            <label class="full" for="id_{{ field.name }}_1" title="(2) Malament"></label>
+            <input type="radio" id="id_{{ field.name }}_0" name="{{ field.name }}" value="1"/>
+            <label class="full" for="id_{{ field.name }}_0" title="(1) Molt malament"></label>
+          </fieldset>
+          {% elif field.type == 'yesno' %}
+          <label for="id_{{ field.name }}">{{ field.obj.label }}</label>
+          <select name="{{ field.name }}" id="id_{{ field.name }}">
+            <option value="unknown" selected="">ns / nc</option>
+            <option value="true">Sí</option>
+            <option value="false">No</option>
+          </select>
+          {% elif field.type == 'text' %}
+          <label for="id_{{ field.name }}">{{ field.obj.label }}</label>
+          <input type="text" name="{{ field.name }}" id="id_{{ field.name }}">
+          {% endif %}
+
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+      <div class="poll__send">
+        <input type="submit" value="Enviar">
+      </div>
+    </div>
+
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

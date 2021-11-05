@@ -1,0 +1,119 @@
+{% load my_tag_library %}
+<!DOCTYPE html>
+<!--[if lte IE 6]><html class="preIE7 preIE8 preIE9"><![endif]-->
+<!--[if IE 7]><html class="preIE8 preIE9"><![endif]-->
+<!--[if IE 8]><html class="preIE9"><![endif]-->
+<!--[if gte IE 9]><!--><html><!--<![endif]-->
+  <head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ PROJECT_NAME }} ─ Plataforma de gestió de projectes i inscripcions</title>
+    <meta name="author" content="name">
+    <meta name="description" content="description here">
+    <meta name="keywords" content="keywords,here">
+    <link rel="stylesheet" href="{% static 'styles/stylesheet.css' %}" type="text/css">
+    <link rel="icon" href="{% external_static "/logo.png" %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'js/js.cookie-2.2.0.min.js' %}"></script>
+    <!-- XDSoft DateTimePicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+    <link href='https://fonts.googleapis.com/css?family=Comfortaa|Lato:400,700' rel='stylesheet' type='text/css'>
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+
+    <header>
+        <div class="content">
+            <div class="top-wrapper">
+                {% load static %}
+                <div>
+                    <a href="{% url 'home' %}" class="title-link">
+                        <div class="logo">
+                            <img src="{% external_static "/logo.png" %}" />
+                            <div class="title">
+                                <h1>{{ PROJECT_NAME }}</h1>
+                                <h2>Plataforma de gestió de projectes i inscripcions</h2>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% if not user.is_authenticated %}
+                {% block loginbox %}
+                <div class="secondary-menu">
+                    <form action="{% url 'login_post' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="div-column">
+                            <div class="div-row">
+                                <input type="text" name="username" placeholder="Adreça d'e-mail">
+                                <input type="password" name="password" placeholder="Contrasenya">
+                            </div>
+                            <div class="div-row-reverse">
+                                <input type="checkbox" name="remember_me"> <label>Mantenir la sessió oberta</label>
+                                <input type='submit' value='Accedir'>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {% endblock %}
+                {% else %}
+                <div class="secondary-menu">
+                    <span>{{ user.email }} ─ <a href="{% url 'logout' %}">Sortir</a></span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="content menu">
+            <ul class="menu-ul">
+                <li><a href="{{ config.PROJECT_WEBSITE_URL }}">Web de l'Ateneu</a></li>
+            {% if user.is_anonymous %}
+                <li><a href="{% url 'password_reset' %}">Recuperar contrasenya</a></li>
+                <li><a href="{% url 'loginsignup' %}">Crear compte</a></li>
+            {% else %}
+                <li><a href="{% url 'user_profile' %}">Les meves dades</a></li>
+                <li><a href="{% url 'my_activities' %}">Els meus cursos</a></li>
+            {% endif %}
+                <li><a href="{% url 'courses' %}">Inscripcions</a></li>
+                <li><a href="{% url 'project_info' %}">Projecte</a></li>
+            {% if user.is_superuser or user.is_staff %}
+                <li><a href="{% url 'admin:index'%}">Backoffice</a></li>
+            {% endif %}
+            </ul>
+        </div>
+
+    </header>
+
+    <div class="content">
+    {% block content %}
+    NO OVERRIDE
+    {% endblock %}
+    </div>
+
+    {% include 'reusable/footer.html' %}
+
+    <div class="cookies-consent">
+        <p>
+        Aquest lloc web fa servir cookies pròpies i de tercers. En continuar la navegació entenem que s’accepta la
+            nostra <a href="{{ config.PROJECT_LEGAL_URL }}">política de cookies</a>.
+        </p>
+        <a href="#" onclick="javascript:addCookieConsent();" class="button">Continuar</a>
+        <script>
+            function addCookieConsent () {
+                Cookies.set("consent", "true");
+                $(".cookies-consent").hide();
+            }
+
+            $( document ).ready(function() {
+                var consent = Cookies.get("consent");
+                if (consent == undefined) {
+                   $(".cookies-consent").css("visibility", "visible");
+                } else {
+                   $(".cookies-consent").css("visibility", "hidden");
+                }
+            });
+        </script>
+    </div>
+  </body>
+</html>

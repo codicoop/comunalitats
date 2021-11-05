@@ -17,7 +17,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-coopolis
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -57,7 +57,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-coopcamp
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -95,7 +95,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-coopmaresme
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -133,7 +133,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-bnord
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -171,7 +171,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-ponentcoopera
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -209,7 +209,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-vallesoccidental
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -247,7 +247,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-catcentral
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -285,7 +285,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-coopsetania
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -323,7 +323,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-terresgironines
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -361,7 +361,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-hospitalet
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -399,7 +399,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-terresebre
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries
@@ -437,7 +437,7 @@ services:
       - "PYTHONUNBUFFERED=1"
       - DJANGO_SETTINGS_MODULE=docker-develop.django-settings.ateneu-altpirineu
       - PYTHONPATH=/shared_libraries
-    command: gunicorn coopolis_backoffice.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --reload
     volumes:
       - ../:/srv
       - ../../python_shared_libraries/:/shared_libraries

@@ -1,0 +1,279 @@
+version: "3.5"
+
+networks:
+  develop_ateneus_network:
+    name: develop_ateneus_network
+
+services:
+  # http://127.0.0.1:5012 or http://localhost:5012
+  develop_ateneus_altpirineu:
+    restart: on-failure
+    container_name: develop_ateneus_altpirineu
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: development
+    env_file: ./settings/develop/altpirineu.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8012 --reload
+    volumes:
+      - ../src/:/srv
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5012:8012
+
+  # http://127.0.0.1:5004 or http://localhost:5004
+  develop_ateneus_bnord:
+    restart: on-failure
+    container_name: develop_ateneus_bnord
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: development
+    env_file: ./settings/develop/bnord.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8004 --reload
+    volumes:
+      - ../src/:/srv
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5004:8004
+
+  # http://127.0.0.1:5007 or http://localhost:5007
+  develop_ateneus_catcentral:
+    restart: on-failure
+    container_name: develop_ateneus_catcentral
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: development
+    env_file: ./settings/develop/catcentral.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8007 --reload
+    volumes:
+      - ../src/:/srv
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5007:8007
+
+  # http://127.0.0.1:5002 or http://localhost:5002
+  develop_ateneus_coopcamp:
+    restart: on-failure
+    container_name: develop_ateneus_coopcamp
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: development
+    env_file: ./settings/develop/coopcamp.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8002 --reload
+    volumes:
+      - ../src/:/srv
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5002:8002
+
+  # http://127.0.0.1:5003 or http://localhost:5003
+  develop_ateneus_coopmaresme:
+    restart: on-failure
+    container_name: develop_ateneus_coopmaresme
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: development
+    env_file: ./settings/develop/coopmaresme.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8003 --reload
+    volumes:
+      - ../src/:/srv
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5003:8003
+
+  # http://127.0.0.1:5001 or http://localhost:5001
+  develop_ateneus_coopolis:
+    restart: on-failure
+    container_name: develop_ateneus_coopolis
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: development
+    env_file: ./settings/develop/coopolis.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8001 --reload
+    volumes:
+      - ../src/:/srv
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5001:8001
+
+  # http://127.0.0.1:5008 or http://localhost:5008
+  develop_ateneus_coopsetania:
+    restart: on-failure
+    container_name: develop_ateneus_coopsetania
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: development
+    env_file: ./settings/develop/coopsetania.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8008 --reload
+    volumes:
+      - ../src/:/srv
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5008:8008
+
+  # http://127.0.0.1:5010 or http://localhost:5010
+  develop_ateneus_hospitalet:
+    restart: on-failure
+    container_name: develop_ateneus_hospitalet
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: development
+    env_file: ./settings/develop/hospitalet.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8010 --reload
+    volumes:
+      - ../src/:/srv
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5010:8010
+
+  # http://127.0.0.1:5005 or http://localhost:5005
+  develop_ateneus_ponentcoopera:
+    restart: on-failure
+    container_name: develop_ateneus_ponentcoopera
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: development
+    env_file: ./settings/develop/ponentcoopera.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8005 --reload
+    volumes:
+      - ../src/:/srv
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5005:8005
+
+  # http://127.0.0.1:5011 or http://localhost:5011
+  develop_ateneus_terresebre:
+    restart: on-failure
+    container_name: develop_ateneus_terresebre
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: development
+    env_file: ./settings/develop/terresebre.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8011 --reload
+    volumes:
+      - ../src/:/srv
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5011:8011
+
+  # http://127.0.0.1:5009 or http://localhost:5009
+  develop_ateneus_terresgironines:
+    restart: on-failure
+    container_name: develop_ateneus_terresgironines
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: development
+    env_file: ./settings/develop/terresgironines.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8009 --reload
+    volumes:
+      - ../src/:/srv
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5009:8009
+
+  # http://127.0.0.1:5006 or http://localhost:5006
+  develop_ateneus_vallesoccidental:
+    restart: on-failure
+    container_name: develop_ateneus_vallesoccidental
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: development
+    env_file: ./settings/develop/vallesoccidental.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8006 --reload
+    volumes:
+      - ../src/:/srv
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5006:8006
+
+  # http://localhost:8080/
+#  develop_ateneus_adminer:
+#    container_name: develop_ateneus_adminer
+#    image: adminer
+#    ports:
+#      - 9876:8080
+#    depends_on:
+#      - develop_ateneus_rb
+#    networks:
+#      - develop_ateneus_network
+
+  develop_ateneus_db:
+    container_name: develop_ateneus_db
+    image: postgres:11
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ../dumps:/dumps
+    networks:
+      - develop_ateneus_network

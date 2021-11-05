@@ -1,0 +1,186 @@
+version: "3.5"
+
+networks:
+  ateneus_network:
+    name: ateneus_network
+
+services:
+  # https://serveis.acapa.cat
+  ateneu-altpirineu:
+    restart: on-failure
+    container_name: ateneu_altpirineu
+    image: codicoop/ateneus:latest
+    env_file: ./settings/production/altpirineu.env
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8014 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    depends_on:
+      - db
+    networks:
+      - ateneus_network
+    ports:
+      - 8014:8014
+
+  # https://serveis.ateneubnord.cat
+  ateneu-bnord:
+    restart: on-failure
+    container_name: ateneu_bnord
+    image: codicoop/ateneus:latest
+    env_file: ./settings/production/bnord.env
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8004 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    depends_on:
+      - db
+    networks:
+      - ateneus_network
+    ports:
+      - 8004:8004
+
+  # https://serveis.coopcatcentral.cat
+  ateneu-catcentral:
+    restart: on-failure
+    container_name: ateneu_catcentral
+    image: codicoop/ateneus:latest
+    env_file: ./settings/production/catcentral.env
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8008 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    depends_on:
+      - db
+    networks:
+      - ateneus_network
+    ports:
+      - 8008:8008
+
+  # https://serveis.coopcamp.cat
+  ateneu-coopcamp:
+    restart: on-failure
+    container_name: ateneu_coopcamp
+    image: codicoop/ateneus:latest
+    env_file: ./settings/production/coopcamp.env
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8002 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    depends_on:
+      - db
+    networks:
+      - ateneus_network
+    ports:
+      - 8002:8002
+
+  # https://serveis.coopmaresme.cat
+  ateneu-coopmaresme:
+    restart: on-failure
+    container_name: ateneu_coopmaresme
+    image: codicoop/ateneus:latest
+    env_file: ./settings/production/coopmaresme.env
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8003 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    depends_on:
+      - db
+    networks:
+      - ateneus_network
+    ports:
+      - 8003:8003
+
+  # http://serveis.bcn.coop
+  coopolis:
+    restart: on-failure
+    container_name: ateneu_coopolis
+    image: codicoop/ateneus:latest
+    env_file: ./settings/production/coopolis.env
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    depends_on:
+      - db
+    networks:
+      - ateneus_network
+    ports:
+      - 8000:8000
+
+  # https://serveis.coopsetania.cat
+  # Nota: no té el port 8009 perquè l'ocupa el java
+  ateneu-coopsetania:
+    restart: on-failure
+    container_name: ateneu_coopsetania
+    image: codicoop/ateneus:latest
+    env_file: ./settings/production/coopsetania.env
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8010 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    depends_on:
+      - db
+    networks:
+      - ateneus_network
+    ports:
+      - 8010:8010
+
+  # https://serveis.ateneulh.coop
+  ateneu-hospitalet:
+    restart: on-failure
+    container_name: ateneu_hospitalet
+    image: codicoop/ateneus:latest
+    env_file: ./settings/production/hospitalet.env
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8012 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    depends_on:
+      - db
+    networks:
+      - ateneus_network
+    ports:
+      - 8012:8012
+
+  # https://serveis.ponentcoopera.cat
+  # Ens saltem el port 8005 perquè hi ha l'antic back-office (java) allà.
+  ateneu-ponentcoopera:
+    restart: on-failure
+    container_name: ateneu_ponentcoopera
+    image: codicoop/ateneus:latest
+    env_file: ./settings/production/ponentcoopera.env
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8006 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    depends_on:
+      - db
+    networks:
+      - ateneus_network
+    ports:
+      - 8006:8006
+
+  # https://serveis.ateneucoopte.org
+  ateneu-terresebre:
+    restart: on-failure
+    container_name: ateneu_terresebre
+    image: codicoop/ateneus:latest
+    env_file: ./settings/production/terresebre.env
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8013 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    depends_on:
+      - db
+    networks:
+      - ateneus_network
+    ports:
+      - 8013:8013
+
+  # https://serveis.ateneucoopgi.org
+  ateneu-terresgironines:
+    restart: on-failure
+    container_name: ateneu_terresgironines
+    image: codicoop/ateneus:latest
+    env_file: ./settings/production/terresgironines.env
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8011 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    depends_on:
+      - db
+    networks:
+      - ateneus_network
+    ports:
+      - 8011:8011
+
+  # https://serveis.ateneucooperatiuvalles.org
+  ateneu-vallesoccidental:
+    restart: on-failure
+    container_name: ateneu_vallesoccidental
+    image: codicoop/ateneus:latest
+    env_file: ./settings/production/vallesoccidental.env
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8007 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    depends_on:
+      - db
+    networks:
+      - ateneus_network
+    ports:
+      - 8007:8007
+
+  db:
+    container_name: postgres
+    image: postgres:11
+    volumes:
+      - /srv/postgres-data/coopolis-production:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+    networks:
+      - ateneus_network

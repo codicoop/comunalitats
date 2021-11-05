@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {% load static %}
+    <script src="{% static 'js/modal.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+{% load enrollable %}
+<div class="breadcrumb">
+    <span><a href="{% url 'home' %}">Inici</a> > <a href="{% url 'courses' %}">Formacions</a> > {{ course.title }}</span>
+</div>
+<div class="page-content">
+
+{% if course.banner %}
+    <img src="{{ course.banner.url }}" />
+{% endif %}
+    <h1>{{ course.title }}</h1><br />
+
+    <h2>Activitats en aquesta formació:</h2>
+
+    <div class="courses-container">
+        {% for activity in activities %}
+        <div class="course">
+            <div class="course-data">
+                <div class="course-description">
+                    <h3>{{ activity.name }}</h3>
+                    <p><strong>Data:</strong> {{ activity.date_start }}</p>
+                    <p><strong>Horari:</strong> de {{ activity.starting_time }} a {{ activity.ending_time }}</p>
+                    <p><strong>Lloc:</strong> {{ activity.place|default_if_none:"" }}</p>
+                    <p><strong>Descripció:</strong> {{ activity.objectives|safe }}</p>
+                </div>
+            </div>
+            <div class="course-button">
+                    {% if activity.is_past_due is False %}
+                        {% if not activity|is_enrolled:user %}
+                    <a
+                            id="actButton{{activity.id}}"
+                            href="#"
+                            onclick="javascript:onInscriptionButtonClick(
+                                '{{ activity.id }}',
+                                '{{ activity.name|escapejs }}',
+                                '{% url 'loginsignup' %}?next={{ request.get_full_path }}&act={{activity.id}}',
+                                {% if activity.remaining_spots > 0 %}true{% else %}false{% endif %});"
+                            class="enroll-button"
+                    >
+                    <div>
+                        {% if activity.remaining_spots > 0 %}
+                        Inscriure-s'hi
+                        {% else %}
+                        Entrar en llista d'espera
+                        {% endif %}
+                    </div>
+                    </a>
+                        {% endif %}
+                        {% if user in activity.enrolled.all %}
+                    <p class="margin-block">Ja estàs inscrita a aquesta activitat. Pots veure i gestionar les teves inscripcions a <a href="{% url 'my_activities' %}">Les meves activitats</a>. </p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="modal-confirm" class="modal">
+    <span class="modal-close" onclick="javascript:hideModal('#modal-confirm');">&times;</span>
+    <div class="modal-container">
+        <div class="modal-title">
+            Confirmació
+        </div>
+        <div class="modal-content">
+            <p>Ets a punt d'inscriure't a l'activitat: <span id="modal-title-text"></span></p>
+            <p class="waiting_list_p" style="margin-top: 10px;">Degut a que les places disponibles estan plenes entraràs en llista d'espera, per tant
+                <strong>aquesta incripció no serà efectiva fins que no s'alliberin places.</strong></p>
+            <p class="waiting_list_p" style="margin-top: 10px;">Només cal que confirmis aquest pas, i quan s'alliberin places la teva inscripció
+            automàticament passarà de <em>Llista d'espera</em> a <em>Confirmada</em>, cosa que se't notificarà per
+            correu electrònic.</p>
+            {% if user.is_anonymous %}
+            <p style="margin-top: 10px;">Però per fer-ho has d'accedir al teu compte o bé registrar-te.</p>
+            {% endif %}
+        </div>
+        <form action="{% url 'enroll_course' %}" method="post">
+            <div class="modal-buttons">
+                {% if user.is_anonymous %}
+                <a id="button1" href="#" class="enroll-button">
+                <div>
+                    Fes login // Registra't
+                </div>
+                </a>
+                {% else %}
+                <p>Hi ha res que vulguis que tinguem en compte?</p>
+                {% csrf_token %}
+                <input name="user_comments" id="user_comments">
+                <input type="hidden" id="activity_id" name="activity_id">
+                <a onclick="$(this).closest('form').submit()" id="button3" href="#" class="enroll-button">
+                <div id="enroll_button">
+                    Incriure's-hi
+                </div>
+                </a>
+            {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $( document ).ready(function() {
+        makeModal('#modal-confirm');
+
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('act')) {
+            var id = urlParams.get('act');
+            $("#actButton" + id).click();
+        }
+    });
+
+    function onInscriptionButtonClick (activityId, activityName, loginsignupUrl, waitingList) {
+        $('#modal-title-text').text(activityName);
+        $("#button1").attr("href", loginsignupUrl);
+        $('#activity_id').val(activityId);
+
+        if (waitingList) {
+            $('#enroll_button').text("Incriure's-hi");
+            $('.modal').height(220);
+            $('.waiting_list_p').hide();
+        } else {
+            $('#enroll_button').text("Entrar en llista d'espera");
+            $('.modal').height(290);
+            $('.waiting_list_p').show();
+        }
+        showModal('#modal-confirm');
+    }
+</script>
+{% endblock %}

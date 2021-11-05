@@ -116,3 +116,63 @@ Added two commands for the monitoring dashboard:
 `python manage.py mailqueue --pending`
 `python manage.py mailqueue --sent-24`
 
+## Dockerització per desenvolupament i pel servidor de develop
+
+La carpeta /docker conté la dockerització que necessites aixecar per
+treballar amb el projecte, i és la mateixa que aixequem al servidor de develop
+quan volem que l'usuari entri a fer proves abans d'una release a producció.
+
+La dockerització de develop monta la carpeta /src dins de la imatge de manera
+que quan facis canvis al codi automàticament es reflecteixin a la imatge i això
+farà que el gunicorn reiniciï l'aplicació al moment.
+
+El docker-compose per aixecar el servidor de develop és al fitxer `compose-dev.yml`.
+Aquest compose crea un contenidor de la imatge a un stage concret, és a dir:
+tant producció com develop fan servir la mateixa imatge, però el compose indica
+a quin stage de la imatge s'ha d'aturar.
+Això ho pots veure al `compose-dev.yml` on fa el build, a:
+`target: development`
+
+Per aixecar-lo cal fer:
+`docker-compose -f compose-dev.yml up`
+
+# Dockerització per producció
+
+A `/docker` hi ha el Dockerfile per generar la imatge de producció.
+També hi ha un docker-compose per comprovar-la al fitxer `compose-prod.yml`.
+
+Com s'explica més amunt, hi ha un sol Dockerfile i diversos composes.
+En el cas del compose per producció hi ha la línia:
+`target: production`
+On especifica que el contenidor s'ha d'aturar en aquest stage de la imatge.
+
+## Generar la imatge manualment
+
+Fer això servirà per verificar que la build funcionarà abans de fer que
+Dockerhub la generi automàticament i potencialment falli.
+
+Des de la carpeta arrel del projecte:
+`docker build -f docker/Dockerfile .`
+
+Amb això estem dient-li que generi la imatge en el context de la carpeta actual
+(per això el punt la final) però fent servir el Dockerfile que li especifiquem.
+
+## Generar la imatge a Dockerhub
+
+El repositori a dockerhub està configurat de manera que sempre que hi hagi un
+push a la branch `main` generi una nova imatge.
+
+Accedeix al compte de dockerhub per veure quines imatges hi ha generades, si
+l'última ja s'ha generat o ha fallat, etc.
+
+Si la vols pujar manualment:
+1. Crear la imatge, des de la carpeta /docker:
+`docker build --compress --target production --tag codicoop/ateneus:latest --file Dockerfile ../`
+
+2. Fer `docker login` si no has fet abans.
+3. Pujar la imatge:
+`docker push codicoop/ateneus:latest`
+
+## Testejar la imatge de producció en local o a develop
+Assumint que tens l'última versió a dockerhub, fes:
+`docker-compose -f compose-develop-hub.yml up`
