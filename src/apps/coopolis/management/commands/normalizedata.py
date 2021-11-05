@@ -54,9 +54,9 @@ class Command(BaseCommand):
                 'date_end': date(2021, 10, 31)
             },
             {
-                'name': '2021-2024',
+                'name': '2021-2022',
                 'date_start': date(2021, 11, 1),
-                'date_end': date(2024, 10, 31)
+                'date_end': date(2022, 10, 31)
             },
         )
         for period in periods:

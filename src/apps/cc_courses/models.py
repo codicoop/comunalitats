@@ -14,7 +14,7 @@ from django.core.validators import ValidationError
 from apps.cc_lib.utils import slugify_model
 from apps.coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
-from apps.coopolis.helpers import get_subaxis_choices
+from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.storage_backends import (
     PrivateMediaStorage, PublicMediaStorage
 )
@@ -444,6 +444,14 @@ class Activity(models.Model):
                                    "dirigides a menors però no has marcat "
                                    "aquesta casella. Marca-la per tal que la "
                                    "sessió es justifiqui com a tal."}
+                )
+
+        if self.axis:
+            subaxis_options = get_subaxis_for_axis(str(self.axis))
+            if self.subaxis not in subaxis_options:
+                raise ValidationError(
+                    {'subaxis': "Has seleccionat un sub-eix que no es "
+                                "correspon a l'eix."}
                 )
 
     def __str__(self):

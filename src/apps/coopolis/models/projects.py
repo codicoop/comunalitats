@@ -10,7 +10,7 @@ from django.utils.timezone import now
 import tagulous.models
 
 from apps.cc_courses.models import Entity, Organizer, Cofunding, StrategicLine
-from apps.coopolis.helpers import get_subaxis_choices
+from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.models import Town, User
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from apps.dataexports.models import SubsidyPeriod
@@ -414,16 +414,12 @@ class ProjectStage(models.Model):
 
     def clean(self):
         super().clean()
-        if self.subaxis:
-            if not self.axis:
+        if self.axis:
+            subaxis_options = get_subaxis_for_axis(str(self.axis))
+            if self.subaxis not in subaxis_options:
                 raise ValidationError(
-                    {'axis': "Si selecciones un sub-eix, cal indicar també "
-                             "l'eix corresponent."}
-                )
-            if self.axis not in self.subaxis:
-                raise ValidationError(
-                    {'subaxis': f"El sub-eix {self.subaxis} no pertany a "
-                                f"l'eix {self.axis}."}
+                    {'subaxis': "Has seleccionat un sub-eix que no es "
+                                "correspon a l'eix."}
                 )
 
         has_subsidy_period = (self.subsidy_period and
