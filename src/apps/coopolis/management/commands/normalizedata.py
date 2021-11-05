@@ -80,7 +80,7 @@ class Command(BaseCommand):
 
         period2019_2020 = SubsidyPeriod.objects.get(name="2019-2020")
         period2020_2021 = SubsidyPeriod.objects.get(name="2020-2021")
-        period2021_2024 = SubsidyPeriod.objects.get(name="2021-2024")
+        period2021_2024 = SubsidyPeriod.objects.get(name="2021-2022")
         exports = [
             {
                 'name': "Cofinançades",
