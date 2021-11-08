@@ -62,9 +62,15 @@ class Command(BaseCommand):
         for period in periods:
             obj, created = SubsidyPeriod.objects.get_or_create(
                 name=period['name'],
-                date_start=period['date_start'],
-                date_end=period['date_end']
+                defaults={
+                    "date_start": period['date_start'],
+                    "date_end": period['date_end'],
+                },
             )
+            if not created:
+                obj.date_start = period['date_start']
+                obj.date_end = period['date_end']
+                obj.save()
             if created:
                 msg = f"SubsidyPeriod {period['name']} did NOT exist and was" \
                       f" created."
@@ -80,7 +86,7 @@ class Command(BaseCommand):
 
         period2019_2020 = SubsidyPeriod.objects.get(name="2019-2020")
         period2020_2021 = SubsidyPeriod.objects.get(name="2020-2021")
-        period2021_2024 = SubsidyPeriod.objects.get(name="2021-2024")
+        period2021_2024 = SubsidyPeriod.objects.get(name="2021-2022")
         exports = [
             {
                 'name': "Cofinançades",
