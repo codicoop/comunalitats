@@ -62,9 +62,15 @@ class Command(BaseCommand):
         for period in periods:
             obj, created = SubsidyPeriod.objects.get_or_create(
                 name=period['name'],
-                date_start=period['date_start'],
-                date_end=period['date_end']
+                defaults={
+                    "date_start": period['date_start'],
+                    "date_end": period['date_end'],
+                },
             )
+            if not created:
+                obj.date_start = period['date_start']
+                obj.date_end = period['date_end']
+                obj.save()
             if created:
                 msg = f"SubsidyPeriod {period['name']} did NOT exist and was" \
                       f" created."

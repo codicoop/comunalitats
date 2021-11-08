@@ -9,7 +9,7 @@ class SubsidyPeriod(models.Model):
         verbose_name_plural = "convocatòries"
         ordering = ['-date_start']
 
-    name = models.CharField("nom", max_length=250)
+    name = models.CharField("nom", max_length=250, unique=True)
     date_start = models.DateField("dia d'inici")
     date_end = models.DateField("dia de finalització")
     number = models.CharField(
@@ -62,17 +62,25 @@ class DataExports(models.Model):
         verbose_name = "exportació"
         verbose_name_plural = "exportacions"
         ordering = ["subsidy_period"]
+        unique_together = ("name", "subsidy_period")
 
     created = models.DateTimeField(verbose_name="creació", auto_now_add=True)
-    subsidy_period = models.ForeignKey(SubsidyPeriod, verbose_name="convocatòria", null=True, on_delete=models.SET_NULL)
+    subsidy_period = models.ForeignKey(
+        SubsidyPeriod,
+        verbose_name="convocatòria",
+        null=True,
+        on_delete=models.SET_NULL
+    )
     name = models.CharField("nom", max_length=200)
     notes = models.TextField("apunts", blank=True, null=True)
     function_name = models.CharField("nom de la funció", max_length=150,
                                      help_text="No modifiqueu aquesta dada.")
     ignore_errors = models.BooleanField(
-        "Ignorar errors", help_text="Si s'activa, es podràn generar els excels de justificació encara que hi hagi "
-                                    "errors a les dades. Els excels que es generin així NO es podran volcar a l'excel "
-                                    "real!", default=False)
+        "Ignorar errors",
+        help_text="Si s'activa, es podràn generar els excels de justificació "
+                  "encara que hi hagi errors a les dades. Els excels que es "
+                  "generin així NO es podran volcar a l'excel real!",
+        default=False)
 
     def __str__(self):
         return self.name
