@@ -191,6 +191,8 @@ services:
       - 3000:3000
     depends_on:
       - db
+    networks:
+      - ateneus_network
 
   db:
     container_name: postgres
