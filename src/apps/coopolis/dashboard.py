@@ -112,7 +112,6 @@ class MyDashboard(Dashboard):
 
         links_children = [
             ["Documentació", 'docs/'],
-            ["Fitxes de projecte perdudes", 'coopolis/projectfile/'],
         ]
         if context['request'].user.is_superuser:
             links_children.append(['Gestió de textos del back-office', 'constance/config'])

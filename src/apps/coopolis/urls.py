@@ -12,7 +12,6 @@ from .views import (
     HomeView, CustomPasswordResetView, ActivityPollView
 )
 from apps.cc_users.decorators import anonymous_required
-from .views.HomeView import StagesMigrationReportView
 
 urlpatterns = [
     url(
@@ -35,7 +34,6 @@ urlpatterns += [
     path('users/signup', anonymous_required(
         CoopolisSignUpView.as_view()), name='signup'),
     path('grappelli/', include('grappelli.urls')),
-    path('admin/', admin.site.urls),
     path('admin/docs/', TemplateView.as_view(
         template_name="admin/docs.html"
     ), name='docs'),
@@ -53,6 +51,5 @@ urlpatterns += [
     path('activities/<uuid:uuid>/poll',
          ActivityPollView.as_view(), name='activity_poll'),
 
-    path('admin/stages_migration_report/',
-         StagesMigrationReportView.as_view()),
+    path('admin/', admin.site.urls),
 ]
