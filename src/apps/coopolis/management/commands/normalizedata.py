@@ -84,125 +84,65 @@ class Command(BaseCommand):
         print("Cleaning up existing exports.")
         DataExports.objects.all().delete()
 
-        period2019_2020 = SubsidyPeriod.objects.get(name="2019-2020")
-        period2020_2021 = SubsidyPeriod.objects.get(name="2020-2021")
-        period2021_2024 = SubsidyPeriod.objects.get(name="2021-2022")
-        exports = [
-            {
-                'name': "Cofinançades",
-                'subsidy_period': period2019_2020,
-                'function_name': 'export_cofunded',
-                'ignore_errors': True
-            },
-            {
-                'name': "Memòria dels acompanyaments en fitxer de text",
-                'subsidy_period': period2019_2020,
-                'function_name': 'export_stages_descriptions',
-                'ignore_errors': True
-            },
-            {
-                'name': "Exportació justificació",
-                'subsidy_period': period2019_2020,
-                'function_name': 'export',
-                'ignore_errors': True
-            },
-            {
-                'name': "Exportació justificació en 2 itineraris",
-                'subsidy_period': period2019_2020,
-                'function_name': 'export_dos_itineraris',
-                'ignore_errors': True
-            },
-            {
-                'name': "Hores acompanyaments covid",
-                'subsidy_period': period2019_2020,
-                'function_name': 'export_covid_hours',
-                'ignore_errors': True
-            },
-            {
-                'name': "Cofinançades",
-                'subsidy_period': period2020_2021,
-                'function_name': 'export_cofunded',
-                'ignore_errors': True
-            },
-            {
-                'name': "Memòria dels acompanyaments en fitxer de text",
-                'subsidy_period': period2020_2021,
-                'function_name': 'export_stages_descriptions',
-                'ignore_errors': True
-            },
-            {
-                'name': "Exportació justificació",
-                'subsidy_period': period2020_2021,
-                'function_name': 'export',
-                'ignore_errors': True
-            },
-            {
-                'name': "Exportació justificació en 2 itineraris",
-                'subsidy_period': period2020_2021,
-                'function_name': 'export_dos_itineraris',
-                'ignore_errors': True
-            },
-            {
-                'name': "Hores acompanyaments covid",
-                'subsidy_period': period2020_2021,
-                'function_name': 'export_covid_hours',
-                'ignore_errors': True
-            },
-            {
-                'name': "Detall dels acompanyaments",
-                'subsidy_period': period2020_2021,
-                'function_name': 'export_stages_details',
-                'ignore_errors': True
-            },
-            {
-                'name': "Resultats enquestes de satisfacció",
-                'subsidy_period': period2020_2021,
-                'function_name': 'export_polls',
-                'ignore_errors': True
-            },
-            {
-                'name': "Cofinançades",
-                'subsidy_period': period2021_2024,
-                'function_name': 'export_cofunded',
-                'ignore_errors': True
-            },
-            {
-                'name': "Memòria dels acompanyaments en fitxer de text",
-                'subsidy_period': period2021_2024,
-                'function_name': 'export_stages_descriptions',
-                'ignore_errors': True
-            },
-            {
-                'name': "Exportació justificació",
-                'subsidy_period': period2021_2024,
-                'function_name': 'export',
-                'ignore_errors': True
-            },
-            {
-                'name': "Exportació justificació en 2 itineraris",
-                'subsidy_period': period2021_2024,
-                'function_name': 'export_dos_itineraris',
-                'ignore_errors': True
-            },
-            {
-                'name': "Hores acompanyaments covid",
-                'subsidy_period': period2021_2024,
-                'function_name': 'export_covid_hours',
-                'ignore_errors': True
-            },
-            {
-                'name': "Detall dels acompanyaments",
-                'subsidy_period': period2021_2024,
-                'function_name': 'export_stages_details',
-                'ignore_errors': True
-            },
-            {
-                'name': "Resultats enquestes de satisfacció",
-                'subsidy_period': period2021_2024,
-                'function_name': 'export_polls',
-                'ignore_errors': True
-            },
+        periods = [
+            SubsidyPeriod.objects.get(name="2019-2020"),
+            SubsidyPeriod.objects.get(name="2020-2021"),
+            SubsidyPeriod.objects.get(name="2021-2022"),
         ]
+        exports = []
+        for period in periods:
+            exports.extend(
+                [
+                    {
+                        'name': "Cofinançades",
+                        'subsidy_period': period,
+                        'function_name': 'export_cofunded',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Memòria dels acompanyaments en fitxer de text",
+                        'subsidy_period': period,
+                        'function_name': 'export_stages_descriptions',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Exportació justificació",
+                        'subsidy_period': period,
+                        'function_name': 'export',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Exportació justificació en 2 itineraris",
+                        'subsidy_period': period,
+                        'function_name': 'export_dos_itineraris',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Hores acompanyaments covid",
+                        'subsidy_period': period,
+                        'function_name': 'export_covid_hours',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Detall dels acompanyaments",
+                        'subsidy_period': period,
+                        'function_name': 'export_stages_details',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Resultats enquestes de satisfacció per organitzadora",
+                        'subsidy_period': period,
+                        'function_name': 'export_polls',
+                        'ignore_errors': True
+                    },
+                    {
+                        'name': "Resultats enquestes de satisfacció per entitat",
+                        'subsidy_period': period,
+                        'function_name': 'export_polls_by_entity',
+                        'ignore_errors': True
+                    },
+                ]
+            )
         for export in exports:
             print(f"Updating or creating {export['function_name']}")
             DataExports.objects.create(**export)

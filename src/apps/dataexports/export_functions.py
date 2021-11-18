@@ -61,3 +61,7 @@ class ExportFunctions:
     def export_polls(self, export_obj):
         controller = ExportPolls(export_obj)
         return controller.export()
+
+    def export_polls_by_entity(self, export_obj):
+        controller = ExportPolls(export_obj, by_entity=True)
+        return controller.export()
