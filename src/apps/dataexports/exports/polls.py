@@ -6,7 +6,7 @@ from django.db.models import (
     Value
 )
 
-from apps.cc_courses.models import Organizer, Activity
+from apps.cc_courses.models import Organizer, Activity, Entity
 from apps.coopolis.models import ActivityPoll
 from apps.dataexports.exports.exceptions import (
     MissingOrganizers,
@@ -21,10 +21,11 @@ from apps.dataexports.exports.row_factories import (
 
 
 class ExportPolls:
-    def __init__(self, export_obj):
+    def __init__(self, export_obj, by_entity=False):
         self.export_manager = ExcelExportManager(export_obj)
         self.organizers = dict()
-        self.import_organizers()
+        self.import_organizers(by_entity)
+        self.organizer_field = "organizer" if not by_entity else "entity"
         if not len(self.organizers):
             raise MissingOrganizers
 
@@ -326,9 +327,11 @@ class ExportPolls:
         querysets = []
         for organizer in self.organizers.values():
             qs = ActivityPoll.objects.filter(
-                    activity__date_start__range=self.export_manager.subsidy_period_range,
-                    activity__organizer=organizer,
-                )
+                **{
+                    "activity__date_start__range": self.export_manager.subsidy_period_range,
+                    f"activity__{self.organizer_field}": organizer,
+                }
+            )
             if axis:
                 qs = qs.filter(activity__axis=axis)
             querysets.append(
@@ -463,10 +466,10 @@ class ExportPolls:
             GlobalReportRow(
                 "Nombre d'enquestes de satisfacció valorades",
                 averages["ateneu"]["id__count"],
-                averages["cercle1"]["id__count"],
-                averages["cercle2"]["id__count"],
-                averages["cercle3"]["id__count"],
-                averages["cercle4"]["id__count"],
+                averages["cercle1"].get("id__count", ""),
+                averages["cercle2"].get("id__count", ""),
+                averages["cercle3"].get("id__count", ""),
+                averages["cercle4"].get("id__count", ""),
             ),
             EmptyRow(),
             TitleRow(
@@ -660,8 +663,12 @@ class ExportPolls:
         for row in rows:
             self.export_manager.fill_row_from_factory(row)
 
-    def import_organizers(self):
-        orgs = Organizer.objects.all()
+    def import_organizers(self, by_entity):
+        if by_entity:
+            model = Entity
+        else:
+            model = Organizer
+        orgs = model.objects.all()
         i = 0
         for org in orgs:
             self.organizers.update({
