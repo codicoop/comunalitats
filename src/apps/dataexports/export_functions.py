@@ -42,8 +42,16 @@ class ExportFunctions:
         controller = ExportJustification(export_obj)
         return controller.export()
 
+    def export_by_entity(self, export_obj):
+        controller = ExportJustification(export_obj, True)
+        return controller.export()
+
     def export_dos_itineraris(self, export_obj):
         controller = ExportJustification2Itineraris(export_obj)
+        return controller.export_dos_itineraris()
+
+    def export_dos_itineraris_by_entity(self, export_obj):
+        controller = ExportJustification2Itineraris(export_obj, True)
         return controller.export_dos_itineraris()
 
     def export_cofunded(self, export_obj):

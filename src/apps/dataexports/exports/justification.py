@@ -1,16 +1,18 @@
 from django.db.models import Q
 
 from apps.coopolis.models import ProjectStage, Project, EmploymentInsertion
-from apps.cc_courses.models import Organizer, Activity
+from apps.cc_courses.models import Organizer, Activity, Entity
 from apps.dataexports.exports.manager import ExcelExportManager
 
 
 class ExportJustification:
-    def __init__(self, export_obj):
+    def __init__(self, export_obj, by_entity=False):
         self.export_manager = ExcelExportManager(export_obj)
         self.organizers = dict()
         self.d_organizer = dict()
-        self.import_organizers()
+        self.import_organizers(by_entity)
+        self.activity_organizer_field = "organizer" if not by_entity else "entity"
+        self.stage_organizer_field = "stage_organizer" if not by_entity else "entity"
         self.number_of_activities = 0
         self.number_of_stages = 0
         self.number_of_nouniversitaris = 0
@@ -45,10 +47,14 @@ class ExportJustification:
             )
         )
 
-    def import_organizers(self):
+    def import_organizers(self, by_entity):
+        if by_entity:
+            model = Entity
+        else:
+            model = Organizer
         # Not forcing any order because we want it in the same order that
         # they see (which should be by ID)
-        orgs = Organizer.objects.all()
+        orgs = model.objects.all()
         if not orgs:
             self.organizers.update({
                 0: 'Ateneu'
@@ -144,7 +150,7 @@ class ExportJustification:
                 subaxis,
                 item.name,
                 item.date_start,
-                self.get_organizer(item.organizer),
+                self.get_organizer(getattr(item, self.activity_organizer_field)),
                 town,
                 item.enrolled.count(),
                 material_difusio,
@@ -292,7 +298,7 @@ class ExportJustification:
                     subaxis,
                     item.project.name,
                     item.date_start if not None else '',
-                    self.get_organizer(item.stage_organizer),
+                    self.get_organizer(getattr(item, self.stage_organizer_field)),
                     town,
                     len(group['participants']),  # Nombre de participants
                     "No",
@@ -332,13 +338,13 @@ class ExportJustification:
                 subaxis,
                 item.name,
                 item.date_start,
-                self.get_organizer(item.organizer),
+                self.get_organizer(getattr(item, self.activity_organizer_field)),
                 town,
                 item.minors_participants_number,
                 material_difusio,
                 "",
                 str(item.entity) if item.entity else '',  # Entitat
-                str(item.entity) if item.organizer else '',  # Organitzadora
+                str(item.organizer) if item.organizer else '',  # Organitzadora
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
                 str(item.cofunded),  # Cofinançat
@@ -396,7 +402,7 @@ class ExportJustification:
                 subaxis,
                 project.name,
                 stage.date_start,
-                self.get_organizer(stage.stage_organizer),
+                self.get_organizer(getattr(stage, self.stage_organizer_field)),
                 town,
                 stage.involved_partners.count(),
                 "No",
