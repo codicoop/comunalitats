@@ -257,6 +257,27 @@ services:
     ports:
       - 5006:8006
 
+  # http://127.0.0.1:5006 or http://localhost:5006
+  develop_ateneus_baixllobregat:
+    restart: on-failure
+    container_name: develop_ateneus_baixllobregat
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: development
+    env_file: ./settings/develop/baixllobregat.env
+    # The WSGI application name is the django app name you chose when doing django-admin startproject.
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8013 --reload
+    volumes:
+      - ../src/:/srv
+    depends_on:
+      - develop_ateneus_db
+    #entrypoint: ["sh", "-c", "sleep 2073600"]
+    networks:
+      - develop_ateneus_network
+    ports:
+      - 5013:8013
+
   # http://localhost:8080/
 #  develop_ateneus_adminer:
 #    container_name: develop_ateneus_adminer
