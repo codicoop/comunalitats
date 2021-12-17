@@ -175,6 +175,20 @@ services:
     ports:
       - 8007:8007
 
+  # https://serveis.ateneucoopbll.cat
+  ateneu-baixllobregat:
+    restart: on-failure
+    container_name: ateneu_baixllobregat
+    image: codicoop/ateneus:latest
+    env_file: ./settings/production/baixllobregat.env
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8015 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
+    depends_on:
+      - db
+    networks:
+      - ateneus_network
+    ports:
+      - 8015:8015
+
   # https://documentacio-backoffice.bcn.coop
   documentacio:
     restart: on-failure
