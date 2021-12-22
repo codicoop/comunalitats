@@ -21,7 +21,7 @@
        {% csrf_token %}
        {{ form.as_p }}
         <p>Contrasenya:</p>
-        <p>Accedeix <a href="{% url 'user_password' %}">aquí</a> per modificar la contrasenya.</p>
+        <p>Accedeix <a href="{% url 'password_change' %}">aquí</a> per modificar la contrasenya.</p>
     <button type="submit">Guardar els canvis</button>
     </form>
 </div>
