@@ -73,8 +73,11 @@ class UserAdmin(admin.ModelAdmin):
 
     def project(self, obj):
         if obj.project:
-            return mark_safe(f"<a href=\"../../../project/{ obj.project.id }"
-                             f"/change/\">{ obj.project }</a>")
+            url = reverse(
+                "admin:coopolis_project_change",
+                kwargs={'object_id': obj.project.id}
+            )
+            return mark_safe(f'<a href="{ url }">{ obj.project }</a>')
         return None
     project.short_description = 'Projecte'
 
