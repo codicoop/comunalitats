@@ -5,6 +5,7 @@ from django.db.models import (
     Count, Avg, IntegerField, Case, When, Sum,
     Value
 )
+from django.utils import formats
 
 from apps.cc_courses.models import Organizer, Activity, Entity
 from apps.coopolis.models import ActivityPoll
@@ -16,7 +17,7 @@ from apps.dataexports.exports.manager import ExcelExportManager
 from apps.dataexports.exports.row_factories import (
     EmptyRow, TextWithValue,
     TitleRow, TextWithYesNoEmpty, GlobalReportRow, GlobalReportYesNoEmptyRow,
-    TextRow
+    MultiTextColRow
 )
 
 
@@ -282,6 +283,9 @@ class ExportPolls:
         self.export_manager.row_number = 1
         columns = [
             ("Acumulació de respostes a aquesta pregunta", 80),
+            ("Acció", 60),
+            ("Sessió", 60),
+            ("Data sessió", 20),
         ]
         self.export_manager.create_columns(columns)
         obj = self.answers_list_obj()
@@ -292,7 +296,14 @@ class ExportPolls:
             answer = getattr(poll_obj, question)
             if answer:
                 self.export_manager.fill_row_from_factory(
-                    TextRow(answer)
+                    MultiTextColRow(
+                        [
+                            answer,
+                            str(poll_obj.activity.course),
+                            str(poll_obj.activity),
+                            str(formats.localize(poll_obj.activity.date_start)),
+                        ]
+                    )
                 )
 
     def answers_list_obj(self):

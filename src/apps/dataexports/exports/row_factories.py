@@ -90,12 +90,15 @@ class EmptyRow(BaseRow):
     pass
 
 
-class TextRow(BaseRow):
-    def __init__(self, title: str):
-        self.title = title
+class MultiTextColRow(BaseRow):
+    def __init__(self, values: list):
+        self.values = values
+        for value in self.values:
+            if type(value) is not str:
+                raise TypeError(f"{value} is not a string.")
 
     def get_columns(self) -> list:
-        return [self.title, ]
+        return self.values
 
 
 class TitleRow(TextRow):
@@ -109,7 +112,10 @@ class TextWithValue(BaseRow):
         self.value = value
 
     def get_columns(self) -> list:
-        return [self.title, self.value]
+        return [
+            self.title,
+            round(self.value, 1) if type(self.value) is float else self.value
+        ]
 
 
 class TextWithYesNoEmpty(BaseRow):
