@@ -87,7 +87,6 @@ class Command(BaseCommand):
         periods = [
             SubsidyPeriod.objects.get(name="2019-2020"),
             SubsidyPeriod.objects.get(name="2020-2021"),
-            SubsidyPeriod.objects.get(name="2021-2022"),
         ]
         exports = []
         for period in periods:
@@ -130,12 +129,6 @@ class Command(BaseCommand):
                         'ignore_errors': True
                     },
                     {
-                        'name': "Hores acompanyaments covid",
-                        'subsidy_period': period,
-                        'function_name': 'export_covid_hours',
-                        'ignore_errors': True
-                    },
-                    {
                         'name': "Detall dels acompanyaments",
                         'subsidy_period': period,
                         'function_name': 'export_stages_details',
@@ -155,6 +148,37 @@ class Command(BaseCommand):
                     },
                 ]
             )
+
+        # Different exports since 2021-2022
+        period = SubsidyPeriod.objects.get(name="2021-2022")
+        exports.extend(
+            [
+                {
+                    'name': "Memòria dels acompanyaments en fitxer de text",
+                    'subsidy_period': period,
+                    'function_name': 'export_stages_descriptions',
+                    'ignore_errors': True
+                },
+                {
+                    'name': "Exportació justificació",
+                    'subsidy_period': period,
+                    'function_name': 'export_service',
+                    'ignore_errors': True
+                },
+                {
+                    'name': "Exportació justificació en 2 itineraris",
+                    'subsidy_period': period,
+                    'function_name': 'export_dos_itineraris',
+                    'ignore_errors': True
+                },
+                {
+                    'name': "Resultats enquestes de satisfacció",
+                    'subsidy_period': period,
+                    'function_name': 'export_polls',
+                    'ignore_errors': True
+                },
+            ]
+        )
         for export in exports:
             print(f"Updating or creating {export['function_name']}")
             DataExports.objects.create(**export)

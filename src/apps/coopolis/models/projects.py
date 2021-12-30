@@ -10,6 +10,7 @@ from django.utils.timezone import now
 import tagulous.models
 
 from apps.cc_courses.models import Entity, Organizer, Cofunding, StrategicLine
+from apps.coopolis.choices import ServicesChoices
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.models import Town, User
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
@@ -176,12 +177,25 @@ class Project(models.Model):
 
     @property
     def axis_list(self):
+        """
+        This method is not used in the new data, reports or exports
+        since 1/11/2021, but needs to be kept until it's confirmed that they
+        don't want the old exports.
+        :return:
+        """
         if not self.stages or self.stages.count() < 1:
             return None
         stages = []
         for stage in self.stages.all():
             stages.append(stage.axis_summary())
         stages.sort()
+        return "; ".join(stages)
+
+    @property
+    def services_list(self):
+        if not self.stages or self.stages.count() < 1:
+            return None
+        stages = [stage.get_service_display() for stage in self.stages.all() if stage.service]
         return "; ".join(stages)
 
     @property
@@ -308,7 +322,6 @@ class ProjectStage(models.Model):
         StageSubtype, verbose_name="subtipus", default=None, null=True,
         blank=True, on_delete=models.SET_NULL
     )
-    covid_crisis = models.BooleanField("Crisi covid", default=False)
     subsidy_period = models.ForeignKey(
         SubsidyPeriod, verbose_name="convocatòria", null=True,
         on_delete=models.SET_NULL)
@@ -316,27 +329,18 @@ class ProjectStage(models.Model):
         "data creació acompanyament", null=False, blank=False,
         auto_now_add=True
     )
-    date_end = models.DateField(
-        "[obsolet] data de finalització", null=True, blank=True,
-        help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, l'inici i finalització"
-                  " de l'acompanyament es calcularà a partir de les dates de "
-                  "les Sessions d'Acompanyament."
-    )
-    follow_up = models.TextField(
-        "[obsolet] Seguiment", null=True, blank=True,
-        help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, cal que el seguiment "
-                  "el poseu en el nou format, mitjançant 'Sessions "
-                  "d'acompanyament'."
+    service = models.SmallIntegerField(
+        "Servei",
+        choices=ServicesChoices.choices,
+        null=True,
+        blank=True,
     )
     axis = models.CharField(
-        "eix", help_text="Eix de la convocatòria on es justificarà.",
+        "(OBSOLET) Eix", help_text="Eix de la convocatòria on es justificarà.",
         choices=settings.AXIS_OPTIONS, null=True, blank=True, max_length=1)
     subaxis = models.CharField(
-        "sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
+        "(OBSOLET) Sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
         null=True, blank=True, max_length=2, choices=get_subaxis_choices())
-    entity = models.ForeignKey(
-        Entity, verbose_name="[obsolet] Entitat", default=None, null=True,
-        blank=True, on_delete=models.SET_NULL)
     # Entity was called "organizer" before, causing confusion, specially
     # because we wanted to add the Organizer field
     # here. We renamed 'organizer' to entity and made a migration for this
@@ -362,19 +366,9 @@ class ProjectStage(models.Model):
         help_text="Persona de l'equip al càrrec de l'acompanyament. Per "
                   "aparèixer al desplegable, cal que la persona tingui "
                   "activada la opció 'Membre del personal'.")
-    scanned_signatures = models.FileField(
-        "[obsolet] Fitxa de projectes (document amb signatures)", blank=True,
-        null=True, storage=PrivateMediaStorage(), max_length=250)
     scanned_certificate = models.FileField(
         "Certificat", blank=True, null=True,
         storage=PrivateMediaStorage(), max_length=250)
-    hours = models.IntegerField(
-        "[obsolet] Número d'hores",
-        help_text="AQUEST CAMP S'ELIMINARÀ PROPERAMENT, cal que les hores "
-                  "les poseu en el nou format, mitjançant 'Sessions "
-                  "d'acompanyament'.",
-        null=True, blank=True
-    )
     involved_partners = models.ManyToManyField(
         User, verbose_name="persones involucrades", blank=True,
         related_name='stage_involved_partners',
@@ -422,22 +416,18 @@ class ProjectStage(models.Model):
                                 "correspon a l'eix."}
                 )
 
-        has_subsidy_period = (self.subsidy_period and
-                              self.subsidy_period.name != 'Sense justificar')
-        if has_subsidy_period and self.date_end:
-            if (
-                    self.date_end < self.subsidy_period.date_start or
-                    self.date_end > self.subsidy_period.date_end
-            ):
-                raise ValidationError(
-                    {'date_end': "La data de finalització ha d'estar dins del "
-                                 "període de la convocatòria seleccionada."})
-
     def get_full_type_str(self):
         txt = self.get_stage_type_display()
         if config.ENABLE_STAGE_SUBTYPES and self.stage_subtype:
             txt = f"{txt} ({self.stage_subtype.name})"
         return txt
+
+    @property
+    def latest_session(self):
+        try:
+            return self.stage_sessions.latest("date")
+        except ProjectStageSession.DoesNotExist:
+            return None
 
     def __str__(self):
         txt = (f"{str(self.project)}: {self.get_full_type_str()} "
@@ -483,6 +473,19 @@ class ProjectStageSession(models.Model):
 
 
 class ProjectsFollowUp(Project):
+    """
+    Deprecated: from Nov 2021 this is kept to let them access older reports,
+    but when they don't need them anymore this and the corresponding admin view
+    and template can be deleted.
+    """
+    class Meta:
+        proxy = True
+        verbose_name_plural = "(obsolet) Seguiment d'acompanyaments per eix"
+        verbose_name = "(obsolet) Seguiment d'acompanyament per eix"
+        ordering = ['follow_up_situation', 'follow_up_situation_update']
+
+
+class ProjectsFollowUpService(Project):
     class Meta:
         proxy = True
         verbose_name_plural = "Seguiment d'acompanyaments"
@@ -491,6 +494,18 @@ class ProjectsFollowUp(Project):
 
 
 class ProjectsConstituted(Project):
+    """
+    Deprecated: from Nov 2021 this is kept to let them access older reports,
+    but when they don't need them anymore this and the corresponding admin view
+    and template can be deleted.
+    """
+    class Meta:
+        proxy = True
+        verbose_name_plural = "(obsolet) Projectes constituïts per eix"
+        verbose_name = "(obsolet) Projecte constituït per eix"
+
+
+class ProjectsConstitutedService(Project):
     class Meta:
         proxy = True
         verbose_name_plural = "Projectes constituïts"

@@ -215,53 +215,6 @@ def get_item_choices(model, value):
     return choices
 
 
-class ProjectStageInlineForm(forms.ModelForm):
-    class Meta:
-        model = ProjectStage
-        fields = '__all__'
-
-    # S'ha de processar això: settings.SUBAXIS_OPTIONS per convertir-ho en una
-    # llista, eliminant el 1r nivell
-
-    choices = [
-        (None, '---------')
-    ]
-    for axis in sorted(settings.SUBAXIS_OPTIONS):
-        for subaxis in sorted(settings.SUBAXIS_OPTIONS[axis]):
-            choices.append(
-                (subaxis[0], subaxis[1])
-            )
-    subaxis = forms.ChoiceField(choices=choices, label="Sub-eix", required=False)
-
-
-class ProjectStageForm(forms.ModelForm):
-    class Meta:
-        model = ProjectStage
-        fields = '__all__'
-        # TODO: Canviar això per una llibreria actualitzada
-        # widgets = {
-        #     'subaxis': DynamicChoicesWidget(
-        #         depends_field='axis',
-        #         # This is supposed to be the model of a FK, but our subaxis
-        #         # field is not a FK
-        #         # but a dictionary in the settings. Turns out that it only
-        #         # wants the model to
-        #         # take its name and use it as identifier when rendering the
-        #         # HTML, so now that
-        #         # get_item_choices() is not using the model to return the
-        #         # values, we can put here
-        #         # any model, as a workaround.
-        #         # Best quality solution would be modify the library to make it
-        #         # model-optional.
-        #         model=ProjectStage,
-        #         callback=get_item_choices,
-        #         no_value_disable=True,
-        #         include_empty_choice=True,
-        #         empty_choice_label="Selecciona un sub-eix",
-        #     )
-        # }
-
-
 class ActivityForm(forms.ModelForm):
     class Meta:
         model = Activity

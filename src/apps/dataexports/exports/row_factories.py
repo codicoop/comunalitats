@@ -101,6 +101,14 @@ class MultiTextColRow(BaseRow):
         return self.values
 
 
+class TextRow(BaseRow):
+    def __init__(self, title: str):
+        self.title = title
+
+    def get_columns(self) -> list:
+        return [self.title, ]
+
+
 class TitleRow(TextRow):
     def get_format_method(self) -> tuple:
         return "format_cell_bold", 1

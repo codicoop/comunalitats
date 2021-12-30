@@ -134,7 +134,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         (None, {
             'fields': ['course', 'name', 'objectives', 'place', 'date_start',
                        'date_end', 'starting_time', 'ending_time', 'spots',
-                       'axis', 'subaxis', 'entity', 'organizer', 'responsible',
+                       'service', 'entity', 'organizer', 'responsible',
                        'publish', ]
         }),
         ("Documents per la justificació", {
@@ -160,7 +160,10 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
             'classes': ('grp-collapse grp-closed',),
             'fields': ('attendee_list_field', 'attendee_filter_field',
                        'send_reminder_field', 'activity_poll_field', ),
-        })
+        }),
+        ("Camps convocatòries < 2020", {
+            'fields': ["axis", "subaxis", ]
+        }),
     ]
     # define the raw_id_fields
     raw_id_fields = ('enrolled', 'course')

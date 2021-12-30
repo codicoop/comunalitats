@@ -1,0 +1,162 @@
+<!-- sales/templates/spandmin/sale_summary_change_list.html -->
+{% extends "admin/change_list.html" %}
+
+{% load i18n grp_tags admin_urls static admin_list humanize %}
+
+{% block pagination_bottom %}
+{% endblock %}
+
+{% block content %}
+<style>
+.totals td {
+  border-top:1px black solid;
+}
+</style>
+
+<div class="grp-module">
+  <div class="grp-row">
+    <div class="l-2cr-fluid {% if cl.has_filters and cl.search_fields %}l-d-12{% else %}{% if cl.has_filters or cl.search_fields %}l-d-6{% endif %}{% endif %}">
+      {% if cl.has_filters or cl.search_fields %}
+      {% block aside %}
+      <aside class="c-1">
+        <header style="display:none"><h1>{% if cl.search_fields %}Search{% if cl.has_filters %} &amp; {% endif %}{% endif %}{% if cl.has_filters %}Filters{% endif %}</h1></header>
+        <!-- SEARCH -->
+        {% if cl.search_fields %}
+        {% block search %}
+        <div id="search" class="g-d-6 g-d-f">
+          {% search_form cl %}
+        </div>
+        {% endblock %}
+        {% endif %}
+        <!-- FILTERS -->
+        {% if cl.has_filters %}
+        {% block filters %}
+        <div id="grp-filters" class="g-d-6 g-d-l">
+          <div class="grp-filter">
+            <div class="grp-pulldown-container">
+              <a href="javascript://" class="grp-button grp-pulldown-handler">{% trans 'Filter' %}</a>
+              <div class="grp-pulldown-content" style="display: none;">
+                {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endblock %}
+        {% endif %}
+      </aside>
+      {% endblock %}
+      {% endif %}
+      {% block pagination_top %}
+      {% endblock %}
+
+    </div>
+  </div>
+  <!-- DATE HIERARCHY -->
+  {% block date_hierarchy %}
+  {% if cl.date_hierarchy %}{% date_hierarchy cl %}{% endif %}
+  {% endblock %}
+</div>
+
+<section id="grp-changelist" class="{% if cl.list_editable %} grp-editable{% endif %}">
+  <header style="display:none"><h1>Results</h1></header>
+  <!-- ERRORS -->
+  {% if cl.formset.errors %}
+    <p class="errornote">
+      {% if cl.formset.total_error_count == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+    </p>
+    {{ cl.formset.non_form_errors }}
+    {% for error in cl.formset.errors %}
+      <p>{{ error }}</p>
+    {% endfor %}
+  {% endif %}
+  <!-- MANAGEMENT FORM -->
+  {% if cl.formset %}
+    {{ cl.formset.management_form }}
+  {% endif %}
+
+  {% block result_list %}
+  <div class="grp-module">
+    <table id="result_list" class="grp-table grp-sortable">
+
+      <thead>
+        <tr>
+          <th class="sortable">
+            <div class="grp-text">
+              <span>Cooperativa</span>
+            </div>
+          </th>
+          <th class="sortable">
+            <div class="grp-text">
+              <span>Servei</span>
+            </div>
+          </th>
+          <th class="sortable">
+            <div class="grp-text">
+              <span>Data de constitució</span>
+            </div>
+          </th>
+          <th class="sortable">
+            <div class="grp-text">
+              <span>CIF</span>
+            </div>
+          </th>
+          <th class="sortable">
+            <div class="grp-text">
+              <span>Sector</span>
+            </div>
+          </th>
+          <th class="sortable">
+            <div class="grp-text">
+              <span>Membres H/D/A</span>
+            </div>
+          </th>
+          <th class="sortable">
+            <div class="grp-text">
+              <span>Correu electrònic</span>
+            </div>
+          </th>
+          <th class="sortable">
+            <div class="grp-text">
+              <span>Telèfon</span>
+            </div>
+          </th>
+          <th class="sortable">
+            <div class="grp-text">
+              <span>Territori</span>
+            </div>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for row in rows %}
+        <tr class="grp-row {% cycle 'grp-row-even' 'grp-row-odd' %}">
+          <td><a href="{% url 'admin:coopolis_project_change' row.id %}">{{ row.name }}</a></td>
+          <td>{{ row.services_list|default_if_none:"" }} </td>
+          <td>{{ row.constitution_date }}</td>
+          <td>{{ row.cif|default_if_none:"" }}</td>
+          <td>{{ row.get_sector_display }}</td>
+          <td>{{ row.members_h }} / {{ row.members_d }} / {{ row.members_a }}</td>
+          <td>{{ row.mail }}</td>
+          <td>{{ row.phone }}</td>
+          <td>{{ row.full_town_district|default_if_none:"" }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="grp-row totals">
+          <td>{{ rows|length }}</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>{{ totals.total_members_h }} / {{ totals.total_members_d }} / {{ totals.total_members_a }}</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
+  {% endblock %}
+</section>
+{% endblock %}

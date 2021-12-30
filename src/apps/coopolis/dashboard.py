@@ -69,7 +69,12 @@ class MyDashboard(Dashboard):
                 title='Seguiment de projectes',
                 column=1,
                 collapsible=False,
-                models=('apps.coopolis.models.projects.ProjectsFollowUp', 'apps.coopolis.models.projects.ProjectsConstituted', ),
+                models=(
+                    'apps.coopolis.models.projects.ProjectsFollowUpService',
+                    'apps.coopolis.models.projects.ProjectsConstitutedService',
+                    'apps.coopolis.models.projects.ProjectsFollowUp',
+                    'apps.coopolis.models.projects.ProjectsConstituted',
+                ),
             ),
             reservations_module_app,
             reservations_module_calendar,
