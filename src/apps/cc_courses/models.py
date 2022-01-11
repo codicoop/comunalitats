@@ -12,7 +12,7 @@ from django.apps import apps
 from django.core.validators import ValidationError
 
 from apps.cc_lib.utils import slugify_model
-from apps.coopolis.choices import ServicesChoices
+from apps.coopolis.choices import ServicesChoices, CirclesChoices
 from apps.coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
@@ -199,6 +199,12 @@ class Activity(models.Model):
         related_name='enrolled_activities',
         verbose_name="inscrites",
         through="ActivityEnrolled"
+    )
+    circle = models.SmallIntegerField(
+        "Ateneu / Cercle",
+        choices=CirclesChoices.choices_named(),
+        null=True,
+        blank=True,
     )
     entity = models.ForeignKey(
         Entity,

@@ -86,6 +86,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_NAME = env.str("PROJECT_NAME", "")
 ADMIN_HEADER = env.str("ADMIN_HEADER", "")
 GRAPPELLI_ADMIN_TITLE = env.str("GRAPPELLI_ADMIN_TITLE", "")
+CIRCLE_NAMES = [
+    env.str("CIRCLE_NAME_ATENEU", ""),
+    env.str("CIRCLE_NAME_1", ""),
+    env.str("CIRCLE_NAME_2", ""),
+    env.str("CIRCLE_NAME_3", ""),
+    env.str("CIRCLE_NAME_4", ""),
+    env.str("CIRCLE_NAME_5", ""),
+]
 
 # Application definition
 INSTALLED_APPS = [

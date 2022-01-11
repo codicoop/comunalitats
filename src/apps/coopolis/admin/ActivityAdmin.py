@@ -134,7 +134,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
         (None, {
             'fields': ['course', 'name', 'objectives', 'place', 'date_start',
                        'date_end', 'starting_time', 'ending_time', 'spots',
-                       'service', 'entity', 'organizer', 'responsible',
+                       'service', 'circle', 'entity', 'responsible',
                        'publish', ]
         }),
         ("Documents per la justificació", {

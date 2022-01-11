@@ -10,7 +10,7 @@ from django.utils.timezone import now
 import tagulous.models
 
 from apps.cc_courses.models import Entity, Organizer, Cofunding, StrategicLine
-from apps.coopolis.choices import ServicesChoices
+from apps.coopolis.choices import ServicesChoices, CirclesChoices
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.models import Town, User
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
@@ -341,6 +341,12 @@ class ProjectStage(models.Model):
     subaxis = models.CharField(
         "(OBSOLET) Sub-eix", help_text="Correspon a 'Tipus d'acció' a la justificació.",
         null=True, blank=True, max_length=2, choices=get_subaxis_choices())
+    circle = models.SmallIntegerField(
+        "Ateneu / Cercle",
+        choices=CirclesChoices.choices_named(),
+        null=True,
+        blank=True,
+    )
     # Entity was called "organizer" before, causing confusion, specially
     # because we wanted to add the Organizer field
     # here. We renamed 'organizer' to entity and made a migration for this
