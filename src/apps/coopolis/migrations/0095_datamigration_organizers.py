@@ -244,9 +244,17 @@ def migrate_coopcamp(
     Els noms i IDs dels Organizers son:
     Ateneu=1
     CIRCLE_NAME_1=Agroecològic=4
-    CIRCLE_NAME_2=Baix Penedès=2
+    CIRCLE_NAME_2=Vulnerabilitats= NO té ID, no existia abans.
     CIRCLE_NAME_3=Tarragonès=3
     CIRCLE_NAME_4=Reus=5
+    CIRCLE_NAME_5=Baix Penedès=2
+
+    NOTA: CERCLE2 abans era Baix Penedès. M'han informat que s'elimina així que
+    l'hem mogut al 5 com a forma fàcil de fer-lo obsolet.
+    Això implica tornar a tirar la migració a develop i tornar de manar que
+    donin l'OK a les dades.
+    En un futur caldrà trobar una manera de poder desactivar cercles mantenint
+    l'històric.
 
     Entitat ho tenen correcte.
 
@@ -260,7 +268,7 @@ def migrate_coopcamp(
     circles = {
         1: CirclesChoices.CERCLE0,
         4: CirclesChoices.CERCLE1,
-        2: CirclesChoices.CERCLE2,
+        2: CirclesChoices.CERCLE5,  # Was 2, now is 5 to deprecate Baix Penedès.
         3: CirclesChoices.CERCLE3,
         5: CirclesChoices.CERCLE4,
     }
