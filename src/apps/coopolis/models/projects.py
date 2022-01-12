@@ -547,9 +547,12 @@ class EmploymentInsertion(models.Model):
         choices=CONTRACT_TYPE_CHOICES,
         null=True
     )
-    organizer = models.ForeignKey(
-        Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL,
-        null=True, blank=False)
+    circle = models.SmallIntegerField(
+        "Ateneu / Cercle",
+        choices=CirclesChoices.choices_named(),
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return f"{self.user.full_name}: {self.get_contract_type_display()}"
