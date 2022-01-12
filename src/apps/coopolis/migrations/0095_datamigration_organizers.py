@@ -610,8 +610,8 @@ def migrate_vallesoccidental(
     Camp entitat: està tot correcte i no cal tocar res.
     Camp organitzadora: el feien servir com a una dada interna que s'havien
     inventat, es pot eliminar sense haver-lo de migrar enlloc.
-    Ateneu/Cercle: de moment ho assignem tot a Ateneu, però estic pendent que
-    em confirmin què passa amb el cercle que tenen.
+    Ateneu/Cercle: tot a Ateneu (no teníen cap cercle. A partir de 2022 en
+    tindran 2).
     """
     print("REORGANITZANT CERCLES PER VALLÈS OCCIDENTAL")
     print("assignar totes les Activity.circle al circle.CERCLE0"
