@@ -200,7 +200,7 @@ class ProjectStagesInline(admin.StackedInline):
                        'stage_organizer', 'stage_responsible',
                        'scanned_certificate',
                        'involved_partners', 'hours_sum', 'date_start',
-                       "earliest_session_field", ]
+                       "earliest_session_field", "stage_sessions_field", ]
         }),
         ("Camps convocatòries < 2020", {
             'fields': ["axis", "subaxis", ]
