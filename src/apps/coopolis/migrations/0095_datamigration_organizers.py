@@ -316,6 +316,12 @@ def migrate_coopmaresme(
     print("Establint tots els Activity.organizer a None")
     updated = activity_model.objects.all().update(organizer=None)
     print(f"Registres actualitzats: {updated}")
+    print("assignar tots els ProjectStage.circle al CERCLE0")
+    updated = stage_model.objects.all().update(
+        circle=CirclesChoices.CERCLE0,
+        stage_organizer=None,
+    )
+    print(f"{updated} registres actualitzats.")
     print("Eliminant tots els Organizers")
     organizer_model.objects.all().delete()
 
