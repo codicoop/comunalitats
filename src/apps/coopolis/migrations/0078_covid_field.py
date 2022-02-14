@@ -4,13 +4,17 @@ from django.db import migrations
 
 
 def update_covid_boolean(apps, schema_editor):
-    print('')
-    projectstage_model = apps.get_model('coopolis', 'ProjectStage')
-    obj = projectstage_model.objects.filter(
-        stage_type=10
-    ).update(covid_crisis=True)
-
-    print("Nou camp Covid omplert amb la dada corresponent.")
+    """
+    Deprecated: Covid related field was eventually deleted.
+    """
+    # print('')
+    # projectstage_model = apps.get_model('coopolis', 'ProjectStage')
+    # obj = projectstage_model.objects.filter(
+    #     stage_type=10
+    # ).update(covid_crisis=True)
+    #
+    # print("Nou camp Covid omplert amb la dada corresponent.")
+    pass
 
 
 class Migration(migrations.Migration):

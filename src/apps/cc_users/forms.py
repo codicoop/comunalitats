@@ -1,10 +1,16 @@
-
+from constance import config
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
+from django.conf import settings
+from django.contrib.auth.forms import (
+    UserCreationForm, AuthenticationForm, UserChangeForm,
+    PasswordResetForm as BasePasswordResetForm,
+)
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 from apps.coopolis.widgets import XDSoftDatePickerInput
 from apps.coopolis.mixins import FormDistrictValidationMixin
+from conf.custom_mail_manager import MyMailTemplate
 
 
 class SignUpForm(UserCreationForm):
@@ -50,3 +56,28 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
         super().__init__(*args, **kwargs)
         if 'password' in self.fields:
             self.fields.pop('password')
+
+
+class PasswordResetForm(BasePasswordResetForm):
+    def send_mail(self, subject_template_name, email_template_name,
+                  context, from_email, to_email, html_email_template_name=None):
+        mail = MyMailTemplate('EMAIL_PASSWORD_RESET')
+        mail.to = to_email
+        mail.subject_strings = {
+            "ateneu_nom": config.PROJECT_FULL_NAME,
+        }
+        password_reset_url = settings.ABSOLUTE_URL + reverse(
+            "password_reset_confirm",
+            kwargs={
+                "uidb64": context["uid"],
+                "token": context["token"],
+            }
+        )
+        mail.body_strings = {
+            "persona_nom": context["user"].first_name,
+            "persona_email": context["email"],
+            "absolute_url": settings.ABSOLUTE_URL,
+            "password_reset_url": password_reset_url,
+            "url_web_ateneu": config.PROJECT_WEBSITE_URL,
+        }
+        mail.send()

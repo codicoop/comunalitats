@@ -5,14 +5,14 @@ from apps.cc_courses.models import Organizer, Activity, Entity
 from apps.dataexports.exports.manager import ExcelExportManager
 
 
-class ExportJustification:
+class ExportJustificationService:
     def __init__(self, export_obj, by_entity=False):
         self.export_manager = ExcelExportManager(export_obj)
         self.organizers = dict()
         self.d_organizer = dict()
         self.import_organizers(by_entity)
-        self.activity_organizer_field = "organizer" if not by_entity else "entity"
-        self.stage_organizer_field = "stage_organizer" if not by_entity else "entity"
+        self.activity_organizer_field = "organizer"
+        self.stage_organizer_field = "stage_organizer"
         self.number_of_activities = 0
         self.number_of_stages = 0
         self.number_of_nouniversitaris = 0
@@ -48,10 +48,7 @@ class ExportJustification:
         )
 
     def import_organizers(self, by_entity):
-        if by_entity:
-            model = Entity
-        else:
-            model = Organizer
+        model = Organizer
         # Not forcing any order because we want it in the same order that
         # they see (which should be by ID)
         orgs = model.objects.all()
@@ -102,7 +99,7 @@ class ExportJustification:
         self.export_manager.worksheet.title = "Actuacions"
 
         columns = [
-            ("Eix", 40),
+            ("Servei", 40),
             ("Tipus d'actuació", 70),
             ("Nom de l'actuació", 70),
             ("Data inici d'actuació", 16),
@@ -110,6 +107,7 @@ class ExportJustification:
             ("Municipi", 30),
             ("Nombre de participants", 20),
             ("Material de difusió (S/N)", 21),
+            ("[Document acreditatiu]", 21),
             ("Incidències", 20),
             ("[Entitat]", 20),
             ("[Organitzadora]", 20),
@@ -131,29 +129,26 @@ class ExportJustification:
         for item in obj:
             self.export_manager.row_number += 1
 
-            axis = self.export_manager.get_correlation("axis", item.axis)
-            if axis is None:
-                axis = ("", True)
-            subaxis = self.export_manager.get_correlation(
-                "subaxis", item.subaxis)
-            if subaxis is None:
-                subaxis = ("", True)
+            service = item.service if item.service else ""
             town = ("", True)
             if item.place is not None and item.place.town:
                 town = str(item.place.town)
             material_difusio = "No"
             if item.file1.name:
                 material_difusio = "Sí"
+            document_acreditatiu = "No"
+            if item.photo2.name:
+                document_acreditatiu = "Sí"
 
             row = [
-                axis,
-                subaxis,
+                service,
                 item.name,
                 item.date_start,
                 self.get_organizer(getattr(item, self.activity_organizer_field)),
                 town,
                 item.enrolled.count(),
                 material_difusio,
+                document_acreditatiu,
                 "",
                 str(item.entity) if item.entity else '',  # Entitat
                 str(item.organizer) if item.organizer else '',  # Organitzadora
@@ -280,20 +275,13 @@ class ExportJustification:
                     'row_number'
                 ] = self.export_manager.row_number - 1
 
-                axis = self.export_manager.get_correlation("axis", item.axis)
-                if axis is None:
-                    axis = ("", True)
-                subaxis = self.export_manager.get_correlation(
-                    "subaxis", item.subaxis)
-                if subaxis is None:
-                    subaxis = ("", True)
+                service = item.service if item.service else ""
                 town = ("", True)
                 if item.project.town:
                     town = str(item.project.town)
 
                 row = [
-                    axis,
-                    subaxis,
+                    service,
                     item.project.name,
                     item.date_start if not None else '',
                     # This used to be this code for the "Cercle = Entitat"
@@ -323,29 +311,26 @@ class ExportJustification:
         for item in obj:
             self.export_manager.row_number += 1
 
-            axis = self.export_manager.get_correlation("axis", item.axis)
-            if axis is None:
-                axis = ("", True)
-            subaxis = self.export_manager.get_correlation(
-                "subaxis", item.subaxis)
-            if subaxis is None:
-                subaxis = ("", True)
+            service = item.service if item.service else ""
             town = ("", True)
             if item.place and item.place.town:
                 town = str(item.place.town)
             material_difusio = "No"
             if item.file1.name:
                 material_difusio = "Sí"
+            document_acreditatiu = "No"
+            if item.photo2.name:
+                document_acreditatiu = "Sí"
 
             row = [
-                axis,
-                subaxis,
+                service,
                 item.name,
                 item.date_start,
                 self.get_organizer(getattr(item, self.activity_organizer_field)),
                 town,
                 item.minors_participants_number,
                 material_difusio,
+                document_acreditatiu,
                 "",
                 str(item.entity) if item.entity else '',  # Entitat
                 str(item.organizer) if item.organizer else '',  # Organitzadora
@@ -390,20 +375,13 @@ class ExportJustification:
             stage = stages.all()[0]
 
             self.export_manager.row_number += 1
-            axis = self.export_manager.get_correlation("axis", stage.axis)
-            if axis is None:
-                axis = ("", True)
-            subaxis = self.export_manager.get_correlation(
-                "subaxis", stage.subaxis)
-            if subaxis is None:
-                subaxis = ("", True)
+            service = stage.service if stage.service else ""
             town = ("", True)
             if project.town:
                 town = str(project.town)
 
             row = [
-                axis,
-                subaxis,
+                service,
                 project.name,
                 stage.date_start,
                 # This used to be this code for the "Cercle = Entitat"
@@ -789,7 +767,7 @@ class ExportJustification:
             ("Correu electrònic", 30),
             ("Telèfon", 15),
             ("[Acompanyaments]", 40),
-            ("[Eixos]", 40),
+            ("[Serveis]", 40),
         ]
         self.export_manager.create_columns(columns)
 
@@ -811,6 +789,6 @@ class ExportJustification:
                 project.mail,
                 project.phone,
                 project.stages_list if project.stages_list else "",
-                project.axis_list if project.axis_list else ""
+                project.services_list if project.services_list else ""
             ]
             self.export_manager.fill_row_data(row)

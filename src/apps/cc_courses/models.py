@@ -12,6 +12,7 @@ from django.apps import apps
 from django.core.validators import ValidationError
 
 from apps.cc_lib.utils import slugify_model
+from apps.coopolis.choices import ServicesChoices, CirclesChoices
 from apps.coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
@@ -199,6 +200,12 @@ class Activity(models.Model):
         verbose_name="inscrites",
         through="ActivityEnrolled"
     )
+    circle = models.SmallIntegerField(
+        "Ateneu / Cercle",
+        choices=CirclesChoices.choices_named(),
+        null=True,
+        blank=True,
+    )
     entity = models.ForeignKey(
         Entity,
         verbose_name="entitat",
@@ -224,8 +231,14 @@ class Activity(models.Model):
                   "al desplegable, cal que la persona tingui activada l'opció "
                   "'Membre del personal'."
     )
+    service = models.SmallIntegerField(
+        "Servei",
+        choices=ServicesChoices.choices,
+        null=True,
+        blank=True,
+    )
     axis = models.CharField(
-        "eix",
+        "(OBSOLET) Eix",
         help_text="Eix de la convocatòria on es justificarà.",
         choices=settings.AXIS_OPTIONS,
         null=True,
@@ -233,7 +246,7 @@ class Activity(models.Model):
         max_length=1
     )
     subaxis = models.CharField(
-        "sub-eix",
+        "(OBSOLET) Sub-eix",
         help_text="Correspon a 'Tipus d'acció' a la justificació.",
         null=True,
         blank=True,

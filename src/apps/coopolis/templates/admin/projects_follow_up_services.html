@@ -1,0 +1,292 @@
+<!-- sales/templates/spandmin/sale_summary_change_list.html -->
+{% extends "admin/change_list.html" %}
+
+{% load i18n grp_tags admin_urls static admin_list humanize %}
+
+{% block pagination_bottom %}
+{% endblock %}
+
+{% block object-tools-items %}
+  <li>
+    <a href="{{ spreadsheet_url }}" class="addlink" target="_blank">
+      Descarregar
+    </a>
+  </li>
+{% endblock %}
+
+{% block content %}
+<style>
+.totals td {
+  border-top:1px black solid;
+}
+#result_list {
+  text-align: left;
+  position: relative;
+  border-collapse: collapse;
+}
+#result_list th.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* hacks to make sticky headers possible */
+header#grp-header {
+  position: initial;
+}
+#grp-content {
+  overflow: initial;
+}
+</style>
+
+<div class="grp-module">
+  <div class="grp-row">
+    <div class="l-2cr-fluid {% if cl.has_filters and cl.search_fields %}l-d-12{% else %}{% if cl.has_filters or cl.search_fields %}l-d-6{% endif %}{% endif %}">
+      {% if cl.has_filters or cl.search_fields %}
+      {% block aside %}
+      <aside class="c-1">
+        <!-- SEARCH -->
+        {% if cl.search_fields %}
+        {% block search %}
+        <div id="search" class="g-d-6 g-d-f">
+          {% search_form cl %}
+        </div>
+        {% endblock %}
+        {% endif %}
+        <!-- FILTERS -->
+        {% if cl.has_filters %}
+        {% block filters %}
+        <div id="grp-filters" class="g-d-6 g-d-l">
+          <div class="grp-filter">
+            <div class="grp-pulldown-container">
+              <a href="javascript://" class="grp-button grp-pulldown-handler">{% trans 'Filter' %}</a>
+              <div class="grp-pulldown-content" style="display: none;">
+                {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endblock %}
+        {% endif %}
+      </aside>
+      {% endblock %}
+      {% endif %}
+      {% block pagination_top %}
+      {% endblock %}
+
+    </div>
+  </div>
+  <!-- DATE HIERARCHY -->
+  {% block date_hierarchy %}
+  {% if cl.date_hierarchy %}{% date_hierarchy cl %}{% endif %}
+  {% endblock %}
+</div>
+
+<section id="grp-changelist" class="{% if cl.list_editable %} grp-editable{% endif %}">
+  <header style="display:none"><h1>Results</h1></header>
+  <!-- ERRORS -->
+  {% if cl.formset.errors %}
+    <p class="errornote">
+      {% if cl.formset.total_error_count == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+    </p>
+    {{ cl.formset.non_form_errors }}
+    {% for error in cl.formset.errors %}
+      <p>{{ error }}</p>
+    {% endfor %}
+  {% endif %}
+  <!-- MANAGEMENT FORM -->
+  {% if cl.formset %}
+    {{ cl.formset.management_form }}
+  {% endif %}
+
+  {% block result_list %}
+  <div class="grp-module">
+    <table id="result_list" class="grp-table grp-sortable">
+
+      <thead>
+        <tr>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>ID</span>
+            </div>
+          </th>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Seguiment</span>
+            </div>
+          </th>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Organitzadora</span>
+            </div>
+          </th>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Nom</span>
+            </div>
+          </th>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Servei</span>
+            </div>
+          </th>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Tutoritza</span>
+            </div>
+          </th>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Membres<br>H/D</span>
+            </div>
+          </th>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Total<br>sòcies</span>
+            </div>
+          </th>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Sector</span>
+            </div>
+          </th>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Descripció</span>
+            </div>
+          </th>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Estat</span>
+            </div>
+          </th>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Territori</span>
+            </div>
+          </th>
+          <th class="sticky" colspan="2">
+            <div class="grp-text">
+              <span>Creació</span>
+            </div>
+            <div class="grp-text">
+              <span>Hores / Cert.</span>
+            </div>
+          </th>
+          <th class="sticky" colspan="2">
+            <div class="grp-text">
+              <span>Consolidació</span>
+            </div>
+            <div class="grp-text">
+              <span>Hores / Cert.</span>
+            </div>
+          </th>
+          {% if totals.show_incubation %}
+          <th class="sticky" colspan="2">
+            <div class="grp-text">
+              <span>Incubació</span>
+            </div>
+            <div class="grp-text">
+              <span>Hores / Cert.</span>
+            </div>
+          </th>
+          {% endif %}
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Insercions previstes</span>
+            </div>
+          </th>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Insercions justificades</span>
+            </div>
+          </th>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Constitució</span>
+            </div>
+          </th>
+          <th class="sticky">
+            <div class="grp-text">
+              <span>Altres</span>
+            </div>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for row in rows %}
+        <tr class="grp-row {% cycle 'grp-row-even' 'grp-row-odd' %}">
+          <td>{{ row.project.id }}</td>
+          <td>
+            {% if row.project.follow_up_with_date %}
+            <span tooltip="{{ row.project.get_follow_up_situation_display }}">{{ row.project.follow_up_with_date }}</span>
+            {% endif %}
+          </td>
+          <td>{{ row.project.last_stage_organizer|default_if_none:'(cap)' }}</td>
+          <td><a href="{% url 'admin:coopolis_project_change' row.project.id %}" target="_blank">{{ row.project.name }}</a></td>
+          <td>{{ row.project.services_list|default_if_none:"" }} </td>
+          <td>{{ row.project.last_stage_responsible|default_if_none:"" }}</td>
+          <td>{{ row.members_h }} / {{ row.members_d }}</td>
+          <td>{{ row.members_total }}</td>
+          <td>{{ row.project.get_sector_display }}</td>
+          <td>{% if row.project.description %}<span ellipsis-tooltip="{{ row.project.description }}"></span>{% endif %}</td>
+          <td>{{ row.project.get_project_status_display|default_if_none:"" }}</td>
+          <td>{{ row.project.full_town_district|default_if_none:"" }}</td>
+          <td>{{ row.creacio_hores|default_if_none:0 }}</td>
+          <td>{% if row.creacio_certificat > 0 %}
+            <img src="{% static 'admin/img/icon-yes.svg' %}" alt="1">{% endif %}
+          </td>
+          <td>{{ row.consolidacio_hores|default_if_none:0 }}</td>
+          <td>{% if row.consolidacio_certificat > 0 %}
+            <img src="{% static 'admin/img/icon-yes.svg' %}" alt="1">{% endif %}
+          </td>
+          {% if totals.show_incubation %}
+          <td>{{ row.incubation_hores|default_if_none:0 }}</td>
+          <td>{% if row.incubation_certificat > 0 %}
+            <img src="{% static 'admin/img/icon-yes.svg' %}" alt="1">{% endif %}
+          </td>
+          {% endif %}
+          <td>{{ row.project.employment_estimation }}</td>
+          <td>{{ row.employment_insertions }}</td>
+          <td>{% if row.constituted %}Sí{% else %}No{% endif %}</td>
+          <td>
+            {% if row.project.other %}
+            <span ellipsis-tooltip="{{ row.project.other }}" class="ellipsis-tooltip--left"></span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+        <tr class="grp-row totals">
+          <td></td>
+          <td>Totals</td>
+          <td>-</td>
+          <td>{{ rows|length }}</td>
+          <td>-</td>
+          <td>-</td>
+          <td>{{ totals.total_members_h }} / {{ totals.total_members_d }}</td>
+          <td>{{ totals.total_members_total }}</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>{{ totals.total_creacio_hores|default_if_none:0 }}</td>
+          <td>{{ totals.total_creacio_certificat }}</td>
+          <td>{{ totals.total_consolidacio_hores|default_if_none:0 }}</td>
+          <td>{{ totals.total_consolidacio_certificat }}</td>
+          {% if totals.show_incubation %}
+          <td>{{ totals.total_incubation_hores|default_if_none:0 }}</td>
+          <td>{{ totals.total_incubation_certificat }}</td>
+          {% endif %}
+          <td>-</td>
+          <td>{{ totals.total_employment_insertions }}</td>
+          <td>{{ totals.total_constitutions }}</td>
+          <td>-</td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
+  {% endblock %}
+</section>
+{% endblock %}

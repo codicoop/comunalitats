@@ -1,55 +1,29 @@
-from django.shortcuts import render, redirect, reverse
-from apps.cc_users.forms import SignUpForm as SignUpFormClass, MyAccountForm
-from apps.coopolis.models import User
-from django.contrib.sites.shortcuts import get_current_site
+from itertools import islice
+
+from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
-from urllib.parse import urljoin
-from django.contrib.auth.views import LoginView
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.utils.encoding import force_text
-from .tokens import AccountActivationTokenGenerator
+from django.contrib.auth.views import (
+    LoginView, PasswordChangeView as BasePasswordChangeView,
+)
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, UpdateView
 from django import urls
-from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import (
+    PasswordResetCompleteView as BasePasswordResetCompleteView,
+)
+from django.contrib.auth.views import (
+    PasswordResetConfirmView as BasePasswordResetConfirmView,
+)
+from django.contrib.auth.views import PasswordResetDoneView as BasePasswordResetDoneView
+from django.contrib.auth.views import PasswordResetView as BasePasswordResetView
 
-
-def get_activate_url(request, user):
-    _id = urlsafe_base64_encode(force_bytes(user.pk)).decode('utf-8')
-    token = AccountActivationTokenGenerator().make_token(user)
-    url = reverse('users_activate', args=(_id, token,))
-    domain = get_current_site(request).domain
-    protocol = 'https' \
-        if request.is_secure and not (domain.startswith('127.0.0.1') or domain.startswith('localhost')) \
-        else 'http'
-    return urljoin(f'{protocol}://{domain}', url)
-
-
-def activate(request, uuid, token):
-    try:
-        _id = force_text(urlsafe_base64_decode(uuid))
-        user = get_user_model().objects.get(pk=_id)
-    except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
-        user = None
-
-    if user is not None \
-            and not user.is_active \
-            and not user.is_confirmed \
-            and AccountActivationTokenGenerator().check_token(user, token):
-        user.is_active = True
-        user.is_confirmed = True
-        user.save()
-        login(request, user)
-        # TODO: Add successful activation message
-        # TODO: Redirect properly (should we take it from settings?)
-        return redirect('/')
-    else:
-        return render(request, 'registration/user_activation_invalid.html')
+from .decorators import anonymous_required
+from apps.cc_users.forms import SignUpForm as SignUpFormClass, MyAccountForm, \
+    PasswordResetForm
+from apps.coopolis.models import User
 
 
 class SignUpView(CreateView):
@@ -92,18 +66,49 @@ class MyAccountView(SuccessMessageMixin, UpdateView):
         return urls.reverse('user_profile')
 
 
-def change_password_view(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            messages.success(request, 'Contrasenya modificada correctament!')
-            return redirect('user_password')
-        else:
-            messages.error(request, 'Si us plau revisa els errors.')
-    else:
-        form = PasswordChangeForm(request.user)
-    return render(request, 'registration/password.html', {
-        'form': form
-    })
+class PasswordResetView(BasePasswordResetView):
+    form_class = PasswordResetForm
+
+    @method_decorator(anonymous_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        user = form.get_users(form.cleaned_data["email"])
+        # get_users is a generator, but our email field is unique.
+        # This is the simplest way to retrieve only 1 item from a generator:
+        user_list = list(islice(user, 1))
+        if len(user_list) == 0 or not user_list[0].is_active:
+            error = ValidationError(
+                {
+                    "email": "El correu indicat no correspon a cap compte "
+                    "registrat, si us plau verifica que l'hagis "
+                    "escrit correctament."
+                },
+                code="inexistent_email",
+            )
+            form.add_error(None, error)
+            return super().form_invalid(form)
+        return super().form_valid(form)
+
+
+class PasswordResetConfirmView(BasePasswordResetConfirmView):
+    @method_decorator(anonymous_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+
+class PasswordResetDoneView(BasePasswordResetDoneView):
+    @method_decorator(anonymous_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+
+class PasswordResetCompleteView(BasePasswordResetCompleteView):
+    @method_decorator(anonymous_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+
+class PasswordChangeView(BasePasswordChangeView):
+    template_name = "registration/password.html"

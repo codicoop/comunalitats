@@ -10,8 +10,8 @@ from django.conf.urls import url
 
 from apps.coopolis.models import User, Project, ProjectStage, EmploymentInsertion
 from apps.coopolis.forms import (
-    ProjectFormAdmin, ProjectStageInlineForm, ProjectStageForm,
-    EmploymentInsertionInlineFormSet
+    ProjectFormAdmin,
+    EmploymentInsertionInlineFormSet,
 )
 from apps.coopolis.models.projects import ProjectStageSession, ProjectFile
 from conf.custom_mail_manager import MyMailTemplate
@@ -51,24 +51,17 @@ class ProjectStageSessionsInline(admin.StackedInline):
 
 
 class ProjectStageAdmin(admin.ModelAdmin):
-    class Media:
-        js = ('js/grappellihacks.js',)
-        css = {
-            'all': ('styles/grappellihacks.css',)
-        }
-
-    form = ProjectStageForm
     empty_value_display = '(cap)'
     list_display = (
         'project_field_ellipsis', 'date_start', 'stage_type',
-        'covid_crisis', 'stage_responsible_field_ellipsis',
+        'stage_responsible_field_ellipsis',
         'axis_summary', 'subsidy_period', '_has_certificate',
         '_participants_count', 'project_field'
     )
     list_filter = (
         'subsidy_period',
         ('stage_responsible', admin.RelatedOnlyFieldListFilter),
-        'date_start', 'stage_type', 'covid_crisis', 'axis',
+        'date_start', 'stage_type', 'axis',
         'stage_organizer', 'project__sector'
     )
     actions = ["export_as_csv"]
@@ -79,16 +72,25 @@ class ProjectStageAdmin(admin.ModelAdmin):
     }
     fieldsets = [
         (None, {
-            'fields': ['project', 'stage_type', 'covid_crisis',
-                       'subsidy_period', 'axis', 'subaxis',
-                       'stage_organizer', 'stage_responsible',
+            'fields': ['project', 'stage_type',
+                       'subsidy_period', 'service',
+                       'circle', 'stage_responsible',
                        'scanned_certificate',
                        'involved_partners', 'hours_sum', 'date_start',
                        "earliest_session_field", ]
         }),
+        ("Camps convocatòries < 2020", {
+            'fields': ["axis", "subaxis", ]
+        }),
     ]
     inlines = (ProjectStageSessionsInline, )
     readonly_fields = ('hours_sum', 'date_start', "earliest_session_field", )
+
+    class Media:
+        js = ('js/grappellihacks.js',)
+        css = {
+            'all': ('styles/grappellihacks.css',)
+        }
 
     def _has_certificate(self, obj):
         if obj.scanned_certificate:
@@ -182,7 +184,6 @@ class ProjectStageAdmin(admin.ModelAdmin):
 
 class ProjectStagesInline(admin.StackedInline):
     model = ProjectStage
-    form = ProjectStageInlineForm
     extra = 0
     min_num = 0
     show_change_link = True
@@ -194,15 +195,19 @@ class ProjectStagesInline(admin.StackedInline):
     }
     fieldsets = (
         (None, {
-            'fields': ['project', 'stage_type', 'covid_crisis',
-                       'subsidy_period', 'axis', 'subaxis',
+            'fields': ['project', 'stage_type',
+                       'subsidy_period', 'service',
                        'stage_organizer', 'stage_responsible',
                        'scanned_certificate',
-                       'involved_partners', 'hours_sum',
-                       'stage_sessions_field', ]
+                       'involved_partners', 'hours_sum', 'date_start',
+                       "earliest_session_field", "stage_sessions_field", ]
+        }),
+        ("Camps convocatòries < 2020", {
+            'fields': ["axis", "subaxis", ]
         }),
     )
-    readonly_fields = ('hours_sum', 'stage_sessions_field', )
+    readonly_fields = ('hours_sum', 'date_start', 'stage_sessions_field',
+                       "earliest_session_field",)
 
     def stage_sessions_field(self, obj):
         count = obj.sessions_count()
@@ -223,6 +228,14 @@ class ProjectStagesInline(admin.StackedInline):
         if db_field.name == "project":
             kwargs["queryset"] = Project.objects.order_by('name')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def earliest_session_field(self, obj):
+        try:
+            session = obj.stage_sessions.earliest("date")
+        except obj.DoesNotExist:
+            return "No hi ha cap sessió d'acompanyament."
+        return formats.localize(session.date)
+    earliest_session_field.short_description = 'Primera sessió'
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = super().get_fieldsets(request, obj)
@@ -438,8 +451,10 @@ class DerivationAdmin(admin.ModelAdmin):
 class EmploymentInsertionAdmin(admin.ModelAdmin):
     model = EmploymentInsertion
     list_display = ('insertion_date', 'project', 'user', 'contract_type',
-                    'subsidy_period',)
-    list_filter = ('subsidy_period', 'contract_type', 'insertion_date', )
+                    'subsidy_period', 'circle', )
+    list_filter = (
+        'subsidy_period', 'contract_type', 'circle', 'insertion_date',
+    )
     search_fields = ('project__name__unaccent', 'user__first_name__unaccent', )
     raw_id_fields = ('user', 'project',)
     autocomplete_lookup_fields = {

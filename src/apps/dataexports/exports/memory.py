@@ -23,14 +23,13 @@ class ExportMemory:
                 or
                 (Q(cofunded__isnull=False) and Q(cofunded_ateneu=True))
             )
-            and
-            Q(follow_up__isnull=False)
         )
         lines = []
         for stage in qs:
-            if stage.follow_up != '':
-                lines.append(self._html_title(stage.project.name))
-                lines.append(self._html_paragraph(stage.follow_up))
+            lines.append(self._html_title(stage.project.name))
+            for stage_session in stage.stage_sessions.all():
+                if stage_session.follow_up:
+                    lines.append(self._html_paragraph(stage_session.follow_up))
         return HttpResponse(self._compose_html(lines))
 
     @staticmethod
