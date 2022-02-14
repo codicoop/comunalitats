@@ -171,12 +171,13 @@ class Command(BaseCommand):
                     'function_name': 'export_dos_itineraris',
                     'ignore_errors': True
                 },
-                {
-                    'name': "Resultats enquestes de satisfacció",
-                    'subsidy_period': period,
-                    'function_name': 'export_polls',
-                    'ignore_errors': True
-                },
+                # Reason: https://trello.com/c/oTTWhkjc/539-bug-lexportaci%C3%B3-denquestes-de-satisfacci%C3%B3-dona-error
+                # {
+                #     'name': "Resultats enquestes de satisfacció",
+                #     'subsidy_period': period,
+                #     'function_name': 'export_polls',
+                #     'ignore_errors': True
+                # },
             ]
         )
         for export in exports:
