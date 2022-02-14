@@ -182,7 +182,6 @@ class Command(BaseCommand):
         )
         for export in exports:
             print(f"Updating or creating {export['function_name']}")
-            DataExports.objects.all().delete()
             DataExports.objects.create(**export)
         print("Done!")
 
