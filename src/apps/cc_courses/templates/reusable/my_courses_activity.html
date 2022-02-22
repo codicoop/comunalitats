@@ -12,7 +12,7 @@
             </div>
             <div class="course-button">
                 {% if enrollment.can_access_details %}
-                <a href="{% url 'activity' pk=enrollment.activity.id %}" class="enroll-button">
+                <a href="{% url 'activity' slug=enrollment.activity.uuid %}" class="enroll-button">
                     <div style="background-color: #e94e1b;">Instruccions i material</div>
                 </a>
                 {% endif %}
