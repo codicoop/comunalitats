@@ -23,7 +23,7 @@ urlpatterns = [
         name='activity_optout'
     ),
     path(
-        'activities/<pk>/instructions',
+        'activities/<uuid:slug>/instructions',
         login_required(ActivityDetailView.as_view()),
         name='activity'
     ),
