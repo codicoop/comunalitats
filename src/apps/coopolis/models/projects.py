@@ -254,7 +254,7 @@ class Project(models.Model):
                 self.follow_up_situation_update = now()
         super(Project, self).save(*args, **kw)
 
-    def notify_new_request_to_ateneu(self, email_to):
+    def notify_new_request_to_ateneu(self):
         mail = MyMailTemplate('EMAIL_NEW_PROJECT')
         mail.to = config.EMAIL_FROM_PROJECTS.split(',')
         mail.subject_strings = {
@@ -264,7 +264,19 @@ class Project(models.Model):
             'projecte_nom': self.name,
             'projecte_telefon': self.phone,
             'projecte_email': self.mail,
-            'usuari_email': email_to,
+            'usuari_email': self.partners.all()[0].email,
+        }
+        mail.send()
+
+    def notify_request_confirmation(self):
+        mail = MyMailTemplate('EMAIL_PROJECT_REQUEST_CONFIRMATION')
+        mail.to = self.partners.all()[0].email
+        mail.subject_strings = {
+            'projecte_nom': self.name
+        }
+        mail.body_strings = {
+            'projecte_nom': self.name,
+            'url_backoffice': settings.ABSOLUTE_URL,
         }
         mail.send()
 

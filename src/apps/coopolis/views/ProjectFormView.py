@@ -41,7 +41,8 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
     def form_valid(self, form):
         newproject = form.save()
         newproject.partners.add(self.request.user)
-        newproject.notify_new_request_to_ateneu(self.request.user.email)
+        newproject.notify_new_request_to_ateneu()
+        newproject.notify_request_confirmation()
 
         messages.success(
             self.request,
