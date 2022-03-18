@@ -117,7 +117,7 @@ header#grp-header {
           </th>
           <th class="sticky">
             <div class="grp-text">
-              <span>Organitzadora</span>
+              <span>Cercle</span>
             </div>
           </th>
           <th class="sticky">
@@ -223,7 +223,7 @@ header#grp-header {
             <span tooltip="{{ row.project.get_follow_up_situation_display }}">{{ row.project.follow_up_with_date }}</span>
             {% endif %}
           </td>
-          <td>{{ row.project.last_stage_organizer|default_if_none:'(cap)' }}</td>
+          <td>{{ row.project.last_stage_circle|default_if_none:'(cap)' }}</td>
           <td><a href="{% url 'admin:coopolis_project_change' row.project.id %}" target="_blank">{{ row.project.name }}</a></td>
           <td>{{ row.project.services_list|default_if_none:"" }} </td>
           <td>{{ row.project.last_stage_responsible|default_if_none:"" }}</td>
