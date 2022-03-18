@@ -100,7 +100,7 @@ class ExportJustificationService:
 
         columns = [
             ("Servei", 40),
-            ("Tipus d'actuació", 70),
+            ("Subservei", 70),
             ("Nom de l'actuació", 70),
             ("Data inici d'actuació", 16),
             ("Cercle / Ateneu", 16),
@@ -129,7 +129,7 @@ class ExportJustificationService:
         for item in obj:
             self.export_manager.row_number += 1
 
-            service = item.service if item.service else ""
+            service = item.get_service_display() if item.service else ""
             town = ("", True)
             if item.place is not None and item.place.town:
                 town = str(item.place.town)
@@ -142,6 +142,7 @@ class ExportJustificationService:
 
             row = [
                 service,
+                "",  # Pendent que es confirmin
                 item.name,
                 item.date_start,
                 self.get_organizer(getattr(item, self.activity_organizer_field)),
@@ -275,13 +276,14 @@ class ExportJustificationService:
                     'row_number'
                 ] = self.export_manager.row_number - 1
 
-                service = item.service if item.service else ""
+                service = item.get_service_display() if item.service else ""
                 town = ("", True)
                 if item.project.town:
                     town = str(item.project.town)
 
                 row = [
                     service,
+                    "",  # Subservei, pendent.
                     item.project.name,
                     item.date_start if not None else '',
                     # This used to be this code for the "Cercle = Entitat"
@@ -311,7 +313,7 @@ class ExportJustificationService:
         for item in obj:
             self.export_manager.row_number += 1
 
-            service = item.service if item.service else ""
+            service = item.get_service_display() if item.service else ""
             town = ("", True)
             if item.place and item.place.town:
                 town = str(item.place.town)
@@ -324,6 +326,7 @@ class ExportJustificationService:
 
             row = [
                 service,
+                "",  # Subservei, pendent
                 item.name,
                 item.date_start,
                 self.get_organizer(getattr(item, self.activity_organizer_field)),
@@ -375,13 +378,14 @@ class ExportJustificationService:
             stage = stages.all()[0]
 
             self.export_manager.row_number += 1
-            service = stage.service if stage.service else ""
+            service = stage.get_service_display() if stage.service else ""
             town = ("", True)
             if project.town:
                 town = str(project.town)
 
             row = [
                 service,
+                "",  # Subservei, pendent.
                 project.name,
                 stage.date_start,
                 # This used to be this code for the "Cercle = Entitat"
