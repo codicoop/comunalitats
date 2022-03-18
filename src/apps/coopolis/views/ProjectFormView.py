@@ -41,19 +41,7 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
     def form_valid(self, form):
         newproject = form.save()
         newproject.partners.add(self.request.user)
-
-        mail = MyMailTemplate('EMAIL_NEW_PROJECT')
-        mail.to = config.EMAIL_FROM_PROJECTS.split(',')
-        mail.subject_strings = {
-            'projecte_nom': newproject.name
-        }
-        mail.body_strings = {
-            'projecte_nom': newproject.name,
-            'projecte_telefon': newproject.phone,
-            'projecte_email': newproject.mail,
-            'usuari_email': self.request.user.email
-        }
-        mail.send()
+        newproject.notify_new_request_to_ateneu(self.request.user.email)
 
         messages.success(
             self.request,

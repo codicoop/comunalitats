@@ -15,6 +15,7 @@ from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.models import Town, User
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from apps.dataexports.models import SubsidyPeriod
+from conf.custom_mail_manager import MyMailTemplate
 
 
 class Derivation(models.Model):
@@ -252,6 +253,20 @@ class Project(models.Model):
             if orig.follow_up_situation != self.follow_up_situation:
                 self.follow_up_situation_update = now()
         super(Project, self).save(*args, **kw)
+
+    def notify_new_request_to_ateneu(self, email_to):
+        mail = MyMailTemplate('EMAIL_NEW_PROJECT')
+        mail.to = config.EMAIL_FROM_PROJECTS.split(',')
+        mail.subject_strings = {
+            'projecte_nom': self.name
+        }
+        mail.body_strings = {
+            'projecte_nom': self.name,
+            'projecte_telefon': self.phone,
+            'projecte_email': self.mail,
+            'usuari_email': email_to,
+        }
+        mail.send()
 
     def __str__(self):
         return self.name
