@@ -64,13 +64,16 @@ class ActivityPoll(models.Model):
     adquired_new_tools = models.PositiveSmallIntegerField(
         "He incorporat eines per aplicar a nous projectes", null=True,
         blank=True)
-    met_new_people = models.NullBooleanField(
-        "M'ha permès conèixer persones afins")
-    wanted_start_cooperative = models.NullBooleanField(
-        "Abans del curs, teníeu ganes/necessitats d'engegar algun projecte "
-        "cooperatiu"
+    met_new_people = models.BooleanField(
+        "M'ha permès conèixer persones afins",
+        null=True,
     )
-    wants_start_cooperative_now = models.NullBooleanField("I després?")
+    wanted_start_cooperative = models.BooleanField(
+        "Abans del curs, teníeu ganes/necessitats d'engegar algun projecte "
+        "cooperatiu",
+        null=True,
+    )
+    wants_start_cooperative_now = models.BooleanField("I després?", null=True)
 
     # Valoració global
     general_satisfaction = models.PositiveSmallIntegerField(
