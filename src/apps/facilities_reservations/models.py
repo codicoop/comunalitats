@@ -9,6 +9,7 @@ class Room(models.Model):
     class Meta:
         verbose_name = "sala"
         verbose_name_plural = "sales"
+        ordering = ["name", ]
 
     place = models.ForeignKey(CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc",
                               blank=True)

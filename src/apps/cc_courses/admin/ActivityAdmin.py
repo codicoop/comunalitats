@@ -348,6 +348,8 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "responsible":
             kwargs["queryset"] = User.objects.filter(is_staff=True)
+        if db_field.name == "minors_teacher":
+            kwargs["queryset"] = User.objects.order_by("first_name", "last_name")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def activity_poll_field(self, obj):

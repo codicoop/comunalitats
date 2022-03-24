@@ -25,6 +25,7 @@ from conf.custom_mail_manager import MyMailTemplate
 class CoursePlace(models.Model):
     class Meta:
         verbose_name = "lloc"
+        ordering = ["name", ]
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     town = models.ForeignKey(
@@ -44,6 +45,7 @@ class Entity(models.Model):
     class Meta:
         verbose_name = "entitat"
         verbose_name_plural = "entitats"
+        ordering = ["name", ]
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     legal_id = models.CharField("N.I.F.", max_length=9, blank=True, null=True)
@@ -68,6 +70,7 @@ class Cofunding(models.Model):
     class Meta:
         verbose_name = "cofinançadora"
         verbose_name_plural = "cofinançadores"
+        ordering = ["name", ]
 
     name = models.CharField(
         "nom",
@@ -85,6 +88,7 @@ class StrategicLine(models.Model):
     class Meta:
         verbose_name = "línia estratègica"
         verbose_name_plural = "línies estratègiques"
+        ordering = ["name", ]
 
     name = models.CharField(
         "nom",
@@ -102,7 +106,7 @@ class Course(models.Model):
     class Meta:
         verbose_name = "acció"
         verbose_name_plural = "accions"
-        ordering = ["date_start"]
+        ordering = ["-date_start"]
 
     TYPE_CHOICES = (
         ('F', "Accions educatives"),
@@ -165,7 +169,7 @@ class Activity(models.Model):
     class Meta:
         verbose_name = "sessió"
         verbose_name_plural = "sessions"
-        ordering = ["date_start"]
+        ordering = ["-date_start"]
 
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
     course = models.ForeignKey(
@@ -299,7 +303,8 @@ class Activity(models.Model):
         on_delete=models.SET_NULL,
         verbose_name="docent",
         null=True,
-        blank=True)
+        blank=True,
+    )
     # room reservations module
     room_reservation = models.ForeignKey(
         apps.get_model("facilities_reservations", "Reservation", False),

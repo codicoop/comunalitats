@@ -22,6 +22,7 @@ class Derivation(models.Model):
     class Meta:
         verbose_name = "derivació"
         verbose_name_plural = "derivacions"
+        ordering = ["name"]
 
     name = models.CharField("nom", max_length=250)
 
@@ -38,17 +39,17 @@ class Project(models.Model):
                                       blank=True, related_name='projects')
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     SECTORS = (
+        ('M', 'Alimentació'),
+        ('S', 'Assessorament'),
         ('A', 'Altres'),
         ('C', 'Comunicació i tecnologia'),
+        ('CU', 'Cultura'),
+        ('U', 'Cures'),
+        ('E', 'Educació'),
         ('F', 'Finances'),
-        ('O', 'Oci'),
         ('H', 'Habitatge'),
         ('L', 'Logística'),
-        ('E', 'Educació'),
-        ('CU', 'Cultura'),
-        ('S', 'Assessorament'),
-        ('M', 'Alimentació'),
-        ('U', 'Cures'),
+        ('O', 'Oci'),
         ('R', 'Roba')
     )
     sector = models.CharField(max_length=2, choices=SECTORS)
