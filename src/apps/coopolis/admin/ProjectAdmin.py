@@ -60,6 +60,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
     )
     list_filter = (
         'subsidy_period',
+        'service',
         ('stage_responsible', admin.RelatedOnlyFieldListFilter),
         'date_start', 'stage_type', 'axis',
         'circle', 'project__sector'

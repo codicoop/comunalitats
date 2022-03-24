@@ -129,6 +129,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     search_fields = ('date_start', 'name', 'objectives',)
     list_filter = (
         FilterBySubsidyPeriod,
+        "service",
         'course', 'date_start', 'room', 'circle', 'entity', 'axis', 'place',
         'for_minors', 'cofunded',)
     fieldsets = [
