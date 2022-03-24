@@ -66,6 +66,7 @@ class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
             "surname": "- Cognom.<br />",
             "gender": "- Gènere. <br/>",
             "birthdate": "- Data de naixement.<br />",
+            "birth_place": "- Lloc de naixement.<br />",
             "town": "- Municipi.<br />",
         }
         user_errors = [value for key, value in user_obj_errors.items() if
