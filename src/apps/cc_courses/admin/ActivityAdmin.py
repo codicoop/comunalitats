@@ -90,6 +90,7 @@ class ActivityEnrolledInline(admin.TabularInline):
     autocomplete_lookup_fields = {
         'fk': ['user']
     }
+    ordering = ["user__first_name", ]
 
     def open_user_details_field(self, obj):
         if obj.id is None:
