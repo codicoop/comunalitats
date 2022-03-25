@@ -5,6 +5,7 @@ class Town(models.Model):
     class Meta:
         verbose_name = "població"
         verbose_name_plural = "poblacions"
+        ordering = ["name", ]
 
     name = models.CharField("nom", max_length=250)
 

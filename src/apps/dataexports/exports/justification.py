@@ -117,6 +117,7 @@ class ExportJustification:
             ("[Acció]", 20),
             ("[Cofinançat]", 20),
             ("[Cofinançat amb AACC]", 20),
+            ("[Línia estratègica]", 20),
         ]
         self.export_manager.create_columns(columns)
         self.actuacions_rows_activities()
@@ -161,6 +162,7 @@ class ExportJustification:
                 str(item.course),  # Acció
                 str(item.cofunded),  # Cofinançat
                 "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
+                str(item.strategic_line) if item.strategic_line else "",
             ]
             self.export_manager.fill_row_data(row)
 
@@ -314,6 +316,7 @@ class ExportJustification:
                     '(no aplicable)',  # Acció
                     str(item.cofunded),  # Cofinançat
                     "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
+                    str(item.strategic_line) if item.strategic_line else "",
                 ]
                 self.export_manager.fill_row_data(row)
 
@@ -353,6 +356,7 @@ class ExportJustification:
                 str(item.course),  # Acció
                 str(item.cofunded),  # Cofinançat
                 "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
+                str(item.strategic_line) if item.strategic_line else "",
             ]
             self.export_manager.fill_row_data(row)
 
@@ -424,6 +428,7 @@ class ExportJustification:
                 '(no aplicable)',  # Acció
                 str(stage.cofunded),  # Cofinançat
                 "Sí" if stage.cofunded_ateneu else "No",  # Cofinançat amb AACC
+                str(stage.strategic_line) if stage.strategic_line else "",
             ]
             self.export_manager.fill_row_data(row)
 

@@ -94,7 +94,7 @@ class MyDashboard(Dashboard):
                 title="Gestió de dades",
                 column=1,
                 collapsible=False,
-                models=('apps.cc_courses.models.Organizer', 'apps.cc_courses.models.Entity', 'apps.cc_courses.models.CoursePlace'),
+                models=('apps.cc_courses.models.Entity', 'apps.cc_courses.models.CoursePlace'),
             ),
         ]
 

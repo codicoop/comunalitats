@@ -132,7 +132,7 @@
         {% for row in rows %}
         <tr class="grp-row {% cycle 'grp-row-even' 'grp-row-odd' %}">
           <td><a href="{% url 'admin:coopolis_project_change' row.id %}">{{ row.name }}</a></td>
-          <td>{{ row.axis_list|default_if_none:"" }} </td>
+          <td>{{ row.services_list|default_if_none:"" }} </td>
           <td>{{ row.constitution_date }}</td>
           <td>{{ row.cif|default_if_none:"" }}</td>
           <td>{{ row.get_sector_display }}</td>

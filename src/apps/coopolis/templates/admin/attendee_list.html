@@ -71,8 +71,8 @@ td {
       <tr>
         <td style="width: 23%;" class="table-header-caption">EXPEDIENT</td>
         <td>{{ activity.subsidy_period.number|default_if_none:"" }}</td>
-        <td style="width: 21%;" class="table-header-caption">ORGANITZADORA</td>
-        <td class="table-header-content">{{ activity.organizer|default_if_none:"" }}</td>
+        <td style="width: 21%;" class="table-header-caption">ATENEU/CERCLE</td>
+        <td class="table-header-content">{{ activity.get_circle_display }}</td>
       </tr>
       <tr>
         <td class="table-header-caption">ENTITAT</td><td>{{ activity.entity|default_if_none:"" }}</td>

@@ -46,7 +46,7 @@ class ProjectStageSessionsInline(admin.StackedInline):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "session_responsible":
-            kwargs["queryset"] = User.objects.filter(is_staff=True)
+            kwargs["queryset"] = User.objects.filter(is_staff=True).order_by("first_name")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -60,9 +60,10 @@ class ProjectStageAdmin(admin.ModelAdmin):
     )
     list_filter = (
         'subsidy_period',
+        'service',
         ('stage_responsible', admin.RelatedOnlyFieldListFilter),
         'date_start', 'stage_type', 'axis',
-        'stage_organizer', 'project__sector'
+        'circle', 'project__sector'
     )
     actions = ["export_as_csv"]
     search_fields = ['project__name__unaccent']
@@ -121,7 +122,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "stage_responsible":
-            kwargs["queryset"] = User.objects.filter(is_staff=True)
+            kwargs["queryset"] = User.objects.filter(is_staff=True).order_by("first_name")
         if db_field.name == "project":
             kwargs["queryset"] = Project.objects.order_by('name')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
@@ -197,7 +198,7 @@ class ProjectStagesInline(admin.StackedInline):
         (None, {
             'fields': ['project', 'stage_type',
                        'subsidy_period', 'service',
-                       'stage_organizer', 'stage_responsible',
+                       'circle', 'stage_responsible',
                        'scanned_certificate',
                        'involved_partners', 'hours_sum', 'date_start',
                        "earliest_session_field", "stage_sessions_field", ]

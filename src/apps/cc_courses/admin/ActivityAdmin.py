@@ -90,6 +90,7 @@ class ActivityEnrolledInline(admin.TabularInline):
     autocomplete_lookup_fields = {
         'fk': ['user']
     }
+    ordering = ["user__first_name", ]
 
     def open_user_details_field(self, obj):
         if obj.id is None:
@@ -128,6 +129,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     search_fields = ('date_start', 'name', 'objectives',)
     list_filter = (
         FilterBySubsidyPeriod,
+        "service",
         'course', 'date_start', 'room', 'circle', 'entity', 'axis', 'place',
         'for_minors', 'cofunded',)
     fieldsets = [
@@ -348,6 +350,8 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "responsible":
             kwargs["queryset"] = User.objects.filter(is_staff=True)
+        if db_field.name == "minors_teacher":
+            kwargs["queryset"] = User.objects.order_by("first_name", "last_name")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def activity_poll_field(self, obj):

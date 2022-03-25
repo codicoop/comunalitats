@@ -7,10 +7,10 @@ from django.db.models import (
 )
 from django.utils import formats
 
-from apps.cc_courses.models import Organizer, Activity, Entity
+from apps.cc_courses.models import Activity
+from apps.coopolis.choices import CirclesChoices, ServicesChoices
 from apps.coopolis.models import ActivityPoll
 from apps.dataexports.exports.exceptions import (
-    MissingOrganizers,
     AxisDoesNotExistException
 )
 from apps.dataexports.exports.manager import ExcelExportManager
@@ -22,26 +22,28 @@ from apps.dataexports.exports.row_factories import (
 
 
 class ExportPolls:
-    def __init__(self, export_obj, by_entity=False):
+    def __init__(self, export_obj):
         self.export_manager = ExcelExportManager(export_obj)
-        self.organizers = dict()
-        self.import_organizers(by_entity)
-        self.organizer_field = "organizer" if not by_entity else "entity"
-        if not len(self.organizers):
-            raise MissingOrganizers
+        self.circles = self.import_circles()
 
     def export(self):
         """ Each function here called handles the creation of one of the
         worksheets."""
         self.global_report()
-        for axis in settings.AXIS_OPTIONS:
-            self.global_report(axis[0])
+        self.generate_dynamic_sheets()
         self.answers_list("also_interested_in", "AltresTemesInterès")
         self.answers_list("heard_about_it", "ComUsHeuAssabentat")
         self.answers_list("comments", "VolsComentarAlgunaCosaMés")
         self.all_activities()
 
         return self.export_manager.return_document("resultats_enquestes")
+
+    def get_sheets_list(self):
+        return settings.AXIS_OPTIONS
+
+    def generate_dynamic_sheets(self):
+        for sheet in self.get_sheets_list():
+            self.global_report(sheet[0])
 
     def all_activities(self):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
@@ -154,14 +156,14 @@ class ExportPolls:
                 EmptyRow(),
                 EmptyRow(),
                 TextWithValue("Nom de l'actuació", activity.name),
-                TextWithValue("Eix", activity.axis),
+                self.get_service_or_axis_row(activity),
                 TextWithValue(
                     "Tipus d'actuació",
                     "Per menors" if activity.for_minors else "Per adults",
                 ),
                 TextWithValue(
                     "Cercle / Ateneu",
-                    activity.organizer.name if activity.organizer else "-",
+                    activity.get_circle_display() if activity.circle else "-",
                 ),
                 TextWithValue(
                     "Municipi",
@@ -276,6 +278,9 @@ class ExportPolls:
             for row in rows:
                 self.export_manager.fill_row_from_factory(row)
 
+    def get_service_or_axis_row(self, activity):
+        return TextWithValue("Eix", activity.axis)
+
     def answers_list(self, question, title):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
             title
@@ -314,7 +319,7 @@ class ExportPolls:
     def global_report(self, axis: str = None):
         if axis:
             self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
-                self.get_axis_title(axis)
+                self.get_dynamic_sheet_title(axis)
             )
         else:
             # The first sheet is already created, just need to adjust name.
@@ -324,11 +329,12 @@ class ExportPolls:
 
         columns = [
             ("", 60),
-            (self.organizers.get(0), 20),
-            (self.organizers.get(1), 20),
-            (self.organizers.get(2), 20),
-            (self.organizers.get(3), 20),
-            (self.organizers.get(4), 20),
+            (self.circles[0][1], 20),
+            (self.circles[1][1], 20),
+            (self.circles[2][1], 20),
+            (self.circles[3][1], 20),
+            (self.circles[4][1], 20),
+            (self.circles[5][1], 20),
         ]
         self.export_manager.create_columns(columns)
 
@@ -336,36 +342,24 @@ class ExportPolls:
 
     def global_report_obj(self, axis: str = None):
         querysets = []
-        for organizer in self.organizers.values():
+        for circle_value, circle_label in self.circles:
             qs = ActivityPoll.objects.filter(
                 **{
                     "activity__date_start__range": self.export_manager.subsidy_period_range,
-                    f"activity__{self.organizer_field}": organizer,
+                    f"activity__circle": circle_value,
                 }
             )
             if axis:
-                qs = qs.filter(activity__axis=axis)
-            querysets.append(
-                qs
-            )
-        # qs.annotate(Count("id"))
-        # qs.order_by()
+                qs = self.add_sheet_filter_to_qs(qs, axis)
+            querysets.append(qs)
         averages = {
             "ateneu": self.get_averages_qs(querysets[0]),
-            "cercle1": {},
-            "cercle2": {},
-            "cercle3": {},
-            "cercle4": {},
+            "cercle1": self.get_averages_qs(querysets[1]),
+            "cercle2": self.get_averages_qs(querysets[2]),
+            "cercle3": self.get_averages_qs(querysets[3]),
+            "cercle4": self.get_averages_qs(querysets[4]),
+            "cercle5": self.get_averages_qs(querysets[5]),
         }
-        total_organizers = len(self.organizers)
-        if total_organizers > 1:
-            averages["cercle1"] = self.get_averages_qs(querysets[1])
-        if total_organizers > 2:
-            averages["cercle2"] = self.get_averages_qs(querysets[2])
-        if total_organizers > 3:
-            averages["cercle3"] = self.get_averages_qs(querysets[3])
-        if total_organizers > 4:
-            averages["cercle4"] = self.get_averages_qs(querysets[4])
 
         return querysets, averages
 
@@ -674,18 +668,8 @@ class ExportPolls:
         for row in rows:
             self.export_manager.fill_row_from_factory(row)
 
-    def import_organizers(self, by_entity):
-        if by_entity:
-            model = Entity
-        else:
-            model = Organizer
-        orgs = model.objects.all()
-        i = 0
-        for org in orgs:
-            self.organizers.update({
-                i: org
-            })
-            i += 1
+    def import_circles(self):
+        return CirclesChoices.choices_named()
 
     def get_global_average(self, values: dict):
         averageable_fields = [
@@ -716,8 +700,24 @@ class ExportPolls:
             return mean(numbers)
         return 0
 
-    def get_axis_title(self, axis):
-        for axis_tuple in settings.AXIS_OPTIONS:
+    def get_dynamic_sheet_title(self, axis):
+        for axis_tuple in self.get_sheets_list():
             if axis in axis_tuple:
-                return axis_tuple[1]
+                # If you want to change the char limit trim, keep it below 32
+                # chars or you'll raise a warning.
+                return axis_tuple[1][:20]
         raise AxisDoesNotExistException
+
+    def add_sheet_filter_to_qs(self, qs, axis):
+        return qs.filter(activity__axis=axis)
+
+
+class ExportPollsByServices(ExportPolls):
+    def add_sheet_filter_to_qs(self, qs, axis):
+        return qs.filter(activity__service=axis)
+
+    def get_sheets_list(self):
+        return ServicesChoices.choices
+
+    def get_service_or_axis_row(self, activity):
+        return TextWithValue("Servei", activity.get_service_display())

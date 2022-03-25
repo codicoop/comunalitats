@@ -15,12 +15,14 @@ from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.models import Town, User
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from apps.dataexports.models import SubsidyPeriod
+from conf.custom_mail_manager import MyMailTemplate
 
 
 class Derivation(models.Model):
     class Meta:
         verbose_name = "derivació"
         verbose_name_plural = "derivacions"
+        ordering = ["name"]
 
     name = models.CharField("nom", max_length=250)
 
@@ -37,17 +39,17 @@ class Project(models.Model):
                                       blank=True, related_name='projects')
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     SECTORS = (
+        ('M', 'Alimentació'),
+        ('S', 'Assessorament'),
         ('A', 'Altres'),
         ('C', 'Comunicació i tecnologia'),
+        ('CU', 'Cultura'),
+        ('U', 'Cures'),
+        ('E', 'Educació'),
         ('F', 'Finances'),
-        ('O', 'Oci'),
         ('H', 'Habitatge'),
         ('L', 'Logística'),
-        ('E', 'Educació'),
-        ('CU', 'Cultura'),
-        ('S', 'Assessorament'),
-        ('M', 'Alimentació'),
-        ('U', 'Cures'),
+        ('O', 'Oci'),
         ('R', 'Roba')
     )
     sector = models.CharField(max_length=2, choices=SECTORS)
@@ -178,10 +180,9 @@ class Project(models.Model):
     @property
     def axis_list(self):
         """
-        This method is not used in the new data, reports or exports
-        since 1/11/2021, but needs to be kept until it's confirmed that they
-        don't want the old exports.
-        :return:
+        Justification export prior to 1/11/2021 still use this method as will
+        probably do so forever unless they decide to completely ditch the
+        information about axis and subaxis.
         """
         if not self.stages or self.stages.count() < 1:
             return None
@@ -207,12 +208,12 @@ class Project(models.Model):
     last_stage_responsible.fget.short_description = "Últim acompanyament"
 
     @property
-    def last_stage_organizer(self):
+    def last_stage_circle(self):
         if not self.stages or self.stages.count() < 1:
             return None
-        return self.stages.all()[0].stage_organizer
+        return self.stages.all()[0].get_circle_display()
 
-    last_stage_organizer.fget.short_description = "Última organitzadora"
+    last_stage_circle.fget.short_description = "Cercle de l'últim acompanyament"
 
     @property
     def full_town_district(self):
@@ -253,6 +254,32 @@ class Project(models.Model):
             if orig.follow_up_situation != self.follow_up_situation:
                 self.follow_up_situation_update = now()
         super(Project, self).save(*args, **kw)
+
+    def notify_new_request_to_ateneu(self):
+        mail = MyMailTemplate('EMAIL_NEW_PROJECT')
+        mail.to = config.EMAIL_FROM_PROJECTS.split(',')
+        mail.subject_strings = {
+            'projecte_nom': self.name
+        }
+        mail.body_strings = {
+            'projecte_nom': self.name,
+            'projecte_telefon': self.phone,
+            'projecte_email': self.mail,
+            'usuari_email': self.partners.all()[0].email,
+        }
+        mail.send()
+
+    def notify_request_confirmation(self):
+        mail = MyMailTemplate('EMAIL_PROJECT_REQUEST_CONFIRMATION')
+        mail.to = self.partners.all()[0].email
+        mail.subject_strings = {
+            'projecte_nom': self.name
+        }
+        mail.body_strings = {
+            'projecte_nom': self.name,
+            'url_backoffice': settings.ABSOLUTE_URL,
+        }
+        mail.send()
 
     def __str__(self):
         return self.name

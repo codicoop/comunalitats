@@ -67,7 +67,3 @@ class ActivityPollView(CreateView):
             raise Http404(f"No existeix cap sessió formativa amb aquesta "
                           f"adreça.")
         return obj
-
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        return form

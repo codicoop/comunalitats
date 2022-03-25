@@ -145,8 +145,8 @@ Correu electrònic de l'usuari que l'ha creat: {usuari_email} <br />""",
             subject="Nou compte creat a {ateneu_nom}",
             body="""
 <h2>Benvingut/da a {ateneu_nom}!</h2>
-<p><em>Estàs rebent aquest correu perquè s'ha completat un registre a la plataforma serveis.bcn.coop.<br />
-Si aquest registre no l'has fet tu o cap altra persona amb qui comparteixis aquest compte, ignora aquestcorreu o 
+<p><em>Estàs rebent aquest correu perquè s'ha completat un registre a la plataforma {url_backoffice}.<br />
+Si aquest registre no l'has fet tu o cap altra persona amb qui comparteixis aquest compte, ignora aquest correu o 
 avisa'ns per tal que l'eliminem de la base de dades.</em></p><br />
 <p>Amb el teu compte pots:</p>
 <ul>
