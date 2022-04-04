@@ -159,6 +159,17 @@ Amb això estem dient-li que generi la imatge en el context de la carpeta actual
 
 ## Generar la imatge a Dockerhub
 
+L'objectiu és tenir dues imatges per cada release:
+
+- codi.coop/ateneus:latest
+- codi.coop/ateneus:release-22.03.002 (versió corresponent a la tag)
+
+Quan es fa una release s'ha de crear una card al Trello fent servir la plantilla
+que hi ha amb la llista de passos que cal seguir, i en aquesta plantilla ja
+s'hi inclouen els passos per generar això.
+
+### Per generar la imatge :latest
+
 El repositori a dockerhub està configurat de manera que sempre que hi hagi un
 push a la branch `main` generi una nova imatge.
 
@@ -172,6 +183,23 @@ Si la vols pujar manualment:
 2. Fer `docker login` si no has fet abans.
 3. Pujar la imatge:
 `docker push codicoop/ateneus:latest`
+
+### Per generar la imatge :release-*tag*
+
+Tenint la versió final a la branch main, obrir el repositori a Github i anar a Tags - Releases - New release.
+
+A Choose a tag, desplegar i escriure el nom que tindrà el nou tag seguint la 
+nomenclatura:
+**v22.02.001** on **22.02** son l'any i el mes de release, i **001** el nº de release dins del mateix mes.
+
+A Target triar Main.
+
+Com a títol el que creguis, p.ex. 'Canvis d'abril de 2022'.
+
+Clicar a Publish Release.
+
+La creació de la imatge es dispararà, ara cal que entris al cap d'uns 10 minuts
+a hub.docker.com per comprovar que s'ha generat sense errors.
 
 ## Testejar la imatge de producció en local o a develop
 Assumint que tens l'última versió a dockerhub, fes:
