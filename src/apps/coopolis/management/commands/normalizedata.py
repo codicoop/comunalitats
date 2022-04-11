@@ -148,6 +148,12 @@ class Command(BaseCommand):
                     'ignore_errors': True
                 },
                 {
+                    'name': "Detall dels acompanyaments",
+                    'subsidy_period': period,
+                    'function_name': 'export_stages_details_services',
+                    'ignore_errors': True
+                },
+                {
                     'name': "Resultats enquestes de satisfacció",
                     'subsidy_period': period,
                     'function_name': 'export_polls_by_services',
