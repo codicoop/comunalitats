@@ -6,7 +6,7 @@ from apps.dataexports.exports.manager import ExcelExportManager
 
 
 class ExportJustification:
-    def __init__(self, export_obj, by_entity=False):
+    def __init__(self, export_obj):
         self.export_manager = ExcelExportManager(export_obj)
         self.number_of_activities = 0
         self.number_of_stages = 0
