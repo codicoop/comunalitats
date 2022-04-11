@@ -10,7 +10,7 @@ from apps.dataexports.exports.justification_service import \
 from apps.dataexports.exports.memory import ExportMemory
 from apps.dataexports.exports.polls import ExportPolls, ExportPollsByServices
 from apps.dataexports.exports.stages_details import ExportStagesDetails
-from apps.dataexports.exports.stages_services import ExportStagesDetailsServices
+from apps.dataexports.exports.stages_details_services import ExportStagesDetailsServices
 
 
 class ExportFunctions:
