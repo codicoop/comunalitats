@@ -148,12 +148,6 @@ class Command(BaseCommand):
                     'ignore_errors': True
                 },
                 {
-                    'name': "Exportació justificació en 2 itineraris",
-                    'subsidy_period': period,
-                    'function_name': 'export_dos_itineraris',
-                    'ignore_errors': True
-                },
-                {
                     'name': "Resultats enquestes de satisfacció",
                     'subsidy_period': period,
                     'function_name': 'export_polls_by_services',
