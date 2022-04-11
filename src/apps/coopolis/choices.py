@@ -39,3 +39,10 @@ class CirclesChoices(models.IntegerChoices):
                 label = member.label
             choices.append((member.value, label))
         return choices
+
+    @property
+    def label_named(self):
+        return (
+            settings.CIRCLE_NAMES[self.value] if settings.CIRCLE_NAMES[self.value]
+            else self.label
+        )

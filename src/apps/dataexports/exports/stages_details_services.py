@@ -3,6 +3,7 @@ import numbers
 from django.db.models import Sum, Q, Count
 from openpyxl.styles.numbers import FORMAT_PERCENTAGE
 
+from apps.coopolis.choices import CirclesChoices, ServicesChoices
 from apps.coopolis.models import ProjectStage
 from apps.coopolis.models.projects import ProjectStageSession, StageSubtype
 from apps.dataexports.exports.manager import ExcelExportManager
@@ -110,21 +111,18 @@ class ExportStagesDetailsServices:
             ("Sense certificat BO", 20),
         ]
         self.export_manager.create_columns(columns)
-        self.circles_ateneu_rows()
-        self.circles_circle1_rows()
-        self.circles_circle2_rows()
+        self.circles_circle_n_rows(CirclesChoices.CERCLE0)
+        self.circles_circle_n_rows(CirclesChoices.CERCLE1)
+        self.circles_circle_n_rows(CirclesChoices.CERCLE2)
+        self.circles_circle_n_rows(CirclesChoices.CERCLE3)
+        self.circles_circle_n_rows(CirclesChoices.CERCLE4)
+        self.circles_circle_n_rows(CirclesChoices.CERCLE5)
         self.circles_ateneu_user_rows()
 
-    def circles_ateneu_rows(self):
-        rows = list(self.circles_data["ateneu"].values())
-        for row in rows:
-            self.export_manager.row_number += 1
-            self.export_manager.fill_row_data(row)
-
-    def circles_circle1_rows(self):
+    def circles_circle_n_rows(self, circle):
         self.export_manager.row_number += 1
         row = [
-            "Cercle transició eco-social",
+            circle.label_named,
             "Bases Convo",
             "Justificades BO",
             "Sense certificat BO",
@@ -133,23 +131,7 @@ class ExportStagesDetailsServices:
         self.export_manager.fill_row_data(row)
         self.export_manager.format_row_header()
 
-        rows = self.circles_data["circle_migrations"].values()
-        for row in rows:
-            self.export_manager.row_number += 1
-            self.export_manager.fill_row_data(row)
-
-    def circles_circle2_rows(self):
-        self.export_manager.row_number += 1
-        row = [
-            "Cercle migracions",
-            "Bases Convo",
-            "Justificades BO",
-            "Sense certificat BO",
-        ]
-        self.export_manager.row_number += 1
-        self.export_manager.fill_row_data(row)
-        self.export_manager.format_row_header()
-        rows = self.circles_data["circle_eco"].values()
+        rows = self.circles_data[circle.name].values()
         for row in rows:
             self.export_manager.row_number += 1
             self.export_manager.fill_row_data(row)
@@ -174,9 +156,6 @@ class ExportStagesDetailsServices:
 
 
 class StageDetailsDataManager:
-    organizer_ateneu_id = 5
-    organizer_circle_migrations_id = 2
-    organizer_circle_eco_id = 6
     subsidy_period = None
 
     def __init__(self, subsidy_period):
@@ -443,54 +422,12 @@ class CirclesPerUserDataManager(StageDetailsDataManager):
     def get_data(self):
         query = {
             'sessions_number': Count('session_responsible'),
-            'hours_ateneu_certified': Sum(
-                'hours',
-                filter=(
-                    Q(project_stage__stage_organizer=self.organizer_ateneu_id) &
-                    Q(project_stage__scanned_certificate__isnull=False) &
-                    ~Q(project_stage__scanned_certificate__exact='')
-                )
-            ),
-            'hours_ateneu_uncertified': Sum(
-                'hours',
-                filter=(
-                    Q(project_stage__stage_organizer=self.organizer_ateneu_id) &
-                    Q(project_stage__scanned_certificate__isnull=True) |
-                    Q(project_stage__scanned_certificate__exact='')
-                )
-            ),
-            'hours_circle_migrations_certified': Sum(
-                'hours',
-                filter=(
-                    Q(project_stage__stage_organizer=self.organizer_circle_migrations_id) &
-                    Q(project_stage__scanned_certificate__isnull=False) &
-                    ~Q(project_stage__scanned_certificate__exact='')
-                )
-            ),
-            'hours_circle_migrations_uncertified': Sum(
-                'hours',
-                filter=(
-                    Q(project_stage__stage_organizer=self.organizer_circle_migrations_id) &
-                    Q(project_stage__scanned_certificate__isnull=True) |
-                    Q(project_stage__scanned_certificate__exact='')
-                )
-            ),
-            'hours_circle_eco_certified': Sum(
-                'hours',
-                filter=(
-                    Q(project_stage__stage_organizer=self.organizer_circle_eco_id) &
-                    Q(project_stage__scanned_certificate__isnull=False) &
-                    ~Q(project_stage__scanned_certificate__exact='')
-                )
-            ),
-            'hours_circle_eco_uncertified': Sum(
-                'hours',
-                filter=(
-                    Q(project_stage__stage_organizer=self.organizer_circle_eco_id) &
-                    Q(project_stage__scanned_certificate__isnull=True) |
-                    Q(project_stage__scanned_certificate__exact='')
-                )
-            ),
+            **self.get_circle_queryset(CirclesChoices.CERCLE0),
+            **self.get_circle_queryset(CirclesChoices.CERCLE1),
+            **self.get_circle_queryset(CirclesChoices.CERCLE2),
+            **self.get_circle_queryset(CirclesChoices.CERCLE3),
+            **self.get_circle_queryset(CirclesChoices.CERCLE4),
+            **self.get_circle_queryset(CirclesChoices.CERCLE5),
         }
         qs = ProjectStageSession.objects.filter(
             project_stage__subsidy_period=self.subsidy_period,
@@ -507,19 +444,51 @@ class CirclesPerUserDataManager(StageDetailsDataManager):
         data = self.format_data(qs)
         return data
 
+    def get_circle_queryset(self, circle):
+        return {
+            f'hours_{circle.name}_certified': Sum(
+                'hours',
+                filter=(
+                        Q(project_stage__circle=circle) &
+                        Q(project_stage__scanned_certificate__isnull=False) &
+                        ~Q(project_stage__scanned_certificate__exact='')
+                )
+            ),
+            f'hours_{circle.name}_uncertified': Sum(
+                'hours',
+                filter=(
+                        Q(project_stage__circle=circle) &
+                        Q(project_stage__scanned_certificate__isnull=True) |
+                        Q(project_stage__scanned_certificate__exact='')
+                )
+            ),
+        }
+
     @staticmethod
     def get_base_data_structure():
         return {
-            "ateneu": {
-                "verbose_name": "Ateneu",
+            CirclesChoices.CERCLE0.name: {
+                "verbose_name": CirclesChoices.CERCLE0.label_named,
                 "values": [],
             },
-            "circle_migrations": {
-                "verbose_name": "Cercles migracions",
+            CirclesChoices.CERCLE1.name: {
+                "verbose_name": CirclesChoices.CERCLE1.label_named,
                 "values": [],
             },
-            "circle_eco": {
-                "verbose_name": "Cercles transició eco-social",
+            CirclesChoices.CERCLE2.name: {
+                "verbose_name": CirclesChoices.CERCLE2.label_named,
+                "values": [],
+            },
+            CirclesChoices.CERCLE3.name: {
+                "verbose_name": CirclesChoices.CERCLE3.label_named,
+                "values": [],
+            },
+            CirclesChoices.CERCLE4.name: {
+                "verbose_name": CirclesChoices.CERCLE4.label_named,
+                "values": [],
+            },
+            CirclesChoices.CERCLE5.name: {
+                "verbose_name": CirclesChoices.CERCLE5.label_named,
                 "values": [],
             },
         }
@@ -552,200 +521,87 @@ class CirclesPerUserDataManager(StageDetailsDataManager):
 
 
 class CirclesDataManager(StageDetailsDataManager):
-    @staticmethod
-    def get_data_structure():
+    def get_data_structure(self):
         return {
-          "ateneu": {
-            "total": [
-                "Total hores",
-                1000,  # Bases Convo
+            **self.get_data_structure_for_circle(CirclesChoices.CERCLE0),
+            **self.get_data_structure_for_circle(CirclesChoices.CERCLE1),
+            **self.get_data_structure_for_circle(CirclesChoices.CERCLE2),
+            **self.get_data_structure_for_circle(CirclesChoices.CERCLE3),
+            **self.get_data_structure_for_circle(CirclesChoices.CERCLE4),
+            **self.get_data_structure_for_circle(CirclesChoices.CERCLE5),
+        }
+
+    def get_data_structure_for_circle(self, circle):
+        return {
+            circle.name: {
+                **self.get_data_structure_for_service(
+                    "total",
+                    "Total hores",
+                ),
+                **self.get_data_structure_for_service(
+                    ServicesChoices.MAP_DIAGNOSI.name,
+                    ServicesChoices.MAP_DIAGNOSI.label,
+                ),
+                **self.get_data_structure_for_service(
+                    ServicesChoices.DIV_SENS_GEN_CONEIXEMENT.name,
+                    ServicesChoices.DIV_SENS_GEN_CONEIXEMENT.label,
+                ),
+                **self.get_data_structure_for_service(
+                    ServicesChoices.FORM_PROM_CREA_CONS.name,
+                    ServicesChoices.FORM_PROM_CREA_CONS.label,
+                ),
+                **self.get_data_structure_for_service(
+                    ServicesChoices.ACOM_CREA_CONS.name,
+                    ServicesChoices.ACOM_CREA_CONS.label,
+                ),
+                **self.get_data_structure_for_service(
+                    ServicesChoices.INTERCOOP_XARXA_TERRITORI.name,
+                    ServicesChoices.INTERCOOP_XARXA_TERRITORI.label,
+                ),
+                **self.get_data_structure_for_service(
+                    ServicesChoices.PUNT_INFO.name,
+                    ServicesChoices.PUNT_INFO.label,
+                ),
+                **self.get_data_structure_for_service(
+                    None,
+                    "Sense Servei",
+                ),
+                **self.get_data_structure_for_service(
+                    "insertions",
+                    "Insercions",
+                ),
+                **self.get_data_structure_for_service(
+                    "constituted",
+                    "Constitució",
+                ),
+            }
+        }
+
+    def get_data_structure_for_service(self, name, label):
+        return {
+            name: [
+                label,
+                0,  # Nº que haurà de venir de les bases convocatòria.
                 0,  # Justificades
                 0,  # Sense certificat
-            ],
-            "B": [
-                "Eix B",
-                "??",  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            "C": [
-                "Eix C",
-                114,  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            "D": [
-                "Eix D",
-                110,  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            None: [
-                "sense eix",
-                0,  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            "insertions": [
-                "Insercions",
-                30,  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            "constituted": [
-                "Constitució",
-                0,  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-          },
-          "circle_migrations": {
-            "total": [
-                "Total hores",
-                300,  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            "B": [
-                "Eix B",
-                "??",  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            "C": [
-                "Eix C",
-                1,  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            "D": [
-                "Eix D",
-                "1 a 20h",  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            None: [
-                "sense eix",
-                0,  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            "insertions": [
-                "insercions",
-                8,  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            "constituted": [
-                "Constitució",
-                "No",  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-          },
-          "circle_eco": {
-            "total": [
-                "Total hores",
-                300,  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            "B": [
-                "Eix B",
-                "??",  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            "C": [
-                "Eix C",
-                1,  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            "D": [
-                "Eix D",
-                "1 a 20h",  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            None: [
-                "sense eix",
-                0,  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            "insertions": [
-                "Insercions",
-                8,  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-            "constituted": [
-                "Constitució",
-                "No",  # Bases Convo
-                0,  # Justificades
-                0,  # Sense certificat
-            ],
-          },
+            ]
         }
 
     def get_circles_data(self):
         query = {
-            'hours_ateneu_certified': Sum(
-                'stage_sessions__hours',
-                filter=(
-                    Q(stage_organizer=self.organizer_ateneu_id) &
-                    Q(scanned_certificate__isnull=False) &
-                    ~Q(scanned_certificate__exact='')
-                )
-            ),
-            'hours_ateneu_uncertified': Sum(
-                'stage_sessions__hours',
-                filter=(
-                    Q(stage_organizer=self.organizer_ateneu_id) &
-                    Q(scanned_certificate__isnull=True) |
-                    Q(scanned_certificate__exact='')
-                )
-            ),
-            'hours_circle_migrations_certified': Sum(
-                'stage_sessions__hours',
-                filter=(
-                    Q(stage_organizer=self.organizer_circle_migrations_id) &
-                    Q(scanned_certificate__isnull=False) &
-                    ~Q(scanned_certificate__exact='')
-                )
-            ),
-            'hours_circle_migrations_uncertified': Sum(
-                'stage_sessions__hours',
-                filter=(
-                    Q(stage_organizer=self.organizer_circle_migrations_id) &
-                    Q(scanned_certificate__isnull=True) |
-                    Q(scanned_certificate__exact='')
-                )
-            ),
-            'hours_circle_eco_certified': Sum(
-                'stage_sessions__hours',
-                filter=(
-                    Q(stage_organizer=self.organizer_circle_eco_id) &
-                    Q(scanned_certificate__isnull=False) &
-                    ~Q(scanned_certificate__exact='')
-                )
-            ),
-            'hours_circle_eco_uncertified': Sum(
-                'stage_sessions__hours',
-                filter=(
-                    Q(stage_organizer=self.organizer_circle_eco_id) &
-                    Q(scanned_certificate__isnull=True) |
-                    Q(scanned_certificate__exact='')
-                )
-            ),
+            **self.get_circles_data_queryset(CirclesChoices.CERCLE0),
+            **self.get_circles_data_queryset(CirclesChoices.CERCLE1),
+            **self.get_circles_data_queryset(CirclesChoices.CERCLE2),
+            **self.get_circles_data_queryset(CirclesChoices.CERCLE3),
+            **self.get_circles_data_queryset(CirclesChoices.CERCLE4),
+            **self.get_circles_data_queryset(CirclesChoices.CERCLE5),
         }
         qs = ProjectStage.objects.filter(
             subsidy_period=self.subsidy_period,
         )
         qs = (
             qs
-                .values('axis')
+                .values('service')
                 .annotate(**query)
         )
         # Disabling order_by because it breaks the group_by.
@@ -753,46 +609,50 @@ class CirclesDataManager(StageDetailsDataManager):
         data = self.format_circles_data(qs)
         return data
 
+    def get_circles_data_queryset(self, circle):
+        return {
+            f'hours_{circle.name}_certified': Sum(
+                'stage_sessions__hours',
+                filter=(
+                        Q(circle=circle) &
+                        Q(scanned_certificate__isnull=False) &
+                        ~Q(scanned_certificate__exact='')
+                )
+            ),
+            f'hours_{circle.name}_uncertified': Sum(
+                'stage_sessions__hours',
+                filter=(
+                        Q(circle=circle) &
+                        Q(scanned_certificate__isnull=True) |
+                        Q(scanned_certificate__exact='')
+                )
+            ),
+        }
+
     def format_circles_data(self, data):
         template = self.get_data_structure()
         for item in data:
-            # Ateneu
-            template["ateneu"][item["axis"]][2] = self.none_as_zero(
-                item["hours_ateneu_certified"]
-            )
-            template["ateneu"][item["axis"]][3] = self.none_as_zero(
-                item["hours_ateneu_uncertified"]
-            )
-            if isinstance(item["hours_ateneu_certified"], numbers.Number):
-                template["ateneu"]["total"][2] += item["hours_ateneu_certified"]
-            if isinstance(item["hours_ateneu_uncertified"], numbers.Number):
-                template["ateneu"]["total"][3] += item["hours_ateneu_uncertified"]
+            self.format_circles_data_item(template, CirclesChoices.CERCLE0, item)
+            self.format_circles_data_item(template, CirclesChoices.CERCLE1, item)
+            self.format_circles_data_item(template, CirclesChoices.CERCLE2, item)
+            self.format_circles_data_item(template, CirclesChoices.CERCLE3, item)
+            self.format_circles_data_item(template, CirclesChoices.CERCLE4, item)
+            self.format_circles_data_item(template, CirclesChoices.CERCLE5, item)
 
-            # Cercle Migracions
-            template["circle_migrations"][item["axis"]][2] = self.none_as_zero(
-                item["hours_circle_migrations_certified"]
-            )
-            template["circle_migrations"][item["axis"]][3] = self.none_as_zero(
-                item["hours_circle_migrations_uncertified"]
-            )
-            if isinstance(item["hours_circle_migrations_certified"], numbers.Number):
-                template["circle_migrations"]["total"][2] += \
-                    item["hours_circle_migrations_certified"]
-            if isinstance(item["hours_circle_migrations_uncertified"], numbers.Number):
-                template["circle_migrations"]["total"][3] += \
-                    item["hours_circle_migrations_uncertified"]
-
-            # Cercle canvi ecosocial
-            template["circle_eco"][item["axis"]][2] = self.none_as_zero(
-                item["hours_circle_eco_certified"]
-            )
-            template["circle_eco"][item["axis"]][3] = self.none_as_zero(
-                item["hours_circle_eco_uncertified"]
-            )
-            if isinstance(item["hours_circle_eco_certified"], numbers.Number):
-                template["circle_eco"]["total"][2] += \
-                    item["hours_circle_eco_certified"]
-            if isinstance(item["hours_circle_eco_uncertified"], numbers.Number):
-                template["circle_eco"]["total"][3] += \
-                    item["hours_circle_eco_uncertified"]
         return template
+
+    def format_circles_data_item(self, template, circle, item):
+        service_name = (
+            ServicesChoices(item["service"]).name if item["service"]
+            else item["service"]
+        )
+        template[circle.name][service_name][2] = self.none_as_zero(
+                item.get(f"hours_{circle.name}_certified")
+            )
+        template[circle.name][service_name][3] = self.none_as_zero(
+            item[f"hours_{circle.name}_uncertified"]
+        )
+        if isinstance(item[f"hours_{circle.name}_certified"], numbers.Number):
+            template[circle.name]["total"][2] += item[f"hours_{circle.name}_certified"]
+        if isinstance(item[f"hours_{circle.name}_uncertified"], numbers.Number):
+            template[circle.name]["total"][3] += item[f"hours_{circle.name}_uncertified"]
