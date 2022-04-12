@@ -10,6 +10,191 @@ from apps.dataexports.exports.manager import ExcelExportManager
 
 
 class ExportStagesDetailsServices:
+    """
+    Descripció del procés de generació de l'exportació
+
+    Aquesta classe fa d'intermediaria entre diversos managers.
+    - ExcelExportManager que s'encarrega de generar el format excel.
+    Els altres 3, tots ells extenen StageDetailsDataManager, però 
+    StageDetailsDataManager únicament declara self.subsidy_period i el mètode
+    none_as_zero():
+    - CirclesDataManager
+    - CirclesPerUserDataManager
+    - StageTypesDataManager
+    
+    El punt d'entrada és ExportStagesDetailsServices.export(), que crida 
+        self.export_circles() <- genera un dels fulls de l'excel
+        self.export_stage() <- genera un dels fulls de l'excel
+    i finalment retorna el propi fitxer per ser descarregat.
+
+    Quan s'executa self.export(), totes les dades ja s'han omplert durant el
+    self.__init__().
+
+    PROCÉS DE GENERAR DADES DEL PRIMER FULL DURANT LA INICIALITZACIÓ
+        PART A: DADES PER CADA UN DELS CERCLES
+
+    ## self.circles_data
+    self.circles_data s'omple fent servir CirclesDataManager.get_circles_data()
+
+    ### CirclesDataManager.get_circles_data()
+
+    Es genera un queryset per cada un dels cercles, omplint els camps:
+    f'hours_{circle.name}_certified'
+    f'hours_{circle.name}_uncertified'
+    ... per cada un.
+
+    Aquest queryset s'executa contra ProjectStage agrupant per 'service',
+    és a dir, que per cada Servei QUE CONTINGUI DADES es retorna el conjunt de
+    dades de cada cercle.
+    Important tenir en compte que els serveis que no tenen dades directament no
+    existiran en els sets de dades que es faran servir més endavant per omplir
+    els templates:
+
+    <QuerySet [
+        {
+            'service': 10,
+            'hours_CERCLE0_certified': None,
+            'hours_CERCLE0_uncertified': None,
+            'hours_CERCLE1_certified': None,
+            'hours_CERCLE1_uncertified': None,
+            'hours_CERCLE2_certified': None,
+            'hours_CERCLE2_uncertified': None,
+            'hours_CERCLE3_certified': None,
+            'hours_CERCLE3_uncertified': 1.5,
+            'hours_CERCLE4_certified': None,
+            'hours_CERCLE4_uncertified': None,
+            'hours_CERCLE5_certified': None,
+            'hours_CERCLE5_uncertified': None
+        }, {
+            'service': None,
+            'hours_CERCLE0_certified': 90.0,
+            'hours_CERCLE0_uncertified': 105.0,
+            'hours_CERCLE1_certified': None,
+            'hours_CERCLE1_uncertified': None,
+            'hours_CERCLE2_certified': None,
+            'hours_CERCLE2_uncertified': None,
+            'hours_CERCLE3_certified': None,
+            'hours_CERCLE3_uncertified': None,
+            'hours_CERCLE4_certified': 80.0,
+            'hours_CERCLE4_uncertified': 10.0,
+            'hours_CERCLE5_certified': None,
+            'hours_CERCLE5_uncertified': None
+        }, {
+            'service': 40,
+            'hours_CERCLE0_certified': 4.0,
+            'hours_CERCLE0_uncertified': 20.0,
+            'hours_CERCLE1_certified': None,
+            'hours_CERCLE1_uncertified': 2.0,
+            'hours_CERCLE2_certified': None,
+            'hours_CERCLE2_uncertified': None,
+            'hours_CERCLE3_certified': None,
+            'hours_CERCLE3_uncertified': None,
+            'hours_CERCLE4_certified': None,
+            'hours_CERCLE4_uncertified': 8.0,
+            'hours_CERCLE5_certified': None,
+            'hours_CERCLE5_uncertified': None
+        }
+    ]>
+
+    Aquestes dades on cop consultades a ProjectStage es passen pel mètode
+    ExportStagesDetailsServices.format_circles_data()
+
+    ## ExportStagesDetailsServices.format_circles_data()
+
+    Aquí s'obté tot l'esquelet de les dades (que anomenem template) amb
+    template = self.get_data_structure()
+    I després fa un bucle en el que va col·locant cada una de les dades al
+    lloc corresponent del template.
+    Aquest template ara té l'estructura i les dades que més endavant s'agafaran
+    per transformat en columnes i rows de l'excel.
+
+    PROCÉS DE GENERAR DADES DEL PRIMER FULL DURANT LA INICIALITZACIÓ
+        PART B: DADES PER CADA UNA DE LES PERSONES DE L'EQUIP
+
+    ## self.users_data = CirclesPerUserDataManager(...).get_data()
+
+    A través d'aquest mètode s'acaba omplint les dades que més endavant durant
+    l'export, quan arribi a self.circles_ateneu_user_rows(), s'afegiran com a
+    blocs de rows per cada un dels users, agrupats per cercles.
+
+    self.users_data:
+    {'CERCLE0': {'values': [['(sense usuari)', 0, 0, 1.0],
+                            ['Nom Usuari A', 6, 36.0, 10.0],
+                            ['Nom Usuari B', 3, 0, 0],
+                            ['etc...', 2, 0, 6.0],
+                 'verbose_name': 'Ateneu'},
+     'CERCLE1': {'values': [['(sense usuari)', 0, 0, 1.0],
+                            ['Nom Usuari A', 6, 0, 10.0],
+                            ['Nom Usuari B', 3, 0, 0],
+                            ['etc...', 2, 0, 6.0],
+                 'verbose_name': 'Consum i Transició Agroecològica'},
+     'CERCLE2': {...
+
+    GENERACIÓ DEL PRIMER FULL (Ateneu-Cercles)
+
+    Es crida circle_n_rows() per cada un dels cercles possibles.
+    Cada fila que això generarà té 4 columnes:
+        Nom, Bases convo, Justicades, Sense justificar.
+
+    I agafa les dades que s'han omplert durant la inicialització de la class,
+    que son a self.circles_data.
+    Ho fa així: rows = self.circles_data[circle.name].values()
+    Dins de self.circle_n_rows(circle)
+
+    PROCÉS DE GENERAR LES DADES PEL 2N FULL DURANT LA INICIALITZACIÓ
+
+    S'omplen dues propietats:
+        self.stage_types_data["totals"],
+        self.stage_types_data["users"]
+
+    ## self.stage_types_data["totals"]:
+    [{'totals': ['Creació - (cap)', 0, 0, 0, 0], 'users': []},
+     {'totals': ['Creació - Acollida', 88.5, 54.0, 34.5, 0], 'users': []},
+     {'totals': ['Creació - Constitució', 63.5, 24.0, 39.5, 0], 'users': []},
+     {'totals': ['Creació - Acompanyament', 0, 0, 0, 0], 'users': []},
+     {'totals': ['Creació - Procés', 125.0, 70.0, 55.0, 0], 'users': []},
+     {'totals': ['Consolidació - (cap)', 0, 0, 0, 0], 'users': []},
+     {'totals': ['Consolidació - Acollida', 88.5, 54.0, 34.5, 0], 'users': []},
+     {'totals': ['Consolidació - Constitució', 63.5, 24.0, 39.5, 0], 'users': []},
+     {'totals': ['Consolidació - Acompanyament', 0, 0, 0, 0], 'users': []},
+     {'totals': ['Consolidació - Procés', 125.0, 70.0, 55.0, 0], 'users': []}]
+
+
+    ## self.stage_types_data["users"]:
+    {11: {'name': 'creation',
+          'subtypes': {0: {'users': [], 'verbose_name': 'Sense subtipus'},
+                       1: {'users': [['Nom Usuari 1', 1, 0, 3.0, 0],
+                                     ['Nom Usuari 2', 17, 14.0, 19.5, 0],
+                                     ['Nom Usuari ETC', 6, 10.0, 5.0, 0],
+                           'verbose_name': 'Acollida'},
+                       2: {'users': [['Nom Usuari 1', 4, 0, 17.0, 0],
+                                     ['Nom Usuari 2', 2, 0, 5.0, 0],
+                                     ['Nom Usuari ETC', 25, 20.0, 30.0, 0],
+                           'verbose_name': 'Procés'},
+                       3: {'users': [['Nom Usuari 1', 1, 10.0, 0, 0],
+                                     ['Nom Usuari 2', 1, 0, 1.0, 0],
+                                     ['Nom Usuari ETC', 26, 14.0, 27.5, 0],
+                           'verbose_name': 'Constitució'},
+                       4: {'users': [], 'verbose_name': 'Acompanyament'}},
+          'verbose_name': 'Creació'},
+     12: {'name': 'consolidation',
+          'subtypes': {0: {'users': [], 'verbose_name': 'Sense subtipus'},
+                       1: {'users': [['Nom Usuari 1', 1, 0, 2.0, 0],
+                                     ['Nom Usuari 2', 1, 0, 2.0, 0],
+                                     ['Nom Usuari ETC', 1, 0, 4.0, 0],
+                           'verbose_name': 'Acollida'},
+                       2: {'users': [], 'verbose_name': 'Procés'},
+                       3: {'users': [], 'verbose_name': 'Constitució'},
+                       4: {'users': [['Nom Usuari 1', 1, 0, 0, 0],
+                                     ['Nom Usuari 2', 2, 0, 3.5, 0],
+                                     ['Nom Usuari ETC', 1, 0, 0, 0],
+                           'verbose_name': 'Acompanyament'}},
+          'verbose_name': 'Consolidació'}}
+
+    Mitjançant el mètode:
+    StageTypesDataManager(...).get_data()
+
+    """
     circles_data = None
     users_data = None
     stage_types_data = {}
@@ -105,24 +290,29 @@ class ExportStagesDetailsServices:
         self.export_manager.row_number = 1
 
         columns = [
-            ("Ateneu", 40),
+            (CirclesChoices.CERCLE0.label_named, 40),
             ("Bases Convo", 20),
             ("Justificades BO", 20),
             ("Sense certificat BO", 20),
         ]
         self.export_manager.create_columns(columns)
-        self.circles_circle_n_rows(CirclesChoices.CERCLE0)
-        self.circles_circle_n_rows(CirclesChoices.CERCLE1)
-        self.circles_circle_n_rows(CirclesChoices.CERCLE2)
-        self.circles_circle_n_rows(CirclesChoices.CERCLE3)
-        self.circles_circle_n_rows(CirclesChoices.CERCLE4)
-        self.circles_circle_n_rows(CirclesChoices.CERCLE5)
+        self.circle_n_rows(CirclesChoices.CERCLE0)
+        self.circle_headers(CirclesChoices.CERCLE1.label_named)
+        self.circle_n_rows(CirclesChoices.CERCLE1)
+        self.circle_headers(CirclesChoices.CERCLE2.label_named)
+        self.circle_n_rows(CirclesChoices.CERCLE2)
+        self.circle_headers(CirclesChoices.CERCLE3.label_named)
+        self.circle_n_rows(CirclesChoices.CERCLE3)
+        self.circle_headers(CirclesChoices.CERCLE4.label_named)
+        self.circle_n_rows(CirclesChoices.CERCLE4)
+        self.circle_headers(CirclesChoices.CERCLE5.label_named)
+        self.circle_n_rows(CirclesChoices.CERCLE5)
         self.circles_ateneu_user_rows()
 
-    def circles_circle_n_rows(self, circle):
+    def circle_headers(self, name):
         self.export_manager.row_number += 1
         row = [
-            circle.label_named,
+            name,
             "Bases Convo",
             "Justificades BO",
             "Sense certificat BO",
@@ -130,6 +320,8 @@ class ExportStagesDetailsServices:
         self.export_manager.row_number += 1
         self.export_manager.fill_row_data(row)
         self.export_manager.format_row_header()
+
+    def circle_n_rows(self, circle):
 
         rows = self.circles_data[circle.name].values()
         for row in rows:
@@ -319,8 +511,7 @@ class StageTypesDataManager(StageDetailsDataManager):
                         filter=(
                             Q(project_stage__stage_type=stage_id) &
                             Q(project_stage__stage_subtype=subtype_id) &
-                            Q(project_stage__scanned_certificate__isnull=False) &
-                            ~Q(project_stage__scanned_certificate__exact='')
+                            ~Q(project_stage__scanned_certificate__in=["", None])
                         )
                     ),
                     f"hours_{stage_name}_{subtype_id}_uncertified": Sum(
@@ -328,8 +519,7 @@ class StageTypesDataManager(StageDetailsDataManager):
                         filter=(
                             Q(project_stage__stage_type=stage_id) &
                             Q(project_stage__stage_subtype=subtype_id) &
-                            Q(project_stage__scanned_certificate__isnull=True) |
-                            Q(project_stage__scanned_certificate__exact='')
+                            Q(project_stage__scanned_certificate__in=["", None])
                         )
                     ),
                 })
@@ -357,15 +547,13 @@ class StageTypesDataManager(StageDetailsDataManager):
             f"hours_{stage_type_name}_certified": Sum(
                 "stage_sessions__hours",
                 filter=(
-                    Q(scanned_certificate__isnull=False) &
-                    ~Q(scanned_certificate__exact='')
+                    ~Q(scanned_certificate__in=["", None])
                 )
             ),
             f"hours_{stage_type_name}_uncertified": Sum(
                 "stage_sessions__hours",
                 filter=(
-                    Q(scanned_certificate__isnull=True) |
-                    Q(scanned_certificate__exact='')
+                    Q(scanned_certificate__in=["", None])
                 )
             ),
         }
@@ -614,17 +802,15 @@ class CirclesDataManager(StageDetailsDataManager):
             f'hours_{circle.name}_certified': Sum(
                 'stage_sessions__hours',
                 filter=(
-                        Q(circle=circle) &
-                        Q(scanned_certificate__isnull=False) &
-                        ~Q(scanned_certificate__exact='')
+                    Q(circle=circle) &
+                    ~Q(scanned_certificate__in=['', None])
                 )
             ),
             f'hours_{circle.name}_uncertified': Sum(
                 'stage_sessions__hours',
                 filter=(
-                        Q(circle=circle) &
-                        Q(scanned_certificate__isnull=True) |
-                        Q(scanned_certificate__exact='')
+                    Q(circle=circle) &
+                    Q(scanned_certificate__in=['', None])
                 )
             ),
         }
