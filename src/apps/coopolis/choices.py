@@ -24,6 +24,15 @@ class ServicesChoices(models.IntegerChoices):
     )
     PUNT_INFO = 60, "Punt d'informació sobre l'ESS."
 
+    def get_sub_services(self):
+        range_start = self.value * 10
+        range_end = range_start + 99
+        return [
+            member
+            for member in SubServicesChoices
+            if member in range(range_start, range_end + 1)
+        ]
+
 
 class SubServicesChoices(models.IntegerChoices):
     __empty__ = "Cap"
@@ -46,19 +55,19 @@ class SubServicesChoices(models.IntegerChoices):
 
     # 2. Servei de divulgació, sensibilització i generació de coneixement
     DIV_SENS_GEN_CONEIXEMENT_CAMPANYA = 201, (
-        "Campanya de Comunica   ció i difusió a col·lectius d'especial atenció. "
+        "Campanya de Comunicació i difusió a col·lectius d'especial atenció. "
         "Materials específic de difusió sobre la fórmula cooperativa."
     )
     DIV_SENS_GEN_CONEIXEMENT_TALLERS = 202, (
-        "2.2. Tallers dirigit   s a joves estudiants de cicles formatius "
+        "Tallers dirigits a joves estudiants de cicles formatius "
         "presencials o virtuals ."
     )
     DIV_SENS_GEN_CONEIXEMENT_ACCIONS = 203, (
-        "Accions per a la cre   ació de diferents classes de cooperatives "
+        "Accions per a la creació de diferents classes de cooperatives "
         "(concursos i tallers sensibilització)"
     )
     DIV_SENS_GEN_CONEIXEMENT_DIAGNOSI = 204, (
-        "Diagnosi sobre les m   ancances i oportunitats socioeconòmiques i "
+        "Diagnosi sobre les mancances i oportunitats socioeconòmiques i "
         "identificació de les empreses participants."
     )
     DIV_SENS_GEN_CONEIXEMENT_SESSIONS = 205, (
@@ -120,8 +129,8 @@ class SubServicesChoices(models.IntegerChoices):
         "Incorporació d'empreses a l'ateneu cooperatiu i assemblea"
     )
     INTERCOOP_XARXA_TERRITORI_TREBALL = 503, (
-        "Treball en xarxa amb altres ateneus:assistir a reunions i col·laborar "
-        "en iniciatives conjuntes."
+        "Treball en xarxa amb altres ateneus: assistir a reunions i col·laborar"
+        " en iniciatives conjuntes."
     )
     INTERCOOP_XARXA_TERRITORI_ALTRES = 599, (
         "Altres accions dins del servei de facilitació (si s'escau "
