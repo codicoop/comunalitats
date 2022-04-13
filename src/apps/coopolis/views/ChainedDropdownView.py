@@ -14,6 +14,6 @@ def get_sub_services(request):
         pass
     else:
         sub_services = {
-            item.label: item.value for item in service.get_sub_services()
+            item.value: item.label for item in service.get_sub_services()
         }
     return JsonResponse(data=sub_services, safe=False)
