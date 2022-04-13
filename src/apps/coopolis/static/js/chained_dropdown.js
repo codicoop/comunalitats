@@ -12,12 +12,18 @@ jQuery(function($){
             type:"GET",
             data:{service: service,},
             success: function(result) {
-                console.log(result);
                 cols = document.getElementById("id_sub_service");
-                cols.options.length = 0;
-                for(var k in result){
-                    cols.options.add(new Option(k, result[k]));
-                }
+                Array.from(cols.options).forEach(function(option_element) {
+                    var existing = false;
+                    for (var k in result) {
+                        if (option_element.value == result[k]) {
+                            existing = true
+                        }
+                    }
+                    if (existing == false) {
+                        cols.options.remove(option_element);
+                    }
+                })
             },
             error: function(e){
                 console.error(JSON.stringify(e));
