@@ -10,7 +10,8 @@ from django.utils.timezone import now
 import tagulous.models
 
 from apps.cc_courses.models import Entity, Organizer, Cofunding, StrategicLine
-from apps.coopolis.choices import ServicesChoices, CirclesChoices
+from apps.coopolis.choices import ServicesChoices, CirclesChoices, \
+    SubServicesChoices
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.models import Town, User
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
@@ -359,6 +360,12 @@ class ProjectStage(models.Model):
     service = models.SmallIntegerField(
         "Servei",
         choices=ServicesChoices.choices,
+        null=True,
+        blank=True,
+    )
+    sub_service = models.SmallIntegerField(
+        "Sub-servei",
+        choices=SubServicesChoices.choices,
         null=True,
         blank=True,
     )
