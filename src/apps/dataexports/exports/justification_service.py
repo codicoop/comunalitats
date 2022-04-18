@@ -1,18 +1,13 @@
 from django.db.models import Q
 
 from apps.coopolis.models import ProjectStage, Project, EmploymentInsertion
-from apps.cc_courses.models import Organizer, Activity, Entity
+from apps.cc_courses.models import Activity
 from apps.dataexports.exports.manager import ExcelExportManager
 
 
 class ExportJustificationService:
-    def __init__(self, export_obj, by_entity=False):
+    def __init__(self, export_obj):
         self.export_manager = ExcelExportManager(export_obj)
-        self.organizers = dict()
-        self.d_organizer = dict()
-        self.import_organizers(by_entity)
-        self.activity_organizer_field = "organizer"
-        self.stage_organizer_field = "stage_organizer"
         self.number_of_activities = 0
         self.number_of_stages = 0
         self.number_of_nouniversitaris = 0
@@ -46,33 +41,6 @@ class ExportJustificationService:
                 )
             )
         )
-
-    def import_organizers(self, by_entity):
-        model = Organizer
-        # Not forcing any order because we want it in the same order that
-        # they see (which should be by ID)
-        orgs = model.objects.all()
-        if not orgs:
-            self.organizers.update({
-                0: 'Ateneu'
-            })
-        else:
-            i = 0
-            for org in orgs:
-                if i == 0:
-                    cercle = 'Ateneu'
-                else:
-                    cercle = f"Cercle {i}"
-                self.organizers.update({
-                    org.id: cercle
-                })
-                i += 1
-        self.d_organizer = list(self.organizers.keys())[0]
-
-    def get_organizer(self, organizer):
-        if not organizer:
-            return self.organizers[self.d_organizer]
-        return self.organizers[organizer.id]
     
     """
     
@@ -110,7 +78,6 @@ class ExportJustificationService:
             ("[Document acreditatiu]", 21),
             ("Incidències", 20),
             ("[Entitat]", 20),
-            ("[Organitzadora]", 20),
             ("[Lloc]", 20),
             ("[Acció]", 20),
             ("[Cofinançat]", 20),
@@ -130,6 +97,7 @@ class ExportJustificationService:
             self.export_manager.row_number += 1
 
             service = item.get_service_display() if item.service else ""
+            sub_service = item.get_sub_service_display() if item.sub_service else ""
             town = ("", True)
             if item.place is not None and item.place.town:
                 town = str(item.place.town)
@@ -142,17 +110,16 @@ class ExportJustificationService:
 
             row = [
                 service,
-                "",  # Pendent que es confirmin
+                sub_service,
                 item.name,
                 item.date_start,
-                self.get_organizer(getattr(item, self.activity_organizer_field)),
+                item.get_circle_display(),
                 town,
                 item.enrolled.count(),
                 material_difusio,
                 document_acreditatiu,
                 "",
                 str(item.entity) if item.entity else '',  # Entitat
-                str(item.organizer) if item.organizer else '',  # Organitzadora
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
                 str(item.cofunded),  # Cofinançat
@@ -277,29 +244,23 @@ class ExportJustificationService:
                 ] = self.export_manager.row_number - 1
 
                 service = item.get_service_display() if item.service else ""
+                sub_service = item.get_sub_service_display() if item.sub_service else ""
                 town = ("", True)
                 if item.project.town:
                     town = str(item.project.town)
 
                 row = [
                     service,
-                    "",  # Subservei, pendent.
+                    sub_service,  # Subservei, pendent.
                     item.project.name,
                     item.date_start if not None else '',
-                    # This used to be this code for the "Cercle = Entitat"
-                    # export:
-                    # self.get_organizer(getattr(item, self.stage_organizer_field)),
-                    # but now we deleted Entity from stages, so project stages
-                    # go back to showing only stage_organizer.
-                    item.stage_organizer.name if item.stage_organizer else "",
+                    item.get_circle_display(),
                     town,
                     len(group['participants']),  # Nombre de participants
                     "No",
                     "",
                     # En blanc pq cada stage session pot contenir una entitat
                     "",  # Entitat
-                    # Organitzadora
-                    str(item.stage_organizer) if item.stage_organizer else '',
                     '(no aplicable)',  # Lloc
                     '(no aplicable)',  # Acció
                     str(item.cofunded),  # Cofinançat
@@ -314,6 +275,7 @@ class ExportJustificationService:
             self.export_manager.row_number += 1
 
             service = item.get_service_display() if item.service else ""
+            sub_service = item.get_sub_service_display() if item.sub_service else ""
             town = ("", True)
             if item.place and item.place.town:
                 town = str(item.place.town)
@@ -326,17 +288,16 @@ class ExportJustificationService:
 
             row = [
                 service,
-                "",  # Subservei, pendent
+                sub_service,
                 item.name,
                 item.date_start,
-                self.get_organizer(getattr(item, self.activity_organizer_field)),
+                item.get_circle_display(),
                 town,
                 item.minors_participants_number,
                 material_difusio,
                 document_acreditatiu,
                 "",
                 str(item.entity) if item.entity else '',  # Entitat
-                str(item.organizer) if item.organizer else '',  # Organitzadora
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
                 str(item.cofunded),  # Cofinançat
@@ -379,29 +340,23 @@ class ExportJustificationService:
 
             self.export_manager.row_number += 1
             service = stage.get_service_display() if stage.service else ""
+            sub_service = item.get_sub_service_display() if item.sub_service else ""
             town = ("", True)
             if project.town:
                 town = str(project.town)
 
             row = [
                 service,
-                "",  # Subservei, pendent.
+                sub_service,
                 project.name,
                 stage.date_start,
-                # This used to be this code for the "Cercle = Entitat"
-                # export:
-                # self.get_organizer(getattr(stage, self.stage_organizer_field)),
-                # but now we deleted Entity from stages, so project stages
-                # go back to showing only stage_organizer.
-                stage.stage_organizer.name if stage.stage_organizer else "",
+                stage.get_circle_display(),
                 town,
                 stage.involved_partners.count(),
                 "No",
                 "",
                 # En blanc pq cada stage session pot contenir una entitat
                 "",  # Entitat
-                str(stage.stage_organizer) if stage.stage_organizer else '',
-                # Organitzadora
                 '(no aplicable)',  # Lloc
                 '(no aplicable)',  # Acció
                 str(stage.cofunded),  # Cofinançat
@@ -556,7 +511,6 @@ class ExportJustificationService:
             ("[Procedència]", 20),
             ("[Nivell d'estudis]", 20),
             ("[Com ens has conegut]", 20),
-            ("[Organitzadora]", 30),
             ("[Email]", 30),
             ("[Telèfon]", 30),
             ("[Projecte]", 30),
@@ -597,7 +551,6 @@ class ExportJustificationService:
                         participant.get_birth_place_display() or "",
                         participant.get_educational_level_display() or "",
                         participant.get_discovered_us_display() or "",
-                        str(activity.stage_organizer) or "",
                         participant.email,
                         participant.phone_number or "",
                         str(participant.project) or "",
@@ -639,7 +592,6 @@ class ExportJustificationService:
                     participant.get_birth_place_display() or "",
                     participant.get_educational_level_display() or "",
                     participant.get_discovered_us_display() or "",
-                    str(activity.organizer) if activity.organizer else "",
                     participant.email,
                     participant.phone_number or "",
                     str(participant.project) if participant.project else "",
@@ -752,8 +704,8 @@ class ExportJustificationService:
                 town,
                 cif,
                 insertion.project.name,  # Projecte
+                insertion.get_circle_display(),  # Cercle / Ateneu
                 str(insertion.subsidy_period),  # Convocatòria
-                '',  # Cercle / Ateneu
             ]
             self.export_manager.fill_row_data(row)
 

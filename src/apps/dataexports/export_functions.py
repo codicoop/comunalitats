@@ -10,6 +10,7 @@ from apps.dataexports.exports.justification_service import \
 from apps.dataexports.exports.memory import ExportMemory
 from apps.dataexports.exports.polls import ExportPolls, ExportPollsByServices
 from apps.dataexports.exports.stages_details import ExportStagesDetails
+from apps.dataexports.exports.stages_details_services import ExportStagesDetailsServices
 
 
 class ExportFunctions:
@@ -47,16 +48,8 @@ class ExportFunctions:
         controller = ExportJustificationService(export_obj)
         return controller.export()
 
-    def export_by_entity(self, export_obj):
-        controller = ExportJustification(export_obj, True)
-        return controller.export()
-
     def export_dos_itineraris(self, export_obj):
         controller = ExportJustification2Itineraris(export_obj)
-        return controller.export_dos_itineraris()
-
-    def export_dos_itineraris_by_entity(self, export_obj):
-        controller = ExportJustification2Itineraris(export_obj, True)
         return controller.export_dos_itineraris()
 
     def export_cofunded(self, export_obj):
@@ -65,6 +58,10 @@ class ExportFunctions:
 
     def export_stages_details(self, export_obj):
         controller = ExportStagesDetails(export_obj)
+        return controller.export()
+
+    def export_stages_details_services(self, export_obj):
+        controller = ExportStagesDetailsServices(export_obj)
         return controller.export()
 
     def export_polls(self, export_obj):

@@ -55,7 +55,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
     list_display = (
         'project_field_ellipsis', 'date_start', 'stage_type',
         'stage_responsible_field_ellipsis',
-        'axis_summary', 'subsidy_period', '_has_certificate',
+        'service', 'subsidy_period', '_has_certificate',
         '_participants_count', 'project_field'
     )
     list_filter = (
@@ -74,7 +74,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {
             'fields': ['project', 'stage_type',
-                       'subsidy_period', 'service',
+                       'subsidy_period', 'service', 'sub_service',
                        'circle', 'stage_responsible',
                        'scanned_certificate',
                        'involved_partners', 'hours_sum', 'date_start',
@@ -88,7 +88,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
     readonly_fields = ('hours_sum', 'date_start', "earliest_session_field", )
 
     class Media:
-        js = ('js/grappellihacks.js',)
+        js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
         css = {
             'all': ('styles/grappellihacks.css',)
         }
@@ -225,7 +225,7 @@ class ProjectStagesInline(admin.StackedInline):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "stage_responsible":
-            kwargs["queryset"] = User.objects.filter(is_staff=True)
+            kwargs["queryset"] = User.objects.filter(is_staff=True).order_by("first_name")
         if db_field.name == "project":
             kwargs["queryset"] = Project.objects.order_by('name')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)

@@ -114,13 +114,13 @@ class ActivityResourcesInlineAdmin(admin.TabularInline):
 
 class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     class Media:
-        js = ('js/grappellihacks.js',)
+        js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
         css = {
             'all': ('styles/grappellihacks.css',)
         }
     form = ActivityForm
     list_display = (
-        'date_start', 'spots', 'remaining_spots', 'name', 'axis_summary',
+        'date_start', 'spots', 'remaining_spots', 'name', 'service',
         'attendee_filter_field', 'attendee_list_field', 'send_reminder_field')
     readonly_fields = (
         'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',
@@ -129,15 +129,17 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     search_fields = ('date_start', 'name', 'objectives',)
     list_filter = (
         FilterBySubsidyPeriod,
-        "service",
-        'course', 'date_start', 'room', 'circle', 'entity', 'axis', 'place',
-        'for_minors', 'cofunded',)
+        "service", ("place__town", admin.RelatedOnlyFieldListFilter),
+        'course', 'date_start', 'room', 'circle', 'entity', 'place',
+        'for_minors', 'cofunded',
+        ("responsible", admin.RelatedOnlyFieldListFilter),
+    )
     fieldsets = [
         (None, {
             'fields': ['course', 'name', 'objectives', 'place', 'date_start',
                        'date_end', 'starting_time', 'ending_time', 'spots',
-                       'service', 'circle', 'entity', 'responsible',
-                       'publish', ]
+                       'service', 'sub_service', 'circle', 'entity',
+                       'responsible', 'publish', ]
         }),
         ("Documents per la justificació", {
             'classes': ('grp-collapse grp-closed',),

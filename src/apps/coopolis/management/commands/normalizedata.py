@@ -105,27 +105,15 @@ class Command(BaseCommand):
                         'ignore_errors': True
                     },
                     {
-                        'name': "Exportació justificació (Cercle = Organitzadora)",
+                        'name': "Exportació justificació",
                         'subsidy_period': period,
                         'function_name': 'export',
                         'ignore_errors': True
                     },
                     {
-                        'name': "Exportació justificació (Cercle = Entitat)",
-                        'subsidy_period': period,
-                        'function_name': 'export_by_entity',
-                        'ignore_errors': True
-                    },
-                    {
-                        'name': "Exportació justificació en 2 itineraris (Cercle = Organitzadora)",
+                        'name': "Exportació justificació en 2 itineraris",
                         'subsidy_period': period,
                         'function_name': 'export_dos_itineraris',
-                        'ignore_errors': True
-                    },
-                    {
-                        'name': "Exportació justificació en 2 itineraris (Cercle = Entitat)",
-                        'subsidy_period': period,
-                        'function_name': 'export_dos_itineraris_by_entity',
                         'ignore_errors': True
                     },
                     {
@@ -160,9 +148,9 @@ class Command(BaseCommand):
                     'ignore_errors': True
                 },
                 {
-                    'name': "Exportació justificació en 2 itineraris",
+                    'name': "Detall dels acompanyaments",
                     'subsidy_period': period,
-                    'function_name': 'export_dos_itineraris',
+                    'function_name': 'export_stages_details_services',
                     'ignore_errors': True
                 },
                 {
