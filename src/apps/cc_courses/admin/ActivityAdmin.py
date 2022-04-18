@@ -130,8 +130,10 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     list_filter = (
         FilterBySubsidyPeriod,
         "service", ("place__town", admin.RelatedOnlyFieldListFilter),
-        'course', 'date_start', 'room', 'circle', 'entity', 'axis', 'place',
-        'for_minors', 'cofunded',)
+        'course', 'date_start', 'room', 'circle', 'entity', 'place',
+        'for_minors', 'cofunded',
+        ("responsible", admin.RelatedOnlyFieldListFilter),
+    )
     fieldsets = [
         (None, {
             'fields': ['course', 'name', 'objectives', 'place', 'date_start',
