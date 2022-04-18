@@ -340,7 +340,7 @@ class ExportJustificationService:
 
             self.export_manager.row_number += 1
             service = stage.get_service_display() if stage.service else ""
-            sub_service = item.get_sub_service_display() if item.sub_service else ""
+            sub_service = stage.get_sub_service_display() if stage.sub_service else ""
             town = ("", True)
             if project.town:
                 town = str(project.town)
