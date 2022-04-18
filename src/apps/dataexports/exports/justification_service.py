@@ -97,6 +97,7 @@ class ExportJustificationService:
             self.export_manager.row_number += 1
 
             service = item.get_service_display() if item.service else ""
+            sub_service = item.get_sub_service_display() if item.sub_service else ""
             town = ("", True)
             if item.place is not None and item.place.town:
                 town = str(item.place.town)
@@ -109,7 +110,7 @@ class ExportJustificationService:
 
             row = [
                 service,
-                "",  # Pendent que es confirmin
+                sub_service,
                 item.name,
                 item.date_start,
                 item.get_circle_display(),
@@ -243,13 +244,14 @@ class ExportJustificationService:
                 ] = self.export_manager.row_number - 1
 
                 service = item.get_service_display() if item.service else ""
+                sub_service = item.get_sub_service_display() if item.sub_service else ""
                 town = ("", True)
                 if item.project.town:
                     town = str(item.project.town)
 
                 row = [
                     service,
-                    "",  # Subservei, pendent.
+                    sub_service,  # Subservei, pendent.
                     item.project.name,
                     item.date_start if not None else '',
                     item.get_circle_display(),
@@ -273,6 +275,7 @@ class ExportJustificationService:
             self.export_manager.row_number += 1
 
             service = item.get_service_display() if item.service else ""
+            sub_service = item.get_sub_service_display() if item.sub_service else ""
             town = ("", True)
             if item.place and item.place.town:
                 town = str(item.place.town)
@@ -285,7 +288,7 @@ class ExportJustificationService:
 
             row = [
                 service,
-                "",  # Subservei, pendent
+                sub_service,
                 item.name,
                 item.date_start,
                 item.get_circle_display(),
@@ -337,13 +340,14 @@ class ExportJustificationService:
 
             self.export_manager.row_number += 1
             service = stage.get_service_display() if stage.service else ""
+            sub_service = item.get_sub_service_display() if item.sub_service else ""
             town = ("", True)
             if project.town:
                 town = str(project.town)
 
             row = [
                 service,
-                "",  # Subservei, pendent.
+                sub_service,
                 project.name,
                 stage.date_start,
                 stage.get_circle_display(),
