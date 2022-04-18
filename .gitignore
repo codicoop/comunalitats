@@ -11,7 +11,7 @@ local_*.py
 .python-version
 /docker-production/settings/
 /docker-develop/django-settings/
-/static/
+/src/static/
 /dumps/
 src/conf/maintenance_mode_state.txt
 /docker/settings/
