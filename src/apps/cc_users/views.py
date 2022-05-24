@@ -65,6 +65,11 @@ class MyAccountView(SuccessMessageMixin, UpdateView):
     def get_success_url(self):
         return urls.reverse('user_profile')
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["request"] = self.request
+        return kwargs
+
 
 class PasswordResetView(BasePasswordResetView):
     form_class = PasswordResetForm
