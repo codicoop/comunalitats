@@ -144,6 +144,12 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
             self.add_error('id_number', msg)
         return self.cleaned_data
 
+    def clean_id_number(self):
+        value = self.cleaned_data.get("id_number")
+        if User.objects.filter(id_number__iexact=value).exists():
+            raise ValidationError("El DNI ja existeix.")
+        return value
+
 
 class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
     """A form for updating users. Includes all the fields on
