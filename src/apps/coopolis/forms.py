@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import (
     UserCreationForm, ReadOnlyPasswordHashField
 )
@@ -145,8 +146,9 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
         return self.cleaned_data
 
     def clean_id_number(self):
+        model = get_user_model()
         value = self.cleaned_data.get("id_number")
-        if User.objects.filter(id_number__iexact=value).exists():
+        if model.objects.filter(id_number__iexact=value).exists():
             raise ValidationError("El DNI ja existeix.")
         return value
 

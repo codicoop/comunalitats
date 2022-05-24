@@ -6,6 +6,7 @@ from django.contrib.auth.forms import (
     PasswordResetForm as BasePasswordResetForm,
 )
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.urls import reverse
 
 from apps.coopolis.widgets import XDSoftDatePickerInput
@@ -53,9 +54,22 @@ class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
     birthdate = forms.DateField(label="Data de naixement", required=False, widget=XDSoftDatePickerInput())
 
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request", None)
         super().__init__(*args, **kwargs)
         if 'password' in self.fields:
             self.fields.pop('password')
+
+    def clean_id_number(self):
+        model = get_user_model()
+        value = self.cleaned_data.get("id_number")
+        if (
+            model.objects
+            .filter(id_number__iexact=value)
+            .exclude(id=self.request.user.id)
+            .exists()
+        ):
+            raise ValidationError("El DNI ja existeix.")
+        return value
 
 
 class PasswordResetForm(BasePasswordResetForm):
