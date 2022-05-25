@@ -9,7 +9,7 @@ services:
   ateneu-altpirineu:
     restart: on-failure
     container_name: ateneu_altpirineu
-    image: codicoop/ateneus:release-22.04.002
+    image: codicoop/ateneus:release-22.05.001
     env_file: ./settings/production/altpirineu.env
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8014 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     depends_on:
@@ -23,7 +23,7 @@ services:
   ateneu-bnord:
     restart: on-failure
     container_name: ateneu_bnord
-    image: codicoop/ateneus:release-22.04.002
+    image: codicoop/ateneus:release-22.05.001
     env_file: ./settings/production/bnord.env
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8004 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     depends_on:
@@ -37,7 +37,7 @@ services:
   ateneu-catcentral:
     restart: on-failure
     container_name: ateneu_catcentral
-    image: codicoop/ateneus:release-22.04.002
+    image: codicoop/ateneus:release-22.05.001
     env_file: ./settings/production/catcentral.env
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8008 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     depends_on:
@@ -51,7 +51,7 @@ services:
   ateneu-coopcamp:
     restart: on-failure
     container_name: ateneu_coopcamp
-    image: codicoop/ateneus:release-22.04.002
+    image: codicoop/ateneus:release-22.05.001
     env_file: ./settings/production/coopcamp.env
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8002 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     depends_on:
@@ -65,7 +65,7 @@ services:
   ateneu-coopmaresme:
     restart: on-failure
     container_name: ateneu_coopmaresme
-    image: codicoop/ateneus:release-22.04.002
+    image: codicoop/ateneus:release-22.05.001
     env_file: ./settings/production/coopmaresme.env
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8003 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     depends_on:
@@ -79,7 +79,7 @@ services:
   coopolis:
     restart: on-failure
     container_name: ateneu_coopolis
-    image: codicoop/ateneus:release-22.04.002
+    image: codicoop/ateneus:release-22.05.001
     env_file: ./settings/production/coopolis.env
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8000 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     depends_on:
@@ -94,7 +94,7 @@ services:
   ateneu-coopsetania:
     restart: on-failure
     container_name: ateneu_coopsetania
-    image: codicoop/ateneus:release-22.04.002
+    image: codicoop/ateneus:release-22.05.001
     env_file: ./settings/production/coopsetania.env
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8010 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     depends_on:
@@ -108,7 +108,7 @@ services:
   ateneu-hospitalet:
     restart: on-failure
     container_name: ateneu_hospitalet
-    image: codicoop/ateneus:release-22.04.002
+    image: codicoop/ateneus:release-22.05.001
     env_file: ./settings/production/hospitalet.env
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8012 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     depends_on:
@@ -123,7 +123,7 @@ services:
   ateneu-ponentcoopera:
     restart: on-failure
     container_name: ateneu_ponentcoopera
-    image: codicoop/ateneus:release-22.04.002
+    image: codicoop/ateneus:release-22.05.001
     env_file: ./settings/production/ponentcoopera.env
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8006 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     depends_on:
@@ -137,7 +137,7 @@ services:
   ateneu-terresebre:
     restart: on-failure
     container_name: ateneu_terresebre
-    image: codicoop/ateneus:release-22.04.002
+    image: codicoop/ateneus:release-22.05.001
     env_file: ./settings/production/terresebre.env
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8013 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     depends_on:
@@ -151,7 +151,7 @@ services:
   ateneu-terresgironines:
     restart: on-failure
     container_name: ateneu_terresgironines
-    image: codicoop/ateneus:release-22.04.002
+    image: codicoop/ateneus:release-22.05.001
     env_file: ./settings/production/terresgironines.env
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8011 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     depends_on:
@@ -165,7 +165,7 @@ services:
   ateneu-vallesoccidental:
     restart: on-failure
     container_name: ateneu_vallesoccidental
-    image: codicoop/ateneus:release-22.04.002
+    image: codicoop/ateneus:release-22.05.001
     env_file: ./settings/production/vallesoccidental.env
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8007 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     depends_on:
@@ -179,7 +179,7 @@ services:
   ateneu-baixllobregat:
     restart: on-failure
     container_name: ateneu_baixllobregat
-    image: codicoop/ateneus:release-22.04.002
+    image: codicoop/ateneus:release-22.05.001
     env_file: ./settings/production/baixllobregat.env
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8015 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     depends_on:
