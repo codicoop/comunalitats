@@ -2,10 +2,26 @@ import environ
 import os
 
 from django.core.management.utils import get_random_secret_key
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 env = environ.Env()
 # False if not in os.environ
 DEBUG = env.bool('DEBUG', False)
+
+sentry_sdk.init(
+    dsn=env("SENTRY_DSN", default=""),
+    integrations=[DjangoIntegration()],
+
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 # Instance's absolute URL (given we're not using Sites framework)
@@ -31,6 +47,15 @@ DATABASES = {
     },
 }
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Sendgrid
+SENDGRID_API_KEY = env("SENDGRID_API_KEY", default="")
+SENDGRID_SANDBOX_MODE_IN_DEBUG = env(
+    "SENDGRID_SANDBOX_MODE_IN_DEBUG", bool, default=False
+)
+SENDGRID_TRACK_EMAIL_OPENS = env("SENDGRID_TRACK_EMAIL_OPENS", bool, default=False)
+SENDGRID_TRACK_CLICKS_HTML = env("SENDGRID_TRACK_CLICKS_HTML", bool, default=False)
+SENDGRID_TRACK_CLICKS_PLAIN = env("SENDGRID_TRACK_CLICKS_PLAIN", bool, default=False)
 
 # SMTP
 EMAIL_HOST = env.str('EMAIL_HOST', default="")
