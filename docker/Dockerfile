@@ -1,4 +1,4 @@
-FROM python:3.7.0 as python-base
+FROM python:3.9.12 as python-base
 
     # ensures that the python output is sent straight to terminal
 ENV PYTHONUNBUFFERED=1 \
