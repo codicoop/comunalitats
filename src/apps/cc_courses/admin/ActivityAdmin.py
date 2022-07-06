@@ -10,7 +10,7 @@ from constance import config
 import modelclone
 
 from apps.coopolis.forms import ActivityForm, ActivityEnrolledForm
-from apps.cc_courses.models import Activity, ActivityEnrolled, ActivityResourceFile
+from apps.cc_courses.models import Activity, ActivityEnrolled, ActivityResourceFile, Entity
 from apps.coopolis.models import User
 from apps.dataexports.models import SubsidyPeriod
 
@@ -354,6 +354,8 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
             kwargs["queryset"] = User.objects.filter(is_staff=True)
         if db_field.name == "minors_teacher":
             kwargs["queryset"] = User.objects.order_by("first_name", "last_name")
+        if db_field.name == "entity":
+            kwargs["queryset"] = Entity.objects.order_by("-is_active", "name")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def activity_poll_field(self, obj):
