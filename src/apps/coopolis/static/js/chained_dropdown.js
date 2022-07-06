@@ -18,7 +18,7 @@ jQuery(function($){
                 Array.from(cols.options).forEach(function(option_element) {
                     var existing = false;
                     for (var k in result) {
-                        if (option_element.value == k) {
+                        if (option_element.value == k || option_element.value == "") {
                             existing = true
                         }
                     }

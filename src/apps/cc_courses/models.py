@@ -155,7 +155,7 @@ class Course(models.Model):
     @property
     def absolute_url(self):
         if self.slug:
-            return reverse('course', args=[str(self.slug)])
+            return settings.ABSOLUTE_URL + reverse('course', args=[str(self.slug)])
         return None
 
     @staticmethod
