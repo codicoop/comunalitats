@@ -10,7 +10,8 @@ from constance import config
 import modelclone
 
 from apps.coopolis.forms import ActivityForm, ActivityEnrolledForm
-from apps.cc_courses.models import Activity, ActivityEnrolled, ActivityResourceFile
+from apps.cc_courses.models import Activity, ActivityEnrolled, ActivityResourceFile, Entity
+from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
 from apps.coopolis.models import User
 from apps.dataexports.models import SubsidyPeriod
 
@@ -112,7 +113,7 @@ class ActivityResourcesInlineAdmin(admin.TabularInline):
     extra = 0
 
 
-class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
+class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
         css = {
@@ -178,6 +179,7 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     }
     date_hierarchy = 'date_start'
     inlines = (ActivityResourcesInlineAdmin, ActivityEnrolledInline)
+    subsidy_period_filter_param = 'subsidy_period'
 
     def get_form(self, request, obj=None, **kwargs):
         # Hack to be able to use self.request at the form.
@@ -354,6 +356,8 @@ class ActivityAdmin(SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
             kwargs["queryset"] = User.objects.filter(is_staff=True)
         if db_field.name == "minors_teacher":
             kwargs["queryset"] = User.objects.order_by("first_name", "last_name")
+        if db_field.name == "entity":
+            kwargs["queryset"] = Entity.objects.order_by("-is_active", "name")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def activity_poll_field(self, obj):

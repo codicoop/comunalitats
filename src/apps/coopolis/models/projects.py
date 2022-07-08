@@ -503,6 +503,8 @@ class ProjectStageSession(models.Model):
         blank=True,
     )
     follow_up = models.TextField("seguiment", null=True, blank=True)
+    # Aquest camp Entity no apareix enlloc, pendent que confirmin si és correcte que no hi ha de ser
+    # per marcar-lo com a obsolet o bé ja eliminar-lo.
     entity = models.ForeignKey(
         Entity, verbose_name="Entitat", default=None, null=True, blank=True,
         on_delete=models.SET_NULL)

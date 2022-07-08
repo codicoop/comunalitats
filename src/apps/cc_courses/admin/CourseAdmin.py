@@ -1,5 +1,3 @@
-
-
 from django_summernote.admin import SummernoteModelAdmin
 from django.utils.safestring import mark_safe
 
@@ -28,7 +26,6 @@ class CourseAdmin(SummernoteModelAdmin):
 
     def copy_clipboard_field(self, obj):
         if obj.absolute_url:
-            abs_url = self.request.build_absolute_uri(obj.absolute_url)
             return mark_safe("""
         {0} <a href="javascript:copyToClipboard('{0}');"> ─ Copiar &#128203;</a>
         <script>
@@ -43,14 +40,13 @@ class CourseAdmin(SummernoteModelAdmin):
           alert(str + ' copied.');
         }}
         </script>
-        """.format(abs_url))
+        """.format(obj.absolute_url))
         else:
             return "(estarà disponible un cop creat)"
 
     copy_clipboard_field.short_description = "Link a l'acció"
 
     def copy_clipboard_list_field(self, obj):
-        abs_url = self.request.build_absolute_uri(obj.absolute_url)
         return mark_safe("""
     <a href="javascript:copyToClipboard('{0}');">Copiar &#128203;</a>
     <script>
@@ -65,6 +61,6 @@ class CourseAdmin(SummernoteModelAdmin):
       alert(str + ' copied.');
     }}
     </script>
-    """.format(abs_url))
+    """.format(obj.absolute_url))
 
     copy_clipboard_list_field.short_description = "Link a l'acció"

@@ -50,9 +50,14 @@ class Entity(models.Model):
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     legal_id = models.CharField("N.I.F.", max_length=9, blank=True, null=True)
+    is_active = models.BooleanField(
+        "Activa",
+        default=True,
+        help_text="Si la desactives no apareixerà al desplegable.",
+    )
 
     def __str__(self):
-        return self.name
+        return self.name if self.is_active else f"[desactivada] {self.name}"
 
 
 class Organizer(models.Model):
@@ -155,7 +160,7 @@ class Course(models.Model):
     @property
     def absolute_url(self):
         if self.slug:
-            return reverse('course', args=[str(self.slug)])
+            return settings.ABSOLUTE_URL + reverse('course', args=[str(self.slug)])
         return None
 
     @staticmethod

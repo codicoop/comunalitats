@@ -1,0 +1,2 @@
+class MissingCurrentSubsidyPeriod(Exception):
+    pass
