@@ -3,7 +3,7 @@ from urllib.parse import urlencode
 
 from django.contrib import admin
 from django.db.models import Count, Q, Sum, OuterRef, Subquery, IntegerField
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.urls import path, reverse
 from openpyxl import Workbook
 from openpyxl.styles import Font, Border, Side, PatternFill
@@ -13,15 +13,12 @@ from .ProjectAdmin import FilterByFounded
 from apps.dataexports.models import SubsidyPeriod
 from apps.coopolis.models.projects import ProjectStage, ProjectsFollowUp, \
     ProjectsFollowUpService, ProjectsConstituted, ProjectsConstitutedService
+from ..mixins import FilterByCurrentSubsidyPeriodMixin
 from ..models import User
 
 
-class MissingCurrentSubsidyPeriod(Exception):
-    pass
-
-
 @admin.register(ProjectsFollowUp)
-class ProjectsFollowUpAdmin(admin.ModelAdmin):
+class ProjectsFollowUpAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     """
     Deprecated: from Nov 2021 the updated report is ProjectsFollowUpAdmin.
     Keeping the deprecated one until we are sure that it's not needed anymore.
@@ -48,10 +45,6 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
     subsidy_period_filter_param = 'stages__subsidy_period__id__exact'
 
     def changelist_view(self, request, extra_context=None):
-        # They usually want to use the current period by default.
-        if self.subsidy_period_filter_param not in request.GET:
-            return self.redirect_to_current_period(request)
-
         response = super().changelist_view(
             request,
             extra_context=extra_context,
@@ -301,25 +294,6 @@ class ProjectsFollowUpAdmin(admin.ModelAdmin):
             ),
         ]
         return custom_urls + urls
-
-    @staticmethod
-    def redirect_to_current_period(request):
-        current = SubsidyPeriod.get_current()
-        if current:
-            value = str(current.id)
-        else:
-            raise MissingCurrentSubsidyPeriod(
-                "El llistat per defecte es carrega mostrant la convocatòria "
-                "vigent, però ha fallat a l'intentar-la trobar. Si us plau "
-                "revisa que existeixi una convocatòria creada per la data "
-                "actual."
-            )
-        query_string = request.META['QUERY_STRING']
-        value = f"stages__subsidy_period__id__exact={value}"
-        if query_string != '':
-            value = f"&{value}"
-        query_string = query_string + value
-        return HttpResponseRedirect(f"{request.path_info}?{query_string}")
 
     def download_spreadsheet(self, request):
         # Getting queryset with filters applied

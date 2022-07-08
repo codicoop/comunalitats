@@ -8,6 +8,7 @@ from constance import config
 from functools import update_wrapper
 from django.conf.urls import url
 
+from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
 from apps.coopolis.models import User, Project, ProjectStage, EmploymentInsertion
 from apps.coopolis.forms import (
     ProjectFormAdmin,
@@ -50,7 +51,7 @@ class ProjectStageSessionsInline(admin.StackedInline):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-class ProjectStageAdmin(admin.ModelAdmin):
+class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     empty_value_display = '(cap)'
     list_display = (
         'project_field_ellipsis', 'date_start', 'stage_type',
@@ -86,6 +87,7 @@ class ProjectStageAdmin(admin.ModelAdmin):
     ]
     inlines = (ProjectStageSessionsInline, )
     readonly_fields = ('hours_sum', 'date_start', "earliest_session_field", )
+    subsidy_period_filter_param = "subsidy_period__id__exact"
 
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )

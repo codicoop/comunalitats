@@ -2,6 +2,8 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, reverse
 from django.utils.html import format_html
+
+from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
 from apps.dataexports.models import DataExports, SubsidyPeriod
 
 
@@ -26,10 +28,11 @@ class SubsidyPeriodAdmin(admin.ModelAdmin):
 
 
 @admin.register(DataExports)
-class DataExportsAdmin(admin.ModelAdmin):
+class DataExportsAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     list_display = ('name', 'subsidy_period', 'export_data_field',)
     readonly_fields = ('created',)
     list_filter = (("subsidy_period", admin.RelatedOnlyFieldListFilter), )
+    subsidy_period_filter_param = "subsidy_period__id__exact"
 
     def get_urls(self):
         urls = super().get_urls()
