@@ -10,7 +10,7 @@ services:
     restart: on-failure
     container_name: ateneu_altpirineu
     image: codicoop/comunalitats:release-22.05.001
-    env_file: ./settings/production/altpirineu.env
+    env_file: ./settings/production/comunalitat_1.env
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8014 --timeout 300 # Sense el timeout peta i l'apache dona proxy error
     depends_on:
       - db

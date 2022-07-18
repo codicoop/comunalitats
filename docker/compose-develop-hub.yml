@@ -6,11 +6,11 @@ networks:
 
 services:
   # http://127.0.0.1:5012 or http://localhost:5012
-  develop_comunalitats_altpirineu:
+  develop_comunalitats_1:
     restart: on-failure
-    container_name: develop_comunalitats_altpirineu
+    container_name: develop_comunalitats_1
     image: codicoop/comunalitats:latest
-    env_file: ./settings/develop/altpirineu.env
+    env_file: ./settings/develop/comunalitat_1.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
     command: gunicorn conf.wsgi:application --bind 0.0.0.0:8012
     depends_on:
