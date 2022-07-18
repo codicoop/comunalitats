@@ -48,7 +48,7 @@ class UserAdmin(admin.ModelAdmin):
     empty_value_display = '(cap)'
     list_display = (
         'date_joined', 'first_name', 'last_name', 'id_number', 'email',
-        'project', 'enrolled_activities_count'
+        'enrolled_activities_count'
     )
     search_fields = (
         'id_number', 'last_name__unaccent', 'first_name__unaccent', 'email',
@@ -63,23 +63,13 @@ class UserAdmin(admin.ModelAdmin):
         'cannot_share_id', 'email', 'fake_email', 'birthdate', 'birth_place',
         'town', 'district', 'address', 'phone_number', 'educational_level',
         'employment_situation', 'discovered_us', 'project_involved',
-        'cooperativism_knowledge', 'authorize_communications', 'project',
+        'cooperativism_knowledge', 'authorize_communications',
         'tags', 'is_staff', 'groups', 'is_active', 'date_joined', 'last_login',
         'new_password',
     )
-    readonly_fields = ('id', 'last_login', 'date_joined', 'project', )
+    readonly_fields = ('id', 'last_login', 'date_joined', )
     actions = ['copy_emails', 'to_csv', ]
     inlines = (ActivityEnrolledInline, )
-
-    def project(self, obj):
-        if obj.project:
-            url = reverse(
-                "admin:coopolis_project_change",
-                kwargs={'object_id': obj.project.id}
-            )
-            return mark_safe(f'<a href="{ url }">{ obj.project }</a>')
-        return None
-    project.short_description = 'Projecte'
 
     def get_readonly_fields(self, request, obj=None):
         fields_t = super().get_readonly_fields(request, obj)
@@ -101,8 +91,7 @@ class UserAdmin(admin.ModelAdmin):
             fields.append('is_superuser')
 
         # If we are adding a new user, don't show these fields:
-        if obj is None and 'project' in fields:
-            fields.remove('project')
+        if obj is None:
             fields.remove('id')
             fields.remove('last_login')
 

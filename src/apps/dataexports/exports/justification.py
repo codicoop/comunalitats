@@ -1,6 +1,5 @@
 from django.db.models import Q
 
-from apps.coopolis.models import ProjectStage, Project, EmploymentInsertion
 from apps.cc_courses.models import Activity
 from apps.dataexports.exports.manager import ExcelExportManager
 

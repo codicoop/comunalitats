@@ -2,8 +2,7 @@ from django.contrib import admin
 from django.conf import settings
 
 from apps.coopolis.models import (
-    User, Project, ProjectStage, Derivation, EmploymentInsertion,
-    ActivityPoll, StageSubtype,
+    User, ActivityPoll,
 )
 from .UserAdmin import UserAdmin
 from .ActivityPollAdmin import ActivityPollAdmin
