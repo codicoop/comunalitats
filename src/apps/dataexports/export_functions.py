@@ -1,6 +1,5 @@
 from django.http import HttpResponseNotFound
 
-from apps.dataexports.exports.cofunded import ExportJustificationCofunded
 from apps.dataexports.exports.justification import ExportJustification
 from apps.dataexports.exports.justification_service import \
     ExportJustificationService
@@ -36,10 +35,6 @@ class ExportFunctions:
 
     def export_service(self, export_obj):
         controller = ExportJustificationService(export_obj)
-        return controller.export()
-
-    def export_cofunded(self, export_obj):
-        controller = ExportJustificationCofunded(export_obj)
         return controller.export()
 
     def export_polls(self, export_obj):

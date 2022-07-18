@@ -257,9 +257,7 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     # Configurable modules or features
     'ENABLE_ROOM_RESERVATIONS_MODULE': (
-        False, "Activar el mòdul de reserva d'espais", bool),
-    'ENABLE_COFUNDED_OPTIONS': (
-        False, "Activar el bloc d'opcions per activitats cofinançades", bool),
+        True, "Activar el mòdul de reserva d'espais", bool),
     'ENABLE_STAGE_SUBTYPES': (
         False, "Mostrar el camp \"Subtipus\" a les justificacions "
                "d'acompanyament.", bool),
@@ -482,7 +480,7 @@ CONSTANCE_CONFIG = {
 CONSTANCE_CONFIG_FIELDSETS = {
     'Configuració': (
         'PROJECT_NAME', 'PROJECT_FULL_NAME', 'ENABLE_ROOM_RESERVATIONS_MODULE',
-        'ENABLE_COFUNDED_OPTIONS', 'ENABLE_STAGE_SUBTYPES',
+        'ENABLE_STAGE_SUBTYPES',
         'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL', 'PROJECT_CONTACT_URL',
         'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG',
         'EMAIL_FROM_ENROLLMENTS', 'EMAIL_FROM_PROJECTS',
