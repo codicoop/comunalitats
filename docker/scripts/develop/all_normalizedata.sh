@@ -1,7 +1,7 @@
 #!/bin/bash
 source sh_vars.conf
 
-for ateneu in "${!ateneus[@]}"
+for ateneu in "${!comunalitats[@]}"
 do
   :
   printf "Running migrate %s\n" "$ateneu"

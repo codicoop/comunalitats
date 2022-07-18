@@ -1,14 +1,14 @@
 version: "3.5"
 
 networks:
-  develop_ateneus_network:
-    name: develop_ateneus_network
+  develop_comunalitats_network:
+    name: develop_comunalitats_network
 
 services:
   # http://127.0.0.1:5012 or http://localhost:5012
-  develop_ateneus_altpirineu:
+  develop_comunalitats_altpirineu:
     restart: on-failure
-    container_name: develop_ateneus_altpirineu
+    container_name: develop_comunalitats_altpirineu
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -19,17 +19,17 @@ services:
     volumes:
       - ../src/:/srv
     depends_on:
-      - develop_ateneus_db
+      - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
     networks:
-      - develop_ateneus_network
+      - develop_comunalitats_network
     ports:
       - 5012:8012
 
   # http://127.0.0.1:5004 or http://localhost:5004
-  develop_ateneus_bnord:
+  develop_comunalitats_bnord:
     restart: on-failure
-    container_name: develop_ateneus_bnord
+    container_name: develop_comunalitats_bnord
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -40,17 +40,17 @@ services:
     volumes:
       - ../src/:/srv
     depends_on:
-      - develop_ateneus_db
+      - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
     networks:
-      - develop_ateneus_network
+      - develop_comunalitats_network
     ports:
       - 5004:8004
 
   # http://127.0.0.1:5007 or http://localhost:5007
-  develop_ateneus_catcentral:
+  develop_comunalitats_catcentral:
     restart: on-failure
-    container_name: develop_ateneus_catcentral
+    container_name: develop_comunalitats_catcentral
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -61,17 +61,17 @@ services:
     volumes:
       - ../src/:/srv
     depends_on:
-      - develop_ateneus_db
+      - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
     networks:
-      - develop_ateneus_network
+      - develop_comunalitats_network
     ports:
       - 5007:8007
 
   # http://127.0.0.1:5002 or http://localhost:5002
-  develop_ateneus_coopcamp:
+  develop_comunalitats_coopcamp:
     restart: on-failure
-    container_name: develop_ateneus_coopcamp
+    container_name: develop_comunalitats_coopcamp
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -82,17 +82,17 @@ services:
     volumes:
       - ../src/:/srv
     depends_on:
-      - develop_ateneus_db
+      - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
     networks:
-      - develop_ateneus_network
+      - develop_comunalitats_network
     ports:
       - 5002:8002
 
   # http://127.0.0.1:5003 or http://localhost:5003
-  develop_ateneus_coopmaresme:
+  develop_comunalitats_coopmaresme:
     restart: on-failure
-    container_name: develop_ateneus_coopmaresme
+    container_name: develop_comunalitats_coopmaresme
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -103,17 +103,17 @@ services:
     volumes:
       - ../src/:/srv
     depends_on:
-      - develop_ateneus_db
+      - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
     networks:
-      - develop_ateneus_network
+      - develop_comunalitats_network
     ports:
       - 5003:8003
 
   # http://127.0.0.1:5001 or http://localhost:5001
-  develop_ateneus_coopolis:
+  develop_comunalitats_coopolis:
     restart: on-failure
-    container_name: develop_ateneus_coopolis
+    container_name: develop_comunalitats_coopolis
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -124,17 +124,17 @@ services:
     volumes:
       - ../src/:/srv
     depends_on:
-      - develop_ateneus_db
+      - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
     networks:
-      - develop_ateneus_network
+      - develop_comunalitats_network
     ports:
       - 5001:8001
 
   # http://127.0.0.1:5008 or http://localhost:5008
-  develop_ateneus_coopsetania:
+  develop_comunalitats_coopsetania:
     restart: on-failure
-    container_name: develop_ateneus_coopsetania
+    container_name: develop_comunalitats_coopsetania
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -145,17 +145,17 @@ services:
     volumes:
       - ../src/:/srv
     depends_on:
-      - develop_ateneus_db
+      - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
     networks:
-      - develop_ateneus_network
+      - develop_comunalitats_network
     ports:
       - 5008:8008
 
   # http://127.0.0.1:5010 or http://localhost:5010
-  develop_ateneus_hospitalet:
+  develop_comunalitats_hospitalet:
     restart: on-failure
-    container_name: develop_ateneus_hospitalet
+    container_name: develop_comunalitats_hospitalet
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -166,17 +166,17 @@ services:
     volumes:
       - ../src/:/srv
     depends_on:
-      - develop_ateneus_db
+      - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
     networks:
-      - develop_ateneus_network
+      - develop_comunalitats_network
     ports:
       - 5010:8010
 
   # http://127.0.0.1:5005 or http://localhost:5005
-  develop_ateneus_ponentcoopera:
+  develop_comunalitats_ponentcoopera:
     restart: on-failure
-    container_name: develop_ateneus_ponentcoopera
+    container_name: develop_comunalitats_ponentcoopera
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -187,17 +187,17 @@ services:
     volumes:
       - ../src/:/srv
     depends_on:
-      - develop_ateneus_db
+      - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
     networks:
-      - develop_ateneus_network
+      - develop_comunalitats_network
     ports:
       - 5005:8005
 
   # http://127.0.0.1:5011 or http://localhost:5011
-  develop_ateneus_terresebre:
+  develop_comunalitats_terresebre:
     restart: on-failure
-    container_name: develop_ateneus_terresebre
+    container_name: develop_comunalitats_terresebre
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -208,17 +208,17 @@ services:
     volumes:
       - ../src/:/srv
     depends_on:
-      - develop_ateneus_db
+      - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
     networks:
-      - develop_ateneus_network
+      - develop_comunalitats_network
     ports:
       - 5011:8011
 
   # http://127.0.0.1:5009 or http://localhost:5009
-  develop_ateneus_terresgironines:
+  develop_comunalitats_terresgironines:
     restart: on-failure
-    container_name: develop_ateneus_terresgironines
+    container_name: develop_comunalitats_terresgironines
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -229,17 +229,17 @@ services:
     volumes:
       - ../src/:/srv
     depends_on:
-      - develop_ateneus_db
+      - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
     networks:
-      - develop_ateneus_network
+      - develop_comunalitats_network
     ports:
       - 5009:8009
 
   # http://127.0.0.1:5006 or http://localhost:5006
-  develop_ateneus_vallesoccidental:
+  develop_comunalitats_vallesoccidental:
     restart: on-failure
-    container_name: develop_ateneus_vallesoccidental
+    container_name: develop_comunalitats_vallesoccidental
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -250,17 +250,17 @@ services:
     volumes:
       - ../src/:/srv
     depends_on:
-      - develop_ateneus_db
+      - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
     networks:
-      - develop_ateneus_network
+      - develop_comunalitats_network
     ports:
       - 5006:8006
 
   # http://127.0.0.1:5006 or http://localhost:5006
-  develop_ateneus_baixllobregat:
+  develop_comunalitats_baixllobregat:
     restart: on-failure
-    container_name: develop_ateneus_baixllobregat
+    container_name: develop_comunalitats_baixllobregat
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
@@ -271,30 +271,30 @@ services:
     volumes:
       - ../src/:/srv
     depends_on:
-      - develop_ateneus_db
+      - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]
     networks:
-      - develop_ateneus_network
+      - develop_comunalitats_network
     ports:
       - 5013:8013
 
   # http://localhost:8080/
-#  develop_ateneus_adminer:
-#    container_name: develop_ateneus_adminer
+#  develop_comunalitats_adminer:
+#    container_name: develop_comunalitats_adminer
 #    image: adminer
 #    ports:
 #      - 9876:8080
 #    depends_on:
-#      - develop_ateneus_rb
+#      - develop_comunalitats_rb
 #    networks:
-#      - develop_ateneus_network
+#      - develop_comunalitats_network
 
-  develop_ateneus_db:
-    container_name: develop_ateneus_db
+  develop_comunalitats_db:
+    container_name: develop_comunalitats_db
     image: postgres:11
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - ../dumps:/dumps
     networks:
-      - develop_ateneus_network
+      - develop_comunalitats_network
