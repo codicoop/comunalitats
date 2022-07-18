@@ -58,24 +58,6 @@ class MyDashboard(Dashboard):
                 collapsible=False,
                 models=('apps.cc_courses.models.Course', 'apps.cc_courses.models.Activity',),
             ),
-            modules.ModelList(
-                title='Acompanyament de projectes',
-                column=1,
-                collapsible=False,
-                models=('apps.coopolis.models.projects.Project', 'apps.coopolis.models.projects.ProjectStage',
-                        'apps.coopolis.models.projects.EmploymentInsertion', ),
-            ),
-            modules.ModelList(
-                title='Seguiment de projectes',
-                column=1,
-                collapsible=False,
-                models=(
-                    'apps.coopolis.models.projects.ProjectsFollowUpService',
-                    'apps.coopolis.models.projects.ProjectsConstitutedService',
-                    'apps.coopolis.models.projects.ProjectsFollowUp',
-                    'apps.coopolis.models.projects.ProjectsConstituted',
-                ),
-            ),
             reservations_module_app,
             reservations_module_calendar,
             modules.ModelList(
