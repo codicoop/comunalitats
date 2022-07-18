@@ -6,9 +6,9 @@ networks:
 
 services:
   # http://localhost:4001
-  develop_comunalitats_1:
+  develop_comunalitat_1:
     restart: on-failure
-    container_name: develop_comunalitats_1
+    container_name: develop_comunalitat_1
     image: codicoop/comunalitats:latest
     env_file: ./settings/develop/comunalitat_1.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
