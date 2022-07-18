@@ -69,7 +69,6 @@ class CoopolisSignUpView(SignUpView):
             'ateneu_nom': config.PROJECT_FULL_NAME,
             'url_backoffice': settings.ABSOLUTE_URL,
             'url_accions': f"{settings.ABSOLUTE_URL}{reverse('courses')}",
-            'url_projecte': f"{settings.ABSOLUTE_URL}{reverse('project_info')}",
         }
         mail.send()
 

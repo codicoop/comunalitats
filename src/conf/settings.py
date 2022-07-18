@@ -274,28 +274,6 @@ CONSTANCE_CONFIG = {
         " descentralitzades en altres espais comunitaris i seus de l’economia "
         "social i solidària barcelonina.",
         "Formació: text d'introducció a la franja blava"),
-    # Project
-    'CONTENT_PROJECT_INTRODUCTION': (
-        "<p>Des de Coòpolis acompanyem projectes en la seva posada en marxa i "
-        "constitució com a cooperatives, en aquells aspectes centrals per a la"
-        " seva activitat i facilitem eines i recursos per a la seva "
-        "consolidació i creixement. També dissenyem itineraris per a la "
-        "transformació d’associacions i altres formes d’empreses a "
-        "cooperatives.</p>",
-        "Apartat Projecte: text d'introducció a la franja blava."),
-    'CONTENT_PROJECT_TITLE': (
-        "Assessorament de projectes",
-        "Apartat Projecte: text d'encapçalament"),
-    'CONTENT_PROJECT_INFO': (
-        "<p>Per sol·licitar acompanyament per al teu projecte, accedeix amb "
-        "el teu compte o crea'n un amb els formularis que hi ha a "
-        "continuació.</p>",
-        "Aartat Projecte: Text que es mostra a l'apartat si hi accedeix sense "
-        "haver fet login"),
-    'CONTENT_PROJECT_NEW': (
-        "<p>Omple el següent formulari per sol·licitar un acompanyament.</p>",
-        "Apartat Projecte: Text que es mostra al formulari per sol·licitar "
-        "un acompanyament"),
     # Home
     'CONTENT_HOME_COURSES_TITLE': (
         "Formació i activitats",
@@ -317,18 +295,6 @@ CONSTANCE_CONFIG = {
         "escriure un correu a <a href=\"mailto:inscripcions@bcn.coop\">"
         "inscripcions@bcn.coop</a> o trucar a Coòpolis)</em></p>",
         "Text d'introducció de la home."),
-    "CONTENT_HOME_PROJECTS_TITLE": (
-        "Acompanyament de projectes",
-        "Portada: títol del bloc que informa sobre l'acompanyament de "
-        "projectes."),
-    "CONTENT_HOME_PROJECTS_TEXT": (
-        "Des de Coòpolis acompanyem projectes en la seva posada en marxa i "
-        "constitució com a cooperatives, en aquells aspectes centrals per a la"
-        " seva activitat i facilitem eines i recursos per a la seva "
-        "consolidació i creixement. També dissenyem itineraris per a la "
-        "transformació d’associacions i altres formes d’empreses a "
-        "cooperatives.",
-        "Portada: bloc que informa sobre l'acompanyament de projectes."),
     # Sign up
     'CONTENT_SIGNUP_LEGAL1': (
         "La participació en les activitats de Coòpolis, Ateneu Cooperatiu de "
@@ -535,12 +501,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
     ),
     "Apartat Portada": (
         'CONTENT_HOME_COURSES_TITLE', 'CONTENT_HOME_COURSES_TEXT',
-        'CONTENT_HOME_PROJECTS_TITLE', "CONTENT_HOME_PROJECTS_TEXT",
         'CONTENT_HOME_INTRODUCTION'
-    ),
-    'Apartat Projectes': (
-        'CONTENT_PROJECT_INTRODUCTION', 'CONTENT_PROJECT_TITLE',
-        'CONTENT_PROJECT_INFO', 'CONTENT_PROJECT_NEW'
     ),
     "Apartat Formació": ('CONTENT_COURSES_INTRODUCTION',),
     "Formulari d'alta": ('CONTENT_SIGNUP_LEGAL1', 'CONTENT_SIGNUP_LEGAL2',),
