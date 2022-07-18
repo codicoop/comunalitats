@@ -5,7 +5,7 @@ networks:
     name: develop_comunalitats_network
 
 services:
-  # http://127.0.0.1:5012 or http://localhost:5012
+  # http://localhost:4001
   develop_comunalitat_1:
     restart: on-failure
     container_name: develop_comunalitats_1
@@ -15,7 +15,7 @@ services:
       target: development
     env_file: ./settings/develop/comunalitat_1.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8012 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8001 --reload
     volumes:
       - ../src/:/srv
     depends_on:
@@ -24,7 +24,7 @@ services:
     networks:
       - develop_comunalitats_network
     ports:
-      - 4001:4001
+      - 4001:8001
 
   # http://localhost:8080/
 #  develop_comunalitats_adminer:

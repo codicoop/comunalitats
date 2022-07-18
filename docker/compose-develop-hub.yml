@@ -5,7 +5,7 @@ networks:
     name: develop_comunalitats_network
 
 services:
-  # http://127.0.0.1:5012 or http://localhost:5012
+  # http://localhost:4001
   develop_comunalitats_1:
     restart: on-failure
     container_name: develop_comunalitats_1
