@@ -9,16 +9,6 @@ def populate_mail_templates(apps, schema_editor):
 
     mail_model.objects.bulk_create([
         mail_model(
-            text_identifier='EMAIL_NEW_PROJECT',
-            subject="Nova sol·licitud d'acompanyament: {projecte_nom}",
-            body="""<h2>Nova sol·licitud d'acompanyament</h2><br /><br />
-    Nom del projecte: {projecte_nom} <br />
-    Telèfon de contacte: {projecte_telefon} <br />
-    Correu electrònic de contacte del projecte: {projecte_email} <br />
-    Correu electrònic de l'usuari que l'ha creat: {usuari_email} <br />""",
-            default_template_path='emails/front_generic.html'
-        ),
-        mail_model(
             text_identifier='EMAIL_ENROLLMENT_CONFIRMATION',
             subject="Confirmació d'inscripció a l'activitat: {activitat_nom}",
             body="""
@@ -34,7 +24,7 @@ def populate_mail_templates(apps, schema_editor):
     <tr>
       <td align="center" valign="top" style="font-family:'Open Sans', Arial, sans-serif; font-size:22px;
       line-height:22px; color:#000; letter-spacing:2px; padding-bottom:12px;" class="pad10">
-        <strong>{activitat_nom}</strong> de {ateneu_nom}
+        <strong>{activitat_nom}</strong> de {comunalitat_nom}
       </td>
     </tr>
     <tr>
@@ -53,7 +43,7 @@ def populate_mail_templates(apps, schema_editor):
     </tr>
     <tr>
       <td align="center" class="em_text1 pad10" bgcolor="#fafafa" style="padding-bottom: 15px;">
-        <a href="{url_web_ateneu}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
+        <a href="{url_web_comunalitat}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
       </td>
     </tr>
     </table>
@@ -76,7 +66,7 @@ def populate_mail_templates(apps, schema_editor):
     <tr>
       <td align="center" valign="top" style="font-family:'Open Sans', Arial, sans-serif; font-size:22px;
       line-height:22px; color:#000; letter-spacing:2px; padding-bottom:12px;" class="pad10">
-        <strong>{activitat_nom}</strong> de {ateneu_nom}
+        <strong>{activitat_nom}</strong> de {comunalitat_nom}
       </td>
     </tr>
     <tr>
@@ -95,7 +85,7 @@ def populate_mail_templates(apps, schema_editor):
     </tr>
     <tr>
       <td align="center" class="em_text1 pad10" bgcolor="#fafafa" style="padding-bottom: 15px;">
-        <a href="{url_ateneu}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
+        <a href="{url_comunalitat}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
       </td>
     </tr>
     </table>""",
@@ -117,7 +107,7 @@ def populate_mail_templates(apps, schema_editor):
     <tr>
       <td align="center" valign="top" style="font-family:'Open Sans', Arial, sans-serif; font-size:22px;
       line-height:22px; color:#000; letter-spacing:2px; padding-bottom:12px;" class="pad10">
-        <strong>{activitat_nom}</strong> de {ateneu_nom}
+        <strong>{activitat_nom}</strong> de {comunalitat_nom}
       </td>
     </tr>
     <tr>
@@ -141,7 +131,7 @@ def populate_mail_templates(apps, schema_editor):
     </tr>
     <tr>
       <td align="center" class="em_text1 pad10" bgcolor="#fafafa" style="padding-bottom: 15px;">
-        <a href="{url_web_ateneu}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
+        <a href="{url_web_comunalitat}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
       </td>
     </tr>
     </table>""",
@@ -149,36 +139,23 @@ def populate_mail_templates(apps, schema_editor):
         ),
         mail_model(
             text_identifier='EMAIL_SIGNUP_WELCOME',
-            subject="Nou compte creat a {ateneu_nom}",
+            subject="Nou compte creat a {comunalitat_nom}",
             body="""
-    <h2>Benvingut/da a {ateneu_nom}!</h2>
+    <h2>Benvingut/da a {comunalitat_nom}!</h2>
     <p><em>Estàs rebent aquest correu perquè s'ha completat un registre a la plataforma {url_backoffice}.<br />
     Si aquest registre no l'has fet tu o cap altra persona amb qui comparteixis aquest compte, ignora aquest correu o 
     avisa'ns per tal que l'eliminem de la base de dades.</em></p><br />
     <p>Amb el teu compte pots:</p>
     <ul>
     <li>Inscriure't a les sessions formatives, que trobaràs <a href="{url_accions}">aquí</a>.</li>
-    <li>Si esteu iniciant o teniu en marxa un projecte cooperatiu, podeu 
-    <a href="{url_projecte}">sol·licitar un acompanyament</a>.</li>
     <li>Consultar o editar les dades del teu perfil i recuperar la contrassenya. </li>
     </ul>
     <p>Més informació a <a href="{url_backoffice}">{url_backoffice}</a>.</p>""",
             default_template_path='emails/front_single_text.html'
         ),
         mail_model(
-            text_identifier='EMAIL_ADDED_TO_PROJECT',
-            subject="Has estat afegit com a participant del projecte {projecte_nom}",
-            body="""
-    <p>Has estat afegit com a participant al projecte acompanyat per {ateneu_nom}:</p>
-    <h3>{projecte_nom}</h3>
-    <p>Per veure i modificar la fitxa del vostre projecte, accedeix a <a href="{url_projectes}">l'apartat Projectes</a> de la 
-    plataforma de {ateneu_nom} amb el teu e-mail i contrasenya.</p><br />
-    <p>Si necessites la contrasenya, trobaràs l'opció per fer-ho a <a href="{url_backoffice}">{url_backoffice}</a>.</p>""",
-            default_template_path='emails/front_single_text.html'
-        ),
-        mail_model(
             text_identifier='EMAIL_PASSWORD_RESET',
-            subject="Reinicialització de contrasenya del teu compte a {ateneu_nom}",
+            subject="Reinicialització de contrasenya del teu compte a {comunalitat_nom}",
             body="""
     <table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f0f0f0">
     <tr>
@@ -199,14 +176,14 @@ def populate_mail_templates(apps, schema_editor):
             ignora aquest correu. Si segueixes rebent aquest correu repetidament,
             podria voler dir que algú està intentant obtenir accés al teu 
             compte, et recomanem que posis una contrasenya el més llarga 
-            possible i que avisis a les administradores de l'Ateneu.</p>
+            possible i que avisis a les administradores de la plataforma.</p>
         <p style="margin-left: 60px">Per establir una nova contrasenya fes
             servir aquest enllaç: {password_reset_url}</p>
       </td>
     </tr>
     <tr>
       <td align="center" class="em_text1 pad10" bgcolor="#fafafa" style="padding-bottom: 15px;">
-        <a href="{url_web_ateneu}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
+        <a href="{url_web_comunalitat}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
       </td>
     </tr>
     </table>""",
@@ -231,7 +208,7 @@ def populate_mail_templates(apps, schema_editor):
     <tr>
       <td align="center" valign="top" style="font-family:'Open Sans', Arial, sans-serif; font-size:22px;
       line-height:22px; color:#000; letter-spacing:2px; padding-bottom:12px;" class="pad10">
-        <strong>{activitat_nom}</strong> de {ateneu_nom}
+        <strong>{activitat_nom}</strong> de {comunalitat_nom}
       </td>
     </tr>
     <tr>
@@ -257,7 +234,7 @@ def populate_mail_templates(apps, schema_editor):
     </tr>
     <tr>
       <td align="center" class="em_text1 pad10" bgcolor="#fafafa" style="padding-bottom: 15px;">
-        <a href="{url_web_ateneu}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
+        <a href="{url_web_comunalitat}" style="color:#e94e1b; text-decoration:none; font-weight: bold;">Fins aviat!</a>
       </td>
     </tr>
     </table>""",
@@ -265,25 +242,6 @@ def populate_mail_templates(apps, schema_editor):
         },
     )
     print('EMAIL_ENROLLMENT_POLL template updated.')
-
-    obj, created = mail_model.objects.update_or_create(
-        text_identifier='EMAIL_PROJECT_REQUEST_CONFIRMATION',
-        defaults={
-            'text_identifier': 'EMAIL_PROJECT_REQUEST_CONFIRMATION',
-            'subject': "Nova sol·licitud d'acompanyament: {projecte_nom}",
-            'body': """<p><strong>Confirmació de sol·licitud d'acompanyament 
-pel projecte {projecte_nom}</strong></p>
-<p style="padding-top: 20px">En els propers dies una persona de l'equip de 
-l'ateneu cooperatiu es posarà en contacte amb tu per parlar dels propers 
-passos.</p>
-<p style="padding-top: 20px">Per consultar i modificar la fitxa del projecte 
-accedeix a <a href="{url_backoffice}">l'aplicació dels serveis de l'ateneu</a>.
-</p>
-            """,
-            'default_template_path': 'emails/front_single_text.html'
-        },
-    )
-    print('EMAIL_PROJECT_REQUEST_CONFIRMATION template updated.')
 
 
 class Migration(migrations.Migration):

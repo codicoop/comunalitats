@@ -510,7 +510,7 @@ class Activity(models.Model):
         )
         mail.body_strings = {
             'activitat_nom': self.name,
-            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'comunalitat_nom': config.PROJECT_FULL_NAME,
             'persona_nom': user.first_name,
             'activitat_data_inici':
                 self.date_start.strftime("%d-%m-%Y"),
@@ -521,7 +521,7 @@ class Activity(models.Model):
             'absolute_url_poll': absolute_url_poll,
             'absolute_url_my_activities':
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
+            'url_web_comunalitat': config.PROJECT_WEBSITE_URL,
         }
         return mail
 
@@ -629,7 +629,7 @@ class ActivityEnrolled(models.Model):
         }
         mail.body_strings = {
             'activitat_nom': self.activity.name,
-            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'comunalitat_nom': config.PROJECT_FULL_NAME,
             'activitat_data_inici':
                 self.activity.date_start.strftime("%d-%m-%Y"),
             'activitat_hora_inici':
@@ -637,7 +637,7 @@ class ActivityEnrolled(models.Model):
             'activitat_lloc': self.activity.place,
             'absolute_url_my_activities':
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
+            'url_web_comunalitat': config.PROJECT_WEBSITE_URL,
         }
         mail.send()
 
@@ -649,7 +649,7 @@ class ActivityEnrolled(models.Model):
         }
         mail.body_strings = {
             'activitat_nom': self.activity.name,
-            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'comunalitat_nom': config.PROJECT_FULL_NAME,
             'activitat_data_inici':
                 self.activity.date_start.strftime("%d-%m-%Y"),
             'activitat_hora_inici':
@@ -657,7 +657,7 @@ class ActivityEnrolled(models.Model):
             'activitat_lloc': self.activity.place,
             'url_els_meus_cursos':
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            'url_ateneu': settings.ABSOLUTE_URL,
+            'url_comunalitat': settings.ABSOLUTE_URL,
         }
         mail.send()
 
@@ -673,7 +673,7 @@ class ActivityEnrolled(models.Model):
         )
         mail.body_strings = {
             'activitat_nom': activity.name,
-            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'comunalitat_nom': config.PROJECT_FULL_NAME,
             'persona_nom': user.first_name,
             'activitat_data_inici':
                 activity.date_start.strftime("%d-%m-%Y"),
@@ -684,7 +684,7 @@ class ActivityEnrolled(models.Model):
             'absolute_url_activity': absolute_url_activity,
             'absolute_url_my_activities':
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
+            'url_web_comunalitat': config.PROJECT_WEBSITE_URL,
         }
         return mail
 

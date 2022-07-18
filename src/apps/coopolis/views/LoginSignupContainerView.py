@@ -63,10 +63,10 @@ class CoopolisSignUpView(SignUpView):
         mail = MyMailTemplate('EMAIL_SIGNUP_WELCOME')
         mail.to = mail_to
         mail.subject_strings = {
-            'ateneu_nom': config.PROJECT_FULL_NAME
+            'comunalitat_nom': config.PROJECT_FULL_NAME
         }
         mail.body_strings = {
-            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'comunalitat_nom': config.PROJECT_FULL_NAME,
             'url_backoffice': settings.ABSOLUTE_URL,
             'url_accions': f"{settings.ABSOLUTE_URL}{reverse('courses')}",
         }
