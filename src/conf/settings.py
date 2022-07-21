@@ -34,6 +34,10 @@ USE_X_FORWARDED_HOST = True
 # Raises django's ImproperlyConfigured exception if SECRET_KEY not in os.environ
 SECRET_KEY = env.str('SECRET_KEY', default=get_random_secret_key())
 
+# Variables for non-interactive superuser creation
+DJANGO_SUPERUSER_EMAIL = env("DJANGO_SUPERUSER_EMAIL", default=None)
+DJANGO_SUPERUSER_PASSWORD = env("DJANGO_SUPERUSER_PASSWORD", default=None)
+
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 DATABASES = {
@@ -471,3 +475,7 @@ Q_CLUSTER = {
     "timeout": 30,
     "workers": 1,
 }
+
+# Maintenance mode
+MAINTENANCE_MODE = env.bool("MAINTENANCE_MODE", default=False)
+MAINTENANCE_MODE_STATE_BACKEND = "maintenance_mode.backends.DefaultStorageBackend"
