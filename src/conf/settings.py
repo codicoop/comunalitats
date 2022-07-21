@@ -290,12 +290,6 @@ CONSTANCE_CONFIG = {
         "l’Ajuntament de Barcelona.",
         'Casella per acceptar #2.'),
     # Configuration
-    'EMAIL_FROM_ENROLLMENTS': (
-        'formacio@bcn.coop',
-        "És el remitent del correu que rep la gent a l'inscriure's a una "
-        "sessió. Quan s'envia un recordatori a tothom inscrit a una sessió, "
-        "s'envia a aquest compte i posa en còpia oculta els correus de la "
-        "gent."),
     'EMAIL_TO_DEBUG': (
         'pere@codi.coop', 'Correu per fer proves d\'enviaments.'),
     'PROJECT_NAME': ("Comunalitat", "Nom curt de la comunalitat."),
@@ -348,7 +342,6 @@ CONSTANCE_CONFIG_FIELDSETS = {
         'PROJECT_NAME', 'PROJECT_FULL_NAME', 'ENABLE_ROOM_RESERVATIONS_MODULE',
         'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL', 'PROJECT_CONTACT_URL',
         'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG',
-        'EMAIL_FROM_ENROLLMENTS',
         'PROJECT_FACEBOOK_URL', 'PROJECT_TWITTER_URL', 'PROJECT_INSTAGRAM_URL'
     ),
     "Apartat Portada": (
