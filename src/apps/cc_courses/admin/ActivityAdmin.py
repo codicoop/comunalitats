@@ -114,7 +114,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     list_filter = (
         FilterBySubsidyPeriod,
         "service", ("place__town", admin.RelatedOnlyFieldListFilter),
-        'course', 'date_start', 'room', 'circle', 'entity', 'place',
+        'course', 'date_start', 'room', 'entity', 'place',
         'for_minors',
         ("responsible", admin.RelatedOnlyFieldListFilter),
     )
@@ -122,7 +122,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         (None, {
             'fields': ['course', 'name', 'objectives', 'place', 'date_start',
                        'date_end', 'starting_time', 'ending_time', 'spots',
-                       'service', 'sub_service', 'circle', 'entity',
+                       'service', 'sub_service', 'entity',
                        'responsible', 'publish', ]
         }),
         ("Documents per la justificació", {
