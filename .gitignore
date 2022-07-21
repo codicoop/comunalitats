@@ -1,17 +1,14 @@
 *.pyc
 .DS_Store
-env
-venv
 .idea/
 **.css.map
 node_modules
-Pipfile.lock
 local_*.py
 # Using this for pyenv in development environment.
 .python-version
-/docker-production/settings/
-/docker-develop/django-settings/
 /src/static/
 /dumps/
-src/conf/maintenance_mode_state.txt
-/docker/settings/
+
+# Ignore configuration file
+docker/settings/*
+!docker/settings/settings.env.example
