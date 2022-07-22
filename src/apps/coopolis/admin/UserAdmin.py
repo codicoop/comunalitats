@@ -74,7 +74,10 @@ class UserAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         fields_t = super().get_readonly_fields(request, obj)
         fields = list(fields_t)
-        if not request.user.groups.filter(name='Responsable de backoffice').exists():
+        if (
+            not request.user.is_superuser
+            and not request.user.groups.filter(name='Responsable de backoffice').exists()
+        ):
             if 'groups' not in fields:
                 fields.append('groups')
             if 'is_staff' not in fields:

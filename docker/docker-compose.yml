@@ -15,7 +15,7 @@ services:
       target: development
     env_file: ./settings/develop/comunalitat_1.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8001 --reload
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8001 --reload --threads=10
     volumes:
       - ../src/:/srv
     depends_on:

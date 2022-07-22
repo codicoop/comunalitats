@@ -45,10 +45,21 @@ def add_group_permissions(apps, schema_editor):
         ],
         "mailqueue": [
             "view_attachment",
+            "view_mailermessage",
         ],
         "auth": [
             "add_permission",
-        ]
+        ],
+        "dataexports": [
+            "change_subsidyperiod", "add_subsidyperiod",
+        ],
+        "cc_courses": [
+            "add_courseplace",
+            "add_entity",
+        ],
+        "coopolis": [
+            "delete_tagulous_user_tags",
+        ],
     }
 
     group, created = group_model.objects.get_or_create(
@@ -67,6 +78,7 @@ def add_group_permissions(apps, schema_editor):
             "view_town",
             "view_activitypoll",
             "view_user", "change_user", "add_user",
+            "add_tagulous_user_tags", "change_tagulous_user_tags", "view_tagulous_user_tags",
         ],
         "cc_courses": [
             "view_courseplace", "change_courseplace",
@@ -80,7 +92,7 @@ def add_group_permissions(apps, schema_editor):
             "add_activityenrolled", "delete_activityenrolled",
         ],
         "dataexports": [
-            "view_subsidyperiod", "change_subsidyperiod", "add_subsidyperiod",
+            "view_subsidyperiod",
             "view_dataexports",
         ],
         "facilities_reservations": [
@@ -92,7 +104,7 @@ def add_group_permissions(apps, schema_editor):
         ],
         "auth": [
             "view_group",
-        ]
+        ],
     }
     group, created = group_model.objects.get_or_create(
         name="Equip"
