@@ -27,29 +27,25 @@ class MyDashboard(Dashboard):
         ))
 
     def init_with_context(self, context):
-        # 'Disabling' reservations module by default, by assigning an empty link module:
-        reservations_module_app = modules.LinkList()
-        reservations_module_calendar = modules.LinkList()
-        if config.ENABLE_ROOM_RESERVATIONS_MODULE:
-            reservations_module_app = modules.ModelList(
-                    title="Gestió de reserves d'aules i sales",
-                    column=1,
-                    collapsible=False,
-                    models=('apps.facilities_reservations.models.Reservation', 'apps.facilities_reservations.models.Room'),
-                )
-            reservations_module_calendar = modules.LinkList(
-                    title="Calendari de reserves",
-                    column=1,
-                    collapsible=False,
-                    children=(
-                        {
-                            'title': 'Obrir el calendari (pestanya nova)',
-                            'url': reverse('fullcalendar'),
-                            'external': False,
-                            'target': True,
-                        },
-                    ),
-                )
+        reservations_module_app = modules.ModelList(
+                title="Gestió de reserves d'aules i sales",
+                column=1,
+                collapsible=False,
+                models=('apps.facilities_reservations.models.Reservation', 'apps.facilities_reservations.models.Room'),
+            )
+        reservations_module_calendar = modules.LinkList(
+                title="Calendari de reserves",
+                column=1,
+                collapsible=False,
+                children=(
+                    {
+                        'title': 'Obrir el calendari (pestanya nova)',
+                        'url': reverse('fullcalendar'),
+                        'external': False,
+                        'target': True,
+                    },
+                ),
+            )
 
         group_children = [
             modules.ModelList(
@@ -57,24 +53,6 @@ class MyDashboard(Dashboard):
                 column=1,
                 collapsible=False,
                 models=('apps.cc_courses.models.Course', 'apps.cc_courses.models.Activity',),
-            ),
-            modules.ModelList(
-                title='Acompanyament de projectes',
-                column=1,
-                collapsible=False,
-                models=('apps.coopolis.models.projects.Project', 'apps.coopolis.models.projects.ProjectStage',
-                        'apps.coopolis.models.projects.EmploymentInsertion', ),
-            ),
-            modules.ModelList(
-                title='Seguiment de projectes',
-                column=1,
-                collapsible=False,
-                models=(
-                    'apps.coopolis.models.projects.ProjectsFollowUpService',
-                    'apps.coopolis.models.projects.ProjectsConstitutedService',
-                    'apps.coopolis.models.projects.ProjectsFollowUp',
-                    'apps.coopolis.models.projects.ProjectsConstituted',
-                ),
             ),
             reservations_module_app,
             reservations_module_calendar,
@@ -101,7 +79,7 @@ class MyDashboard(Dashboard):
         if context['request'].user.is_superuser:
             group_children.append(
                 modules.ModelList(
-                    title="Configuració dels correus electrònics",
+                    title="Plantilles dels correus electrònics",
                     column=1,
                     collapsible=False,
                     models=('mailing_manager.models.Mail',),
@@ -115,13 +93,31 @@ class MyDashboard(Dashboard):
             children=group_children
         ))
 
+        self.children.append(
+            modules.ModelList(
+                "Paràmetres de l'aplicació",
+                column=1,
+                collapsible=False,
+                models=(
+                    "apps.base.models.Customization",
+                    "constance.*",
+                    "mailing_manager.*",
+                ),
+            )
+        )
+
+        self.children.append(
+            modules.ModelList(
+                "Correus enviats",
+                column=1,
+                collapsible=False,
+                models=("mailqueue.*",),
+            )
+        )
+
         links_children = [
-            ["Documentació", 'docs/'],
         ]
         if context['request'].user.is_superuser:
-            links_children.append(['Gestió de textos del back-office', 'constance/config'])
-            links_children.append(["Registre d'e-mails enviats", 'mailqueue/mailermessage/'])
-            links_children.append(["Django-Q scheduling", 'django_q/'])
             links_children.append(["Registre d'activitat al panell d'administració", 'admin/logentry/'])
 
         self.children.append(modules.LinkList(

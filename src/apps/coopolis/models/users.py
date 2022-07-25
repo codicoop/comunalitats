@@ -116,12 +116,6 @@ class User(BaseUser):
 
     enrolled_activities_count.short_description = "Sessions"
 
-    @property
-    def project(self):
-        if self.projects.count() > 0:
-            return self.projects.all()[0]
-        return None
-
     def get_full_name(self):
         name = self.first_name
         if self.surname:

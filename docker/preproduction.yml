@@ -9,15 +9,10 @@ services:
   develop_comunalitat_1:
     restart: on-failure
     container_name: develop_comunalitat_1
-    build:
-      context: ..
-      dockerfile: ./docker/Dockerfile
-      target: development
+    image: codicoop/comunalitats:latest
     env_file: ./settings/develop/comunalitat_1.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8001 --reload --threads=10
-    volumes:
-      - ../src/:/srv
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8001
     depends_on:
       - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]

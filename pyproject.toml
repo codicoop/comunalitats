@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "Ateneus Cooperatius"
+name = "Comunalitats"
 version = "0.1.0"
 description = ""
 authors = ["Codi Cooperatiu <hola@codi.coop>"]
