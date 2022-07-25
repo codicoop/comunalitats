@@ -3,11 +3,9 @@ from django.contrib import admin
 from django.conf.urls import url
 from django.conf import settings
 from django.views.generic.base import RedirectView
-from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
 from .views import (
-    ProjectFormView, ProjectCreateFormView, ProjectInfoView,
     LoginSignupContainerView, CoopolisSignUpView, CoopolisLoginView,
     HomeView, CustomPasswordResetView, ActivityPollView, get_sub_services
 )
@@ -38,11 +36,6 @@ urlpatterns += [
         template_name="admin/docs.html"
     ), name='docs'),
     path('summernote/', include('django_summernote.urls')),
-    path('project/edit/', login_required(
-        ProjectFormView.as_view()), name='edit_project'),
-    path('project/new/', login_required(
-        ProjectCreateFormView.as_view()), name='new_project'),
-    path('project/info/', ProjectInfoView.as_view(), name='project_info'),
     path('email_template_test/', TemplateView.as_view(
         template_name="emails/base.html"), name='email_template_test'),
     path('users/password_reset/',

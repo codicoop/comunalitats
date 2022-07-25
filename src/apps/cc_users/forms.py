@@ -78,7 +78,7 @@ class PasswordResetForm(BasePasswordResetForm):
         mail = MyMailTemplate('EMAIL_PASSWORD_RESET')
         mail.to = to_email
         mail.subject_strings = {
-            "ateneu_nom": config.PROJECT_FULL_NAME,
+            "comunalitat_nom": config.PROJECT_FULL_NAME,
         }
         password_reset_url = settings.ABSOLUTE_URL + reverse(
             "password_reset_confirm",
@@ -92,6 +92,6 @@ class PasswordResetForm(BasePasswordResetForm):
             "persona_email": context["email"],
             "absolute_url": settings.ABSOLUTE_URL,
             "password_reset_url": password_reset_url,
-            "url_web_ateneu": config.PROJECT_WEBSITE_URL,
+            "url_web_comunalitat": config.PROJECT_WEBSITE_URL,
         }
         mail.send()

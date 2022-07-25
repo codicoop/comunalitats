@@ -12,8 +12,7 @@ from django.apps import apps
 from django.core.validators import ValidationError
 
 from apps.cc_lib.utils import slugify_model
-from apps.coopolis.choices import ServicesChoices, CirclesChoices, \
-    SubServicesChoices
+from apps.coopolis.choices import ServicesChoices, SubServicesChoices
 from apps.coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
@@ -67,42 +66,6 @@ class Organizer(models.Model):
         ordering = ['name']
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Cofunding(models.Model):
-    class Meta:
-        verbose_name = "cofinançadora"
-        verbose_name_plural = "cofinançadores"
-        ordering = ["name", ]
-
-    name = models.CharField(
-        "nom",
-        max_length=200,
-        blank=False,
-        unique=True,
-        null=False
-    )
-
-    def __str__(self):
-        return self.name
-
-
-class StrategicLine(models.Model):
-    class Meta:
-        verbose_name = "línia estratègica"
-        verbose_name_plural = "línies estratègiques"
-        ordering = ["name", ]
-
-    name = models.CharField(
-        "nom",
-        max_length=200,
-        blank=False,
-        unique=True,
-        null=False
-    )
 
     def __str__(self):
         return self.name
@@ -209,12 +172,6 @@ class Activity(models.Model):
         related_name='enrolled_activities',
         verbose_name="inscrites",
         through="ActivityEnrolled"
-    )
-    circle = models.SmallIntegerField(
-        "Ateneu / Cercle",
-        choices=CirclesChoices.choices_named(),
-        null=True,
-        blank=True,
     )
     entity = models.ForeignKey(
         Entity,
@@ -336,26 +293,6 @@ class Activity(models.Model):
                   "per la sessió. <br>Consulta el "
                   "<a href=\"/reservations/calendar/\" target=\"_blank\">"
                   "CALENDARI DE RESERVES</a> per veure la disponibilitat."
-    )
-    # cofunding options module
-    cofunded = models.ForeignKey(
-        Cofunding,
-        verbose_name="Cofinançat",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='cofunded_activities'
-    )
-    cofunded_ateneu = models.BooleanField(
-        "Cofinançat amb Ateneus Cooperatius", default=False
-    )
-    strategic_line = models.ForeignKey(
-        StrategicLine,
-        verbose_name="línia estratègica",
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name='strategic_line_activities'
     )
 
     # Camps pel material formatiu
@@ -510,7 +447,7 @@ class Activity(models.Model):
         )
         mail.body_strings = {
             'activitat_nom': self.name,
-            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'comunalitat_nom': config.PROJECT_FULL_NAME,
             'persona_nom': user.first_name,
             'activitat_data_inici':
                 self.date_start.strftime("%d-%m-%Y"),
@@ -521,7 +458,7 @@ class Activity(models.Model):
             'absolute_url_poll': absolute_url_poll,
             'absolute_url_my_activities':
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
+            'url_web_comunalitat': config.PROJECT_WEBSITE_URL,
         }
         return mail
 
@@ -629,7 +566,7 @@ class ActivityEnrolled(models.Model):
         }
         mail.body_strings = {
             'activitat_nom': self.activity.name,
-            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'comunalitat_nom': config.PROJECT_FULL_NAME,
             'activitat_data_inici':
                 self.activity.date_start.strftime("%d-%m-%Y"),
             'activitat_hora_inici':
@@ -637,7 +574,7 @@ class ActivityEnrolled(models.Model):
             'activitat_lloc': self.activity.place,
             'absolute_url_my_activities':
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
+            'url_web_comunalitat': config.PROJECT_WEBSITE_URL,
         }
         mail.send()
 
@@ -649,7 +586,7 @@ class ActivityEnrolled(models.Model):
         }
         mail.body_strings = {
             'activitat_nom': self.activity.name,
-            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'comunalitat_nom': config.PROJECT_FULL_NAME,
             'activitat_data_inici':
                 self.activity.date_start.strftime("%d-%m-%Y"),
             'activitat_hora_inici':
@@ -657,7 +594,7 @@ class ActivityEnrolled(models.Model):
             'activitat_lloc': self.activity.place,
             'url_els_meus_cursos':
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            'url_ateneu': settings.ABSOLUTE_URL,
+            'url_comunalitat': settings.ABSOLUTE_URL,
         }
         mail.send()
 
@@ -673,7 +610,7 @@ class ActivityEnrolled(models.Model):
         )
         mail.body_strings = {
             'activitat_nom': activity.name,
-            'ateneu_nom': config.PROJECT_FULL_NAME,
+            'comunalitat_nom': config.PROJECT_FULL_NAME,
             'persona_nom': user.first_name,
             'activitat_data_inici':
                 activity.date_start.strftime("%d-%m-%Y"),
@@ -684,7 +621,7 @@ class ActivityEnrolled(models.Model):
             'absolute_url_activity': absolute_url_activity,
             'absolute_url_my_activities':
                 f"{settings.ABSOLUTE_URL}{reverse('my_activities')}",
-            'url_web_ateneu': config.PROJECT_WEBSITE_URL,
+            'url_web_comunalitat': config.PROJECT_WEBSITE_URL,
         }
         return mail
 

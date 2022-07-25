@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib import admin
 from django.urls import path, reverse
 from django.utils.html import format_html
@@ -10,21 +9,6 @@ from apps.dataexports.models import DataExports, SubsidyPeriod
 @admin.register(SubsidyPeriod)
 class SubsidyPeriodAdmin(admin.ModelAdmin):
     list_display = ('name', 'number', 'date_start', 'date_end')
-
-    def has_change_permission(self, request, obj=None):
-        if request.user.is_superuser:
-            return True
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        if request.user.is_superuser:
-            return True
-        return False
-
-    def has_add_permission(self, request):
-        if request.user.is_superuser:
-            return True
-        return False
 
 
 @admin.register(DataExports)
@@ -58,18 +42,3 @@ class DataExportsAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         obj = DataExports.objects.get(id=_id)
         instance = ExportFunctions()
         return instance.callmethod(obj)
-
-    def has_change_permission(self, request, obj=None):
-        if request.user.is_superuser and settings.DEBUG:
-            return True
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        if request.user.is_superuser and settings.DEBUG:
-            return True
-        return False
-
-    def has_add_permission(self, request):
-        if request.user.is_superuser and settings.DEBUG:
-            return True
-        return False
