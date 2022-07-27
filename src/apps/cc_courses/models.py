@@ -12,7 +12,7 @@ from django.apps import apps
 from django.core.validators import ValidationError
 
 from apps.cc_lib.utils import slugify_model
-from apps.coopolis.choices import ServicesChoices, SubServicesChoices
+from apps.coopolis.choices import ServicesChoices
 from apps.coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 from apps.coopolis.storage_backends import (
@@ -200,12 +200,6 @@ class Activity(models.Model):
     service = models.SmallIntegerField(
         "Servei",
         choices=ServicesChoices.choices,
-        null=True,
-        blank=True,
-    )
-    sub_service = models.SmallIntegerField(
-        "Sub-servei",
-        choices=SubServicesChoices.choices,
         null=True,
         blank=True,
     )
