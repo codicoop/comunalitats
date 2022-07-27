@@ -249,9 +249,6 @@ CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 CONSTANCE_SUPERUSER_ONLY = False
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
-    # Configurable modules or features
-    'ENABLE_ROOM_RESERVATIONS_MODULE': (
-        True, "Activar el mòdul de reserva d'espais", bool),
     # Courses
     'CONTENT_COURSES_INTRODUCTION': (
         "Disposem d’una oferta regular de formació en economia"
@@ -341,7 +338,7 @@ CONSTANCE_CONFIG = {
 }
 CONSTANCE_CONFIG_FIELDSETS = {
     'Configuració': (
-        'PROJECT_NAME', 'PROJECT_FULL_NAME', 'ENABLE_ROOM_RESERVATIONS_MODULE',
+        'PROJECT_NAME', 'PROJECT_FULL_NAME',
         'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL', 'PROJECT_CONTACT_URL',
         'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG',
         'PROJECT_FACEBOOK_URL', 'PROJECT_TWITTER_URL', 'PROJECT_INSTAGRAM_URL'
