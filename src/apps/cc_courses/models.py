@@ -367,7 +367,7 @@ class Activity(models.Model):
         return False
 
     def clean(self):
-        super().clean()
+        errors = {}
         if (
                 self.minors_grade or
                 self.minors_participants_number or
@@ -376,12 +376,18 @@ class Activity(models.Model):
                 self.minors_teacher
         ):
             if not self.for_minors:
-                raise ValidationError(
-                    {'for_minors': "Has omplert dades relatives a sessions "
-                                   "dirigides a menors però no has marcat "
-                                   "aquesta casella. Marca-la per tal que la "
-                                   "sessió es justifiqui com a tal."}
+                errors.update(
+                    {
+                        "for_minors": ValidationError(
+                            "Has omplert dades relatives a sessions "
+                            "dirigides a menors però no has marcat "
+                            "aquesta casella. Marca-la per tal que la "
+                            "sessió es justifiqui com a tal."
+                        ),
+                    }
                 )
+        if errors:
+            raise ValidationError(errors)
 
     def __str__(self):
         return self.name
