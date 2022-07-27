@@ -108,8 +108,6 @@ MEDIA_FILE_OVERWRITE = True
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# TODO: delete this commented code if it proves to be deprecatred.
-# sys.path.insert(0, os.path.abspath(os.path.join(BASE_DIR, '../apps')))
 
 # Local strings
 PROJECT_NAME = env.str("PROJECT_NAME", "")
