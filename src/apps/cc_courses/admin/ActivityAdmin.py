@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib import admin
 from django.template.response import TemplateResponse
 from django.utils import formats
@@ -5,6 +7,7 @@ from django.utils.html import format_html
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import path, reverse, reverse_lazy
 from django.utils.safestring import mark_safe
+from django.utils.timezone import make_aware
 from django_summernote.admin import SummernoteModelAdminMixin
 from constance import config
 import modelclone
@@ -14,6 +17,7 @@ from apps.cc_courses.models import Activity, ActivityEnrolled, ActivityResourceF
 from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
 from apps.coopolis.models import User
 from apps.dataexports.models import SubsidyPeriod
+from apps.facilities_reservations.models import Reservation
 
 
 class FilterBySubsidyPeriod(admin.SimpleListFilter):
@@ -103,7 +107,8 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     )
     fieldsets = [
         (None, {
-            'fields': ['course', 'name', 'objectives', 'place', 'date_start',
+            'fields': ['course', 'name', 'objectives', 'place', 'room',
+                       'date_start',
                        'date_end', 'starting_time', 'ending_time', 'spots',
                        'service', 'entity',
                        'responsible', 'publish', ]
@@ -149,21 +154,6 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         form = super(ActivityAdmin, self).get_form(request, obj=obj, **kwargs)
         form.request = request
         return form
-
-    def get_fieldsets(self, request, obj=None):
-        """
-        For ateneus using room reservations module: Adding the room field.
-        """
-        if (
-            config.ENABLE_ROOM_RESERVATIONS_MODULE
-            and 'room' not in self.fieldsets[0][1]['fields']
-        ):
-            index = 0
-            if 'place' in self.fieldsets[0][1]['fields']:
-                index = self.fieldsets[0][1]['fields'].index('place') + 1
-            self.fieldsets[0][1]['fields'].insert(index, 'room')
-
-        return self.fieldsets
 
     def get_queryset(self, request):
         qs = super(ActivityAdmin, self).get_queryset(request)
@@ -382,3 +372,73 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
                         activity=obj['activity']
                     )
                 obj.send_confirmation_email()
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        self.synchronize_with_reserved_room(obj, change)
+
+    def synchronize_with_reserved_room(self, obj, change):
+        # Si és una nova sessió i s'ha seleccionat self.room:
+        # Si estem editant una sessió que no tenia una reserva, i ara sí que
+        # n'ha de tenir:
+        if (
+            obj.room
+            and (
+                not change
+                or (
+                    change
+                    and not obj.room_reservation
+                    and obj.room
+                )
+            )
+        ):
+            reservation_obj = self.create_update_reservation(
+                obj,
+                obj.room_reservation,
+            )
+            obj.room_reservation = reservation_obj
+
+        # Si estem editant una sessió que ja tenia una reserva però han
+        # deseleccionat la sala:
+        if change and obj.room_reservation and not obj.room:
+            if obj.room_reservation:
+                self.delete_reservation(obj.room_reservation)
+
+        # Si estem editant una sessió que ja tenia reserva i que n'ha de
+        # continuar tenint:
+        if change and obj.room_reservation and obj.room:
+            reservation_obj = self.create_update_reservation(
+                obj,
+                obj.room_reservation,
+            )
+            obj.room_reservation = reservation_obj
+
+    def create_update_reservation(self, activity_obj, reservation_obj):
+        date_end = activity_obj.date_start
+        if activity_obj.date_end:
+            date_end = activity_obj.date_end
+        values = {
+            "title": activity_obj.name,
+            "start": make_aware(
+                datetime.combine(
+                    activity_obj.date_start,
+                    activity_obj.starting_time,
+                )
+            ),
+            "end": make_aware(
+                datetime.combine(
+                    date_end, activity_obj.ending_time,
+                )
+            ),
+            "room": activity_obj.room,
+            "responsible": self.request.user,
+            "created_by": self.request.user,
+        }
+        reservation_obj, created = Reservation.objects.update_or_create(
+            id=getattr(reservation_obj, "id", None),
+            defaults=values,
+        )
+        return reservation_obj
+
+    def delete_reservation(self, reservation_obj):
+        reservation_obj.delete()
