@@ -1,16 +1,16 @@
+from datetime import datetime
+
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import (
     UserCreationForm, ReadOnlyPasswordHashField
 )
 from django.core.exceptions import ValidationError
+from django.utils.timezone import make_aware
 
 from apps.coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
 from constance import config
-from django.conf import settings
-from datetime import datetime
-from django.utils.timezone import make_aware
 
 from apps.coopolis.models import User, ActivityPoll
 from apps.cc_courses.models import Activity, ActivityEnrolled
@@ -143,6 +143,37 @@ class ActivityForm(forms.ModelForm):
             'minors_grade', 'minors_participants_number', 'minors_teacher',
             'room',
         )
+
+    def clean(self):
+        errors = {}
+        if self.cleaned_data.get("room"):
+            date_end = self.cleaned_data.get("date_start")
+            if self.cleaned_data.get("date_end"):
+                date_end = self.cleaned_data.get("date_end")
+            values = {
+                "title": self.cleaned_data.get("name"),
+                "start": make_aware(
+                    datetime.combine(
+                        self.cleaned_data.get("date_start"),
+                        self.cleaned_data.get("starting_time"),
+                    )
+                ),
+                "end": make_aware(
+                    datetime.combine(
+                        date_end, self.cleaned_data.get("ending_time"),
+                    )
+                ),
+                "room": self.cleaned_data.get("room"),
+                "responsible": self.request.user,
+                "created_by": self.request.user,
+            }
+            reservation_obj = Reservation(**values)
+            try:
+                reservation_obj.clean()
+            except ValidationError as error:
+                errors.update({"room": ValidationError(error)})
+        if errors:
+            raise ValidationError(errors)
 
 
 class ActivityEnrolledForm(forms.ModelForm):
