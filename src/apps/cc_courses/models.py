@@ -15,7 +15,6 @@ from apps.cc_lib.utils import slugify_model
 from apps.coopolis.choices import ServicesChoices, SubServicesChoices
 from apps.coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
-from apps.coopolis.helpers import get_subaxis_choices, get_subaxis_for_axis
 from apps.coopolis.storage_backends import (
     PrivateMediaStorage, PublicMediaStorage
 )
@@ -210,22 +209,6 @@ class Activity(models.Model):
         null=True,
         blank=True,
     )
-    axis = models.CharField(
-        "(OBSOLET) Eix",
-        help_text="Eix de la convocatòria on es justificarà.",
-        choices=settings.AXIS_OPTIONS,
-        null=True,
-        blank=True,
-        max_length=1
-    )
-    subaxis = models.CharField(
-        "(OBSOLET) Sub-eix",
-        help_text="Correspon a 'Tipus d'acció' a la justificació.",
-        null=True,
-        blank=True,
-        max_length=2,
-        choices=get_subaxis_choices()
-    )
     photo1 = models.FileField("fotografia", blank=True, null=True,
                               storage=PrivateMediaStorage(), max_length=250)
     photo3 = models.FileField("fotografia 2", blank=True, null=True,
@@ -370,13 +353,6 @@ class Activity(models.Model):
                 return datetime.combine(self.date_start, self.ending_time)
         return datetime.combine(self.date_end, self.ending_time)
 
-    def axis_summary(self):
-        axis = self.axis if self.axis else '(cap)'
-        subaxis = self.subaxis if self.subaxis else '(cap)'
-        return f"{axis} - {subaxis}"
-    axis_summary.short_description = "Eix - Subeix"
-    axis_summary.admin_order_field = 'subaxis'
-
     @property
     def subsidy_period(self):
         model = apps.get_model('dataexports', 'SubsidyPeriod')
@@ -397,7 +373,7 @@ class Activity(models.Model):
         return False
 
     def clean(self):
-        super().clean()
+        errors = {}
         if (
                 self.minors_grade or
                 self.minors_participants_number or
@@ -406,20 +382,18 @@ class Activity(models.Model):
                 self.minors_teacher
         ):
             if not self.for_minors:
-                raise ValidationError(
-                    {'for_minors': "Has omplert dades relatives a sessions "
-                                   "dirigides a menors però no has marcat "
-                                   "aquesta casella. Marca-la per tal que la "
-                                   "sessió es justifiqui com a tal."}
+                errors.update(
+                    {
+                        "for_minors": ValidationError(
+                            "Has omplert dades relatives a sessions "
+                            "dirigides a menors però no has marcat "
+                            "aquesta casella. Marca-la per tal que la "
+                            "sessió es justifiqui com a tal."
+                        ),
+                    }
                 )
-
-        if self.axis:
-            subaxis_options = get_subaxis_for_axis(str(self.axis))
-            if self.subaxis not in subaxis_options:
-                raise ValidationError(
-                    {'subaxis': "Has seleccionat un sub-eix que no es "
-                                "correspon a l'eix."}
-                )
+        if errors:
+            raise ValidationError(errors)
 
     def __str__(self):
         return self.name

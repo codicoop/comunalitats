@@ -108,8 +108,6 @@ MEDIA_FILE_OVERWRITE = True
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# TODO: delete this commented code if it proves to be deprecatred.
-# sys.path.insert(0, os.path.abspath(os.path.join(BASE_DIR, '../apps')))
 
 # Local strings
 PROJECT_NAME = env.str("PROJECT_NAME", "")
@@ -251,9 +249,6 @@ CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 CONSTANCE_SUPERUSER_ONLY = False
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
-    # Configurable modules or features
-    'ENABLE_ROOM_RESERVATIONS_MODULE': (
-        True, "Activar el mòdul de reserva d'espais", bool),
     # Courses
     'CONTENT_COURSES_INTRODUCTION': (
         "Disposem d’una oferta regular de formació en economia"
@@ -343,7 +338,7 @@ CONSTANCE_CONFIG = {
 }
 CONSTANCE_CONFIG_FIELDSETS = {
     'Configuració': (
-        'PROJECT_NAME', 'PROJECT_FULL_NAME', 'ENABLE_ROOM_RESERVATIONS_MODULE',
+        'PROJECT_NAME', 'PROJECT_FULL_NAME',
         'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL', 'PROJECT_CONTACT_URL',
         'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG',
         'PROJECT_FACEBOOK_URL', 'PROJECT_TWITTER_URL', 'PROJECT_INSTAGRAM_URL'
@@ -379,61 +374,7 @@ SIGNUP_FORM = 'apps.coopolis.forms.MySignUpForm'
 # Static texts and option fields
 ADMIN_SITE_TITLE = ''
 ADMIN_INDEX_TITLE = ''
-AXIS_OPTIONS = (
-    ('A', 'Eix A'),
-    ('B', 'Eix B'),
-    ('C', "Eix C"),
-    ('D', 'Eix D'),
-    ('E', 'Eix E'),
-    ('F', 'Eix F'),
-)
-SUBAXIS_OPTIONS = {
-    'A': {
-        ('A1', "A.1 Reunions de la taula territorial"),
-        ('A2', "A.2 Diagnosi entitats socials del territori"),
-        ('A3', "A.3 Elaboració catàleg bones pràctiques"),
-        ('A4', "A.4 Jornades per presentar experiències de bones pràctiques o "
-               "jornades sectorials i/o d'interès per al territori"),
-        ('A5', "A.5 Assistència a fires, actes per visibilitzar el programa"),
-        ('A6', "A.6 Publicitat en mitjans de comunicació.  Web del programa"),
-        ('A7', "A.7 Altres")
-    },
-    'B': {
-        ('B1', "B.1 Accions de suport a la inserció laboral i a la creació de "
-               "cooperatives i societats laborals (concursos de projectes "
-               "cooperatius o altres accions)"),
-        ('B2', "B.2 Tallers sensibilització o dinamització"),
-        ('B3', "B.3 Acompanyament a empreses i entitats"),
-        ('B4', "B.4 Altres"),
-    },
-    'C': {
-        ('C1', "C.1 Tallers de dinamització adreçats al teixit associatiu i a "
-               "empreses"),
-        ('C2', "C.2 Tallers de dinamització adreçats a professionals que "
-               "s'agrupen per prestar serveis de manera conjunta"),
-        ('C3', "C.3 Acompanyament a mida per a la creació o transformació"),
-        ('C4', "C.4 Altres"),
-    },
-    'D': {
-        ('D1', "D.1 Accions de difusió"),
-        ('D2', "D.2 Activitats de sensibilització o dinamització."),
-        ('D3', "D.3 Acompanyament individualitzat"),
-        ('D4', "D.4 Altres"),
-    },
-    'E': {
-        ('E1', "E.1 Tallers a joves"),
-        ('E2', "E.2 Atenció individual professorat"),
-        ('E3', "E.3 Complementàries (recursos, eines, productes, publicacions "
-               "sectorials pròpies )"),
-        ('E4', "E.4 Altres"),
-    },
-    'F': {
-        ('F1', "F.1 Pla d'actuació"),
-        ('F2', "F.2 Tallers de creació de cooperatives o societats laborals, "
-               "o transformació d'associacions, altres entitats"),
-        ('F3', "F.3 Altres"),
-    }
-}
+
 DISTRICTS = (
     ('CV', 'Ciutat Vella'),
     ('EX', 'Eixample'),

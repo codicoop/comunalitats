@@ -12,7 +12,7 @@ services:
     image: codicoop/comunalitats:latest
     env_file: ./settings/develop/comunalitat_1.env
     # The WSGI application name is the django app name you chose when doing django-admin startproject.
-    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8001
+    command: gunicorn conf.wsgi:application --bind 0.0.0.0:8001 --threads=10
     depends_on:
       - develop_comunalitats_db
     #entrypoint: ["sh", "-c", "sleep 2073600"]

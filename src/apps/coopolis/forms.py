@@ -1,16 +1,16 @@
+from datetime import datetime
+
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import (
     UserCreationForm, ReadOnlyPasswordHashField
 )
 from django.core.exceptions import ValidationError
+from django.utils.timezone import make_aware
 
 from apps.coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
 from constance import config
-from django.conf import settings
-from datetime import datetime
-from django.utils.timezone import make_aware
 
 from apps.coopolis.models import User, ActivityPoll
 from apps.cc_courses.models import Activity, ActivityEnrolled
@@ -132,121 +132,54 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
         return None
 
 
-def get_item_choices(model, value):
-    choices = []
-
-    item = sorted(settings.SUBAXIS_OPTIONS[value])
-
-    for thing in item:
-        choices.append({
-            'value': thing[0],
-            'label': thing[1],
-        })
-
-    return choices
-
-
 class ActivityForm(forms.ModelForm):
     class Meta:
         model = Activity
         fields = (
             'course', 'name', 'objectives', 'place', 'date_start', 'date_end',
             'starting_time', 'ending_time', 'spots', 'enrolled', 'entity',
-            'organizer', 'axis', 'subaxis', 'photo1', 'photo2', 'publish',
+            'organizer', 'photo1', 'photo2', 'publish',
             'for_minors', 'minors_school_name', 'minors_school_cif',
             'minors_grade', 'minors_participants_number', 'minors_teacher',
             'room',
         )
-        # TODO: Canviar això per una llibreria actualitzada
-        # widgets = {
-        #     'subaxis': DynamicChoicesWidget(
-        #         depends_field='axis',
-        #         # This is supposed to be the model of a FK, but our subaxis
-        #         # field is not a FK
-        #         # but a dictionary in the settings. Turns out that it only
-        #         # wants the model to
-        #         # take its name and use it as identifier when rendering the
-        #         # HTML, so now that
-        #         # get_item_choices() is not using the model to return the
-        #         # values, we can put here
-        #         # any model, as a workaround.
-        #         # Best quality solution would be modify the library to make it
-        #         # model-optional.
-        #         model=Activity,
-        #         callback=get_item_choices,
-        #         no_value_disable=True,
-        #         include_empty_choice=True,
-        #         empty_choice_label="Selecciona un sub-eix",
-        #     )
-        # }
 
     def clean(self):
-        super(ActivityForm, self).clean()
-        if config.ENABLE_ROOM_RESERVATIONS_MODULE:
-            self.synchronize_with_reserved_room()
-
-    def synchronize_with_reserved_room(self):
-        change = True if self.instance.pk else False
-        obj = self.instance
-        # Si és una nova sessió i s'ha seleccionat self.room:
-        # Si estem editant una sessió que no tenia una reserva, i ara sí que
-        # n'ha de tenir:
-        if (
-            self.cleaned_data['room']
-            and (
-                not change
-                or (
-                    change
-                    and not obj.room_reservation
-                    and self.cleaned_data['room']
-                )
+        errors = {}
+        if self.cleaned_data.get("room"):
+            date_end = self.cleaned_data.get("date_start")
+            if self.cleaned_data.get("date_end"):
+                date_end = self.cleaned_data.get("date_end")
+            existing_reservation = getattr(
+                self.instance,
+                "room_reservation",
+                None,
             )
-        ):
-            # Activity.clean() already checked the availability.
-            reservation_obj = self.create_update_reservation()
-            obj.room_reservation = reservation_obj
-
-        # Si estem editant una sessió que ja tenia una reserva però han
-        # deseleccionat la sala:
-        if change and obj.room_reservation and not self.cleaned_data['room']:
-            if obj.room_reservation:
-                self.delete_reservation()
-
-        # Si estem editant una sessió que ja tenia reserva i que n'ha de
-        # continuar tenint:
-        if change and obj.room_reservation and self.cleaned_data['room']:
-            reservation_obj = self.create_update_reservation(
-                obj.room_reservation)
-            obj.room_reservation = reservation_obj
-
-    def create_update_reservation(self, inst=None):
-        date_end = self.cleaned_data['date_start']
-        if self.cleaned_data['date_end']:
-            date_end = self.cleaned_data['date_end']
-        values = {
-            'title': self.cleaned_data['name'],
-            'start': make_aware(
-                datetime.combine(
-                    self.cleaned_data['date_start'],
-                    self.cleaned_data['starting_time']
-                )
-            ),
-            'end': make_aware(
-                datetime.combine(date_end, self.cleaned_data['ending_time'])),
-            'room': self.cleaned_data['room'],
-            'responsible': self.request.user,
-            'created_by': self.request.user
-        }
-        pk = inst.id if inst else None
-        obj, created = Reservation.objects.update_or_create(
-            id=pk, defaults=values)
-        return obj
-
-    def delete_reservation(self):
-        obj = Reservation.objects.filter(id=self.instance.room_reservation.id)
-        obj.delete()
-        self.instance.room_reservation = None
-        self.instance.save()
+            values = {
+                "id": getattr(existing_reservation, "pk", None),
+                "title": self.cleaned_data.get("name"),
+                "start": make_aware(
+                    datetime.combine(
+                        self.cleaned_data.get("date_start"),
+                        self.cleaned_data.get("starting_time"),
+                    )
+                ),
+                "end": make_aware(
+                    datetime.combine(
+                        date_end, self.cleaned_data.get("ending_time"),
+                    )
+                ),
+                "room": self.cleaned_data.get("room"),
+                "responsible": self.request.user,
+                "created_by": self.request.user,
+            }
+            reservation_obj = Reservation(**values)
+            try:
+                reservation_obj.clean()
+            except ValidationError as error:
+                errors.update({"room": ValidationError(error)})
+        if errors:
+            raise ValidationError(errors)
 
 
 class ActivityEnrolledForm(forms.ModelForm):
