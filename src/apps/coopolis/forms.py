@@ -150,7 +150,13 @@ class ActivityForm(forms.ModelForm):
             date_end = self.cleaned_data.get("date_start")
             if self.cleaned_data.get("date_end"):
                 date_end = self.cleaned_data.get("date_end")
+            existing_reservation = getattr(
+                self.instance,
+                "room_reservation",
+                None,
+            )
             values = {
+                "id": getattr(existing_reservation, "pk", None),
                 "title": self.cleaned_data.get("name"),
                 "start": make_aware(
                     datetime.combine(
