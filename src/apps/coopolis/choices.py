@@ -70,11 +70,13 @@ class SubServicesChoices(models.IntegerChoices):
 
     # B. Servei de formació i difusió per a l'activisme
     B1 = 201, (
-        "Campanya de comunicació i difusió a col.lectius d'especial atenció"
+        "B.1) Campanya de comunicació i difusió a col.lectius d'especial "
+        "atenció"
     )
-    B2 = 202, "Elaboració de material especific i difusió dels materials"
+    B2 = 202, "B.2) Elaboració de material especific i difusió dels materials"
     B3 = 203, (
-        "Activitats anuals de dinamització  i activació de l'autoorganització "
+        "B.3) Activitats anuals de dinamització  i activació de "
+        "l'autoorganització "
         "col.lectiva per  a la generació de projectes"
     )
     B4 = 204, (
