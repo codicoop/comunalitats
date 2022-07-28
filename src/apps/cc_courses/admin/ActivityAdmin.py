@@ -85,7 +85,7 @@ class ActivityResourcesInlineAdmin(admin.TabularInline):
 
 class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     class Media:
-        js = ('js/grappellihacks.js', )
+        js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
         css = {
             'all': ('styles/grappellihacks.css',)
         }
@@ -110,7 +110,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'fields': ['course', 'name', 'objectives', 'place', 'room',
                        'date_start',
                        'date_end', 'starting_time', 'ending_time', 'spots',
-                       'service', 'entity',
+                       'service', 'sub_service', 'entity',
                        'responsible', 'publish', ]
         }),
         ("Documents per la justificació", {
