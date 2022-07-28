@@ -397,6 +397,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
                 obj.room_reservation,
             )
             obj.room_reservation = reservation_obj
+            obj.save()
 
         # Si estem editant una sessió que ja tenia una reserva però han
         # deseleccionat la sala:
@@ -412,6 +413,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
                 obj.room_reservation,
             )
             obj.room_reservation = reservation_obj
+            obj.save()
 
     def create_update_reservation(self, activity_obj, reservation_obj):
         date_end = activity_obj.date_start
