@@ -7,7 +7,7 @@ from django.views.generic import TemplateView
 
 from .views import (
     LoginSignupContainerView, CoopolisSignUpView, CoopolisLoginView,
-    HomeView, CustomPasswordResetView, ActivityPollView
+    HomeView, CustomPasswordResetView, ActivityPollView, get_sub_services
 )
 from apps.cc_users.decorators import anonymous_required
 
@@ -43,6 +43,7 @@ urlpatterns += [
     path('reservations/', include('apps.facilities_reservations.urls')),
     path('activities/<uuid:uuid>/poll',
          ActivityPollView.as_view(), name='activity_poll'),
+    path('chained_dropdowns/get_sub_services/', get_sub_services),
 
     path('admin/', admin.site.urls),
 ]
