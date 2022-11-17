@@ -51,8 +51,6 @@ class User(BaseUser):
     birthdate = models.DateField("data de naixement", blank=True, null=True)
     town = models.ForeignKey(Town, verbose_name="població actual",
                              on_delete=models.SET_NULL, null=True, blank=False)
-    district = models.TextField("districte", blank=True, null=True,
-                                choices=settings.DISTRICTS)
     address = models.CharField("adreça", max_length=250, blank=True, null=True)
     phone_number = models.CharField("telèfon", max_length=25, blank=True,
                                     null=True)

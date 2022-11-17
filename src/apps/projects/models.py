@@ -81,8 +81,6 @@ class Project(models.Model):
     phone = models.CharField("telèfon", max_length=25)
     town = models.ForeignKey(Town, verbose_name="població",
                              on_delete=models.SET_NULL, null=True, blank=True)
-    district = models.TextField("districte", blank=True, null=True,
-                                choices=settings.DISTRICTS)
     number_people = models.IntegerField("número de persones", blank=True,
                                         null=True)
     registration_date = models.DateField("data de registre", blank=True,
@@ -193,15 +191,6 @@ class Project(models.Model):
         return self.stages.all()[0].responsible
 
     last_stage_responsible.fget.short_description = "Últim acompanyament"
-
-    @property
-    def full_town_district(self):
-        if not self.town:
-            return None
-        ret = self.town
-        if self.district:
-            ret = f"{ret} ({self.get_district_display()})"
-        return ret
 
     @property
     def follow_up_with_date(self):

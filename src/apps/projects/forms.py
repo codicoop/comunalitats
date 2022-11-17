@@ -6,17 +6,16 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from apps.projects.models import Project
-from apps.coopolis.mixins import FormDistrictValidationMixin
 
 
-class ProjectForm(FormDistrictValidationMixin, forms.ModelForm):
+class ProjectForm(forms.ModelForm):
     required_css_class = "required"
 
     class Meta:
         model = Project
         fields = (
             'name', 'sector', 'web', 'project_status', 'motivation', 'mail',
-            'phone', 'town', 'district', 'number_people', 'estatuts',
+            'phone', 'town', 'number_people', 'estatuts',
             'viability', 'sostenibility', 'object_finality', 'project_origins',
             'solves_necessities', 'social_base'
         )

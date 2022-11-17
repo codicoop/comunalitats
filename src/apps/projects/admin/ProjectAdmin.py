@@ -317,7 +317,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     fieldsets = (
         ("Dades que s'omplen des de la web", {
             'fields': ['name', 'sector', 'web', 'project_status', 'motivation',
-                       'mail', 'phone', 'town', 'district', 'number_people',
+                       'mail', 'phone', 'town', 'number_people',
                        'estatuts', 'viability', 'sostenibility',
                        'object_finality', 'project_origins',
                        'solves_necessities', 'social_base']

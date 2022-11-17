@@ -376,18 +376,6 @@ SIGNUP_FORM = 'apps.coopolis.forms.MySignUpForm'
 ADMIN_SITE_TITLE = ''
 ADMIN_INDEX_TITLE = ''
 
-DISTRICTS = (
-    ('CV', 'Ciutat Vella'),
-    ('EX', 'Eixample'),
-    ('HG', 'Horta-Guinardó'),
-    ('LC', 'Les Corts'),
-    ('NB', 'Nou Barris'),
-    ('SA', 'Sant Andreu'),
-    ('SM', 'Sant Martí'),
-    ('ST', 'Sants-Montjuïc'),
-    ('SS', 'Sarrià-Sant Gervasi'),
-    ('GR', 'Gràcia')
-)
 PROJECT_STATUS = (
     ('PENDENT', "Pendent d’enviar proposta de trobada"),
     ('ENVIAT', "Enviat email amb proposta de data per trobar-nos"),

@@ -10,7 +10,6 @@ from django.core.exceptions import ValidationError
 from django.urls import reverse
 
 from apps.coopolis.widgets import XDSoftDatePickerInput
-from apps.coopolis.mixins import FormDistrictValidationMixin
 from conf.custom_mail_manager import MyMailTemplate
 
 
@@ -39,11 +38,11 @@ class LogInForm(AuthenticationForm):
         return self.cleaned_data
 
 
-class MyAccountForm(FormDistrictValidationMixin, UserChangeForm):
+class MyAccountForm(UserChangeForm):
     class Meta:
         model = get_user_model()
         fields = ['first_name', 'last_name', 'surname2', 'id_number', 'email', 'phone_number', 'birthdate',
-                  'birth_place', 'town', 'district', 'address', 'gender', 'educational_level',
+                  'birth_place', 'town', 'address', 'gender', 'educational_level',
                   'employment_situation', 'discovered_us', 'project_involved', 'authorize_communications', ]
 
     required_css_class = "required"

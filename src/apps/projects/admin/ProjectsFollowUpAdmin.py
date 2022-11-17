@@ -455,8 +455,7 @@ class FollowUpSpreadsheet:
                 (raw_row['project'].description
                     if raw_row['project'].description else ''),
                 raw_row['project'].get_project_status_display(),
-                (raw_row['project'].full_town_district
-                    if raw_row['project'].full_town_district else ''),
+                raw_row['project'].town or "",
                 (raw_row['creacio_hores']
                     if raw_row['creacio_hores'] else 0),
                 1 if raw_row['creacio_certificat'] > 0 else 0,
