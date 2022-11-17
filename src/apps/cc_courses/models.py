@@ -57,6 +57,10 @@ class Entity(models.Model):
     def __str__(self):
         return self.name if self.is_active else f"[desactivada] {self.name}"
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return "name__icontains",
+
 
 class Organizer(models.Model):
     class Meta:
@@ -144,7 +148,9 @@ class Activity(models.Model):
         Course,
         on_delete=models.CASCADE,
         verbose_name="acció",
-        related_name="activities"
+        related_name="activities",
+        help_text=("Escriu el nom de l'acció i selecciona-la del desplegable."
+        " Si no existeix, clica a la lupa i després a 'Crear acció'.")
     )
     name = models.CharField("títol", max_length=200, blank=False, null=False)
     objectives = models.TextField("descripció", null=True)
@@ -172,12 +178,13 @@ class Activity(models.Model):
         verbose_name="inscrites",
         through="ActivityEnrolled"
     )
-    entity = models.ForeignKey(
+    entities = models.ManyToManyField(
         Entity,
-        verbose_name="entitat",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
+        verbose_name="entitats organitzadores",
+        blank=True,
+        related_name="entities",
+        help_text=("Escriu el nom de l'entitat i selecciona-la del desplegable."
+        " Si no existeix, clica a la lupa i després a 'Crear entitat'.")
     )
     organizer = models.ForeignKey(
         Organizer,
