@@ -35,7 +35,7 @@ class ProjectsFollowUpAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin)
     list_filter = (
         'stages__subsidy_period', 'follow_up_situation',
         FilterByFounded,
-        ('stages__stage_responsible', admin.RelatedOnlyFieldListFilter),
+        ('stages__responsible', admin.RelatedOnlyFieldListFilter),
         'project_status',
     )
     search_fields = ('id', 'name', 'cif', )

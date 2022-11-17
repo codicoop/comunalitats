@@ -103,43 +103,35 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     empty_value_display = '(cap)'
     list_display = (
         'project_field_ellipsis', 'date_start', 'stage_type',
-        'stage_responsible_field_ellipsis',
+        'responsible_field_ellipsis',
         'service', 'subsidy_period', '_has_certificate',
         '_participants_count', 'project_field', 'justification_documents_total',
     )
     list_filter = (
         FilterBySubsidyPeriod,
         'service',
-        ('stage_responsible', admin.RelatedOnlyFieldListFilter),
-        'date_start', 'stage_type', 'axis',
-        'circle', 'project__sector'
+        ('responsible', admin.RelatedOnlyFieldListFilter),
+        'date_start', 'stage_type',
+        'project__sector'
     )
     actions = ["export_as_csv"]
     search_fields = ['project__name__unaccent']
     fieldsets = [
         (None, {
             'fields': [
-                'project', 'stage_type',
+                'project', 'stage_type', 'stage_subtype',
                 'subsidy_period', 'service', 'sub_service',
-                'circle', 'stage_responsible',
+                'responsible',
                 'scanned_certificate',
                 'hours_sum', 'date_start',
                 "earliest_session_field",
                 "justification_documents_total",
             ]
         }),
-        ('Opcions de cofinançament', {
-            'classes': ('grp-collapse grp-closed',),
-            'fields': ('cofunded', 'cofunded_ateneu', 'strategic_line',),
-        }),
         ("Sessions d'acompanyament", {
             # Grappelli way for sorting inlines
             'classes': ('placeholder stage_sessions-group',),
             'fields': (),
-        }),
-        ("Camps convocatòries < 2020", {
-            'classes': ('grp-collapse grp-closed',),
-            'fields': ["axis", "subaxis", ]
         }),
     ]
     inlines = (ProjectStageSessionsInline, )
@@ -179,13 +171,13 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     project_field_ellipsis.short_description = "Fitxa"
 
     def stage_responsible_field_ellipsis(self, obj):
-        if obj.stage_responsible and len(str(obj.stage_responsible)) > 15:
-            return "%s..." % str(obj.stage_responsible)[:15]
-        return obj.stage_responsible
+        if obj.responsible and len(str(obj.responsible)) > 15:
+            return "%s..." % str(obj.responsible)[:15]
+        return obj.responsible
     stage_responsible_field_ellipsis.short_description = 'Responsable'
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "stage_responsible":
+        if db_field.name == "responsible":
             kwargs["queryset"] = User.objects.filter(is_staff=True).order_by("first_name")
         if db_field.name == "project":
             kwargs["queryset"] = Project.objects.order_by('name')
@@ -204,44 +196,6 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         return formats.localize(session.date)
     earliest_session_field.short_description = 'Primera sessió'
 
-    def get_fieldsets(self, request, obj=None):
-        fieldsets = super().get_fieldsets(request, obj)
-
-        # For ateneus enabling stage_subtype: Adding the Subtype field.
-        if config.ENABLE_STAGE_SUBTYPES is True:
-            fieldsets[0][1]['fields'] = self.get_fields_with_type(
-                fieldsets[0][1]['fields']
-            )
-
-        return fieldsets
-
-    def get_fields(self, request, obj=None):
-        return self.get_fields_with_type(super().get_fields(request, obj))
-
-    def get_list_display(self, request):
-        return self.get_fields_with_type(super().get_list_display(request))
-
-    def get_list_filter(self, request):
-        return self.get_fields_with_type(super().get_list_filter(request))
-
-    @staticmethod
-    def get_fields_with_type(fields):
-        fields = list(fields)
-        if (
-            config.ENABLE_STAGE_SUBTYPES is True
-            and 'stage_subtype' not in fields
-        ):
-            type_index = 0
-            if 'stage_type' in fields:
-                type_index = fields.index('stage_type') + 1
-            fields.insert(type_index, 'stage_subtype')
-        return fields
-
-    def get_readonly_fields(self, request, obj=None):
-        if not request.user.is_superuser:
-            return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
-        return super().get_readonly_fields(request, obj)
-
 
 class ProjectStagesInline(admin.StackedInline):
     model = ProjectStage
@@ -255,11 +209,11 @@ class ProjectStagesInline(admin.StackedInline):
             'fields': [
                 'project',
                 'stage_type',
+                'stage_subtype',
                 'subsidy_period',
                 'service',
                 'sub_service',
-                'circle',
-                'stage_responsible',
+                'responsible',
                 'scanned_certificate',
                 'hours_sum',
                 'date_start',
@@ -267,12 +221,6 @@ class ProjectStagesInline(admin.StackedInline):
                 "stage_sessions_field",
                 "justification_documents_total",
             ]
-        }),
-        ('Opcions de cofinançament', {
-            'fields': ('cofunded', 'cofunded_ateneu', 'strategic_line',),
-        }),
-        ("Camps convocatòries < 2020", {
-            'fields': ["axis", "subaxis", ]
         }),
     )
     readonly_fields = (
@@ -286,7 +234,7 @@ class ProjectStagesInline(admin.StackedInline):
     def stage_sessions_field(self, obj):
         count = obj.sessions_count()
         url = reverse_lazy(
-            'admin:coopolis_projectstage_change',
+            'admin:projects_projectstage_change',
             kwargs={'object_id': obj.id}
         )
         url = (f'<a href="{url}#stage_sessions-group">Anar a la fitxa de la '
@@ -297,7 +245,7 @@ class ProjectStagesInline(admin.StackedInline):
     stage_sessions_field.short_description = "Sessions d'acompanyament"
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "stage_responsible":
+        if db_field.name == "responsible":
             kwargs["queryset"] = User.objects.filter(is_staff=True).order_by("first_name")
         if db_field.name == "project":
             kwargs["queryset"] = Project.objects.order_by('name')
@@ -310,22 +258,6 @@ class ProjectStagesInline(admin.StackedInline):
             return "No hi ha cap sessió d'acompanyament."
         return formats.localize(session.date)
     earliest_session_field.short_description = 'Primera sessió'
-
-    def get_fieldsets(self, request, obj=None):
-        fieldsets = super().get_fieldsets(request, obj)
-
-        # For ateneus enabling stage_subtype: Adding the Subtype field.
-        if config.ENABLE_STAGE_SUBTYPES is True:
-            fieldsets[0][1]['fields'] = ProjectStageAdmin.get_fields_with_type(
-                fieldsets[0][1]['fields']
-            )
-
-        return fieldsets
-
-    def get_readonly_fields(self, request, obj=None):
-        if not request.user.is_superuser:
-            return super().get_readonly_fields(request, obj) + ("axis", "subaxis")
-        return super().get_readonly_fields(request, obj)
 
 
 class EmploymentInsertionInline(admin.TabularInline):
@@ -533,9 +465,9 @@ class DerivationAdmin(admin.ModelAdmin):
 class EmploymentInsertionAdmin(admin.ModelAdmin):
     model = EmploymentInsertion
     list_display = ('insertion_date', 'project', 'user', 'contract_type',
-                    'subsidy_period', 'circle', )
+                    'subsidy_period', )
     list_filter = (
-        'subsidy_period', 'contract_type', 'circle', 'insertion_date',
+        'subsidy_period', 'contract_type', 'insertion_date',
     )
     search_fields = ('project__name__unaccent', 'user__first_name__unaccent', )
     raw_id_fields = ('user', 'project',)
@@ -583,7 +515,6 @@ class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         "project_field",
         "stage_type_field",
         "stage_responsible_field",
-        "stage_circle_field",
     )
     list_display = (
         "date",
@@ -593,13 +524,11 @@ class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         "session_responsible",
         "stage_responsible_field",
         "entity",
-        "stage_circle_field",
         "justification_file",
     )
     list_filter = (
         ("project_stage__subsidy_period", admin.RelatedOnlyFieldListFilter),
         ("session_responsible", admin.RelatedOnlyFieldListFilter),
-        "project_stage__circle",
     )
     subsidy_period_filter_param = "project_stage__subsidy_period__id__exact"
 
@@ -629,9 +558,3 @@ class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
             return obj.project_stage.stage_responsible
         return None
     stage_responsible_field.short_description = 'Responsable'
-
-    def stage_circle_field(self, obj):
-        if obj:
-            return obj.project_stage.get_circle_display()
-        return None
-    stage_circle_field.short_description = 'Cercle'

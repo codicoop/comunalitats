@@ -195,14 +195,6 @@ class Project(models.Model):
     last_stage_responsible.fget.short_description = "Últim acompanyament"
 
     @property
-    def last_stage_circle(self):
-        if not self.stages or self.stages.count() < 1:
-            return None
-        return self.stages.all()[0].get_circle_display()
-
-    last_stage_circle.fget.short_description = "Cercle de l'últim acompanyament"
-
-    @property
     def full_town_district(self):
         if not self.town:
             return None
@@ -410,9 +402,7 @@ class ProjectStage(models.Model):
 
     def get_full_type_str(self):
         txt = self.get_stage_type_display()
-        if config.ENABLE_STAGE_SUBTYPES and self.stage_subtype:
-            txt = f"{txt} ({self.stage_subtype.name})"
-        return txt
+        return f"{txt} ({self.stage_subtype.name})"
 
     @property
     def latest_session(self):
