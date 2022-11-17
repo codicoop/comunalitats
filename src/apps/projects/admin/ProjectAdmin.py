@@ -303,7 +303,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
 
     form = ProjectFormAdmin
     list_display = (
-        'id', 'name', 'mail', 'phone', 'registration_date',
+        'name', 'mail', 'phone', 'registration_date',
         'constitution_date', 'stages_field', 'last_stage_responsible',
         '_insertions_count'
     )
