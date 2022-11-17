@@ -53,6 +53,19 @@ class Entity(models.Model):
         default=True,
         help_text="Si la desactives no apareixerà al desplegable.",
     )
+    neighborhood = models.CharField(
+        "Barri",
+        default="",
+        blank=True,
+        max_length=50,
+    )
+    town = models.ForeignKey(
+        "coopolis.Town",
+        verbose_name="municipi",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return self.name if self.is_active else f"[desactivada] {self.name}"
