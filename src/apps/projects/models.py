@@ -254,8 +254,10 @@ class Project(models.Model):
         super(Project, self).save(*args, **kw)
 
     def notify_new_request_to_ateneu(self):
+        if not config.CONTACT_EMAIL:
+            return
         mail = MyMailTemplate('EMAIL_NEW_PROJECT')
-        mail.to = config.EMAIL_FROM_PROJECTS.split(',')
+        mail.to = config.CONTACT_EMAIL.split(',')
         mail.subject_strings = {
             'projecte_nom': self.name
         }

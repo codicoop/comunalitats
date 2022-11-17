@@ -140,3 +140,9 @@ class User(BaseUser):
 
     def __str__(self):
         return self.get_full_name()
+
+    @property
+    def project(self):
+        if self.projects.count() > 0:
+            return self.projects.all()[0]
+        return None
