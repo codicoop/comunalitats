@@ -75,10 +75,14 @@ def add_group_permissions(apps, schema_editor):
 
     # Equip
     permissions = {
-        "coopolis": [
-            "view_town",
-            "view_activitypoll",
+        "cc_users": [
             "view_user", "change_user", "add_user",
+        ],
+        "base": [
+            "view_town",
+        ],
+        "coopolis": [
+            "view_activitypoll",
             "add_tagulous_user_tags", "change_tagulous_user_tags", "view_tagulous_user_tags",
         ],
         "cc_courses": [
@@ -157,10 +161,17 @@ def get_permissions(permission_model, permissions_dict: dict):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('base', '0003_data_emails'),
-        # ('dataexports', '0001_initial'),
-        # ('facilities_reservations', '0001_initial'),
-        # ('projects', '0001_initial'),
+        ('base', '0004_load_town_fixtures'),
+        # If you add permissions for an app that is not listed, you need to add
+        # it here, even if it doesn't raise an error.
+        # That's because the lack of making this step dependant on the other
+        # apps only fails when it's a clean new installation.
+        ('coopolis', '0001_initial'),
+        ('dataexports', '0001_initial'),
+        ('facilities_reservations', '0001_initial'),
+        ('projects', '0001_initial'),
+        ('cc_users', '0001_initial'),
+        ('cc_courses', '0001_initial'),
     ]
 
     operations = [
