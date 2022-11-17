@@ -5,7 +5,7 @@ from django.db import migrations
 
 def load_fixtures(apps, schema_editor):
     print("\nLoading Towns")
-    path = settings.BASE_DIR + "/apps/coopolis/fixtures/towns.json"
+    path = settings.BASE_DIR + "/apps/base/fixtures/towns.json"
     call_command("loaddata", path, verbosity=2)
     print("Towns loaded.")
 
@@ -13,7 +13,7 @@ def load_fixtures(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("coopolis", "0005_data_groups"),
+        ("base", "0005_data_groups"),
     ]
 
     operations = [migrations.RunPython(load_fixtures)]

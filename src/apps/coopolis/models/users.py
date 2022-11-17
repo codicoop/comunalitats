@@ -1,10 +1,9 @@
 from tagulous.models import TagField
-from django.conf import settings
 from django.db import models
 
 from apps.cc_users.managers import CCUserManager
 from apps.cc_users.models import BaseUser
-from .general import Town
+from apps.base.models import Town
 
 
 class User(BaseUser):

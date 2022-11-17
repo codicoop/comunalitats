@@ -16,6 +16,7 @@ def add_group_permissions(apps, schema_editor):
         "cc_courses",
         "dataexports",
         "facilities_reservations",
+        "projects",
         # External libraries:
         "mailing_manager",
         "mailqueue",
@@ -156,8 +157,10 @@ def get_permissions(permission_model, permissions_dict: dict):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('coopolis', '0004_data_superuser'),
-        ('dataexports', '0001_initial'),
+        ('base', '0004_data_superuser'),
+        # ('dataexports', '0001_initial'),
+        # ('facilities_reservations', '0001_initial'),
+        # ('projects', '0001_initial'),
     ]
 
     operations = [

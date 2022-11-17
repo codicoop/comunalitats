@@ -247,7 +247,7 @@ def populate_mail_templates(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('coopolis', '0002_data_unaccent_enable'),
+        ('base', '0002_town'),
         ('mailing_manager', '__latest__'),
     ]
 

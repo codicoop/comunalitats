@@ -43,7 +43,7 @@ accedeix a <a href="{url_backoffice}">l'aplicació dels serveis de la comunalita
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('coopolis', '0006_load_town_fixtures'),
+        ('projects', '0001_initial'),
         ('mailing_manager', '__latest__'),
     ]
 

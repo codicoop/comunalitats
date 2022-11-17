@@ -47,7 +47,7 @@ def remove_superuser(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("coopolis", "0003_data_emails"),
+        ("base", "0003_data_emails"),
     ]
 
     operations = [migrations.RunPython(generate_superuser, remove_superuser)]
