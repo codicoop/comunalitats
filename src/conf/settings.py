@@ -129,6 +129,7 @@ INSTALLED_APPS = [
     'apps.cc_courses',
     'apps.facilities_reservations',
     'apps.coopolis',
+    'apps.projects',
     'grappelli.dashboard',
     'grappelli',
     'tagulous',
