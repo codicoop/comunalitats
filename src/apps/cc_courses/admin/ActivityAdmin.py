@@ -110,7 +110,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'fields': ['course', 'name', 'objectives', 'place', 'room',
                        'date_start',
                        'date_end', 'starting_time', 'ending_time', 'spots',
-                       'service', 'sub_service', 'entity',
+                       'service', 'sub_service', 'entity', 'entities',
                        'responsible', 'publish', ]
         }),
         ("Documents per la justificació", {
@@ -139,10 +139,10 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         }),
     ]
     # define the raw_id_fields
-    raw_id_fields = ('enrolled', 'course')
+    raw_id_fields = ('enrolled', 'course', 'entities',)
     # define the autocomplete_lookup_fields
     autocomplete_lookup_fields = {
-        'm2m': ['enrolled'],
+        'm2m': ['enrolled', 'entities'],
         'fk': ['course'],
     }
     date_hierarchy = 'date_start'
