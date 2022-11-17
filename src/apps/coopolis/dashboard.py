@@ -27,13 +27,33 @@ class MyDashboard(Dashboard):
         ))
 
     def init_with_context(self, context):
-        reservations_module_app = modules.ModelList(
+
+        group_children = [
+            modules.ModelList(
+                title='Accions i sessions',
+                column=1,
+                collapsible=False,
+                models=('apps.cc_courses.models.Course', 'apps.cc_courses.models.Activity',),
+            ),
+            modules.ModelList(
+                title='Acompanyament de projectes',
+                column=1,
+                collapsible=False,
+                models=(
+                    'apps.projects.models.Project',
+                    'apps.projects.models.ProjectStage',
+                    'apps.projects.models.EmploymentInsertion',
+                    'apps.projects.models.ProjectStageSession',
+                ),
+            ),
+            modules.ModelList(
                 title="Gestió de reserves d'aules i sales",
                 column=1,
                 collapsible=False,
-                models=('apps.facilities_reservations.models.Reservation', 'apps.facilities_reservations.models.Room'),
-            )
-        reservations_module_calendar = modules.LinkList(
+                models=('apps.facilities_reservations.models.Reservation',
+                        'apps.facilities_reservations.models.Room'),
+            ),
+            modules.LinkList(
                 title="Calendari de reserves",
                 column=1,
                 collapsible=False,
@@ -45,17 +65,7 @@ class MyDashboard(Dashboard):
                         'target': True,
                     },
                 ),
-            )
-
-        group_children = [
-            modules.ModelList(
-                title='Accions i sessions',
-                column=1,
-                collapsible=False,
-                models=('apps.cc_courses.models.Course', 'apps.cc_courses.models.Activity',),
             ),
-            reservations_module_app,
-            reservations_module_calendar,
             modules.ModelList(
                 title="Gestió d'usuàries",
                 column=1,
