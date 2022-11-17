@@ -179,6 +179,12 @@ class Activity(models.Model):
         null=True,
         blank=True
     )
+    entities = models.ManyToManyField(
+        Entity,
+        verbose_name="entitats organitzadores",
+        blank=True,
+        related_name="entities",
+    )
     organizer = models.ForeignKey(
         Organizer,
         verbose_name="organitzadora",
