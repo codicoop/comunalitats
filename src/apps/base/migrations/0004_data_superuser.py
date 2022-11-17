@@ -7,7 +7,7 @@ from django.utils import timezone
 
 
 def generate_superuser(apps, schema_editor):
-    user_model = apps.get_model("coopolis.User")
+    user_model = apps.get_model("cc_users.User")
 
     email = settings.DJANGO_SUPERUSER_EMAIL
     password = settings.DJANGO_SUPERUSER_PASSWORD
