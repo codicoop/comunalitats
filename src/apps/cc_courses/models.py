@@ -172,13 +172,6 @@ class Activity(models.Model):
         verbose_name="inscrites",
         through="ActivityEnrolled"
     )
-    entity = models.ForeignKey(
-        Entity,
-        verbose_name="entitat",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
-    )
     entities = models.ManyToManyField(
         Entity,
         verbose_name="entitats organitzadores",
