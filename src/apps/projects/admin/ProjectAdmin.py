@@ -170,11 +170,11 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         return obj.project.name
     project_field_ellipsis.short_description = "Fitxa"
 
-    def stage_responsible_field_ellipsis(self, obj):
+    def responsible_field_ellipsis(self, obj):
         if obj.responsible and len(str(obj.responsible)) > 15:
             return "%s..." % str(obj.responsible)[:15]
         return obj.responsible
-    stage_responsible_field_ellipsis.short_description = 'Responsable'
+    responsible_field_ellipsis.short_description = 'Responsable'
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "responsible":
@@ -555,6 +555,6 @@ class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
 
     def stage_responsible_field(self, obj):
         if obj:
-            return obj.project_stage.stage_responsible
+            return obj.project_stage.responsible
         return None
     stage_responsible_field.short_description = 'Responsable'

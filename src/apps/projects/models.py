@@ -190,7 +190,7 @@ class Project(models.Model):
     def last_stage_responsible(self):
         if not self.stages or self.stages.count() < 1:
             return None
-        return self.stages.all()[0].stage_responsible
+        return self.stages.all()[0].responsible
 
     last_stage_responsible.fget.short_description = "Últim acompanyament"
 
@@ -402,7 +402,9 @@ class ProjectStage(models.Model):
 
     def get_full_type_str(self):
         txt = self.get_stage_type_display()
-        return f"{txt} ({self.stage_subtype.name})"
+        if self.stage_subtype:
+            txt = f"{txt} ({self.stage_subtype.name})"
+        return txt
 
     @property
     def latest_session(self):
