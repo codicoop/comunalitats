@@ -23,7 +23,7 @@ from django.contrib.auth.views import PasswordResetView as BasePasswordResetView
 from .decorators import anonymous_required
 from apps.cc_users.forms import SignUpForm as SignUpFormClass, MyAccountForm, \
     PasswordResetForm
-from apps.coopolis.models import User
+from apps.cc_users.models import User
 
 
 class SignUpView(CreateView):

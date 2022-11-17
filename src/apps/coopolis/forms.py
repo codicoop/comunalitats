@@ -12,7 +12,8 @@ from apps.coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
 from constance import config
 
-from apps.coopolis.models import User, ActivityPoll
+from apps.coopolis.models import ActivityPoll
+from apps.cc_users.models import User
 from apps.cc_courses.models import Activity, ActivityEnrolled
 from apps.facilities_reservations.models import Reservation
 

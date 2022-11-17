@@ -13,7 +13,7 @@ def load_fixtures(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("base", "0005_data_groups"),
+        ("base", "0003_data_emails"),
     ]
 
     operations = [migrations.RunPython(load_fixtures)]

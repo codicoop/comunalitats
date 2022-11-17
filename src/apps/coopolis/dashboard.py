@@ -70,7 +70,7 @@ class MyDashboard(Dashboard):
                 title="Gestió d'usuàries",
                 column=1,
                 collapsible=False,
-                models=('apps.coopolis.models.users.User',),
+                models=('apps.cc_users.models.User',),
             ),
             modules.ModelList(
                 title="Exportació de dades per justificacions",

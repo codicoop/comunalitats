@@ -9,7 +9,7 @@ from functools import update_wrapper
 from django.conf.urls import url
 
 from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
-from apps.coopolis.models import User
+from apps.cc_users.models import User
 from apps.projects.models import Project, ProjectStage, EmploymentInsertion
 from apps.projects.forms import (
     ProjectFormAdmin,

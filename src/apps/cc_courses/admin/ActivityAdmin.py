@@ -15,7 +15,7 @@ import modelclone
 from apps.coopolis.forms import ActivityForm, ActivityEnrolledForm
 from apps.cc_courses.models import Activity, ActivityEnrolled, ActivityResourceFile
 from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
-from apps.coopolis.models import User
+from apps.cc_users.models import User
 from apps.dataexports.models import SubsidyPeriod
 from apps.facilities_reservations.models import Reservation
 

@@ -157,7 +157,7 @@ def get_permissions(permission_model, permissions_dict: dict):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('base', '0004_data_superuser'),
+        ('base', '0003_data_emails'),
         # ('dataexports', '0001_initial'),
         # ('facilities_reservations', '0001_initial'),
         # ('projects', '0001_initial'),

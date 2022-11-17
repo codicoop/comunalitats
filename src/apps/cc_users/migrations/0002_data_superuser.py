@@ -33,7 +33,7 @@ def generate_superuser(apps, schema_editor):
 
 def remove_superuser(apps, schema_editor):
     try:
-        user_model = apps.get_model("users.User")
+        user_model = apps.get_model("cc_users.User")
         superuser = user_model.objects.filter(email=settings.DJANGO_SUPERUSER_EMAIL)
 
         if superuser.exists():
@@ -47,7 +47,7 @@ def remove_superuser(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("base", "0003_data_emails"),
+        ("cc_users", "0001_initial"),
     ]
 
     operations = [migrations.RunPython(generate_superuser, remove_superuser)]
