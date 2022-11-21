@@ -118,6 +118,9 @@ class Command(BaseCommand):
             "cc_users": [
                 "delete_tagulous_user_tags",
             ],
+            "projects": [
+                "delete_tagulous_project_tags",
+            ],
         }
 
         group, created = Group.objects.get_or_create(
@@ -168,6 +171,10 @@ class Command(BaseCommand):
             ],
             "auth": [
                 "view_group",
+            ],
+            "projects": [
+                "add_tagulous_projects_tags", "change_tagulous_projects_tags",
+                "view_tagulous_projects_tags",
             ],
         }
         group, created = Group.objects.get_or_create(
