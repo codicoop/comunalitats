@@ -131,6 +131,7 @@ INSTALLED_APPS = [
     'apps.facilities_reservations',
     'apps.coopolis',
     'apps.projects',
+    'apps.polls',
     'grappelli.dashboard',
     'grappelli',
     'tagulous',
