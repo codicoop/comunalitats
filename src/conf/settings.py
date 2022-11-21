@@ -149,7 +149,6 @@ INSTALLED_APPS = [
     'mailqueue',
     'mailing_manager',
     'django.contrib.humanize',
-    "django_q",
 ]
 
 MIDDLEWARE = [
