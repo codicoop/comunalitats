@@ -13,7 +13,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.normalize_permissions()
         self.normalize_subsidy_periods()
-        # self.add_group_permissions()
         # Disabled until exports are adapted and can be introduced:
         # self.normalize_exports()
 
@@ -92,91 +91,6 @@ class Command(BaseCommand):
             print(f"Updating or creating {export['function_name']}")
             DataExports.objects.create(**export)
         print("Done!")
-
-    # @staticmethod
-    # def add_group_permissions():
-    #     # base user
-    #     group, created = Group.objects.get_or_create(name='Permisos base')
-    #     add_thing = Permission.objects.filter(
-    #         codename__in=['add_logentry', 'change_logentry', 'view_logentry', 'delete_logentry', 'view_permission',
-    #                       'add_town', 'change_town', 'delete_town', 'view_town', 'add_user', 'change_user',
-    #                       'view_user', ]
-    #     )
-    #     group.permissions.set(add_thing)
-    #     group.save()
-    #     print('Permisos del grup Permisos base actualitzats.')
-    #
-    #     # formació / sessions
-    #     group, created = Group.objects.get_or_create(name="Gestió d'accions i sessions")
-    #     add_thing = Permission.objects.filter(
-    #         codename__in=[
-    #             'add_activity', 'change_activity', 'delete_activity', 'view_activity', 'add_course',
-    #             'change_course', 'delete_course', 'view_course', 'add_courseplace', 'change_courseplace',
-    #             'delete_courseplace', 'view_courseplace', 'view_entity', 'add_organizer',
-    #             'change_organizer', 'delete_organizer', 'view_organizer', 'add_attachment',
-    #             'change_attachment', 'delete_attachment', 'view_attachment', 'add_source',
-    #             'change_source', 'delete_source', 'view_source', 'add_thumbnail', 'change_thumbnail',
-    #             'delete_thumbnail', 'view_thumbnail', 'add_thumbnaildimensions',
-    #             'change_thumbnaildimensions', 'delete_thumbnaildimensions', 'view_thumbnaildimensions',
-    #             'view_activityenrolled', 'delete_activityenrolled', 'change_activityenrolled', 'add_activityenrolled',
-    #             'view_activityresourcefile', 'delete_activityresourcefile', 'change_activityresourcefile', 'add_activityresourcefile',
-    #             'view_activitypoll',
-    #         ]
-    #     )
-    #     group.permissions.set(add_thing)
-    #     group.save()
-    #     print("Permisos del grup Gestió d'accions i sessions actualitzats.")
-    #
-    #     # projectes
-    #     group, created = Group.objects.get_or_create(name='Gestió de projectes')
-    #     add_thing = Permission.objects.filter(
-    #         codename__in=[
-    #             # Projectes
-    #             'add_project', 'change_project', 'view_project',
-    #             # Justificacions d'acompanyament
-    #             'add_projectstagetype', 'change_projectstagetype', 'delete_projectstagetype', 'view_projectstagetype', 'view_projectstagetype',
-    #             'add_projectstage', 'change_projectstage', 'delete_projectstage', 'view_projectstage',
-    #             'add_projectstagesession', 'change_projectstagesession', 'delete_projectstagesession', 'view_projectstagesession',
-    #             # Insercions laborals
-    #             'add_employmentinsertion', 'change_employmentinsertion', 'delete_employmentinsertion', 'view_employmentinsertion',
-    #             # Seguiment de projectes
-    #             'view_projectsconstituted', 'view_projectsfollowup',
-    #             # Etiquetes
-    #             'add_tagulous_project_tags', 'change_tagulous_project_tags', 'delete_tagulous_project_tags', 'view_tagulous_project_tags',
-    #             # Fitxers
-    #             'add_projectfile', 'change_projectfile', 'delete_projectfile', 'view_projectfile',
-    #         ]
-    #     )
-    #     group.permissions.set(add_thing)
-    #     group.save()
-    #     print("Permisos del grup Gestió de projectes actualitzats.")
-    #
-    #     # exportacions
-    #     group, created = Group.objects.get_or_create(name='Exportar justificació')
-    #     add_thing = Permission.objects.filter(
-    #         codename__in=['view_dataexports', ]
-    #     )
-    #     group.permissions.set(add_thing)
-    #     group.save()
-    #     print('Permisos del grup Exportar justificació actualitzats.')
-    #
-    #     # gestió de sales
-    #     group, created = Group.objects.get_or_create(name="Afegir o modificar Sales")
-    #     add_thing = Permission.objects.filter(
-    #         codename__in=['add_room', 'change_room', 'delete_room', ]
-    #     )
-    #     group.permissions.set(add_thing)
-    #     group.save()
-    #     print('Permisos del grup Afegir o modificar Sales actualitzats.')
-    #
-    #     # gestió de reserves de sales
-    #     group, created = Group.objects.get_or_create(name="Fer i modificar reserves d'espais")
-    #     add_thing = Permission.objects.filter(
-    #         codename__in=['add_reservation', 'change_reservation', 'delete_reservation', ]
-    #     )
-    #     group.permissions.set(add_thing)
-    #     group.save()
-    #     print('Permisos del grup Fer i modificar reserves d\'espais actualitzats.')
 
     def normalize_permissions(self):
         # Administradors
