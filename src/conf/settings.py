@@ -132,6 +132,7 @@ INSTALLED_APPS = [
     'apps.coopolis',
     'apps.projects',
     'apps.polls',
+    'apps.towns',
     'grappelli.dashboard',
     'grappelli',
     'tagulous',

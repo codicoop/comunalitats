@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from .managers import CCUserManager
 from tagulous.models import TagField
 
-from apps.base.models import Town
+from apps.towns.models import Town
 
 
 class BaseUser(AbstractUser):

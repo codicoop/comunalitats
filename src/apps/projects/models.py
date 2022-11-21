@@ -11,7 +11,7 @@ import tagulous.models
 from apps.cc_courses.models import Entity, Organizer
 from apps.coopolis.choices import ServicesChoices, SubServicesChoices
 from apps.cc_users.models import User
-from apps.base.models import Town
+from apps.towns.models import Town
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate

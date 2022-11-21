@@ -28,7 +28,7 @@ class CoursePlace(models.Model):
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     town = models.ForeignKey(
-        "base.Town",
+        "towns.Town",
         verbose_name="població",
         on_delete=models.SET_NULL,
         null=True,
@@ -60,7 +60,7 @@ class Entity(models.Model):
         max_length=50,
     )
     town = models.ForeignKey(
-        "base.Town",
+        "towns.Town",
         verbose_name="municipi",
         on_delete=models.SET_NULL,
         null=True,

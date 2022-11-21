@@ -247,7 +247,7 @@ def populate_mail_templates(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('base', '0002_town'),
+        ('base', '0001_initial'),
         ('mailing_manager', '__latest__'),
     ]
 
