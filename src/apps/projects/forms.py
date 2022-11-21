@@ -15,7 +15,7 @@ class ProjectForm(forms.ModelForm):
         model = Project
         fields = (
             'name', 'sector', 'web', 'project_status', 'motivation', 'mail',
-            'phone', 'town', 'number_people', 'estatuts',
+            'phone', 'town', 'neighborhood', 'number_people', 'estatuts',
             'viability', 'sostenibility', 'object_finality', 'project_origins',
             'solves_necessities', 'social_base'
         )

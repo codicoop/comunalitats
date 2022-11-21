@@ -78,6 +78,11 @@
                         {{ form.town }}
                     </p>
                     <p>
+                        {{ form.neighborhood.errors }}
+                        {{ form.neighborhood.label_tag }}
+                        {{ form.neighborhood }}
+                    </p>
+                    <p>
                         {{ form.district.errors }}
                         {{ form.district.label_tag }}
                         {{ form.district }}

@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('projects', '0001_initial'),
-        ('mailing_manager', '__latest__'),
+        ('mailing_manager', '0004_auto_20210422_1407'),
     ]
 
     operations = [

@@ -82,6 +82,12 @@ class Project(models.Model):
     phone = models.CharField("telèfon", max_length=25)
     town = models.ForeignKey(Town, verbose_name="població",
                              on_delete=models.SET_NULL, null=True, blank=True)
+    neighborhood = models.CharField(
+        "Barri",
+        default="",
+        blank=True,
+        max_length=50,
+    )
     number_people = models.IntegerField("número de persones", blank=True,
                                         null=True)
     registration_date = models.DateField("data de registre", blank=True,
