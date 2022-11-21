@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.views.generic import CreateView
 
 from apps.cc_courses.models import Activity
-from apps.coopolis.models import ActivityPoll
+from apps.polls.models import ActivityPoll
 from apps.coopolis.forms import ActivityPollForm
 
 

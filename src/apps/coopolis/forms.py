@@ -12,19 +12,19 @@ from apps.coopolis.widgets import XDSoftDatePickerInput
 from django.utils.safestring import mark_safe
 from constance import config
 
-from apps.coopolis.models import User, ActivityPoll
+from apps.polls.models import ActivityPoll
+from apps.cc_users.models import User
 from apps.cc_courses.models import Activity, ActivityEnrolled
-from apps.coopolis.mixins import FormDistrictValidationMixin
 from apps.facilities_reservations.models import Reservation
 
 
-class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
+class MySignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = (
             'first_name', 'last_name', 'surname2', 'id_number',
             'cannot_share_id', 'email',
-            'phone_number', 'birthdate', 'birth_place', 'town', 'district',
+            'phone_number', 'birthdate', 'birth_place', 'town',
             'address', 'gender', 'educational_level', 'employment_situation',
             'discovered_us', 'project_involved', 'password1', 'password2',
             'authorize_communications'
@@ -75,7 +75,7 @@ class MySignUpForm(FormDistrictValidationMixin, UserCreationForm):
         return value
 
 
-class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
+class MySignUpAdminForm(forms.ModelForm):
     """A form for updating users. Includes all the fields on
     the user, but replaces the password field with admin's
     password hash display field.
@@ -85,7 +85,7 @@ class MySignUpAdminForm(FormDistrictValidationMixin, forms.ModelForm):
         fields = (
             'first_name', 'last_name', 'surname2', 'id_number', 'email',
             'phone_number', 'birthdate', 'birth_place', 'town',
-            'district', 'address', 'gender', 'educational_level',
+            'address', 'gender', 'educational_level',
             'employment_situation', 'discovered_us', 'project_involved',
         )
 

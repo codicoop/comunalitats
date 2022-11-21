@@ -124,11 +124,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apps.base',
     'apps.dataexports',
     'apps.cc_users',
     'apps.cc_courses',
     'apps.facilities_reservations',
     'apps.coopolis',
+    'apps.projects',
+    'apps.polls',
+    'apps.towns',
     'grappelli.dashboard',
     'grappelli',
     'tagulous',
@@ -145,7 +149,6 @@ INSTALLED_APPS = [
     'mailqueue',
     'mailing_manager',
     'django.contrib.humanize',
-    "django_q",
 ]
 
 MIDDLEWARE = [
@@ -234,13 +237,8 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 LOGIN_URL = 'loginsignup'
 LOGIN_REDIRECT_URL = '/'
 
-AUTH_USER_MODEL = 'coopolis.User'
+AUTH_USER_MODEL = 'cc_users.User'
 DEV_SETTINGS_MODULE = 'conf.settings'
-
-# APPS
-
-USERS_APP_TITLE = 'Usuàries'
-COURSES_APP_TITLE = "Accions"
 
 FIXTURES_PATH_TO_COURSE_IMAGES = 'test-images/coopolis-courses'
 
@@ -355,8 +353,6 @@ CONSTANCE_CONFIG_FIELDSETS = {
 # CC Courses
 
 COURSES_LIST_VIEW_CLASS = 'apps.coopolis.views.CoopolisCoursesListView'
-COURSES_CLASS_TO_ENROLL = 'coopolis.User'
-COURSES_CLASSES_CAN_ENROLL = ['apps.cc_courses.models.Course']
 
 FIXTURE_FACTORIES = [
     ('apps.coopolis.tests.fixtures.UserFactory', {}),
@@ -369,24 +365,6 @@ FIXTURE_FACTORIES = [
     }),
 ]
 
-SIGNUP_FORM = 'apps.coopolis.forms.MySignUpForm'
-
-# Static texts and option fields
-ADMIN_SITE_TITLE = ''
-ADMIN_INDEX_TITLE = ''
-
-DISTRICTS = (
-    ('CV', 'Ciutat Vella'),
-    ('EX', 'Eixample'),
-    ('HG', 'Horta-Guinardó'),
-    ('LC', 'Les Corts'),
-    ('NB', 'Nou Barris'),
-    ('SA', 'Sant Andreu'),
-    ('SM', 'Sant Martí'),
-    ('ST', 'Sants-Montjuïc'),
-    ('SS', 'Sarrià-Sant Gervasi'),
-    ('GR', 'Gràcia')
-)
 PROJECT_STATUS = (
     ('PENDENT', "Pendent d’enviar proposta de trobada"),
     ('ENVIAT', "Enviat email amb proposta de data per trobar-nos"),
@@ -408,14 +386,6 @@ THUMBNAIL_ALIASES = {
     },
 }
 THUMBNAIL_DEFAULT_STORAGE = 'apps.cc_lib.storages.MediaStorage'
-
-# Django-Q
-Q_CLUSTER = {
-    "name": "ateneus-backoffice",
-    "orm": "default",  # Use Django's ORM + database for broker
-    "timeout": 30,
-    "workers": 1,
-}
 
 # Maintenance mode
 MAINTENANCE_MODE = env.bool("MAINTENANCE_MODE", default=False)

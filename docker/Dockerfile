@@ -12,7 +12,7 @@ ENV PYTHONUNBUFFERED=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_DEFAULT_TIMEOUT=100 \
     # poetry:
-    POETRY_VERSION=1.1.6 \
+    POETRY_VERSION=1.2.0 \
     # make poetry install to this location
     POETRY_HOME="/opt/poetry" \
     # make poetry create the virtual environment in the project's root
@@ -38,7 +38,7 @@ RUN set -x \
   && apt-get update && apt-get install -y --no-install-recommends $buildDeps \
   && rm -rf /var/lib/apt/lists/* \
   # install poetry - respects $POETRY_VERSION & $POETRY_HOME
-  && curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python \
+  && curl -sSL https://install.python-poetry.org | python \
   && apt-get purge -y --auto-remove $buildDeps
 
 # copy project requirement files here to ensure they will be cached.

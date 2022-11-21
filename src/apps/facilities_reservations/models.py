@@ -2,7 +2,7 @@ from django.db import models
 from django.core.validators import ValidationError
 
 from apps.cc_courses.models import CoursePlace
-from apps.coopolis.models import User
+from apps.cc_users.models import User
 
 
 class Room(models.Model):

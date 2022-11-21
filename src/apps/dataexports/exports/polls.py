@@ -9,7 +9,7 @@ from django.utils import formats
 
 from apps.cc_courses.models import Activity
 from apps.coopolis.choices import ServicesChoices
-from apps.coopolis.models import ActivityPoll
+from apps.polls.models import ActivityPoll
 from apps.dataexports.exports.exceptions import (
     AxisDoesNotExistException
 )
