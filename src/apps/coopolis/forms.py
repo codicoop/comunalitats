@@ -24,8 +24,8 @@ class MySignUpForm(UserCreationForm):
         fields = (
             'first_name', 'last_name', 'surname2', 'id_number',
             'cannot_share_id', 'email',
-            'phone_number', 'birthdate', 'birth_place', 'town',
-            'address', 'gender', 'educational_level', 'employment_situation',
+            'phone_number', 'birthdate', 'gender',
+            'educational_level', 'employment_situation',
             'discovered_us', 'project_involved', 'password1', 'password2',
             'authorize_communications'
         )
@@ -84,8 +84,8 @@ class MySignUpAdminForm(forms.ModelForm):
         model = User
         fields = (
             'first_name', 'last_name', 'surname2', 'id_number', 'email',
-            'phone_number', 'birthdate', 'birth_place', 'town',
-            'address', 'gender', 'educational_level',
+            'phone_number', 'birthdate', 'gender',
+            'educational_level',
             'employment_situation', 'discovered_us', 'project_involved',
         )
 
