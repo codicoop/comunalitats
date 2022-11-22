@@ -120,6 +120,10 @@ class Command(BaseCommand):
             ],
             "projects": [
                 "delete_tagulous_project_tags",
+                "delete_project",
+                "delete_derivation",
+                "delete_employmentinsertion",
+                "delete_projectfile",
             ],
         }
 
@@ -177,6 +181,19 @@ class Command(BaseCommand):
             "projects": [
                 "add_tagulous_projects_tags", "change_tagulous_projects_tags",
                 "view_tagulous_projects_tags",
+                "view_project", "change_project", "add_project",
+                "view_derivation", "change_derivation", "add_derivation",
+                "view_employmentinsertion", "change_employmentinsertion", 
+                "add_employmentinsertion",
+                "view_projectfile", "change_projectfile", 
+                "add_projectfile",
+                "view_projectsfollowupservice",
+                "change_projectsfollowupservice",
+                "add_projectsfollowupservice",
+                "view_projectsconstitutedservice",
+                "change_projectsconstitutedservice",
+                "add_projectsconstitutedservice",
+
             ],
         }
         group, created = Group.objects.get_or_create(
