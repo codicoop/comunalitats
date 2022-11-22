@@ -244,7 +244,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     def attendee_filter_field(self, obj):
         if obj.id is None:
             return '-'
-        base_url = reverse('admin:coopolis_user_changelist')
+        base_url = reverse('admin:cc_users_user_changelist')
         return mark_safe(
             u'<a href="%s?enrolled_activities__exact=%d">Inscrites i '
             u'en llista d\'espera</a>' % (base_url, obj.id))
@@ -306,7 +306,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             return '-'
 
         poll_status = "Oberta" if obj.poll_access_allowed() else "Tancada"
-        results_url = reverse_lazy('admin:coopolis_activitypoll_changelist')
+        results_url = reverse_lazy('admin:polls_activitypoll_changelist')
         text = "Accés als resultats (pestanya nova)"
         results_url = (f'<a href="{results_url}?activity__id__exact={obj.id}"'
                        f'target="_new">{text}</a>')
