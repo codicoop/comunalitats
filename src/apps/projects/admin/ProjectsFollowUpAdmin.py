@@ -17,8 +17,8 @@ from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
 from ..models import User
 
 
-@admin.register(ProjectsFollowUp)
-class ProjectsFollowUpAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
+@admin.register(ProjectsFollowUpService)
+class ProjectsFollowUpServicesAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     """
     Deprecated: from Nov 2021 the updated report is ProjectsFollowUpAdmin.
     Keeping the deprecated one until we are sure that it's not needed anymore.
@@ -31,7 +31,7 @@ class ProjectsFollowUpAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin)
             'all': ('styles/grappellihacks.css',)
         }
 
-    change_list_template = 'admin/projects_follow_up.html'
+    change_list_template = 'admin/projects_follow_up_services.html'
     list_filter = (
         'stages__subsidy_period', 'follow_up_situation',
         FilterByFounded,
@@ -308,11 +308,6 @@ class ProjectsFollowUpAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin)
         rows = self.get_rows(projects, request)
         sheet = FollowUpSpreadsheet(rows['rows'], rows['totals'])
         return sheet.export_seguiment_acompanyaments()
-
-
-@admin.register(ProjectsFollowUpService)
-class ProjectsFollowUpServicesAdmin(ProjectsFollowUpAdmin):
-    change_list_template = 'admin/projects_follow_up_services.html'
 
 
 class FollowUpSpreadsheet:

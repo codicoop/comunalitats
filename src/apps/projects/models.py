@@ -505,19 +505,6 @@ class ProjectStageSession(models.Model):
                 f"{self.project_stage.project.name}")
 
 
-class ProjectsFollowUp(Project):
-    """
-    Deprecated: from Nov 2021 this is kept to let them access older reports,
-    but when they don't need them anymore this and the corresponding admin view
-    and template can be deleted.
-    """
-    class Meta:
-        proxy = True
-        verbose_name_plural = "(obsolet) Seguiment d'acompanyaments per eix"
-        verbose_name = "(obsolet) Seguiment d'acompanyament per eix"
-        ordering = ['follow_up_situation', 'follow_up_situation_update']
-
-
 class ProjectsFollowUpService(Project):
     class Meta:
         proxy = True
