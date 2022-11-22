@@ -1,6 +1,7 @@
 import uuid
 
 from constance import config
+from django.core.exceptions import NON_FIELD_ERRORS
 from django.db import models
 from django.shortcuts import reverse
 from django.conf import settings
@@ -11,6 +12,7 @@ from easy_thumbnails.fields import ThumbnailerImageField
 from django.apps import apps
 from django.core.validators import ValidationError
 
+from apps.base.choices import ActivityFileType
 from apps.cc_lib.utils import slugify_model
 from apps.coopolis.choices import ServicesChoices, SubServicesChoices
 from apps.coopolis.managers import Published
@@ -489,6 +491,72 @@ class ActivityResourceFile(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ActivityFile(models.Model):
+    class Meta:
+        verbose_name = "fitxer"
+        verbose_name_plural = "fitxers i enllaços interns"
+        ordering = ["name"]
+
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.CASCADE,
+        related_name="files"
+    )
+    file = models.FileField(
+        "fitxer adjunt",
+        storage=PrivateMediaStorage(),
+        blank=True,
+        null=True,
+    )
+    file_type = models.CharField(
+        "tipus de fitxer",
+        choices=ActivityFileType.choices,
+        max_length=50,
+    )
+    url = models.URLField(
+        "fitxer enllaçat",
+        blank=True,
+        null=True,
+    )
+    name = models.CharField(
+        "nom del fitxer",
+        max_length=120,
+        null=False,
+        blank=False,
+        help_text="Pensa un nom prou descriptiu com perquè ajudi a altres "
+        "persones a preparar possibles requeriments d'aquí uns mesos o anys."
+    )
+
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        errors = {}
+        if self.file and self.url:
+            errors.update(
+                {
+                    "file": ValidationError(
+                        "No pots incloure un fitxer adjunt si també inclous "
+                        "un fitxer enllaçat."
+                    ),
+                    "url": ValidationError(
+                        "No pots incloure un fitxer enllaçat si també inclous "
+                        "un fitxer adjunt."
+                    ),
+                }
+            )
+        if not self.file and not self.url:
+            errors.update(
+                {
+                    NON_FIELD_ERRORS: ValidationError(
+                        "Cal indicar un fitxer ja sigui adjunt o enllaçat."
+                    ),
+                }
+            )
+        if errors:
+            raise ValidationError(errors)
 
 
 class ActivityEnrolled(models.Model):
