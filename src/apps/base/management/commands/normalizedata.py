@@ -113,7 +113,6 @@ class Command(BaseCommand):
             ],
             "cc_courses": [
                 "add_courseplace",
-                "add_entity",
             ],
             "cc_users": [
                 "delete_tagulous_user_tags",
@@ -124,6 +123,9 @@ class Command(BaseCommand):
                 "delete_derivation",
                 "delete_employmentinsertion",
                 "delete_projectfile",
+                "delete_projectstage",
+                "delete_projectstagesession",
+                "delete_stagesubtype",
             ],
         }
 
@@ -152,7 +154,7 @@ class Command(BaseCommand):
             ],
             "cc_courses": [
                 "view_courseplace", "change_courseplace",
-                "view_entity", "change_entity",
+                "add_entity", "view_entity", "change_entity",
                 "view_organizer", "change_organizer",
                 "view_course", "change_course", "add_course",
                 "view_activity", "change_activity", "add_activity",
@@ -179,8 +181,8 @@ class Command(BaseCommand):
                 "view_group",
             ],
             "projects": [
-                "add_tagulous_projects_tags", "change_tagulous_projects_tags",
-                "view_tagulous_projects_tags",
+                "add_tagulous_project_tags", "change_tagulous_project_tags",
+                "view_tagulous_project_tags",
                 "view_project", "change_project", "add_project",
                 "view_derivation", "change_derivation", "add_derivation",
                 "view_employmentinsertion", "change_employmentinsertion", 
@@ -193,6 +195,11 @@ class Command(BaseCommand):
                 "view_projectsconstitutedservice",
                 "change_projectsconstitutedservice",
                 "add_projectsconstitutedservice",
+                "view_projectstage", "change_projectstage",
+                "add_projectstage",
+                "view_projectstagesession", "change_projectstagesession",
+                "add_projectstagesession",
+                "view_stagesubtype",
 
             ],
         }
