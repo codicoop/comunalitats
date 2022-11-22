@@ -69,14 +69,14 @@ td {
   <table cellspacing="0" cellpadding="0">
     <tbody>
       <tr>
-        <td style="width: 23%;" class="table-header-caption">EXPEDIENT</td>
+        <td style="width: 24%;" class="table-header-caption">EXPEDIENT</td>
         <td>{{ activity.subsidy_period.number|default_if_none:"" }}</td>
-        <td style="width: 21%;" class="table-header-caption"></td>
-        <td class="table-header-content"></td>
+        <td style="width: 18%;" class="table-header-caption">DATA INICI</td>
+        <td>{{ activity.date_start }}</td>
       </tr>
       <tr>
         <td class="table-header-caption">ENTITAT</td><td>{{ activity.entity|default_if_none:"" }}</td>
-        <td class="table-header-caption">DATA</td><td>{{ activity.date_start }}</td>
+        <td class="table-header-caption">DATA FI</td><td>{{ activity.date_end|default_if_none:activity.date_start }}</td>
       </tr>
       <tr>
         <td class="table-header-caption">NOM DE L'ACTIVITAT</td><td colspan="3">{{ activity }}</td>
