@@ -1,5 +1,4 @@
 
-from .CoopolisCoursesListView import CoopolisCoursesListView
 from .LoginSignupContainerView import LoginSignupContainerView, CoopolisSignUpView, CoopolisLoginView
 from .HomeView import HomeView
 from .RegistrationMailView import CustomPasswordResetView
