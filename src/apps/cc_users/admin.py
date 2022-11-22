@@ -56,7 +56,7 @@ class UserAdmin(admin.ModelAdmin):
         'phone_number', 'cooperativism_knowledge'
     )
     list_filter = (
-        'gender', ('town', admin.RelatedOnlyFieldListFilter),
+        'gender',
         'is_staff', 'fake_email', 'authorize_communications', 'tags',
     )
     fields = (
@@ -150,8 +150,6 @@ class UserAdmin(admin.ModelAdmin):
                 'Email Address',
                 'First Name',
                 'Last Name',
-                'City',
-                'Address',
                 'Authorize Newsletter',
             ]
         )
@@ -163,8 +161,6 @@ class UserAdmin(admin.ModelAdmin):
                     user.email,
                     user.first_name,
                     user.surname,
-                    user.town if user.town else '',
-                    user.address if user.address else '',
                     'yes' if user.authorize_communications else 'no'
                 ]
             )
