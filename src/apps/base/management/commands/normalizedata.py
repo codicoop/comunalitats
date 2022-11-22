@@ -156,6 +156,8 @@ class Command(BaseCommand):
                 "add_activityresourcefile", "delete_activityresourcefile",
                 "view_activityenrolled", "change_activityenrolled",
                 "add_activityenrolled", "delete_activityenrolled",
+                "view_activityfile", "change_activityfile",
+                "add_activityfile", "delete_activityfile",
             ],
             "dataexports": [
                 "view_subsidyperiod",
