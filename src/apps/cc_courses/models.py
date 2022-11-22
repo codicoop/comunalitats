@@ -15,8 +15,8 @@ from django.core.validators import ValidationError
 from apps.base.choices import ActivityFileType
 from apps.cc_lib.utils import slugify_model
 from apps.coopolis.choices import ServicesChoices, SubServicesChoices
-from apps.coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
+from apps.coopolis.managers import Published
 from apps.coopolis.storage_backends import (
     PrivateMediaStorage, PublicMediaStorage
 )
@@ -93,24 +93,11 @@ class Course(models.Model):
     class Meta:
         verbose_name = "acció"
         verbose_name_plural = "accions"
-        ordering = ["-date_start"]
+        ordering = ["title"]
 
-    TYPE_CHOICES = (
-        ('F', "Accions educatives"),
-        ('A', "Altres accions")
-    )
     title = models.CharField("títol", max_length=250, blank=False)
     slug = models.CharField(max_length=250, unique=True)
-    date_start = models.DateField("dia inici")
-    date_end = models.DateField("dia finalització", null=True, blank=True)
-    hours = models.CharField(
-        "horaris",
-        blank=False,
-        max_length=200,
-        help_text="Indica només els horaris, sense els dies."
-    )
     description = models.TextField("descripció", null=True)
-    publish = models.BooleanField("publicat")
     created = models.DateTimeField(
         "data de creació",
         null=True,
@@ -123,16 +110,7 @@ class Course(models.Model):
         max_length=250,
         blank=True
     )
-    place = models.ForeignKey(
-        CoursePlace,
-        on_delete=models.SET_NULL,
-        null=True,
-        verbose_name="lloc",
-        blank=True,
-        help_text="Aquesta dada de moment és d'ús intern i no es publica."
-    )
     objects = models.Manager()
-    published = Published()
 
     @classmethod
     def pre_save(cls, sender, instance, **kwargs):
