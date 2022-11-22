@@ -46,20 +46,14 @@ class User(BaseUser):
         ('FEMALE', 'Dona'),
         ('MALE', 'Home')
     )
-    gender = models.CharField("gènere", blank=True, null=True, choices=GENDERS,
-                              max_length=10)
-    BIRTH_PLACES = (
-        ("BARCELONA", "Barcelona"),
-        ("CATALUNYA", "Catalunya"),
-        ("ESPANYA", "Espanya"),
-        ("OTHER", "Altre")
+    gender = models.CharField(
+        "gènere",
+        blank=True,
+        null=True,
+        choices=GENDERS,
+        max_length=10,
     )
-    birth_place = models.TextField("lloc de naixement", blank=True, null=True,
-                                   choices=BIRTH_PLACES)
     birthdate = models.DateField("data de naixement", blank=True, null=True)
-    town = models.ForeignKey(Town, verbose_name="població actual",
-                             on_delete=models.SET_NULL, null=True, blank=False)
-    address = models.CharField("adreça", max_length=250, blank=True, null=True)
     phone_number = models.CharField("telèfon", max_length=25, blank=True,
                                     null=True)
     STUDY_LEVELS = (
