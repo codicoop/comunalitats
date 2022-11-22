@@ -12,7 +12,7 @@ from openpyxl.utils import get_column_letter
 from .ProjectAdmin import FilterByFounded
 from apps.dataexports.models import SubsidyPeriod
 from apps.projects.models import ProjectStage, ProjectsFollowUp, \
-    ProjectsFollowUpService, ProjectsConstituted, ProjectsConstitutedService
+    ProjectsFollowUpService, ProjectsConstitutedService
 from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
 from ..models import User
 
@@ -494,8 +494,8 @@ class ConstitutionDateFilter(admin.SimpleListFilter):
         return queryset
 
 
-@admin.register(ProjectsConstituted)
-class ProjectsConstitutedAdmin(admin.ModelAdmin):
+@admin.register(ProjectsConstitutedService)
+class ProjectsConstitutedServiceAdmin(admin.ModelAdmin):
     """
     Inspired in: https://medium.com/@hakibenita/how-to-turn-django-admin-into-a-lightweight-dashboard-a0e0bbf609ad
     """
@@ -505,7 +505,7 @@ class ProjectsConstitutedAdmin(admin.ModelAdmin):
             'all': ('styles/grappellihacks.css',)
         }
 
-    change_list_template = 'admin/projects_constituted.html'
+    change_list_template = 'admin/projects_constituted_service.html'
     list_filter = (ConstitutionDateFilter, )
     show_full_result_count = False
     list_display = ('name', )
@@ -566,16 +566,8 @@ class ProjectsConstitutedAdmin(admin.ModelAdmin):
 
         return response
 
-    # def has_change_permission(self, request, obj=None):
-    #     return False
-
     def has_delete_permission(self, request, obj=None):
         return False
 
     def has_add_permission(self, request):
         return False
-
-
-@admin.register(ProjectsConstitutedService)
-class ProjectsConstitutedServiceAdmin(ProjectsConstitutedAdmin):
-    change_list_template = 'admin/projects_constituted_service.html'

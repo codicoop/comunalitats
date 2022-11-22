@@ -526,18 +526,6 @@ class ProjectsFollowUpService(Project):
         ordering = ['follow_up_situation', 'follow_up_situation_update']
 
 
-class ProjectsConstituted(Project):
-    """
-    Deprecated: from Nov 2021 this is kept to let them access older reports,
-    but when they don't need them anymore this and the corresponding admin view
-    and template can be deleted.
-    """
-    class Meta:
-        proxy = True
-        verbose_name_plural = "(obsolet) Projectes constituïts per eix"
-        verbose_name = "(obsolet) Projecte constituït per eix"
-
-
 class ProjectsConstitutedService(Project):
     class Meta:
         proxy = True
