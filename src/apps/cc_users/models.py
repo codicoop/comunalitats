@@ -42,7 +42,7 @@ class User(BaseUser):
         default=False,
     )
     GENDERS = (
-        ('OTHER', 'Altre'),
+        ('OTHER', 'No binari'),
         ('FEMALE', 'Dona'),
         ('MALE', 'Home')
     )
