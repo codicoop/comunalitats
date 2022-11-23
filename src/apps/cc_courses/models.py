@@ -127,7 +127,7 @@ class Course(models.Model):
         return ("title__icontains", )
 
     def __str__(self):
-        return f"{self.title} ({self.date_start})"
+        return self.title
 
 
 class Activity(models.Model):

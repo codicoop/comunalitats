@@ -69,7 +69,7 @@ class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
         if not user_errors and not cif_error:
             return True
         url = reverse(
-            'admin:coopolis_user_change',
+            'admin:cc_users_user_change',
             kwargs={'object_id': user_obj.id}
         )
         url = f'<a href="{url}" target="_blank">Fitxa de la Persona</a>'

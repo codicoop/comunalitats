@@ -540,7 +540,7 @@ class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     def project_field(self, obj):
         if obj.project_stage.project:
             url = reverse(
-                "admin:coopolis_project_change",
+                "admin:projects_project_change",
                 kwargs={'object_id': obj.project_stage.project.id}
             )
             return mark_safe(f'<a href="{ url }">{ obj.project_stage.project }</a>')
