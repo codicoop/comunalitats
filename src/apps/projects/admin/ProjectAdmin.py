@@ -322,7 +322,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
                        'object_finality', 'project_origins',
                        'solves_necessities', 'social_base']
         }),
-        ("Dades internes gestionades per l'ateneu", {
+        ("Dades internes gestionades per la comunalitat", {
             'fields': ['partners', 'partners_participants',
                        'registration_date', 'cif',
                        'constitution_date', 'subsidy_period', 'derivation',

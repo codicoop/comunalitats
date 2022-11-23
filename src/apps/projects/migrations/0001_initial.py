@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
                 ('follow_up_situation_update', models.DateTimeField(blank=True, null=True, verbose_name='actualització seguiment')),
                 ('derivation', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='projects.derivation', verbose_name='derivat')),
                 ('partners', models.ManyToManyField(blank=True, related_name='projects', to=settings.AUTH_USER_MODEL, verbose_name='sòcies')),
-                ('subsidy_period', models.ForeignKey(blank=True, help_text="OPCIONAL. En cas que el projecte s'hagi constituït en una convocatòria posterior a l'ultima intervenció de l'ateneu, podeu indicar-ho aquí, per tal que aparegui a l'informe de Projectes Constituïts. Aquest camp NO farà aparèixer el projecte a l'excel de justificació (per aparèixer a l'excel cal crear una Justificació d'Acompanyament)", null=True, on_delete=django.db.models.deletion.SET_NULL, to='dataexports.subsidyperiod', verbose_name='convocatòria de la constitució')),
+                ('subsidy_period', models.ForeignKey(blank=True, help_text="OPCIONAL. En cas que el projecte s'hagi constituït en una convocatòria posterior a l'ultima intervenció de la comunalitat, podeu indicar-ho aquí, per tal que aparegui a l'informe de Projectes Constituïts. Aquest camp NO farà aparèixer el projecte a l'excel de justificació (per aparèixer a l'excel cal crear una Justificació d'Acompanyament)", null=True, on_delete=django.db.models.deletion.SET_NULL, to='dataexports.subsidyperiod', verbose_name='convocatòria de la constitució')),
             ],
             options={
                 'verbose_name': 'projecte',
