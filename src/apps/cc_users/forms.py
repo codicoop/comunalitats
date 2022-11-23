@@ -210,6 +210,11 @@ class MySignUpAdminForm(forms.ModelForm):
                   "notificació de creació de nou compte."
     )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["email"].required = False
+        self.fields["id_number"].required = False
+
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
         # This is done here, rather than on the field, because the
@@ -217,3 +222,19 @@ class MySignUpAdminForm(forms.ModelForm):
         if "password" in self.initial:
             return self.initial["password"]
         return None
+
+    def clean(self):
+        super().clean()
+        cannot_share_id = self.cleaned_data.get('cannot_share_id')
+        id_number = self.cleaned_data.get('id_number')
+        if not id_number and not cannot_share_id:
+            msg = ("Necessitem el DNI, NIF o passaport per justificar la "
+                   "participació davant dels organismes públics que financen "
+                   "aquestes activitats.")
+            self.add_error('id_number', msg)
+        email = self.cleaned_data.get('email')
+        if not email and not id_number:
+            msg = ("És necessari indicar el correu "
+                   "electrònic o bé omplir el camp DNI/NIE/Passaport.")
+            self.add_error(NON_FIELD_ERRORS, msg)
+        return self.cleaned_data
