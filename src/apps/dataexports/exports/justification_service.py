@@ -1,7 +1,6 @@
-from django.db.models import Q
-
 from apps.cc_courses.models import Activity
 from apps.dataexports.exports.manager import ExcelExportManager
+from apps.projects.models import ProjectStage, Project, EmploymentInsertion
 
 
 class ExportJustificationService:
