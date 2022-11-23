@@ -1,15 +1,12 @@
 from itertools import islice
 
 from django.core.exceptions import ValidationError
-from django.contrib.auth import get_user_model
 from django.contrib.auth.views import (
-    LoginView, PasswordChangeView as BasePasswordChangeView,
+    PasswordChangeView as BasePasswordChangeView,
 )
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import UpdateView
 from django import urls
-from django.http import HttpResponseRedirect
-from django.contrib.auth import authenticate, login
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import (
     PasswordResetCompleteView as BasePasswordResetCompleteView,
@@ -21,36 +18,8 @@ from django.contrib.auth.views import PasswordResetDoneView as BasePasswordReset
 from django.contrib.auth.views import PasswordResetView as BasePasswordResetView
 
 from .decorators import anonymous_required
-from apps.cc_users.forms import SignUpForm as SignUpFormClass, MyAccountForm, \
-    PasswordResetForm
+from apps.cc_users.forms import MyAccountForm, PasswordResetForm
 from apps.cc_users.models import User
-
-
-class SignUpView(CreateView):
-    form_class = SignUpFormClass
-    model = get_user_model()
-    template_name = 'registration/signup.html'
-
-    def get_success_url(self):
-        url = self.request.META.get('HTTP_REFERER')
-        if url is None:
-            url = urls.reverse('user_profile')
-        return url
-
-    def form_valid(self, form):
-        form.save()
-        username = self.request.POST['email']
-        password = self.request.POST['password1']
-        user = authenticate(username=username, password=password)
-        login(self.request, user)
-        return HttpResponseRedirect(self.get_success_url())
-
-
-class UsersLoginView(LoginView):
-    redirect_authenticated_user = True
-
-    def get_success_url(self):
-        return super().resolve_url(self.request.get_redirect_url())
 
 
 class MyAccountView(SuccessMessageMixin, UpdateView):
