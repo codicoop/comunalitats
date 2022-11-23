@@ -100,7 +100,7 @@ class ActivityEnrolledInline(admin.TabularInline):
         if obj.id is None:
             return '-'
         url = reverse(
-            'admin:coopolis_user_change', kwargs={'object_id': obj.user.id})
+            'admin:cc_users_user_change', kwargs={'object_id': obj.user.id})
         return format_html(
             f'<a href="{url}" target="_blank">Fitxa {obj.user.first_name}</a>')
     open_user_details_field.allow_tags = True

@@ -6,12 +6,11 @@ class CourseAdmin(SummernoteModelAdmin):
     class Media:
         js = ('js/grappellihacks.js',)
 
-    list_display = ('date_start', 'title', 'hours', 'activities_list_field', 'copy_clipboard_list_field',)
+    list_display = ('title', 'activities_list_field', 'copy_clipboard_list_field',)
     summernote_fields = ('description',)
     readonly_fields = ('copy_clipboard_field', 'created',)
     exclude = ('slug',)
-    search_fields = ('date_start', 'title__unaccent', 'description__unaccent',)
-    list_filter = ('date_start',)
+    search_fields = ('title__unaccent', 'description__unaccent',)
 
     def get_queryset(self, request):
         qs = super(CourseAdmin, self).get_queryset(request)

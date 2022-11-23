@@ -21,9 +21,6 @@
                         {% endif %}
                         <div class="course-description">
                             <a href="{{ course.absolute_url }}"><h3>{{ course.title }}</h3></a>
-                            <p>Inici de les sessions: {{ course.date_start }}</p>
-                            <br />
-                            <p>Horaris: {{ course.hours }}</p>
                             <br />
                             <p>{{ course.description|safe }}</p>
                         </div>
