@@ -7,6 +7,8 @@ from .ProjectAdmin import (
     ProjectAdmin, ProjectStageAdmin, DerivationAdmin, EmploymentInsertionAdmin,
     StageSubtypeAdmin, ProjectFileAdmin,
 )
+from .ProjectsFollowUpAdmin import ProjectsFollowUpService, ProjectsConstitutedService
+
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectStage, ProjectStageAdmin)
