@@ -20,6 +20,10 @@ class LogInForm(AuthenticationForm):
         label="Mantenir la sessió oberta"
     )
 
+    def __init__(self, request=None, *args, **kwargs):
+        super().__init__(request, *args, **kwargs)
+        self.fields['username'].label = "Correu electrònic o DNI/NIE/Passaport"
+
     def clean(self):
         super().clean()
         if not self.cleaned_data.get('remember_me'):
