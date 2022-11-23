@@ -328,39 +328,22 @@ class ExportPolls:
 
         columns = [
             ("", 60),
-            # (self.circles[0][1], 20),
-            # (self.circles[1][1], 20),
-            # (self.circles[2][1], 20),
-            # (self.circles[3][1], 20),
-            # (self.circles[4][1], 20),
-            # (self.circles[5][1], 20),
         ]
         self.export_manager.create_columns(columns)
 
         self.polls_rows(axis)
 
     def global_report_obj(self, axis: str = None):
-        querysets = []
-        # for circle_value, circle_label in self.circles:
-        #     qs = ActivityPoll.objects.filter(
-        #         **{
-        #             "activity__date_start__range": self.export_manager.subsidy_period_range,
-        #             f"activity__circle": circle_value,
-        #         }
-        #     )
-        #     if axis:
-        #         qs = self.add_sheet_filter_to_qs(qs, axis)
-        #     querysets.append(qs)
+        qs = ActivityPoll.objects.filter(
+            **{
+                "activity__date_start__range": self.export_manager.subsidy_period_range,
+            }
+        )
         averages = {
-            "comunalitat": self.get_averages_qs(querysets[0]),
-            # "cercle1": self.get_averages_qs(querysets[1]),
-            # "cercle2": self.get_averages_qs(querysets[2]),
-            # "cercle3": self.get_averages_qs(querysets[3]),
-            # "cercle4": self.get_averages_qs(querysets[4]),
-            # "cercle5": self.get_averages_qs(querysets[5]),
+            "comunalitat": self.get_averages_qs(qs),
         }
 
-        return querysets, averages
+        return qs, averages
 
     def get_averages_qs(self, queryset):
         return queryset.aggregate(
@@ -470,10 +453,6 @@ class ExportPolls:
             GlobalReportRow(
                 "Nombre d'enquestes de satisfacció valorades",
                 averages["comunalitat"]["id__count"],
-                # averages["cercle1"].get("id__count", ""),
-                # averages["cercle2"].get("id__count", ""),
-                # averages["cercle3"].get("id__count", ""),
-                # averages["cercle4"].get("id__count", ""),
             ),
             EmptyRow(),
             TitleRow(
@@ -482,10 +461,6 @@ class ExportPolls:
             GlobalReportRow(
                 "Valoració global de les actuacions",
                 self.get_global_average(averages["comunalitat"]),
-                # self.get_global_average(averages["cercle1"]),
-                # self.get_global_average(averages["cercle2"]),
-                # self.get_global_average(averages["cercle3"]),
-                # self.get_global_average(averages["cercle4"]),
             ),
             EmptyRow(),
             TitleRow("Organització"),
@@ -578,26 +553,6 @@ class ExportPolls:
                     averages["comunalitat"].get("met_new_people_no"),
                     averages["comunalitat"].get("met_new_people_empty"),
                 ),
-                # (
-                #     averages["cercle1"].get("met_new_people_yes"),
-                #     averages["cercle1"].get("met_new_people_no"),
-                #     averages["cercle1"].get("met_new_people_empty"),
-                # ),
-                # (
-                #     averages["cercle2"].get("met_new_people_yes"),
-                #     averages["cercle2"].get("met_new_people_no"),
-                #     averages["cercle2"].get("met_new_people_empty"),
-                # ),
-                # (
-                #     averages["cercle3"].get("met_new_people_yes"),
-                #     averages["cercle3"].get("met_new_people_no"),
-                #     averages["cercle3"].get("met_new_people_empty"),
-                # ),
-                # (
-                #     averages["cercle4"].get("met_new_people_yes"),
-                #     averages["cercle4"].get("met_new_people_no"),
-                #     averages["cercle4"].get("met_new_people_empty"),
-                # ),
             ),
             GlobalReportYesNoEmptyRow(
                 "Abans del curs, teníeu ganes/necessitats d'engegar algun projecte cooperatiu",
@@ -606,26 +561,6 @@ class ExportPolls:
                     averages["comunalitat"].get("wanted_start_cooperative_no"),
                     averages["comunalitat"].get("wanted_start_cooperative_empty"),
                 ),
-                # (
-                #     averages["cercle1"].get("wanted_start_cooperative_yes"),
-                #     averages["cercle1"].get("wanted_start_cooperative_no"),
-                #     averages["cercle1"].get("wanted_start_cooperative_empty"),
-                # ),
-                # (
-                #     averages["cercle2"].get("wanted_start_cooperative_yes"),
-                #     averages["cercle2"].get("wanted_start_cooperative_no"),
-                #     averages["cercle2"].get("wanted_start_cooperative_empty"),
-                # ),
-                # (
-                #     averages["cercle3"].get("wanted_start_cooperative_yes"),
-                #     averages["cercle3"].get("wanted_start_cooperative_no"),
-                #     averages["cercle3"].get("wanted_start_cooperative_empty"),
-                # ),
-                # (
-                #     averages["cercle4"].get("wanted_start_cooperative_yes"),
-                #     averages["cercle4"].get("wanted_start_cooperative_no"),
-                #     averages["cercle4"].get("wanted_start_cooperative_empty"),
-                # ),
             ),
             GlobalReportYesNoEmptyRow(
                 "I després?",
@@ -634,26 +569,6 @@ class ExportPolls:
                     averages["comunalitat"].get("wants_start_cooperative_now_no"),
                     averages["comunalitat"].get("wants_start_cooperative_now_empty"),
                 ),
-                # (
-                #     averages["cercle1"].get("wants_start_cooperative_now_yes"),
-                #     averages["cercle1"].get("wants_start_cooperative_now_no"),
-                #     averages["cercle1"].get("wants_start_cooperative_now_empty"),
-                # ),
-                # (
-                #     averages["cercle2"].get("wants_start_cooperative_now_yes"),
-                #     averages["cercle2"].get("wants_start_cooperative_now_no"),
-                #     averages["cercle2"].get("wants_start_cooperative_now_empty"),
-                # ),
-                # (
-                #     averages["cercle3"].get("wants_start_cooperative_now_yes"),
-                #     averages["cercle3"].get("wants_start_cooperative_now_no"),
-                #     averages["cercle3"].get("wants_start_cooperative_now_empty"),
-                # ),
-                # (
-                #     averages["cercle4"].get("wants_start_cooperative_now_yes"),
-                #     averages["cercle4"].get("wants_start_cooperative_now_no"),
-                #     averages["cercle4"].get("wants_start_cooperative_now_empty"),
-                # ),
             ),
             EmptyRow(),
             TitleRow("Valoració global"),
