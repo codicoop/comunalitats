@@ -447,6 +447,14 @@ class Activity(models.Model):
         self.poll_sent = datetime.now()
         self.save()
 
+    @property
+    def entities_str(self):
+        # sessions = self.entities.filter(entity__isnull=False).distinct("entity")
+        entities = self.entities.all()
+        entities_list = [str(x.entity) for x in entities]
+        entities_list.sort()
+        return ", ".join(entities_list)
+
 
 class ActivityResourceFile(models.Model):
     class Meta:

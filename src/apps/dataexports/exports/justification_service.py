@@ -31,14 +31,8 @@ class ExportJustificationService:
 
     def get_sessions_obj(self, for_minors=False):
         return Activity.objects.filter(
-            Q(
-                date_start__range=self.export_manager.subsidy_period.range,
-                for_minors=for_minors
-            ) & (
-                Q(cofunded__isnull=True) | (
-                    Q(cofunded__isnull=False) & Q(cofunded_ateneu=True)
-                )
-            )
+            date_start__range=self.export_manager.subsidy_period.range,
+            for_minors=for_minors
         )
     
     """
@@ -70,7 +64,6 @@ class ExportJustificationService:
             ("Subservei", 70),
             ("Nom de l'actuació", 70),
             ("Data inici d'actuació", 16),
-            ("Cercle / Ateneu", 16),
             ("Municipi", 30),
             ("Nombre de participants", 20),
             ("Material de difusió (S/N)", 21),
@@ -79,8 +72,6 @@ class ExportJustificationService:
             ("[Entitat]", 20),
             ("[Lloc]", 20),
             ("[Acció]", 20),
-            ("[Cofinançat]", 20),
-            ("[Cofinançat amb AACC]", 20),
         ]
         self.export_manager.create_columns(columns)
         self.actuacions_rows_activities()
@@ -112,17 +103,14 @@ class ExportJustificationService:
                 sub_service,
                 item.name,
                 item.date_start,
-                item.get_circle_display(),
                 town,
                 item.enrolled.count(),
                 material_difusio,
                 document_acreditatiu,
                 "",
-                str(item.entity) if item.entity else '',  # Entitat
+                item.entities_str,  # Entitat
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
-                str(item.cofunded),  # Cofinançat
-                "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
             ]
             self.export_manager.fill_row_data(row)
 
@@ -253,7 +241,6 @@ class ExportJustificationService:
                     sub_service,  # Subservei, pendent.
                     item.project.name,
                     item.date_start if not None else '',
-                    item.get_circle_display(),
                     town,
                     len(group['participants']),  # Nombre de participants
                     "No",
@@ -262,8 +249,6 @@ class ExportJustificationService:
                     "",  # Entitat
                     '(no aplicable)',  # Lloc
                     '(no aplicable)',  # Acció
-                    str(item.cofunded),  # Cofinançat
-                    "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
                 ]
                 self.export_manager.fill_row_data(row)
 
@@ -290,7 +275,6 @@ class ExportJustificationService:
                 sub_service,
                 item.name,
                 item.date_start,
-                item.get_circle_display(),
                 town,
                 item.minors_participants_number,
                 material_difusio,
@@ -299,8 +283,6 @@ class ExportJustificationService:
                 str(item.entity) if item.entity else '',  # Entitat
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
-                str(item.cofunded),  # Cofinançat
-                "Sí" if item.cofunded_ateneu else "No",  # Cofinançat amb AACC
             ]
             self.export_manager.fill_row_data(row)
 
@@ -349,7 +331,6 @@ class ExportJustificationService:
                 sub_service,
                 project.name,
                 stage.date_start,
-                stage.get_circle_display(),
                 town,
                 stage.involved_partners.count(),
                 "No",
@@ -358,8 +339,6 @@ class ExportJustificationService:
                 "",  # Entitat
                 '(no aplicable)',  # Lloc
                 '(no aplicable)',  # Acció
-                str(stage.cofunded),  # Cofinançat
-                "Sí" if stage.cofunded_ateneu else "No",  # Cofinançat amb AACC
             ]
             self.export_manager.fill_row_data(row)
 
@@ -434,7 +413,6 @@ class ExportJustificationService:
             ("Correu electrònic", 12),
             ("Telèfon", 10),
             ("Economia solidària (revisar)", 35),
-            ("Ateneu / Cercle (omplir a ma)", 35),
             ("[Acompanyaments]", 10),
         ]
         self.export_manager.create_columns(columns)
@@ -487,7 +465,6 @@ class ExportJustificationService:
                 project.mail,
                 project.phone,
                 "Sí",  # Economia solidària
-                "",  # Ateneu / Cercle
                 project.stages_list
             ]
             self.export_manager.fill_row_data(row)
@@ -649,7 +626,6 @@ class ExportJustificationService:
             ("Població", 20),
             ("NIF Projecte", 20),
             ("Nom projecte", 20),
-            ("Cercle / Ateneu (omplir a ma)", 20),
             ("[ convocatòria ]", 20),
         ]
         self.export_manager.create_columns(columns)
@@ -700,7 +676,6 @@ class ExportJustificationService:
                 town,
                 cif,
                 insertion.project.name,  # Projecte
-                insertion.get_circle_display(),  # Cercle / Ateneu
                 str(insertion.subsidy_period),  # Convocatòria
             ]
             self.export_manager.fill_row_data(row)
