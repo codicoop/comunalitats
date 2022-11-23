@@ -2,7 +2,7 @@ from constance import config
 from django import forms
 from django.conf import settings
 from django.contrib.auth.forms import (
-    UserCreationForm, AuthenticationForm, UserChangeForm,
+    AuthenticationForm, UserChangeForm,
     PasswordResetForm as BasePasswordResetForm,
 )
 from django.contrib.auth import get_user_model
@@ -13,23 +13,16 @@ from apps.coopolis.widgets import XDSoftDatePickerInput
 from conf.custom_mail_manager import MyMailTemplate
 
 
-class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(label="Nom", max_length=30, required=False, help_text='Opcional.')
-    last_name = forms.CharField(label="Cognoms", max_length=30, required=False, help_text='Opcional.')
-    email = forms.EmailField(label="Correu electrònic", max_length=254, help_text='Requerit, ha de ser una adreça vàlida.')
-
-    class Meta:
-        model = get_user_model()
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
-
-
 class LogInForm(AuthenticationForm):
     remember_me = forms.BooleanField(
         required=False,
         widget=forms.CheckboxInput(),
         label="Mantenir la sessió oberta"
     )
-    # referer = request.META.get('HTTP_REFERER')
+
+    def __init__(self, request=None, *args, **kwargs):
+        super().__init__(request, *args, **kwargs)
+        self.fields['username'].label = "Correu electrònic o DNI/NIE/Passaport"
 
     def clean(self):
         super().clean()

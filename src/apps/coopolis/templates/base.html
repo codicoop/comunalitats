@@ -47,7 +47,7 @@
                         {% csrf_token %}
                         <div class="div-column">
                             <div class="div-row">
-                                <input type="text" name="username" placeholder="Adreça d'e-mail">
+                                <input type="text" name="username" placeholder="E-mail o DNI/NIE/Passaport">
                                 <input type="password" name="password" placeholder="Contrasenya">
                             </div>
                             <div class="div-row-reverse">
@@ -60,7 +60,7 @@
                 {% endblock %}
                 {% else %}
                 <div class="secondary-menu">
-                    <span>{{ user.email }} ─ <a href="{% url 'logout' %}">Sortir</a></span>
+                    <span>{{ user.get_full_name }} ─ <a href="{% url 'logout' %}">Sortir</a></span>
                 </div>
                 {% endif %}
             </div>

@@ -1,13 +1,12 @@
+from django.contrib.auth.views import LoginView
 from django.urls import reverse
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django import urls
 from django.conf import settings
 from constance import config
 
-from apps.cc_users.views import LoginView
-from apps.cc_users.views import SignUpView
 from apps.cc_users.models import User
 from apps.coopolis.forms import MySignUpForm
 from apps.cc_users.forms import LogInForm
@@ -26,7 +25,7 @@ class LoginSignupContainerView(TemplateView):
         return self.render_to_response(context)
 
 
-class CoopolisSignUpView(SignUpView):
+class CoopolisSignUpView(CreateView):
     template_name = 'registration/login_signup_container.html'
     success_url = '/'
     form_class = MySignUpForm
@@ -44,7 +43,7 @@ class CoopolisSignUpView(SignUpView):
         else:
             url = self.request.META.get('HTTP_REFERER')
         if url is None:
-            url = super().get_success_url()
+            url = urls.reverse('user_profile')
         return url
 
     def form_valid(self, form):

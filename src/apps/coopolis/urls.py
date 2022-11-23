@@ -6,10 +6,8 @@ from django.views.generic.base import RedirectView
 from django.views.generic import TemplateView
 
 from .views import (
-    LoginSignupContainerView, CoopolisSignUpView, CoopolisLoginView,
     HomeView, CustomPasswordResetView, ActivityPollView, get_sub_services
 )
-from apps.cc_users.decorators import anonymous_required
 
 urlpatterns = [
     url(
@@ -21,16 +19,6 @@ urlpatterns = [
 
 urlpatterns += [
     path('', HomeView.as_view(), name='home'),
-    path('users/loginsignup/', anonymous_required(
-        LoginSignupContainerView.as_view()), name='loginsignup'),
-    path('users/login_post/', anonymous_required(
-        CoopolisLoginView.as_view()), name='login_post'),
-    path('users/login/', anonymous_required(
-        CoopolisLoginView.as_view()), name='login'),
-    path('users/signup_post', anonymous_required(
-        CoopolisSignUpView.as_view()), name='signup_post'),
-    path('users/signup', anonymous_required(
-        CoopolisSignUpView.as_view()), name='signup'),
     path('grappelli/', include('grappelli.urls')),
     path('admin/docs/', TemplateView.as_view(
         template_name="admin/docs.html"

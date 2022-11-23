@@ -3,13 +3,27 @@ from django.urls import path
 from apps.cc_users import views
 from django.contrib.auth.decorators import login_required
 
+from apps.cc_users.decorators import anonymous_required
 from apps.cc_users.views import (
     PasswordResetView, PasswordResetConfirmView,
     PasswordResetDoneView, PasswordResetCompleteView, PasswordChangeView
 )
+from apps.coopolis.views import LoginSignupContainerView, CoopolisLoginView, \
+    CoopolisSignUpView
 
 urlpatterns = [
-    path('users/login/', views.UsersLoginView.as_view(), name='login'),
+    path('users/loginsignup/', anonymous_required(
+        LoginSignupContainerView.as_view()), name='loginsignup'),
+    path('users/login_post/', anonymous_required(
+        CoopolisLoginView.as_view()), name='login_post'),
+    path('users/login/', anonymous_required(
+        CoopolisLoginView.as_view()), name='login'),
+    path('users/signup_post', anonymous_required(
+        CoopolisSignUpView.as_view()), name='signup_post'),
+    path('users/signup', anonymous_required(
+        CoopolisSignUpView.as_view()), name='signup'),
+
+
     path('logout/', LogoutView.as_view(), name='logout'),
     path(
         'password_change/',
@@ -21,7 +35,6 @@ urlpatterns = [
         PasswordChangeDoneView.as_view(),
         name='password_change_done')
     ,
-    path('users/signup', views.SignUpView.as_view(), name='signup'),
     path(
         'users/profile/',
         login_required(views.MyAccountView.as_view()),

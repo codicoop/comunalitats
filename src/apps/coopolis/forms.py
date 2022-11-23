@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import (
     UserCreationForm, ReadOnlyPasswordHashField
 )
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.utils.timezone import make_aware
 
 from apps.coopolis.widgets import XDSoftDatePickerInput
@@ -34,8 +34,11 @@ class MySignUpForm(UserCreationForm):
     first_name = forms.CharField(label="Nom", max_length=30)
     last_name = forms.CharField(label="Cognom", max_length=30, required=True)
     email = forms.EmailField(
-        label="Correu electrònic", max_length=254,
-        help_text='Requerit, ha de ser una adreça vàlida.')
+        label="Correu electrònic",
+        max_length=254,
+        help_text='Ha de ser una adreça vàlida.',
+        required=False,
+    )
     birthdate = forms.DateField(
         label="Data de naixement", required=True,
         widget=XDSoftDatePickerInput())
@@ -58,6 +61,7 @@ class MySignUpForm(UserCreationForm):
 
     def clean(self):
         super().clean()
+        email = self.cleaned_data.get('email')
         cannot_share_id = self.cleaned_data.get('cannot_share_id')
         id_number = self.cleaned_data.get('id_number')
         if not id_number and not cannot_share_id:
@@ -65,6 +69,10 @@ class MySignUpForm(UserCreationForm):
                    "participació davant dels organismes públics que financen "
                    "aquestes activitats.")
             self.add_error('id_number', msg)
+        if not email and not id_number:
+            msg = ("Per crear un compte és necessari indicar el correu "
+                   "electrònic o bé omplir el camp DNI/NIE/Passaport.")
+            self.add_error(NON_FIELD_ERRORS, msg)
         return self.cleaned_data
 
     def clean_id_number(self):
