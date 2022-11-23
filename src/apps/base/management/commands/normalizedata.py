@@ -13,8 +13,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.normalize_permissions()
         self.normalize_subsidy_periods()
-        # Disabled until exports are adapted and can be introduced:
-        # self.normalize_exports()
+        self.normalize_exports()
 
     @staticmethod
     def normalize_subsidy_periods():
@@ -56,27 +55,13 @@ class Command(BaseCommand):
         DataExports.objects.all().delete()
 
         exports = []
-
-        # Different exports since 2021-2022
-        period = SubsidyPeriod.objects.get(name="2021-2022")
+        period = SubsidyPeriod.objects.get(name="2022-2023")
         exports.extend(
             [
-                {
-                    'name': "Memòria dels acompanyaments en fitxer de text",
-                    'subsidy_period': period,
-                    'function_name': 'export_stages_descriptions',
-                    'ignore_errors': True
-                },
                 {
                     'name': "Exportació justificació",
                     'subsidy_period': period,
                     'function_name': 'export_service',
-                    'ignore_errors': True
-                },
-                {
-                    'name': "Detall dels acompanyaments",
-                    'subsidy_period': period,
-                    'function_name': 'export_stages_details_services',
                     'ignore_errors': True
                 },
                 {
