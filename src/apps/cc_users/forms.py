@@ -210,12 +210,6 @@ class MySignUpAdminForm(forms.ModelForm):
                   "notificació de creació de nou compte."
     )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        if "town" in self.fields:
-            self.fields['town'].required = False
-
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
         # This is done here, rather than on the field, because the
