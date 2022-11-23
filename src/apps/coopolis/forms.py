@@ -70,7 +70,7 @@ class MySignUpForm(UserCreationForm):
     def clean_id_number(self):
         model = get_user_model()
         value = self.cleaned_data.get("id_number")
-        if model.objects.filter(id_number__iexact=value).exists():
+        if value and model.objects.filter(id_number__iexact=value).exists():
             raise ValidationError("El DNI ja existeix.")
         return value
 
