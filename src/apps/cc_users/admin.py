@@ -7,8 +7,8 @@ from django.conf import settings
 from constance import config
 from django.urls import reverse
 
+from apps.cc_users.forms import MySignUpAdminForm
 from apps.cc_users.models import User
-from apps.coopolis.forms import MySignUpAdminForm
 from apps.cc_courses.models import ActivityEnrolled
 from conf.custom_mail_manager import MyMailTemplate
 

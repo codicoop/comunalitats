@@ -1,6 +1,5 @@
 from django.http import HttpResponseNotFound
 
-from apps.dataexports.exports.justification import ExportJustification
 from apps.dataexports.exports.justification_service import \
     ExportJustificationService
 from apps.dataexports.exports.polls import ExportPolls, ExportPollsByServices
@@ -29,16 +28,8 @@ class ExportFunctions:
             message = "<h1>La funció especificada no existeix</h1>"
             return HttpResponseNotFound(message)
 
-    def export(self, export_obj):
-        controller = ExportJustification(export_obj)
-        return controller.export()
-
     def export_service(self, export_obj):
         controller = ExportJustificationService(export_obj)
-        return controller.export()
-
-    def export_polls(self, export_obj):
-        controller = ExportPolls(export_obj)
         return controller.export()
 
     def export_polls_by_services(self, export_obj):

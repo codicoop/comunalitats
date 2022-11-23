@@ -1,4 +1,4 @@
-from apps.coopolis.views import LoginSignupContainerView
+from apps.cc_users.views import LoginSignupContainerView
 
 
 class HomeView(LoginSignupContainerView):

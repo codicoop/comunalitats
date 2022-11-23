@@ -309,7 +309,7 @@ CONSTANCE_CONFIG = {
         "de condicions legals del formulari d'alta."),
     'PROJECT_WEBSITE_URL': (
         "https://example.com",
-        "Enllaç a la pàgina principal de l'ateneu. Apareix al menú "
+        "Enllaç a la pàgina principal de la comunalitat. Apareix al menú "
         "principal."),
     'CONTACT_PHONE_NUMBER': (
         "93 XXX XX XX",

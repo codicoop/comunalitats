@@ -110,7 +110,7 @@ class Project(models.Model):
         null=True, blank=True, on_delete=models.SET_NULL,
         help_text="OPCIONAL. En cas que el projecte s'hagi constituït en una "
                   "convocatòria posterior a l'ultima "
-                  "intervenció de l'ateneu, podeu indicar-ho aquí, per tal "
+                  "intervenció de la comunalitat, podeu indicar-ho aquí, per tal "
                   "que aparegui a l'informe de Projectes "
                   "Constituïts. Aquest camp NO farà aparèixer el projecte a "
                   "l'excel de justificació (per aparèixer a "
@@ -249,7 +249,7 @@ class Project(models.Model):
                 self.follow_up_situation_update = now()
         super(Project, self).save(*args, **kw)
 
-    def notify_new_request_to_ateneu(self):
+    def notify_new_request_to_comunalitat(self):
         if not config.CONTACT_EMAIL:
             return
         mail = MyMailTemplate('EMAIL_NEW_PROJECT')

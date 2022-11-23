@@ -6,7 +6,7 @@ from django.contrib import messages
 
 from apps.projects.models import Project
 from apps.projects.forms import ProjectForm
-from apps.coopolis.views import LoginSignupContainerView
+from apps.cc_users.views import LoginSignupContainerView
 
 
 class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
@@ -39,13 +39,13 @@ class ProjectCreateFormView(SuccessMessageMixin, generic.CreateView):
     def form_valid(self, form):
         newproject = form.save()
         newproject.partners.add(self.request.user)
-        newproject.notify_new_request_to_ateneu()
+        newproject.notify_new_request_to_comunalitat()
         newproject.notify_request_confirmation()
 
         messages.success(
             self.request,
             "S'ha enviat una sol·licitud d'acompanyament del projecte. En els"
-            " propers dies et contactarà una persona de l'ateneu per concertar"
+            " propers dies et contactarà una persona de la comunalitat per concertar"
             " una primera reunió."
         )
         return HttpResponseRedirect(self.get_success_url())

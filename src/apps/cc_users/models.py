@@ -3,8 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from .managers import CCUserManager
 from tagulous.models import TagField
 
-from apps.towns.models import Town
-
 
 class BaseUser(AbstractUser):
     class Meta:
@@ -77,7 +75,7 @@ class User(BaseUser):
     DISCOVERED_US_OPTIONS = (
         ('INTERNET', 'Per internet i xarxes socials'),
         ('FRIEND', "A través d'un conegut"),
-        ('PREVIOUS_ACTIVITY', "Per una activitat de l'ateneu"),
+        ('PREVIOUS_ACTIVITY', "Per una activitat de la comunalitat"),
         ('OTHER', 'Altres')
     )
     discovered_us = models.TextField("com ens has conegut", blank=True,

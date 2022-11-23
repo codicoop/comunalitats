@@ -47,6 +47,15 @@ class MyDashboard(Dashboard):
                 ),
             ),
             modules.ModelList(
+                title='Seguiment de projectes',
+                column=1,
+                collapsible=False,
+                models=(
+                    'apps.projects.models.ProjectsFollowUpService',
+                    'apps.projects.models.ProjectsConstitutedService',
+                ),
+            ),
+            modules.ModelList(
                 title="Gestió de reserves d'aules i sales",
                 column=1,
                 collapsible=False,
