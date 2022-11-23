@@ -6,7 +6,7 @@ from django.contrib import messages
 
 from apps.projects.models import Project
 from apps.projects.forms import ProjectForm
-from apps.coopolis.views import LoginSignupContainerView
+from apps.cc_users.views import LoginSignupContainerView
 
 
 class ProjectFormView(SuccessMessageMixin, generic.UpdateView):
