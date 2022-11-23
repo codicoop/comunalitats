@@ -60,7 +60,7 @@
                 {% endblock %}
                 {% else %}
                 <div class="secondary-menu">
-                    <span>{{ user.email }} ─ <a href="{% url 'logout' %}">Sortir</a></span>
+                    <span>{{ user.get_full_name }} ─ <a href="{% url 'logout' %}">Sortir</a></span>
                 </div>
                 {% endif %}
             </div>
