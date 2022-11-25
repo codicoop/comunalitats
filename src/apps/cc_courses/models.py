@@ -1,6 +1,7 @@
 import uuid
 
 from constance import config
+from django.contrib import admin
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.db import models
 from django.shortcuts import reverse
@@ -333,7 +334,16 @@ class Activity(models.Model):
 
     @property
     def is_past_due(self):
-        return date.today() > self.date_start
+        if timezone.now() >= self.datetime_end:
+            return True
+        return False
+
+    @property
+    @admin.display(description="Data finalització")
+    def calculated_date_end(self):
+        if isinstance(self.date_end, date):
+            return self.date_end
+        return self.date_start
 
     @property
     def datetime_start(self):
@@ -341,17 +351,18 @@ class Activity(models.Model):
                 isinstance(self.date_start, date) and
                 isinstance(self.starting_time, time)
         ):
-            return datetime.combine(self.date_start, self.starting_time)
+            return timezone.make_aware(
+                datetime.combine(self.date_start, self.starting_time)
+            )
         return None
 
     @property
     def datetime_end(self):
         if not isinstance(self.ending_time, time):
             return None
-        if not isinstance(self.date_end, date):
-            if self.datetime_start:
-                return datetime.combine(self.date_start, self.ending_time)
-        return datetime.combine(self.date_end, self.ending_time)
+        return timezone.make_aware(
+            datetime.combine(self.calculated_date_end, self.ending_time)
+        )
 
     @property
     def subsidy_period(self):

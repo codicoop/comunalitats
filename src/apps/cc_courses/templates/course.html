@@ -25,7 +25,8 @@
             <div class="course-data">
                 <div class="course-description">
                     <h3>{{ activity.name }}</h3>
-                    <p><strong>Data:</strong> {{ activity.date_start }}</p>
+                    <p><strong>Data d'inici:</strong> {{ activity.date_start }}</p>
+                    <p><strong>Data de finalització:</strong> {{ activity.calculated_date_end }}</p>
                     <p><strong>Horari:</strong> de {{ activity.starting_time }} a {{ activity.ending_time }}</p>
                     <p><strong>Lloc:</strong> {{ activity.place|default_if_none:"" }}</p>
                     <p><strong>Descripció:</strong> {{ activity.objectives|safe }}</p>

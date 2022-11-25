@@ -133,7 +133,8 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         }
     form = ActivityForm
     list_display = (
-        'date_start', 'spots', 'remaining_spots', 'name', 'service',
+        'date_start', 'calculated_date_end', 'spots', 'remaining_spots', 'name',
+        'service',
         'attendee_filter_field', 'attendee_list_field', 'send_reminder_field')
     readonly_fields = (
         'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',

@@ -4,7 +4,8 @@
                 <div class="course-description">
                     <h2>Programa / curs: "{{ enrollment.activity.course }}"</h2>
                     <h3>Activitat: {{ enrollment.activity.name }}</h3>
-                    <p><strong>Data:</strong> {{ enrollment.activity.date_start }}</p>
+                    <p><strong>Data d'inici:</strong> {{ enrollment.activity.date_start }}</p>
+                    <p><strong>Data de finalització:</strong> {{ enrollment.activity.calculated_date_end }}</p>
                     <p><strong>Horari:</strong> de {{ enrollment.activity.starting_time }} a {{ enrollment.activity.ending_time }}</p>
                     <p><strong>Lloc:</strong> {{ enrollment.activity.place }}</p>
                     <p><strong>Descripció:</strong> {{ enrollment.activity.objectives|safe }}</p>
