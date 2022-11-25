@@ -38,8 +38,8 @@ class MyAccountForm(UserChangeForm):
     class Meta:
         model = get_user_model()
         fields = [
-            'first_name', 'last_name', 'surname2', 'id_number', 'email',
-            'phone_number', 'birthdate',
+            'first_name', 'last_name', 'surname2', 'id_number',
+            'cannot_share_id', 'email', 'phone_number', 'birthdate',
             'gender', 'educational_level',
             'employment_situation', 'discovered_us', 'project_involved',
             'authorize_communications',
@@ -51,7 +51,8 @@ class MyAccountForm(UserChangeForm):
     email = forms.EmailField(
         label="Correu electrònic",
         max_length=254,
-        help_text='Requerit, ha de ser una adreça vàlida.',
+        help_text='Ha de ser una adreça vàlida.',
+        required=False,
     )
     birthdate = forms.DateField(
         label="Data de naixement",
@@ -64,11 +65,29 @@ class MyAccountForm(UserChangeForm):
         super().__init__(*args, **kwargs)
         if 'password' in self.fields:
             self.fields.pop('password')
+        self.fields['id_number'].required = False
+
+    def clean(self):
+        super().clean()
+        email = self.cleaned_data.get('email')
+        cannot_share_id = self.cleaned_data.get('cannot_share_id')
+        id_number = self.cleaned_data.get('id_number')
+        if not id_number and not cannot_share_id:
+            msg = ("Necessitem el DNI, NIF o passaport per justificar la "
+                   "participació davant dels organismes públics que financen "
+                   "aquestes activitats.")
+            self.add_error('id_number', msg)
+        if not email and not id_number:
+            msg = ("És necessari indicar el correu "
+                   "electrònic o bé omplir el camp DNI/NIE/Passaport.")
+            self.add_error(NON_FIELD_ERRORS, msg)
+        return self.cleaned_data
 
     def clean_id_number(self):
         model = get_user_model()
         value = self.cleaned_data.get("id_number")
         if (
+            value and
             model.objects
             .filter(id_number__iexact=value)
             .exclude(id=self.request.user.id)
