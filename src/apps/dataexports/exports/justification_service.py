@@ -1,4 +1,4 @@
-from apps.cc_courses.models import Activity
+from apps.cc_courses.models import Activity, ActivityEnrolled
 from apps.dataexports.exports.manager import ExcelExportManager
 from apps.projects.models import ProjectStage, Project, EmploymentInsertion
 
@@ -96,6 +96,10 @@ class ExportJustificationService:
             document_acreditatiu = "No"
             if item.photo2.name:
                 document_acreditatiu = "Sí"
+            participants_count = ActivityEnrolled.objects.filter(
+                    activity=item,
+                    waiting_list=False
+                ).count()
 
             row = [
                 service,
@@ -103,7 +107,7 @@ class ExportJustificationService:
                 item.name,
                 item.date_start,
                 town,
-                item.enrolled.count(),
+                participants_count,
                 material_difusio,
                 document_acreditatiu,
                 "",
