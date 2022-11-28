@@ -11,10 +11,7 @@ from django.conf.urls import url
 from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
 from apps.cc_users.models import User
 from apps.projects.models import Project, ProjectStage, EmploymentInsertion
-from apps.projects.forms import (
-    ProjectFormAdmin,
-    EmploymentInsertionInlineFormSet,
-)
+from apps.projects.forms import ProjectFormAdmin, EmploymentInsertionForm
 from apps.projects.models import ProjectStageSession, ProjectFile
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
@@ -260,19 +257,6 @@ class ProjectStagesInline(admin.StackedInline):
     earliest_session_field.short_description = 'Primera sessió'
 
 
-class EmploymentInsertionInline(admin.TabularInline):
-    class Media:
-        js = ('js/grappellihacks.js',)
-
-    model = EmploymentInsertion
-    formset = EmploymentInsertionInlineFormSet
-    extra = 0
-    raw_id_fields = ('user',)
-    autocomplete_lookup_fields = {
-        'fk': ['user']
-    }
-
-
 class ProjectFileInline(admin.TabularInline):
     class Media:
         js = ('js/grappellihacks.js',)
@@ -341,8 +325,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     actions = ["export_as_csv"]
     change_actions = ('print', )
     print_template = 'admin/my_test/myentry/review.html'
-    inlines = (ProjectFileInline, ProjectStagesInline,
-               EmploymentInsertionInline,)
+    inlines = (ProjectFileInline, ProjectStagesInline, )
     raw_id_fields = ('partners',)
     autocomplete_lookup_fields = {
         'm2m': ['partners'],
@@ -464,15 +447,16 @@ class DerivationAdmin(admin.ModelAdmin):
 
 class EmploymentInsertionAdmin(admin.ModelAdmin):
     model = EmploymentInsertion
-    list_display = ('insertion_date', 'project', 'user', 'contract_type',
+    form = EmploymentInsertionForm
+    list_display = ('insertion_date', 'activity', 'user', 'contract_type',
                     'subsidy_period', )
     list_filter = (
         'subsidy_period', 'contract_type', 'insertion_date',
     )
-    search_fields = ('project__name__unaccent', 'user__first_name__unaccent', )
-    raw_id_fields = ('user', 'project',)
+    search_fields = ('activity__name__unaccent', 'user__first_name__unaccent', )
+    raw_id_fields = ('user', 'activity',)
     autocomplete_lookup_fields = {
-        'fk': ['user', 'project', ],
+        'fk': ['user', 'activity', ],
     }
 
 
