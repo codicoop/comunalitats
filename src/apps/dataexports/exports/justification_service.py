@@ -60,14 +60,14 @@ class ExportJustificationService:
 
         columns = [
             ("Servei", 40),
-            ("Subservei", 70),
+            ("Actuacions", 70),
             ("Nom de l'actuació", 70),
             ("Data inici d'actuació", 16),
+            ("Període actuacions", 30),
             ("Municipi", 30),
-            ("Nombre de participants", 20),
             ("Material de difusió (S/N)", 21),
-            ("[Document acreditatiu]", 21),
             ("Incidències", 20),
+            ("[Document acreditatiu]", 21),
             ("[Entitat]", 20),
             ("[Lloc]", 20),
             ("[Acció]", 20),
@@ -96,21 +96,17 @@ class ExportJustificationService:
             document_acreditatiu = "No"
             if item.photo2.name:
                 document_acreditatiu = "Sí"
-            participants_count = ActivityEnrolled.objects.filter(
-                    activity=item,
-                    waiting_list=False
-                ).count()
 
             row = [
                 service,
                 sub_service,
                 item.name,
                 item.date_start,
+                "",  # Període
                 town,
-                participants_count,
                 material_difusio,
-                document_acreditatiu,
                 "",
+                document_acreditatiu,
                 item.entities_str,  # Entitat
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
@@ -241,13 +237,13 @@ class ExportJustificationService:
 
                 row = [
                     service,
-                    sub_service,  # Subservei, pendent.
+                    sub_service,
                     item.project.name,
-                    item.date_start if not None else '',
+                    item.date_start or '',
                     town,
-                    len(group['participants']),  # Nombre de participants
-                    "No",
-                    "",
+                    "No",  # Material de difusió
+                    "",  # Incidències
+                    "",  # Document acreditatiu
                     # En blanc pq cada stage session pot contenir una entitat
                     "",  # Entitat
                     '(no aplicable)',  # Lloc
@@ -278,9 +274,10 @@ class ExportJustificationService:
                 sub_service,
                 item.name,
                 item.date_start,
+                "",  # Període
                 town,
-                item.minors_participants_number,
                 material_difusio,
+                item.entities_str,  # Entitat
                 document_acreditatiu,
                 "",
                 str(item.entity) if item.entity else '',  # Entitat
@@ -334,10 +331,10 @@ class ExportJustificationService:
                 sub_service,
                 project.name,
                 stage.date_start,
+                "",  # Període
                 town,
-                stage.involved_partners.count(),
-                "No",
-                "",
+                "No",  # Material de difusió
+                "",  # Incidències
                 # En blanc pq cada stage session pot contenir una entitat
                 "",  # Entitat
                 '(no aplicable)',  # Lloc
