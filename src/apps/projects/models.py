@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 import tagulous.models
 
-from apps.cc_courses.models import Entity, Organizer
+from apps.cc_courses.models import Entity, Organizer, Activity
 from apps.coopolis.choices import ServicesChoices, SubServicesChoices
 from apps.cc_users.models import User
 from apps.towns.models import Town
@@ -526,12 +526,17 @@ class EmploymentInsertion(models.Model):
         verbose_name_plural = "insercions laborals"
         ordering = ["-insertion_date"]
 
-    project = models.ForeignKey(
-        Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat",
-        related_name="employment_insertions")
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.CASCADE,
+        verbose_name="activitat relacionada amb l'inserció",
+        related_name="employment_insertions",
+    )
     user = models.ForeignKey(
-        User, verbose_name="persona", blank=True, null=True,
-        on_delete=models.PROTECT)
+        User,
+        verbose_name="persona",
+        on_delete=models.PROTECT,
+    )
     subsidy_period = models.ForeignKey(
         SubsidyPeriod, verbose_name="convocatòria", null=True,
         on_delete=models.SET_NULL)
@@ -540,14 +545,31 @@ class EmploymentInsertion(models.Model):
     CONTRACT_TYPE_CHOICES = (
         (1, "Indefinit"),
         (5, "Temporal"),
-        (2, "Formació i aprenentatge"),
-        (3, "Pràctiques"),
-        (4, "Soci/a cooperativa o societat laboral")
+        (2, "Soci/a cooperativa o societat laboral"),
+        (3, "Autònom"),
     )
     contract_type = models.SmallIntegerField(
         "tipus de contracte",
         choices=CONTRACT_TYPE_CHOICES,
         null=True
+    )
+    entity_name = models.CharField(
+        "Nom de l'entitat on s'insereix",
+        max_length=150,
+    )
+    entity_nif = models.CharField(
+        "NIF de l'entitat on s'insereix",
+        max_length=11,
+    )
+    entity_town = models.ForeignKey(
+        "towns.Town",
+        verbose_name="població de l'entitat on s'insereix",
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+    entity_neighborhood = models.CharField(
+        "Barri de l'entitat on s'insereix",
+        max_length=50,
     )
 
     def __str__(self):

@@ -1,11 +1,11 @@
 from django import forms
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.forms import models
 from django.urls import reverse
 
 from django.utils.safestring import mark_safe
 
-from apps.projects.models import Project
+from apps.projects.models import Project, EmploymentInsertion
 
 
 class ProjectForm(forms.ModelForm):
@@ -29,28 +29,35 @@ class ProjectFormAdmin(ProjectForm):
         exclude = None
 
 
-class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
+class EmploymentInsertionForm(models.ModelForm):
+    class Meta:
+        model = EmploymentInsertion
+        fields = (
+            "activity",
+            "user",
+            "subsidy_period",
+            "insertion_date",
+            "end_date",
+            "contract_type",
+            "entity_name",
+            "entity_nif",
+            "entity_town",
+            "entity_neighborhood",
+        )
+
     def clean(self):
         super().clean()
-        for form in self.forms:
-            if not hasattr(form, 'cleaned_data'):
-                continue
-            data = form.cleaned_data
-            if 'DELETE' not in data:
-                # When there are no rows in the formset it still calls this
-                # clean() but with empty data.
-                continue
-            # Skipping the ones marked for deletion:
-            if data['DELETE']:
-                continue
-            # We're checking for all the rows because trying to check only
-            # for new ones will cause problems, as we'll need to check also
-            # for rows in which the user has been modified (or make the
-            # user row read only when editing).
-            # New (unsaved yet) ones will have data['id'] == None
-            self.validate_extended_fields(data['user'], data['project'])
+        errors = {}
+        user = self.cleaned_data.get('user')
+        if user:
+            try:
+                self.validate_extended_fields(user)
+            except ValidationError as error:
+                    errors.update({"user": ValidationError(error)})
+        if errors:
+            raise ValidationError(errors)
 
-    def validate_extended_fields(self, user_obj, project_obj):
+    def validate_extended_fields(self, user_obj):
         user_obj_errors = {
             "surname": "- Cognom.<br />",
             "gender": "- Gènere. <br/>",
@@ -59,24 +66,17 @@ class EmploymentInsertionInlineFormSet(models.BaseInlineFormSet):
         user_errors = [value for key, value in user_obj_errors.items() if
                        not getattr(user_obj, key)]
 
-        cif_error = None
-        if not project_obj.cif:
-            cif_error = ("- NIF (el trobaràs més amunt en aquest mateix "
-                         "formulari).<br>")
-
-        if not user_errors and not cif_error:
+        if not user_errors:
             return True
         url = reverse(
             'admin:cc_users_user_change',
             kwargs={'object_id': user_obj.id}
         )
         url = f'<a href="{url}" target="_blank">Fitxa de la Persona</a>'
-        msg = (f"No s'ha pogut desar la inserció laboral. Hi ha camps del "
-               f"Projecte i de les Persones que normalment son opcionals, "
+        msg = (f"No s'ha pogut desar la inserció laboral. Hi ha camps de "
+               f"Persones que normalment son opcionals, "
                f"però que per poder justificar les insercions laborals "
                f"son obligatoris.<br>")
         if user_errors:
             msg += f"De la {url}:<br /> {''.join(user_errors)}<br />"
-        if cif_error:
-            msg += f"De la fitxa del Projecte:<br>{cif_error}"
         raise ValidationError(mark_safe(msg))

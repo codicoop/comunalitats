@@ -466,6 +466,10 @@ class Activity(models.Model):
         entities_list.sort()
         return ", ".join(entities_list)
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('name__icontains',)
+
 
 class ActivityResourceFile(models.Model):
     class Meta:
