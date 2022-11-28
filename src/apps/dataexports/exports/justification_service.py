@@ -620,15 +620,16 @@ class ExportJustificationService:
             ("Nom actuació", 20),
             ("Cognoms", 20),
             ("Nom", 20),
-            ("ID", 20),
-            ("Data alta", 20),
-            ("Data baixa", 20),
-            ("Tipus contracte", 20),
+            ("DNI o NIE persona inserida", 20),
+            ("Data alta SS", 20),
+            ("Data baixa SS", 20),
+            ("Tipus contracte o vinculació", 20),
             ("Gènere", 20),
             ("Data naixement", 20),
-            ("Població", 20),
-            ("NIF Projecte", 20),
-            ("Nom projecte", 20),
+            ("Nom entitat on s'insereix", 20),
+            ("NIF Entitat", 20),
+            ("Municipi Entitat", 20),
+            ("Barri Entitat", 20),
             ("[ convocatòria ]", 20),
         ]
         self.export_manager.create_columns(columns)
@@ -646,18 +647,15 @@ class ExportJustificationService:
             insertion_date = insertion.insertion_date
             if not insertion_date:
                 insertion_date = ('', True)
+            end_date = insertion.end_date
+            if not end_date:
+                end_date = ('', True)
             contract_type = insertion.get_contract_type_display()
             if not contract_type:
                 contract_type = ('', True)
             birthdate = insertion.user.birthdate
             if not birthdate:
                 birthdate = ('', True)
-            town = ('', True)
-            if insertion.user.town:
-                town = str(insertion.user.town)
-            cif = insertion.project.cif
-            if not cif:
-                cif = ('', True)
 
             if insertion.user.gender is None:
                 gender = ""
@@ -669,16 +667,17 @@ class ExportJustificationService:
                 '',  # Deixem referència en blanc pq la posin a ma.
                 '',  # Nom actuació
                 insertion.user.surname,
-                insertion.user.first_name,  # Persona
+                insertion.user.first_name,
                 id_number,
                 insertion_date,  # Data d'alta SS
-                '',  # Data baixa SS
-                contract_type,  # Tipus de contracte
+                end_date,  # Data baixa SS
+                contract_type,
                 gender,
                 birthdate,
-                town,
-                cif,
-                insertion.project.name,  # Projecte
+                insertion.entity_name,
+                insertion.entity_nif,
+                str(insertion.entity_town),
+                insertion.entity_neighborhood,
                 str(insertion.subsidy_period),  # Convocatòria
             ]
             self.export_manager.fill_row_data(row)
