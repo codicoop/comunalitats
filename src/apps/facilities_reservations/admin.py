@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 
 from .models import Room, Reservation
 from .forms import RoomForm, ReservationForm
-from apps.coopolis.models import User
+from apps.cc_users.models import User
 from apps.cc_courses.models import CoursePlace
 
 
@@ -41,7 +41,7 @@ class ReservationAdmin(admin.ModelAdmin):
             activity = obj.related_activities.first()
             self.message_user(request, mark_safe(
                 "Aquesta reserva no es pot editar directament perquè s'ha generat automàticament.<br />"
-                "Per modificar-la o eliminar-la, has de fer-ho a la fitxa de la sessió: "
+                "Per modificar-la o eliminar-la, has de fer-ho a la fitxa de l'activitat: "
                 f"<a href=\"/admin/cc_courses/activity/{ activity.id }/change/\">{ activity.name }</a>"))
         return obj
 

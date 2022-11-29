@@ -1,6 +1,8 @@
 import uuid
 
 from constance import config
+from django.contrib import admin
+from django.core.exceptions import NON_FIELD_ERRORS
 from django.db import models
 from django.shortcuts import reverse
 from django.conf import settings
@@ -11,10 +13,11 @@ from easy_thumbnails.fields import ThumbnailerImageField
 from django.apps import apps
 from django.core.validators import ValidationError
 
+from apps.base.choices import ActivityFileType
 from apps.cc_lib.utils import slugify_model
 from apps.coopolis.choices import ServicesChoices, SubServicesChoices
-from apps.coopolis.managers import Published
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
+from apps.coopolis.managers import Published
 from apps.coopolis.storage_backends import (
     PrivateMediaStorage, PublicMediaStorage
 )
@@ -28,7 +31,7 @@ class CoursePlace(models.Model):
 
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     town = models.ForeignKey(
-        "coopolis.Town",
+        "towns.Town",
         verbose_name="població",
         on_delete=models.SET_NULL,
         null=True,
@@ -53,9 +56,26 @@ class Entity(models.Model):
         default=True,
         help_text="Si la desactives no apareixerà al desplegable.",
     )
+    neighborhood = models.CharField(
+        "Barri",
+        default="",
+        blank=True,
+        max_length=50,
+    )
+    town = models.ForeignKey(
+        "towns.Town",
+        verbose_name="municipi",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return self.name if self.is_active else f"[desactivada] {self.name}"
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return "name__icontains",
 
 
 class Organizer(models.Model):
@@ -74,24 +94,11 @@ class Course(models.Model):
     class Meta:
         verbose_name = "acció"
         verbose_name_plural = "accions"
-        ordering = ["-date_start"]
+        ordering = ["title"]
 
-    TYPE_CHOICES = (
-        ('F', "Accions educatives"),
-        ('A', "Altres accions")
-    )
     title = models.CharField("títol", max_length=250, blank=False)
     slug = models.CharField(max_length=250, unique=True)
-    date_start = models.DateField("dia inici")
-    date_end = models.DateField("dia finalització", null=True, blank=True)
-    hours = models.CharField(
-        "horaris",
-        blank=False,
-        max_length=200,
-        help_text="Indica només els horaris, sense els dies."
-    )
     description = models.TextField("descripció", null=True)
-    publish = models.BooleanField("publicat")
     created = models.DateTimeField(
         "data de creació",
         null=True,
@@ -104,16 +111,7 @@ class Course(models.Model):
         max_length=250,
         blank=True
     )
-    place = models.ForeignKey(
-        CoursePlace,
-        on_delete=models.SET_NULL,
-        null=True,
-        verbose_name="lloc",
-        blank=True,
-        help_text="Aquesta dada de moment és d'ús intern i no es publica."
-    )
     objects = models.Manager()
-    published = Published()
 
     @classmethod
     def pre_save(cls, sender, instance, **kwargs):
@@ -130,13 +128,13 @@ class Course(models.Model):
         return ("title__icontains", )
 
     def __str__(self):
-        return f"{self.title} ({self.date_start})"
+        return self.title
 
 
 class Activity(models.Model):
     class Meta:
-        verbose_name = "sessió"
-        verbose_name_plural = "sessions"
+        verbose_name = "activitat"
+        verbose_name_plural = "activitats"
         ordering = ["-date_start"]
 
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
@@ -144,7 +142,9 @@ class Activity(models.Model):
         Course,
         on_delete=models.CASCADE,
         verbose_name="acció",
-        related_name="activities"
+        related_name="activities",
+        help_text=("Escriu el nom de l'acció i selecciona-la del desplegable."
+        " Si no existeix, clica a la lupa i després a 'Crear acció'.")
     )
     name = models.CharField("títol", max_length=200, blank=False, null=False)
     objectives = models.TextField("descripció", null=True)
@@ -162,22 +162,23 @@ class Activity(models.Model):
                   "número de places, passaran a confirmades i se'ls hi "
                   "notificarà el canvi. Si redueixes el número de places per "
                   "sota del total d'inscrites les que ja estaven confirmades "
-                  "seguiran confirmades. Aquestes autotatitzacions únicament "
-                  "s'activen si la sessió té una data futura."
+                  "seguiran confirmades. Aquestes automatitzacions únicament "
+                  "s'activen si l'activitat té una data futura."
     )
     enrolled = models.ManyToManyField(
-        "coopolis.User",
+        "cc_users.User",
         blank=True,
         related_name='enrolled_activities',
         verbose_name="inscrites",
         through="ActivityEnrolled"
     )
-    entity = models.ForeignKey(
+    entities = models.ManyToManyField(
         Entity,
-        verbose_name="entitat",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
+        verbose_name="entitats organitzadores",
+        blank=True,
+        related_name="entities",
+        help_text=("Escriu el nom de l'entitat i selecciona-la del desplegable."
+        " Si no existeix, clica a la lupa i després a 'Crear entitat'.")
     )
     organizer = models.ForeignKey(
         Organizer,
@@ -187,13 +188,13 @@ class Activity(models.Model):
         blank=True
     )
     responsible = models.ForeignKey(
-        "coopolis.User",
+        "cc_users.User",
         verbose_name="persona responsable",
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
         related_name='activities_responsible',
-        help_text="Persona de l'equip al càrrec de la sessió. Per aparèixer "
+        help_text="Persona de l'equip al càrrec de l'activitat. Per aparèixer "
                   "al desplegable, cal que la persona tingui activada l'opció "
                   "'Membre del personal'."
     )
@@ -251,7 +252,7 @@ class Activity(models.Model):
         null=True
     )
     minors_teacher = models.ForeignKey(
-        "coopolis.User",
+        "cc_users.User",
         on_delete=models.SET_NULL,
         verbose_name="docent",
         null=True,
@@ -273,7 +274,7 @@ class Activity(models.Model):
         null=True,
         blank=True,
         help_text="Si selecciones una sala, quan guardis quedarà reservada "
-                  "per la sessió. <br>Consulta el "
+                  "per l'activitat. <br>Consulta el "
                   "<a href=\"/reservations/calendar/\" target=\"_blank\">"
                   "CALENDARI DE RESERVES</a> per veure la disponibilitat."
     )
@@ -333,7 +334,16 @@ class Activity(models.Model):
 
     @property
     def is_past_due(self):
-        return date.today() > self.date_start
+        if timezone.now() >= self.datetime_end:
+            return True
+        return False
+
+    @property
+    @admin.display(description="Data finalització")
+    def calculated_date_end(self):
+        if isinstance(self.date_end, date):
+            return self.date_end
+        return self.date_start
 
     @property
     def datetime_start(self):
@@ -341,17 +351,18 @@ class Activity(models.Model):
                 isinstance(self.date_start, date) and
                 isinstance(self.starting_time, time)
         ):
-            return datetime.combine(self.date_start, self.starting_time)
+            return timezone.make_aware(
+                datetime.combine(self.date_start, self.starting_time)
+            )
         return None
 
     @property
     def datetime_end(self):
         if not isinstance(self.ending_time, time):
             return None
-        if not isinstance(self.date_end, date):
-            if self.datetime_start:
-                return datetime.combine(self.date_start, self.ending_time)
-        return datetime.combine(self.date_end, self.ending_time)
+        return timezone.make_aware(
+            datetime.combine(self.calculated_date_end, self.ending_time)
+        )
 
     @property
     def subsidy_period(self):
@@ -364,8 +375,8 @@ class Activity(models.Model):
         return obj
 
     def poll_access_allowed(self):
-         # Si la data actual és superior o igual a la data i hora d'inici,
-        # mostrem  l'enquesta.
+        # Si la data actual és superior o igual a la data i hora d'inici,
+        # mostrem l'enquesta.
         naive_datetime = datetime.combine(self.date_start, self.starting_time)
         aware_datetime = timezone.make_aware(naive_datetime)
         if timezone.now() >= aware_datetime:
@@ -385,10 +396,10 @@ class Activity(models.Model):
                 errors.update(
                     {
                         "for_minors": ValidationError(
-                            "Has omplert dades relatives a sessions "
+                            "Has omplert dades relatives a activitats "
                             "dirigides a menors però no has marcat "
-                            "aquesta casella. Marca-la per tal que la "
-                            "sessió es justifiqui com a tal."
+                            "aquesta casella. Marca-la per tal que "
+                            "l'activitat es justifiqui com a tal."
                         ),
                     }
                 )
@@ -447,6 +458,18 @@ class Activity(models.Model):
         self.poll_sent = datetime.now()
         self.save()
 
+    @property
+    def entities_str(self):
+        # sessions = self.entities.filter(entity__isnull=False).distinct("entity")
+        entities = self.entities.all()
+        entities_list = [str(x.entity) for x in entities]
+        entities_list.sort()
+        return ", ".join(entities_list)
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('name__icontains',)
+
 
 class ActivityResourceFile(models.Model):
     class Meta:
@@ -471,6 +494,72 @@ class ActivityResourceFile(models.Model):
         return self.name
 
 
+class ActivityFile(models.Model):
+    class Meta:
+        verbose_name = "fitxer"
+        verbose_name_plural = "fitxers i enllaços interns"
+        ordering = ["name"]
+
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.CASCADE,
+        related_name="files"
+    )
+    file = models.FileField(
+        "fitxer adjunt",
+        storage=PrivateMediaStorage(),
+        blank=True,
+        null=True,
+    )
+    file_type = models.CharField(
+        "tipus de fitxer",
+        choices=ActivityFileType.choices,
+        max_length=50,
+    )
+    url = models.URLField(
+        "fitxer enllaçat",
+        blank=True,
+        null=True,
+    )
+    name = models.CharField(
+        "nom del fitxer",
+        max_length=120,
+        null=False,
+        blank=False,
+        help_text="Pensa un nom prou descriptiu com perquè ajudi a altres "
+        "persones a preparar possibles requeriments d'aquí uns mesos o anys."
+    )
+
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        errors = {}
+        if self.file and self.url:
+            errors.update(
+                {
+                    "file": ValidationError(
+                        "No pots incloure un fitxer adjunt si també inclous "
+                        "un fitxer enllaçat."
+                    ),
+                    "url": ValidationError(
+                        "No pots incloure un fitxer enllaçat si també inclous "
+                        "un fitxer adjunt."
+                    ),
+                }
+            )
+        if not self.file and not self.url:
+            errors.update(
+                {
+                    NON_FIELD_ERRORS: ValidationError(
+                        "Cal indicar un fitxer ja sigui adjunt o enllaçat."
+                    ),
+                }
+            )
+        if errors:
+            raise ValidationError(errors)
+
+
 class ActivityEnrolled(models.Model):
     class Meta:
         db_table = 'cc_courses_activity_enrolled'
@@ -481,11 +570,11 @@ class ActivityEnrolled(models.Model):
     activity = models.ForeignKey(
         Activity,
         on_delete=models.CASCADE,
-        verbose_name="sessió",
+        verbose_name="activitat",
         related_name="enrollments"
     )
     user = models.ForeignKey(
-        "coopolis.User",
+        "cc_users.User",
         on_delete=models.CASCADE,
         verbose_name="persona",
         related_name="enrollments"

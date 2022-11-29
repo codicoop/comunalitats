@@ -70,7 +70,7 @@ class ExcelExportManager(ExportManager):
 
         self.import_correlations(
             settings.BASE_DIR
-            + "/apps/dataexports/fixtures/correlations_2019.json"
+            + "/apps/dataexports/fixtures/correlations_2022.json"
         )
 
     def return_document(self, name):

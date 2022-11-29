@@ -6,12 +6,11 @@ class CourseAdmin(SummernoteModelAdmin):
     class Media:
         js = ('js/grappellihacks.js',)
 
-    list_display = ('date_start', 'title', 'hours', 'activities_list_field', 'copy_clipboard_list_field',)
+    list_display = ('title', 'activities_list_field', 'copy_clipboard_list_field',)
     summernote_fields = ('description',)
     readonly_fields = ('copy_clipboard_field', 'created',)
     exclude = ('slug',)
-    search_fields = ('date_start', 'title__unaccent', 'description__unaccent',)
-    list_filter = ('date_start',)
+    search_fields = ('title__unaccent', 'description__unaccent',)
 
     def get_queryset(self, request):
         qs = super(CourseAdmin, self).get_queryset(request)
@@ -19,10 +18,10 @@ class CourseAdmin(SummernoteModelAdmin):
         return qs
 
     def activities_list_field(self, obj):
-        return mark_safe(u'<a href="../../%s/%s/?course_id__exact=%d">Sessions</a>' % (
+        return mark_safe(u'<a href="../../%s/%s/?course_id__exact=%d">Activitats</a>' % (
             obj._meta.app_label, 'activity', obj.id))
 
-    activities_list_field.short_description = 'Sessions'
+    activities_list_field.short_description = 'Activitats'
 
     def copy_clipboard_field(self, obj):
         if obj.absolute_url:

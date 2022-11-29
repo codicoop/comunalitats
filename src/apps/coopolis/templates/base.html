@@ -22,10 +22,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
     <link href='https://fonts.googleapis.com/css?family=Comfortaa|Lato:400,700' rel='stylesheet' type='text/css'>
     {% block head %}{% endblock %}
+    {% if config.CUSTOM_STYLESHEET_URL %}<link rel="stylesheet" href="{{ config.CUSTOM_STYLESHEET_URL }}" type="text/css">{% endif %}
   </head>
   <body>
 
     <header>
+        {% if not config.DISABLE_FOOTER_AND_HEADER %}
         <div class="content">
             <div class="top-wrapper">
                 {% load static %}
@@ -47,7 +49,7 @@
                         {% csrf_token %}
                         <div class="div-column">
                             <div class="div-row">
-                                <input type="text" name="username" placeholder="Adreça d'e-mail">
+                                <input type="text" name="username" placeholder="E-mail o DNI/NIE/Passaport">
                                 <input type="password" name="password" placeholder="Contrasenya">
                             </div>
                             <div class="div-row-reverse">
@@ -60,11 +62,12 @@
                 {% endblock %}
                 {% else %}
                 <div class="secondary-menu">
-                    <span>{{ user.email }} ─ <a href="{% url 'logout' %}">Sortir</a></span>
+                    <span>{{ user.get_full_name }} ─ <a href="{% url 'logout' %}">Sortir</a></span>
                 </div>
                 {% endif %}
             </div>
         </div>
+        {% endif %}
         <div class="content menu">
             <ul class="menu-ul">
                 <li><a href="{{ config.PROJECT_WEBSITE_URL }}">Web</a></li>
@@ -75,6 +78,7 @@
                 <li><a href="{% url 'user_profile' %}">Les meves dades</a></li>
                 <li><a href="{% url 'my_activities' %}">Els meus cursos</a></li>
             {% endif %}
+                <li><a href="{% url 'project_info' %}">Projecte</a></li>
                 <li><a href="{% url 'courses' %}">Inscripcions</a></li>
             {% if user.is_superuser or user.is_staff %}
                 <li><a href="{% url 'admin:index'%}">Backoffice</a></li>
@@ -90,7 +94,9 @@
     {% endblock %}
     </div>
 
-    {% include 'reusable/footer.html' %}
+    {% if not config.DISABLE_FOOTER_AND_HEADER %}
+        {% include 'reusable/footer.html' %}
+    {% endif %}
 
     <div class="cookies-consent">
         <p>

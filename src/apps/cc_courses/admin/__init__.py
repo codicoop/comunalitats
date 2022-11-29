@@ -14,7 +14,3 @@ admin.site.register(Activity, ActivityAdmin)
 admin.site.register(CoursePlace, CoursePlaceAdmin)
 admin.site.register(Entity)
 admin.site.register(Organizer)
-
-admin.site.site_header = settings.ADMIN_HEADER
-admin.site.site_title = settings.ADMIN_SITE_TITLE
-admin.site.index_title = settings.ADMIN_INDEX_TITLE

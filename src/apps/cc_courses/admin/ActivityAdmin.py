@@ -12,10 +12,16 @@ from django_summernote.admin import SummernoteModelAdminMixin
 from constance import config
 import modelclone
 
+from apps.base.choices import ActivityFileType
 from apps.coopolis.forms import ActivityForm, ActivityEnrolledForm
-from apps.cc_courses.models import Activity, ActivityEnrolled, ActivityResourceFile, Entity
+from apps.cc_courses.models import (
+    Activity,
+    ActivityEnrolled,
+    ActivityResourceFile,
+    ActivityFile,
+)
 from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
-from apps.coopolis.models import User
+from apps.cc_users.models import User
 from apps.dataexports.models import SubsidyPeriod
 from apps.facilities_reservations.models import Reservation
 
@@ -39,6 +45,33 @@ class FilterBySubsidyPeriod(admin.SimpleListFilter):
             period = SubsidyPeriod.objects.get(id=value)
             return queryset.filter(date_start__range=(
                 period.date_start, period.date_end)
+            )
+        return queryset
+
+
+class FilterByJustificationFiles(admin.SimpleListFilter):
+    """
+    Allows Activities to be filtered by the existence of at least 1 internal
+    file of the type "justification".
+    """
+    title = "Fitxer justificació"
+    parameter_name = 'justification_file'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('Yes', 'Sí'),
+            ('No', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == "Yes":
+            queryset = Activity.objects.filter(
+                files__file_type=ActivityFileType.JUSTIFICATION,
+            )
+        if value == "No":
+            queryset = Activity.objects.exclude(
+                files__file_type=ActivityFileType.JUSTIFICATION,
             )
         return queryset
 
@@ -67,7 +100,7 @@ class ActivityEnrolledInline(admin.TabularInline):
         if obj.id is None:
             return '-'
         url = reverse(
-            'admin:coopolis_user_change', kwargs={'object_id': obj.user.id})
+            'admin:cc_users_user_change', kwargs={'object_id': obj.user.id})
         return format_html(
             f'<a href="{url}" target="_blank">Fitxa {obj.user.first_name}</a>')
     open_user_details_field.allow_tags = True
@@ -83,6 +116,15 @@ class ActivityResourcesInlineAdmin(admin.TabularInline):
     extra = 0
 
 
+class ActivityFileInlineAdmin(admin.TabularInline):
+    class Media:
+        js = ('js/grappellihacks.js',)
+
+    classes = ('grp-collapse', 'grp-closed')
+    model = ActivityFile
+    extra = 0
+
+
 class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin, modelclone.ClonableModelAdmin):
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
@@ -91,7 +133,8 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         }
     form = ActivityForm
     list_display = (
-        'date_start', 'spots', 'remaining_spots', 'name', 'service',
+        'date_start', 'calculated_date_end', 'spots', 'remaining_spots', 'name',
+        'service',
         'attendee_filter_field', 'attendee_list_field', 'send_reminder_field')
     readonly_fields = (
         'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',
@@ -99,9 +142,9 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     summernote_fields = ('objectives', 'instructions',)
     search_fields = ('date_start', 'name', 'objectives',)
     list_filter = (
-        FilterBySubsidyPeriod,
+        FilterBySubsidyPeriod, FilterByJustificationFiles,
         "service", ("place__town", admin.RelatedOnlyFieldListFilter),
-        'course', 'date_start', 'room', 'entity', 'place',
+        'course', 'date_start', 'room', 'entities', 'place',
         'for_minors',
         ("responsible", admin.RelatedOnlyFieldListFilter),
     )
@@ -110,7 +153,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'fields': ['course', 'name', 'objectives', 'place', 'room',
                        'date_start',
                        'date_end', 'starting_time', 'ending_time', 'spots',
-                       'service', 'sub_service', 'entity',
+                       'service', 'sub_service', 'entities',
                        'responsible', 'publish', ]
         }),
         ("Documents per la justificació", {
@@ -137,16 +180,24 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'fields': ('attendee_list_field', 'attendee_filter_field',
                        'send_reminder_field', 'activity_poll_field', ),
         }),
+        ("Fitxers interns", {
+            'classes': ('placeholder files-group',),
+            'fields': (),
+        }),
     ]
     # define the raw_id_fields
-    raw_id_fields = ('enrolled', 'course')
+    raw_id_fields = ('enrolled', 'course', 'entities',)
     # define the autocomplete_lookup_fields
     autocomplete_lookup_fields = {
-        'm2m': ['enrolled'],
+        'm2m': ['enrolled', 'entities'],
         'fk': ['course'],
     }
     date_hierarchy = 'date_start'
-    inlines = (ActivityResourcesInlineAdmin, ActivityEnrolledInline)
+    inlines = (
+        ActivityResourcesInlineAdmin,
+        ActivityEnrolledInline,
+        ActivityFileInlineAdmin,
+    )
     subsidy_period_filter_param = 'subsidy_period'
 
     def get_form(self, request, obj=None, **kwargs):
@@ -244,7 +295,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     def attendee_filter_field(self, obj):
         if obj.id is None:
             return '-'
-        base_url = reverse('admin:coopolis_user_changelist')
+        base_url = reverse('admin:cc_users_user_changelist')
         return mark_safe(
             u'<a href="%s?enrolled_activities__exact=%d">Inscrites i '
             u'en llista d\'espera</a>' % (base_url, obj.id))
@@ -299,8 +350,6 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             kwargs["queryset"] = User.objects.filter(is_staff=True)
         if db_field.name == "minors_teacher":
             kwargs["queryset"] = User.objects.order_by("first_name", "last_name")
-        if db_field.name == "entity":
-            kwargs["queryset"] = Entity.objects.order_by("-is_active", "name")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def activity_poll_field(self, obj):
@@ -308,7 +357,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             return '-'
 
         poll_status = "Oberta" if obj.poll_access_allowed() else "Tancada"
-        results_url = reverse_lazy('admin:coopolis_activitypoll_changelist')
+        results_url = reverse_lazy('admin:polls_activitypoll_changelist')
         text = "Accés als resultats (pestanya nova)"
         results_url = (f'<a href="{results_url}?activity__id__exact={obj.id}"'
                        f'target="_new">{text}</a>')

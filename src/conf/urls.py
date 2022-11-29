@@ -22,7 +22,8 @@ urlpatterns = [
 urlpatterns += [
     path('', include('apps.coopolis.urls')),
     path('', include('apps.cc_users.urls')),
-    path('', include('apps.cc_courses.urls'))
+    path('', include('apps.cc_courses.urls')),
+    path('', include('apps.projects.urls')),
 ]
 
 # Add views for testing 404 and 500 templates

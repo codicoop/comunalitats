@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="breadcrumb">
+    <span><a href="{% url 'home' %}">Inici</a> > Projecte</span>
+</div>
+<div class="introduction">
+    {{ config.CONTENT_PROJECT_INTRODUCTION|safe }}
+</div>
+<div class="page-content">
+    <div class="generic-content">
+        <h1>{{ config.CONTENT_PROJECT_TITLE }}</h1>
+        {{ config.CONTENT_PROJECT_INFO|safe }}
+    </div>
+    {% include 'registration/login_signup_form.html' %}
+</div>
+{% endblock %}

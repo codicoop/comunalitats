@@ -2,26 +2,10 @@ import environ
 import os
 
 from django.core.management.utils import get_random_secret_key
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
 env = environ.Env()
 # False if not in os.environ
 DEBUG = env.bool('DEBUG', False)
-
-sentry_sdk.init(
-    dsn=env("SENTRY_DSN", default=""),
-    integrations=[DjangoIntegration()],
-
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
-    # We recommend adjusting this value in production.
-    traces_sample_rate=0.1,
-
-    # If you wish to associate users to errors (assuming you are using
-    # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=True
-)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 # Instance's absolute URL (given we're not using Sites framework)
@@ -124,11 +108,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apps.base',
     'apps.dataexports',
     'apps.cc_users',
     'apps.cc_courses',
     'apps.facilities_reservations',
     'apps.coopolis',
+    'apps.projects',
+    'apps.polls',
+    'apps.towns',
     'grappelli.dashboard',
     'grappelli',
     'tagulous',
@@ -145,7 +133,6 @@ INSTALLED_APPS = [
     'mailqueue',
     'mailing_manager',
     'django.contrib.humanize',
-    "django_q",
 ]
 
 MIDDLEWARE = [
@@ -201,6 +188,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'apps.cc_users.authentication_backend.IdNumberBackend',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -234,13 +225,8 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 LOGIN_URL = 'loginsignup'
 LOGIN_REDIRECT_URL = '/'
 
-AUTH_USER_MODEL = 'coopolis.User'
+AUTH_USER_MODEL = 'cc_users.User'
 DEV_SETTINGS_MODULE = 'conf.settings'
-
-# APPS
-
-USERS_APP_TITLE = 'Usuàries'
-COURSES_APP_TITLE = "Accions"
 
 FIXTURES_PATH_TO_COURSE_IMAGES = 'test-images/coopolis-courses'
 
@@ -289,6 +275,13 @@ CONSTANCE_CONFIG = {
         "l’Ajuntament de Barcelona.",
         'Casella per acceptar #2.'),
     # Configuration
+    'DISABLE_FOOTER_AND_HEADER': (
+        False,
+        "Ocultar l'encapçalament i peu de pàgina a l'aplicació. Activa "
+        "aquesta opció si vols 'incrustar' l'aplicació dins d'una altra "
+        "pàgina o aplicació web.",
+        bool,
+    ),
     'EMAIL_TO_DEBUG': (
         'pere@codi.coop', 'Correu per fer proves d\'enviaments.'),
     'PROJECT_NAME': ("Comunalitat", "Nom curt de la comunalitat."),
@@ -307,14 +300,14 @@ CONSTANCE_CONFIG = {
         "de condicions legals del formulari d'alta."),
     'PROJECT_WEBSITE_URL': (
         "https://example.com",
-        "Enllaç a la pàgina principal de l'ateneu. Apareix al menú "
+        "Enllaç a la pàgina principal de la comunalitat. Apareix al menú "
         "principal."),
     'CONTACT_PHONE_NUMBER': (
         "93 XXX XX XX",
         "Apareix al correu que s'envia a la gent que s'inscriu a activitats, "
         "perquè sàpiguen on contactar si tenen dubtes. De la mateixa manera "
         "apareix al correu que s'envia quan envieu un recordatori a tota la "
-        "gent inscrita a una sessió."),
+        "gent inscrita a una activitat."),
     'PROJECT_FACEBOOK_URL': (
         "",
         "Si s'indica la URL del perfil de Facebook, apareixerà a la plantilla "
@@ -330,17 +323,22 @@ CONSTANCE_CONFIG = {
     'CONTACT_EMAIL': (
         "hola@example.com",
         "Apareix al correu que s'envia a la persona que s'ha inscrit a una "
-        "sessió (i al de recordatori que s'envia massivament des de l'admin) "
+        "activitat (i al de recordatori que s'envia massivament des de l'admin) "
         "per indicar que si tenen dubtes, escriguin a aquest correu."),
     'ATTENDEE_LIST_FOOTER_IMG': (
         "https://example.com/footer.png",
         "URL de la imatge pel peu de pàgina del llistat d'assistència."),
+    'CUSTOM_STYLESHEET_URL': (
+        "",
+        "URL a un full d'estils que d'inclourà en última posició, de manera "
+        "que sobreescrigui la resta d'estils.",
+    ),
 }
 CONSTANCE_CONFIG_FIELDSETS = {
     'Configuració': (
         'PROJECT_NAME', 'PROJECT_FULL_NAME',
         'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL', 'PROJECT_CONTACT_URL',
-        'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG',
+        'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL',
         'PROJECT_FACEBOOK_URL', 'PROJECT_TWITTER_URL', 'PROJECT_INSTAGRAM_URL'
     ),
     "Apartat Portada": (
@@ -349,14 +347,17 @@ CONSTANCE_CONFIG_FIELDSETS = {
     ),
     "Apartat Formació": ('CONTENT_COURSES_INTRODUCTION',),
     "Formulari d'alta": ('CONTENT_SIGNUP_LEGAL1', 'CONTENT_SIGNUP_LEGAL2',),
-    "Llistat d'assistència": ('ATTENDEE_LIST_FOOTER_IMG',),
+    "Variables avançades": (
+        'CUSTOM_STYLESHEET_URL',
+        'DISABLE_FOOTER_AND_HEADER',
+        'ATTENDEE_LIST_FOOTER_IMG',
+        'EMAIL_TO_DEBUG',
+    ),
 }
 
 # CC Courses
 
 COURSES_LIST_VIEW_CLASS = 'apps.coopolis.views.CoopolisCoursesListView'
-COURSES_CLASS_TO_ENROLL = 'coopolis.User'
-COURSES_CLASSES_CAN_ENROLL = ['apps.cc_courses.models.Course']
 
 FIXTURE_FACTORIES = [
     ('apps.coopolis.tests.fixtures.UserFactory', {}),
@@ -369,24 +370,6 @@ FIXTURE_FACTORIES = [
     }),
 ]
 
-SIGNUP_FORM = 'apps.coopolis.forms.MySignUpForm'
-
-# Static texts and option fields
-ADMIN_SITE_TITLE = ''
-ADMIN_INDEX_TITLE = ''
-
-DISTRICTS = (
-    ('CV', 'Ciutat Vella'),
-    ('EX', 'Eixample'),
-    ('HG', 'Horta-Guinardó'),
-    ('LC', 'Les Corts'),
-    ('NB', 'Nou Barris'),
-    ('SA', 'Sant Andreu'),
-    ('SM', 'Sant Martí'),
-    ('ST', 'Sants-Montjuïc'),
-    ('SS', 'Sarrià-Sant Gervasi'),
-    ('GR', 'Gràcia')
-)
 PROJECT_STATUS = (
     ('PENDENT', "Pendent d’enviar proposta de trobada"),
     ('ENVIAT', "Enviat email amb proposta de data per trobar-nos"),
@@ -408,14 +391,6 @@ THUMBNAIL_ALIASES = {
     },
 }
 THUMBNAIL_DEFAULT_STORAGE = 'apps.cc_lib.storages.MediaStorage'
-
-# Django-Q
-Q_CLUSTER = {
-    "name": "ateneus-backoffice",
-    "orm": "default",  # Use Django's ORM + database for broker
-    "timeout": 30,
-    "workers": 1,
-}
 
 # Maintenance mode
 MAINTENANCE_MODE = env.bool("MAINTENANCE_MODE", default=False)
