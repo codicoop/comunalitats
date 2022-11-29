@@ -10,21 +10,22 @@ class ExportJustificationService:
         self.number_of_stages = 0
         self.number_of_nouniversitaris = 0
         self.number_of_founded_projects = 0
-        # La majoria d'ateneus volen que hi hagi una sola actuació per un
-        # projecte encara que hagi tingut diferents tipus d'acompanyament.
-        # CoopCamp (i potser algun altre?) volen separar-ho per itineraris,
-        # de manera que hi hagi una actuació per l'itinerari de Nova Creació i
-        # una pel de Consolidació.
-        # Per defecte ho definim per 1 itinerari.
+        # Si a cada item del diccionari se li posa un nom diferent, agruparà
+        # els diferents acompanyaments pel tipus d'acompanyament i per tant
+        # apareixerà una línia nova per cada tipus d'acompanyament dins d'una
+        # mateixa convocatòria.
+        # Si en canvi es posen tots iguals, tipus:
+        #         self.stages_groups = {
+        #             11: 'creacio',
+        #             12: 'creacio',
+        #             13: 'creacio',
+        #         }
+        # Això farà que cada projecte només aparegui com a un sol acompanyament
+        # independentment de que n'hagi tingut un de cada tipus.
         self.stages_groups = {
-            # 1: 'nova_creacio',
-            # 2: 'nova_creacio',
-            # 6: 'nova_creacio',
-            # 7: 'nova_creacio',
-            # 8: 'nova_creacio',
-            9: 'creacio',  # Era Incubació
-            11: 'creacio',  # Creació
-            12: 'creacio',  # Consolidació
+            11: 'creacio',
+            12: 'consolidacio',
+            13: 'creixement',
         }
         self.stages_obj = None
 
@@ -154,7 +155,7 @@ class ExportJustificationService:
             # repetir el procés més endavant. La qüestió és que encara que un
             # participant hagi participat a diversos acompanyaments, aquí
             # només aparegui una vegada.
-            for participant in item.involved_partners.all():
+            for participant in item.partners_involved_in_sessions:
                 if (
                         participant
                         not in self.stages_obj[p_id][group]['participants']
@@ -477,20 +478,18 @@ class ExportJustificationService:
 
         columns = [
             ("Referència", 40),
-            ("Nom actuació", 40),
+            ("Nom d'actuació", 40),
             ("Cognoms", 20),
             ("Nom", 10),
-            ("Doc. identificatiu", 12),
+            ("Document identificatiu (DNI,NIE,passaport)", 22),
             ("Gènere", 10),
             ("Data naixement", 10),
-            ("Municipi del participant", 20),
             ("[Situació laboral]", 20),
             ("[Nivell d'estudis]", 20),
             ("[Com ens has conegut]", 20),
             ("[Email]", 30),
             ("[Telèfon]", 30),
             ("[Projecte]", 30),
-            ("[Acompanyaments]", 30),
         ]
         self.export_manager.create_columns(columns)
 
@@ -503,33 +502,27 @@ class ExportJustificationService:
                 activity = group['obj']
                 activity_reference_number = group['row_number']
                 for participant in group['participants']:
-                    if participant.gender is None:
-                        gender = ""
-                    else:
+                    gender = ("", True)
+                    if participant.gender:
                         gender = self.export_manager.get_correlation(
-                            'gender', participant.gender)
-                    town = ""
-                    if participant.town:
-                        town = participant.town.name
+                            'gender',
+                            participant.gender,
+                        )
 
                     row = [
                         f"{activity_reference_number} {activity.project.name}",
-                        # Referència.
-                        activity.project.name,
-                        # Nom de l'actuació. Camp automàtic de l'excel.
+                        "",  # Nom de l'actuació. Camp automàtic de l'excel.
                         participant.surname or "",
                         participant.first_name,
-                        participant.id_number,
-                        gender if gender else "",
-                        participant.birthdate or "",
-                        town,
+                        participant.id_number or ("", True),
+                        gender,
+                        participant.birthdate or ("", True),
                         participant.get_employment_situation_display() or "",
                         participant.get_educational_level_display() or "",
                         participant.get_discovered_us_display() or "",
                         participant.email,
                         participant.phone_number or "",
                         str(participant.project) or "",
-                        participant.project.stages_list if participant.project and participant.project.stages_list else "",
                     ]
                     self.export_manager.row_number += 1
                     self.export_manager.fill_row_data(row)
@@ -543,33 +536,27 @@ class ExportJustificationService:
             for enrollment in activity.confirmed_enrollments:
                 participant = enrollment.user
                 self.export_manager.row_number += 1
-                if participant.gender is None:
-                    gender = ""
-                else:
+                gender = ("", True)
+                if participant.gender:
                     gender = self.export_manager.get_correlation(
-                        'gender', participant.gender)
-                town = ""
-                if participant.town:
-                    town = participant.town.name
+                        'gender',
+                        participant.gender,
+                    )
 
                 row = [
                     f"{activity_reference_number} {activity.name}",
-                    # Referència.
-                    activity.name,
-                    # Nom de l'actuació. Camp automàtic de l'excel.
-                    participant.surname if participant.surname else "",
+                    "",  # Nom de l'actuació. Camp automàtic de l'excel.
+                    participant.surname or "",
                     participant.first_name,
-                    participant.id_number,
-                    gender if gender else "",
-                    participant.birthdate if participant.birthdate else "",
-                    town,
+                    participant.id_number or ("", True),
+                    gender,
+                    participant.birthdate or ("", True),
                     participant.get_employment_situation_display() or "",
                     participant.get_educational_level_display() or "",
                     participant.get_discovered_us_display() or "",
                     participant.email,
                     participant.phone_number or "",
                     str(participant.project) if participant.project else "",
-                    participant.project.stages_list if participant.project and participant.project.stages_list else "",
                 ]
                 self.export_manager.fill_row_data(row)
 
