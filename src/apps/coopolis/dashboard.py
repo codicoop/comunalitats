@@ -95,16 +95,6 @@ class MyDashboard(Dashboard):
             ),
         ]
 
-        if context['request'].user.is_superuser:
-            group_children.append(
-                modules.ModelList(
-                    title="Plantilles dels correus electrònics",
-                    column=1,
-                    collapsible=False,
-                    models=('mailing_manager.models.Mail',),
-                )
-            )
-
         self.children.append(modules.Group(
             title=settings.PROJECT_NAME,
             column=1,
