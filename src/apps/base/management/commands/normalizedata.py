@@ -84,7 +84,7 @@ class Command(BaseCommand):
                 "change_config", "view_config",
             ],
             "mailing_manager": [
-                "view_mail",
+                "view_mail", "change_mail",
             ],
             "mailqueue": [
                 "view_attachment",
