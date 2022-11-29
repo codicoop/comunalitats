@@ -289,7 +289,6 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     list_display = (
         'name', 'mail', 'phone', 'registration_date',
         'constitution_date', 'stages_field', 'last_stage_responsible',
-        '_insertions_count'
     )
     search_fields = (
         'id', 'name__unaccent', 'web', 'mail', 'phone', 'registration_date',
@@ -420,12 +419,6 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
             'url_backoffice': settings.ABSOLUTE_URL
         }
         mail.send_to_user(user_obj)
-
-    def _insertions_count(self, obj):
-        if obj.employment_insertions:
-            return len(obj.employment_insertions.all())
-        return 0
-    _insertions_count.short_description = "Insercions"
 
 
 class DerivationAdmin(admin.ModelAdmin):
