@@ -351,15 +351,15 @@ class ExportJustificationService:
         columns = [
             ("Referència", 20),
             ("Nom actuació", 40),
-            ("Destinatari de l'acompanyament (revisar)", 45),
-            ("En cas d'entitat (nom de l'entitat)", 40),
-            ("En cas d'entitat (revisar)", 30),
-            ("Creació/consolidació", 18),
+            ("Nom de projecte/ empresa o entitat", 35),
+            ("Destinatari de l'acompanyament", 30),
+            ("Tipus d'acompanyament:  creació/consolidació/creixement", 30),
             ("Data d'inici", 13),
-            ("Localitat", 20),
-            ("Breu descripció del projecte", 50),
+            ("Barri", 20),
+            ("Municipi", 20),
+            ("Breu descripció de l'actuació", 50),
             ("Total hores d'acompanyament", 10),
-            ("[Data fi]", 13),
+            ("[Data última sessió]", 10),
         ]
         self.export_manager.create_columns(columns)
 
@@ -373,29 +373,27 @@ class ExportJustificationService:
                 self.export_manager.row_number += 1
                 reference_number += 1
                 item = group['obj']
-
+                stage_type = self.export_manager.get_correlation(
+                    "stage_type",
+                    item.stage_type,
+                )
                 # hours = item.hours if item.hours is not None else ("", True)
                 hours = group['total_hours']
                 town = ("", True)
                 if item.project.town:
                     town = str(item.project.town)
-                crea_consolida = item.get_stage_type_display()
 
                 row = [
                     f"{reference_number} {item.project.name}",  # Referència.
+                    "",  # Nom actuació. Camp no editable.
                     item.project.name,
-                    # Camp no editable, l'ha d'omplir l'excel automàticament.
-                    "Entitat",
-                    # "Destinatari de l'actuació" Opcions: Persona física/Promotor del projecte/Entitat PENDENT.
-                    item.project.name,  # "En cas d'entitat (Nom de l'entitat)"
-                    self.export_manager.get_correlation(
-                        "project_status", item.project.project_status),
-                    crea_consolida if crea_consolida else '',
-                    # "Creació/consolidació".
-                    item.date_start if item.date_start else '',
+                    "",  # Destinatari de l'acompanyament
+                    stage_type,  # Tipus d'acompanyament
+                    item.date_start or ('', True),
+                    item.project.neighborhood or ('', True),
                     town,
                     item.project.description,  # Breu descripció.
-                    hours,  # Total hores d'acompanyament.
+                    hours,  # Total d'hores d'acompanyament.
                     item.latest_session.date if item.latest_session else '',
                 ]
                 self.export_manager.fill_row_data(row)
