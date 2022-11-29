@@ -43,11 +43,12 @@ class ExportJustificationService:
         """ Each function here called handles the creation of one of the
         worksheets."""
         self.export_actuacions()
+        self.export_participants()
+        self.export_insercionslaborals()
         self.export_stages()
         self.export_founded_projects()
-        self.export_participants()
-        self.export_nouniversitaris()
-        self.export_insercionslaborals()
+        # A l'excel de justificació no hi ha la pestanya dels NoUniversitaris.
+        # self.export_nouniversitaris()
 
         return self.export_manager.return_document("justificacio")
 
@@ -401,7 +402,7 @@ class ExportJustificationService:
 
     def export_founded_projects(self):
         self.export_manager.worksheet = \
-            self.export_manager.workbook.create_sheet("EntitatCreada")
+            self.export_manager.workbook.create_sheet("Creació d'entitats")
         self.export_manager.row_number = 1
 
         columns = [
@@ -471,7 +472,9 @@ class ExportJustificationService:
 
     def export_participants(self):
         self.export_manager.worksheet = \
-            self.export_manager.workbook.create_sheet("Participants")
+            self.export_manager.workbook.create_sheet(
+                "Persones Participants o Ateses",
+            )
         self.export_manager.row_number = 1
 
         columns = [
@@ -609,7 +612,7 @@ class ExportJustificationService:
 
     def export_insercionslaborals(self):
         self.export_manager.worksheet = \
-            self.export_manager.workbook.create_sheet("InsercionsLaborals")
+            self.export_manager.workbook.create_sheet("Persones Inserides")
         self.export_manager.row_number = 1
 
         columns = [
