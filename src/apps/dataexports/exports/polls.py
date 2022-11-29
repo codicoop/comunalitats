@@ -288,8 +288,8 @@ class ExportPolls:
         columns = [
             ("Acumulació de respostes a aquesta pregunta", 80),
             ("Acció", 60),
-            ("Sessió", 60),
-            ("Data sessió", 20),
+            ("Activitat", 60),
+            ("Data activitat", 20),
         ]
         self.export_manager.create_columns(columns)
         obj = self.answers_list_obj()

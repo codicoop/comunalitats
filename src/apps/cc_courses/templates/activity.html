@@ -34,7 +34,7 @@
     <h1>{{ object }}</h1>
 
     {% if object.instructions %}
-    <h2>Instruccions sobre el funcionament de la sessió</h2>
+    <h2>Instruccions sobre el funcionament de l'activitat</h2>
     <p>{{ object.instructions|safe }}</p>
     {% endif %}
 
@@ -57,7 +57,7 @@
     {% if object.poll_access_allowed %}
     <p><a href="{% url 'activity_poll' uuid=object.uuid %}">Accedir a l'enquesta</a></p>
     {% else %}
-    <p>L'enquesta de valoració s'activarà quan s'hagi celebrat la sessió.</p>
+    <p>L'enquesta de valoració s'activarà quan s'hagi celebrat l'activitat.</p>
     {% endif %}
 
 

@@ -18,10 +18,10 @@ class CourseAdmin(SummernoteModelAdmin):
         return qs
 
     def activities_list_field(self, obj):
-        return mark_safe(u'<a href="../../%s/%s/?course_id__exact=%d">Sessions</a>' % (
+        return mark_safe(u'<a href="../../%s/%s/?course_id__exact=%d">Activitats</a>' % (
             obj._meta.app_label, 'activity', obj.id))
 
-    activities_list_field.short_description = 'Sessions'
+    activities_list_field.short_description = 'Activitats'
 
     def copy_clipboard_field(self, obj):
         if obj.absolute_url:

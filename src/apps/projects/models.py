@@ -221,7 +221,7 @@ class Project(models.Model):
         acts.sort()
         return mark_safe("<br>".join(acts))
 
-    partners_activities.fget.short_description = "Sessions"
+    partners_activities.fget.short_description = "Activitats"
 
     @property
     def partners_participants(self):

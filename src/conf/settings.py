@@ -300,7 +300,7 @@ CONSTANCE_CONFIG = {
         "Apareix al correu que s'envia a la gent que s'inscriu a activitats, "
         "perquè sàpiguen on contactar si tenen dubtes. De la mateixa manera "
         "apareix al correu que s'envia quan envieu un recordatori a tota la "
-        "gent inscrita a una sessió."),
+        "gent inscrita a una activitat."),
     'PROJECT_FACEBOOK_URL': (
         "",
         "Si s'indica la URL del perfil de Facebook, apareixerà a la plantilla "
@@ -316,7 +316,7 @@ CONSTANCE_CONFIG = {
     'CONTACT_EMAIL': (
         "hola@example.com",
         "Apareix al correu que s'envia a la persona que s'ha inscrit a una "
-        "sessió (i al de recordatori que s'envia massivament des de l'admin) "
+        "activitat (i al de recordatori que s'envia massivament des de l'admin) "
         "per indicar que si tenen dubtes, escriguin a aquest correu."),
     'ATTENDEE_LIST_FOOTER_IMG': (
         "https://example.com/footer.png",

@@ -133,8 +133,8 @@ class Course(models.Model):
 
 class Activity(models.Model):
     class Meta:
-        verbose_name = "sessió"
-        verbose_name_plural = "sessions"
+        verbose_name = "activitat"
+        verbose_name_plural = "activitats"
         ordering = ["-date_start"]
 
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
@@ -162,8 +162,8 @@ class Activity(models.Model):
                   "número de places, passaran a confirmades i se'ls hi "
                   "notificarà el canvi. Si redueixes el número de places per "
                   "sota del total d'inscrites les que ja estaven confirmades "
-                  "seguiran confirmades. Aquestes autotatitzacions únicament "
-                  "s'activen si la sessió té una data futura."
+                  "seguiran confirmades. Aquestes automatitzacions únicament "
+                  "s'activen si l'activitat té una data futura."
     )
     enrolled = models.ManyToManyField(
         "cc_users.User",
@@ -194,7 +194,7 @@ class Activity(models.Model):
         null=True,
         on_delete=models.SET_NULL,
         related_name='activities_responsible',
-        help_text="Persona de l'equip al càrrec de la sessió. Per aparèixer "
+        help_text="Persona de l'equip al càrrec de l'activitat. Per aparèixer "
                   "al desplegable, cal que la persona tingui activada l'opció "
                   "'Membre del personal'."
     )
@@ -274,7 +274,7 @@ class Activity(models.Model):
         null=True,
         blank=True,
         help_text="Si selecciones una sala, quan guardis quedarà reservada "
-                  "per la sessió. <br>Consulta el "
+                  "per l'activitat. <br>Consulta el "
                   "<a href=\"/reservations/calendar/\" target=\"_blank\">"
                   "CALENDARI DE RESERVES</a> per veure la disponibilitat."
     )
@@ -396,10 +396,10 @@ class Activity(models.Model):
                 errors.update(
                     {
                         "for_minors": ValidationError(
-                            "Has omplert dades relatives a sessions "
+                            "Has omplert dades relatives a activitats "
                             "dirigides a menors però no has marcat "
-                            "aquesta casella. Marca-la per tal que la "
-                            "sessió es justifiqui com a tal."
+                            "aquesta casella. Marca-la per tal que "
+                            "l'activitat es justifiqui com a tal."
                         ),
                     }
                 )
@@ -570,7 +570,7 @@ class ActivityEnrolled(models.Model):
     activity = models.ForeignKey(
         Activity,
         on_delete=models.CASCADE,
-        verbose_name="sessió",
+        verbose_name="activitat",
         related_name="enrollments"
     )
     user = models.ForeignKey(

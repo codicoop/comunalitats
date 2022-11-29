@@ -116,13 +116,13 @@ def populate_mail_templates(apps, schema_editor):
     <tr>
       <td align="left" valign="top" style="padding: 0px 40px 10px 40px" bgcolor="#fafafa" class="em_text1 pad10">
         <p style="padding-top: 20px">Hola {persona_nom}!</p>
-        <p style="padding-top: 20px">T'enviem aquest correu perquè tens una inscripció a aquesta sessió i s'acosta la data:</p>
+        <p style="padding-top: 20px">T'enviem aquest correu perquè tens una inscripció a aquesta activitat i s'acosta la data:</p>
         <p style="margin-left: 60px"><strong>Data:</strong> {activitat_data_inici}</p>
         <p style="margin-left: 60px"><strong>Hora:</strong> {activitat_hora_inici}</p>
         <p style="margin-left: 60px"><strong>Lloc:</strong> {activitat_lloc}</p>
         <p style="padding-top: 20px">{activitat_instruccions}</p>
         <p style="padding-top: 20px">Per accedir als fitxers adjunts, enllaç a la videotrucada i gestionar la teva 
-            inscripció, ves a <a href="{absolute_url_activity}">la fitxa de la sessió</a>.</p>
+            inscripció, ves a <a href="{absolute_url_activity}">la fitxa de l'activitat</a>.</p>
         <p style="padding-top: 20px">Es tracta d'una formació gratuïta subvencionada, per això et demanem que 
             si finalment no pots venir ens avisis amb antelació per poder obrir la plaça a una altra persona.<br>
           Per fer-ho pots gestionar les teves inscripcions accedint a l'aplicació amb el teu compte i anant a 
@@ -147,7 +147,7 @@ def populate_mail_templates(apps, schema_editor):
     avisa'ns per tal que l'eliminem de la base de dades.</em></p><br />
     <p>Amb el teu compte pots:</p>
     <ul>
-    <li>Inscriure't a les sessions formatives, que trobaràs <a href="{url_accions}">aquí</a>.</li>
+    <li>Inscriure't a les activitats, que trobaràs <a href="{url_accions}">aquí</a>.</li>
     <li>Consultar o editar les dades del teu perfil i recuperar la contrassenya. </li>
     </ul>
     <p>Més informació a <a href="{url_backoffice}">{url_backoffice}</a>.</p>""",
@@ -217,7 +217,7 @@ def populate_mail_templates(apps, schema_editor):
     <tr>
       <td align="left" valign="top" style="padding: 0px 40px 10px 40px" bgcolor="#fafafa" class="em_text1 pad10">
         <p style="padding-top: 20px">Hola {persona_nom}!</p>
-        <p style="padding-top: 20px">T'enviem aquest correu perquè has participat a aquesta sessió:</p>
+        <p style="padding-top: 20px">T'enviem aquest correu perquè has participat a aquesta activitat:</p>
         <p style="margin-left: 60px"><strong>Data:</strong> {activitat_data_inici}</p>
         <p style="margin-left: 60px"><strong>Hora:</strong> {activitat_hora_inici}</p>
         <p style="margin-left: 60px"><strong>Lloc:</strong> {activitat_lloc}</p>
@@ -226,7 +226,7 @@ def populate_mail_templates(apps, schema_editor):
         gratuïta subvencionada.</p>
         <p style="padding-top: 20px">Si us plau, omple <a href="{absolute_url_poll}">l'enquesta de valoració</a>.
         </p> 
-        <p style="padding-top: 20px">Descàrrega del material formatiu: <a href="{absolute_url_activity}">Fitxa de la sessió</a>.</p>
+        <p style="padding-top: 20px">Descàrrega del material formatiu: <a href="{absolute_url_activity}">Fitxa de l'activitat</a>.</p>
         <p>
           Pots gestionar les teves dades i inscripcions accedint a l'aplicació amb el teu compte i anant a 
         l'apartat <a href="{absolute_url_my_activities}">Perfil -> Els Meus Cursos</a>.</p>

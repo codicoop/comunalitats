@@ -53,7 +53,7 @@ class ActivityPollView(CreateView):
     def access_granted(self):
         if not self.activity_obj.poll_access_allowed():
             raise Http404(
-                f"La sessió {self.activity_obj} no té l'enquesta de "
+                f"L'activitat {self.activity_obj} no té l'enquesta de "
                 f"valoració oberta en aquests moments."
             )
 
@@ -64,6 +64,6 @@ class ActivityPollView(CreateView):
         try:
             obj = Activity.objects.get(uuid=uuid)
         except Activity.DoesNotExist:
-            raise Http404(f"No existeix cap sessió formativa amb aquesta "
+            raise Http404(f"No existeix cap activitat amb aquesta "
                           f"adreça.")
         return obj

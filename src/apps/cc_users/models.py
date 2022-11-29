@@ -112,7 +112,7 @@ class User(BaseUser):
     def enrolled_activities_count(self):
         return self.enrolled_activities.all().count()
 
-    enrolled_activities_count.short_description = "Sessions"
+    enrolled_activities_count.short_description = "Activitats"
 
     def get_full_name(self):
         name = self.first_name
