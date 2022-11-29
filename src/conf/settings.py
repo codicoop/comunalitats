@@ -275,6 +275,13 @@ CONSTANCE_CONFIG = {
         "l’Ajuntament de Barcelona.",
         'Casella per acceptar #2.'),
     # Configuration
+    'DISABLE_FOOTER_AND_HEADER': (
+        False,
+        "Ocultar l'encapçalament i peu de pàgina a l'aplicació. Activa "
+        "aquesta opció si vols 'incrustar' l'aplicació dins d'una altra "
+        "pàgina o aplicació web.",
+        bool,
+    ),
     'EMAIL_TO_DEBUG': (
         'pere@codi.coop', 'Correu per fer proves d\'enviaments.'),
     'PROJECT_NAME': ("Comunalitat", "Nom curt de la comunalitat."),
@@ -324,7 +331,7 @@ CONSTANCE_CONFIG = {
 }
 CONSTANCE_CONFIG_FIELDSETS = {
     'Configuració': (
-        'PROJECT_NAME', 'PROJECT_FULL_NAME',
+        'DISABLE_FOOTER_AND_HEADER', 'PROJECT_NAME', 'PROJECT_FULL_NAME',
         'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL', 'PROJECT_CONTACT_URL',
         'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG',
         'PROJECT_FACEBOOK_URL', 'PROJECT_TWITTER_URL', 'PROJECT_INSTAGRAM_URL'
