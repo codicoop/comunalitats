@@ -163,11 +163,6 @@ class ProjectsFollowUpServicesAdmin(FilterByCurrentSubsidyPeriodMixin, admin.Mod
 
         for key, row in enumerate(ctxt['rows']):
             ctxt['rows'][key]['project'] = project_ids[row['project_id']]
-            ctxt['rows'][key]['employment_insertions'] = len(
-                row['project'].employment_insertions.filter(
-                    subsidy_period=filtered_subsidy_period
-                )
-            )
             ctxt['rows'][key]['constituted'] = 0
             project_subsidy = ctxt['rows'][key]['project'].subsidy_period
             if project_subsidy:
@@ -195,7 +190,6 @@ class ProjectsFollowUpServicesAdmin(FilterByCurrentSubsidyPeriodMixin, admin.Mod
             total_consolidacio_certificat=0,
             total_incubation_hores=0,
             total_incubation_certificat=0,
-            total_employment_insertions=0,
             total_constitutions=0,
             show_incubation=False
         )
@@ -227,9 +221,6 @@ class ProjectsFollowUpServicesAdmin(FilterByCurrentSubsidyPeriodMixin, admin.Mod
             totals['total_incubation_certificat'] += (
                 1 if row['incubation_certificat'] else 0
             )
-            totals['total_employment_insertions'] += row[
-                'employment_insertions'
-            ]
             totals['total_constitutions'] += row['constituted']
 
         if (totals['total_incubation_certificat'] > 0
@@ -402,7 +393,6 @@ class FollowUpSpreadsheet:
         columns = [
             ("ID", 10),
             ("Seguiment", 35),
-            ("Ateneu/Cercle", 20),
             ("Nom", 50),
             ("Servei", 30),
             ("Tutoritza", 20),
@@ -420,7 +410,6 @@ class FollowUpSpreadsheet:
             ("Incubació H.", 15),
             ("Incubació cert.", 15),
             ("Insercions previstes", 15),
-            ("Insercions justificades", 15),
             ("Constitució", 15),
             ("Altres", 60),
         ]
@@ -438,7 +427,6 @@ class FollowUpSpreadsheet:
             row = [
                 raw_row['project'].id,
                 follow_up_situation if follow_up_situation else '',
-                raw_row["project"].last_stage_circle,
                 raw_row['project'].name,
                 (raw_row['project'].services_list
                     if raw_row['project'].services_list else ''),
@@ -461,7 +449,6 @@ class FollowUpSpreadsheet:
                     if raw_row['incubation_hores'] else 0),
                 1 if raw_row['incubation_certificat'] > 0 else 0,
                 raw_row['project'].employment_estimation,
-                len(raw_row['project'].employment_insertions.all()),
                 (raw_row['project'].constitution_date
                     if raw_row['project'].constitution_date else ''),
                 raw_row['project'].other if raw_row['project'].other else '',

@@ -198,11 +198,6 @@ header#grp-header {
           </th>
           <th class="sticky">
             <div class="grp-text">
-              <span>Insercions justificades</span>
-            </div>
-          </th>
-          <th class="sticky">
-            <div class="grp-text">
               <span>Constitució</span>
             </div>
           </th>
@@ -248,7 +243,6 @@ header#grp-header {
           </td>
           {% endif %}
           <td>{{ row.project.employment_estimation }}</td>
-          <td>{{ row.employment_insertions }}</td>
           <td>{% if row.constituted %}Sí{% else %}No{% endif %}</td>
           <td>
             {% if row.project.other %}
@@ -279,7 +273,6 @@ header#grp-header {
           <td>{{ totals.total_incubation_certificat }}</td>
           {% endif %}
           <td>-</td>
-          <td>{{ totals.total_employment_insertions }}</td>
           <td>{{ totals.total_constitutions }}</td>
           <td>-</td>
         </tr>

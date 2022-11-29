@@ -471,13 +471,14 @@ class StageSubtypeAdmin(admin.ModelAdmin):
 
 
 @admin.register(ProjectStageSession)
-class ProjectStageSessions(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
+class ProjectStageSessionAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     empty_value_display = '(cap)'
     raw_id_fields = ('involved_partners',)
     autocomplete_lookup_fields = {
         'm2m': ['involved_partners'],
     }
     fields = (
+        "project_stage",
         "session_responsible",
         "date",
         "hours",
