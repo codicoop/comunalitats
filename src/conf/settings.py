@@ -117,7 +117,6 @@ INSTALLED_APPS = [
     'apps.projects',
     'apps.polls',
     'apps.towns',
-    'apps.iframe_front',
     'grappelli.dashboard',
     'grappelli',
     'tagulous',
