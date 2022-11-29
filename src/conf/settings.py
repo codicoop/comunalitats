@@ -328,12 +328,17 @@ CONSTANCE_CONFIG = {
     'ATTENDEE_LIST_FOOTER_IMG': (
         "https://example.com/footer.png",
         "URL de la imatge pel peu de pàgina del llistat d'assistència."),
+    'CUSTOM_STYLESHEET_URL': (
+        "",
+        "URL a un full d'estils que d'inclourà en última posició, de manera "
+        "que sobreescrigui la resta d'estils.",
+    ),
 }
 CONSTANCE_CONFIG_FIELDSETS = {
     'Configuració': (
-        'DISABLE_FOOTER_AND_HEADER', 'PROJECT_NAME', 'PROJECT_FULL_NAME',
+        'PROJECT_NAME', 'PROJECT_FULL_NAME',
         'PROJECT_WEBSITE_URL', 'PROJECT_LEGAL_URL', 'PROJECT_CONTACT_URL',
-        'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL', 'EMAIL_TO_DEBUG',
+        'CONTACT_PHONE_NUMBER', 'CONTACT_EMAIL',
         'PROJECT_FACEBOOK_URL', 'PROJECT_TWITTER_URL', 'PROJECT_INSTAGRAM_URL'
     ),
     "Apartat Portada": (
@@ -342,7 +347,12 @@ CONSTANCE_CONFIG_FIELDSETS = {
     ),
     "Apartat Formació": ('CONTENT_COURSES_INTRODUCTION',),
     "Formulari d'alta": ('CONTENT_SIGNUP_LEGAL1', 'CONTENT_SIGNUP_LEGAL2',),
-    "Llistat d'assistència": ('ATTENDEE_LIST_FOOTER_IMG',),
+    "Variables avançades": (
+        'CUSTOM_STYLESHEET_URL',
+        'DISABLE_FOOTER_AND_HEADER',
+        'ATTENDEE_LIST_FOOTER_IMG',
+        'EMAIL_TO_DEBUG',
+    ),
 }
 
 # CC Courses
