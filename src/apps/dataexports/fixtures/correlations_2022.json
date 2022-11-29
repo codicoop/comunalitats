@@ -1,0 +1,19 @@
+{
+  "gender": {
+    "FEMALE": "D",
+    "MALE": "H",
+    "OTHER": "NB"
+  },
+  "minors_grade": {
+    "PRIM": "Prim\u00e0ria",
+    "ESO": "Secund\u00e0ria obligat\u00f2ria",
+    "BATX": "Batxillerat",
+    "FPGM": "Formaci\u00f3 professional grau mig",
+    "FPGS": "Formaci\u00f3 professional grau superior"
+  },
+  "stage_type": {
+    "11": "Creació",
+    "12": "Consolidació",
+    "13": "Creixement"
+  }
+}

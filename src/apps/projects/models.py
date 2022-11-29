@@ -335,7 +335,7 @@ class ProjectStage(models.Model):
     STAGE_TYPE_OPTIONS = (
         ('11', "Creació"),
         ('12', "Consolidació"),
-        ('9', "Incubació"),
+        ('13', "Creixement"),
     )
     stage_type = models.CharField("tipus d'acompanyament", max_length=2,
                                   default=DEFAULT_STAGE_TYPE,
