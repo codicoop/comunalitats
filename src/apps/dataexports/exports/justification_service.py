@@ -1,4 +1,5 @@
-from apps.cc_courses.models import Activity, ActivityEnrolled
+from apps.cc_courses.models import Activity
+from apps.coopolis.choices import ServicesChoices
 from apps.dataexports.exports.manager import ExcelExportManager
 from apps.projects.models import ProjectStage, Project, EmploymentInsertion
 
@@ -385,7 +386,11 @@ class ExportJustificationService:
                     town = str(item.project.town)
 
                 row = [
-                    f"{reference_number} {item.project.name}",  # Referència.
+                    self.get_formatted_reference(
+                        reference_number,
+                        item.service,
+                        item.project.name,
+                    ),  # Referència.
                     "",  # Nom actuació. Camp no editable.
                     item.project.name,
                     "",  # Destinatari de l'acompanyament
@@ -440,8 +445,11 @@ class ExportJustificationService:
             if stages.count() > 0:
                 stage = stages.all()[0]
                 founded_projects_reference_number += 1
-                reference_number = (f"{founded_projects_reference_number} "
-                                    f"{project.name}")
+                reference_number = self.get_formatted_reference(
+                        founded_projects_reference_number,
+                        stage.service,
+                        project.name,
+                    )
                 name = project.name
 
             self.export_manager.row_number += 1
@@ -510,7 +518,11 @@ class ExportJustificationService:
                         )
 
                     row = [
-                        f"{activity_reference_number} {activity.project.name}",
+                        self.get_formatted_reference(
+                            activity_reference_number,
+                            activity.service,
+                            activity.project.name,
+                        ),
                         "",  # Nom de l'actuació. Camp automàtic de l'excel.
                         participant.surname or "",
                         participant.first_name,
@@ -544,7 +556,11 @@ class ExportJustificationService:
                     )
 
                 row = [
-                    f"{activity_reference_number} {activity.name}",
+                    self.get_formatted_reference(
+                        activity_reference_number,
+                        activity.service,
+                        activity.name,
+                    ),
                     "",  # Nom de l'actuació. Camp automàtic de l'excel.
                     participant.surname or "",
                     participant.first_name,
@@ -586,7 +602,11 @@ class ExportJustificationService:
             self.export_manager.row_number += 1
             nouniversitari_reference_number += 1
             row = [
-                f"{nouniversitari_reference_number} {activity.name}",
+                self.get_formatted_reference(
+                    nouniversitari_reference_number,
+                    activity.service,
+                    activity.project.name,
+                ),
                 # Referència.
                 activity.name,  # Nom de l'actuació. Camp automàtic de l'excel.
                 self.export_manager.get_correlation(
@@ -649,8 +669,8 @@ class ExportJustificationService:
                     'gender', insertion.user.gender)
 
             row = [
-                '',  # Deixem referència en blanc pq la posin a ma.
-                '',  # Nom actuació
+                "",  # TODO: des d'aquí no podem saber la referència de l'Activitat
+                "",  # Nom actuació
                 insertion.user.surname,
                 insertion.user.first_name,
                 id_number,
@@ -706,3 +726,16 @@ class ExportJustificationService:
                 project.services_list if project.services_list else ""
             ]
             self.export_manager.fill_row_data(row)
+
+    def get_formatted_reference(
+        self,
+        ref_num,
+        service_id,
+        actuation_name,
+    ):
+        if not service_id or not actuation_name:
+            return "", True
+        service_code = ServicesChoices(service_id).name
+        return (
+            f"{ref_num} {service_code})  {actuation_name}"
+        )
