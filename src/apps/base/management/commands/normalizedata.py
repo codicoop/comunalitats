@@ -25,8 +25,13 @@ class Command(BaseCommand):
             },
             {
                 'name': '2022-2023',
-                'date_start': date(2022, 3, 1),
-                'date_end': date(2023, 2, monthrange(2022, 2)[1]),
+                'date_start': date(2022, 2, 16),
+                'date_end': date(2023, 2, 15),
+            },
+            {
+                'name': '2023-2024',
+                'date_start': date(2023, 2, 16),
+                'date_end': date(2024, 2, 15),
             },
         )
         for period in periods:
