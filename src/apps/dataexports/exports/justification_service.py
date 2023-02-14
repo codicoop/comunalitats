@@ -243,11 +243,11 @@ class ExportJustificationService:
                     sub_service,
                     item.project.name,
                     item.date_start or '',
+                    "",  # Període d'actuacions
                     town,
                     "No",  # Material de difusió
                     "",  # Incidències
                     "",  # Document acreditatiu
-                    # En blanc pq cada stage session pot contenir una entitat
                     "",  # Entitat
                     '(no aplicable)',  # Lloc
                     '(no aplicable)',  # Acció
@@ -280,10 +280,9 @@ class ExportJustificationService:
                 "",  # Període
                 town,
                 material_difusio,
-                item.entities_str,  # Entitat
+                "",  # Incidències
                 document_acreditatiu,
-                "",
-                str(item.entity) if item.entity else '',  # Entitat
+                item.entities_str,  # Entitat
                 str(item.place) if item.place else '',  # Lloc
                 str(item.course),  # Acció
             ]
@@ -338,7 +337,7 @@ class ExportJustificationService:
                 town,
                 "No",  # Material de difusió
                 "",  # Incidències
-                # En blanc pq cada stage session pot contenir una entitat
+                "", # Doc. acreditatiu
                 "",  # Entitat
                 '(no aplicable)',  # Lloc
                 '(no aplicable)',  # Acció

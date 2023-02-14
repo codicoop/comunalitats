@@ -1,6 +1,7 @@
-# Coòpolis: Back office
+# Comunalitats: Back office
 
-Aplicació online per gestionar les formacions que fa Coòpolis durant l'any, així com l'acompanyament de projectes.
+Aplicació web per gestionar l'activitat de les comunalitats, facilitant la 
+inscripció de les participants i la justificació de la convocatòria.
 
 ## Prepare the develop environment
 
@@ -10,46 +11,6 @@ module that sets `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` values.*
 *⚠ If you get the "failed to load a library: cairo" when generating attendees lists, it's because of Weasyprint,
 which uses Cairo.
 You need to install Weasyprint in your system following the [official website's instruccions](https://weasyprint.readthedocs.io/en/stable/install.html#macos).
-
-For the file and image uploads to work, set a `DJANGO_SETTINGS_MODULE` environment variable pointing to a config.
-
-Because is made for multi-tenancy, you'll see that database settings are not in dev.py, but are expected to be placed
-in a local settings file.
-You can just put them in dev.py if you don't need multitenancy, but if you keep them in the local file
-and you run commands directly in PyCharm (or virtual environment) terminal, the execution is probably
-going to be missing the settings module environment variable and therefore fail.
-A trick I'm doing is to create a command alias (editing ~/.bash_profile) like:
-`alias pmc='DJANGO_SETTINGS_MODULE=path_to_.settings.local_settings python3 manage.py'`
-And now I can run `pmc check`, `pmc makemigrations`, etc. 
-
-Another option to do this is with PyCharm settings, at Tools -> Terminal -> Environment Variables.
-(needs restarting to take effect)
-
-### Update requirements
-
-Make sure you have pipenv installed and to initiate it in the project's folder.
-If you are using PyCharm, use [this guide](href="https://www.jetbrains.com/help/pycharm/pipenv.html") to set everything up.
-
-### Start a DB server
-
-`$ sudo docker run -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword postgres`
-
-Then you could connect to the DB server and create DB:
-```
-$ export PGPASSWORD=mysecretpassword && psql -U postgres -h 127.0.0.1`
-create database coopolis;
-```
-
-### Create the DB structure
-```
-python3 manage.py makemigrations
-python3 manage.py migrate
-```
-
-At this point you could add fake data (⚠ this action erases data in DB):
-```
-python3 manage.py generatefakedata
-```
 
 ### Editing stylesheets
 
@@ -96,18 +57,6 @@ https://gitlab.com/dannosaur/django-dynamic-form-fields
 
 Enables dropdowns that filter its content according to another dropdown.
 We use them when selecting Axis and Sub-axis.
-
-## Django-Q
-
-Package for handling scheduled tasks.
-We're using it in a very simple way to execute the *mailqueue* command
-`send_queued_messages`.
-
-This tutorial is helpful to understand the setup:
-https://mattsegal.dev/simple-scheduled-tasks.html
-
-Then, the process is launched by having one docker container instance for each
-ateneu, each suffixed as "automation".
 
 # Commands
 
@@ -161,8 +110,8 @@ Amb això estem dient-li que generi la imatge en el context de la carpeta actual
 
 L'objectiu és tenir dues imatges per cada release:
 
-- codi.coop/ateneus:latest
-- codi.coop/ateneus:release-22.03.002 (versió corresponent a la tag)
+- codi.coop/comunalitats:latest
+- codi.coop/comunalitats:release-22.03.002 (versió corresponent a la tag)
 
 Quan es fa una release s'ha de crear una card al Trello fent servir la plantilla
 que hi ha amb la llista de passos que cal seguir, i en aquesta plantilla ja
@@ -178,11 +127,11 @@ l'última ja s'ha generat o ha fallat, etc.
 
 Si la vols pujar manualment:
 1. Crear la imatge, des de la carpeta /docker:
-`docker build --compress --target production --tag codicoop/ateneus:latest --file Dockerfile ../`
+`docker build --compress --target production --tag codicoop/comunalitats:latest --file Dockerfile ../`
 
 2. Fer `docker login` si no has fet abans.
 3. Pujar la imatge:
-`docker push codicoop/ateneus:latest`
+`docker push codicoop/comunalitats:latest`
 
 ### Per generar la imatge :release-*tag*
 
