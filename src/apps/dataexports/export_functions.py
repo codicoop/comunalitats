@@ -2,6 +2,7 @@ from django.http import HttpResponseNotFound
 
 from apps.dataexports.exports.justification_service import \
     ExportJustificationService
+from apps.dataexports.exports.minors import ExportMinors
 from apps.dataexports.exports.polls import ExportPolls, ExportPollsByServices
 
 
@@ -30,6 +31,10 @@ class ExportFunctions:
 
     def export_service(self, export_obj):
         controller = ExportJustificationService(export_obj)
+        return controller.export()
+
+    def export_minors(self, export_obj):
+        controller = ExportMinors(export_obj)
         return controller.export()
 
     def export_polls_by_services(self, export_obj):
