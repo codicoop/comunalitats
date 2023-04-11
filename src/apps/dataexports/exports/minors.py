@@ -101,6 +101,7 @@ class ExportMinors:
             ("Nom actuació", 40),
             ("Grau d'estudis", 20),
             ("Nom centre educatiu", 20),
+            ("Nombre de participants", 20),
         ]
         self.export_manager.create_columns(columns)
 
@@ -114,7 +115,7 @@ class ExportMinors:
             nouniversitari_reference_number += 1
             row = [
                 self.get_formatted_reference(
-                    self.export_manager.row_number,
+                    nouniversitari_reference_number,
                     activity.service,
                     activity.name,
                 ),
@@ -123,6 +124,7 @@ class ExportMinors:
                 self.export_manager.get_correlation(
                     'minors_grade', activity.minors_grade),
                 activity.minors_school_name,
+                activity.minors_participants_number,
             ]
             self.export_manager.fill_row_data(row)
 
