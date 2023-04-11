@@ -661,9 +661,7 @@ class ExportJustificationService:
             insertion_date = insertion.insertion_date
             if not insertion_date:
                 insertion_date = ('', True)
-            end_date = insertion.end_date
-            if not end_date:
-                end_date = ('', True)
+            end_date = insertion.end_date or ""
             contract_type = insertion.get_contract_type_display()
             if not contract_type:
                 contract_type = ('', True)
