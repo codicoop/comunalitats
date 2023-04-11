@@ -5,6 +5,8 @@ from apps.projects.models import ProjectStage, Project, EmploymentInsertion
 
 
 class ExportJustificationService:
+    subsidy_period_str = "2022-23"
+
     def __init__(self, export_obj):
         self.export_manager = ExcelExportManager(export_obj)
         self.number_of_activities = 0
@@ -739,10 +741,15 @@ class ExportJustificationService:
         ref_num,
         service_id,
         actuation_name,
+        subsidy_period=None,
     ):
+        # Format justificació 22-23:
+        # 1 B) 2022-23 Nom de l'activitat
         if not service_id or not actuation_name:
             return "", True
+        if not subsidy_period:
+            subsidy_period = self.subsidy_period_str
         service_code = ServicesChoices(service_id).name
         return (
-            f"{ref_num} {service_code})  {actuation_name}"
+            f"{ref_num} {service_code}) {subsidy_period} {actuation_name}"
         )
