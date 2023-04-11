@@ -30,12 +30,11 @@ class ExportJustificationService:
         }
         self.stages_obj = None
 
-    def get_sessions_obj(self, for_minors=False):
+    def get_sessions_obj(self):
         return Activity.objects.filter(
             date_start__range=self.export_manager.subsidy_period.range,
-            for_minors=for_minors
         )
-    
+
     """
     
     Exportació Ateneu
@@ -78,11 +77,20 @@ class ExportJustificationService:
         self.export_manager.create_columns(columns)
         self.actuacions_rows_activities()
         self.actuacions_rows_stages()
-        self.actuacions_rows_nouniversitaris()
+        # self.actuacions_rows_nouniversitaris()
         self.actuacions_rows_founded_projects()
         # Total Stages: self.export_manager.row_number-Total Activities-1
 
     def actuacions_rows_activities(self):
+        # Anteriorment, per una banda es mostràven totes les activitats que
+        # no eren per menors i més avall en un altre bloc, les de menors.
+        # Ara que una activitat pot tenir qualsevol de les dues coses juntes,
+        # això genera problemes a l'hora de determinar quines han d'aparèixer
+        # a cada bloc, a demés, deixa de ser necessària aquesta diferenciació,
+        # ja que no hi una pestanya de menors sinó que els menors van a un
+        # excel a banda
+        #
+        # Per tant, ara totes les activitats es llisten en aquest bloc.
         obj = self.get_sessions_obj()
         self.number_of_activities = len(obj)
         for item in obj:
@@ -255,7 +263,7 @@ class ExportJustificationService:
                 self.export_manager.fill_row_data(row)
 
     def actuacions_rows_nouniversitaris(self):
-        obj = self.get_sessions_obj(for_minors=True)
+        obj = self.get_sessions_obj()
         self.number_of_nouniversitaris = len(obj)
         for item in obj:
             self.export_manager.row_number += 1
@@ -540,7 +548,7 @@ class ExportJustificationService:
 
     def participants_rows(self):
         activity_reference_number = 0
-        obj = self.get_sessions_obj(for_minors=False)
+        obj = self.get_sessions_obj()
         for activity in obj:
             # We know that activities where generated first, so it starts at 1.
             activity_reference_number += 1
@@ -596,7 +604,7 @@ class ExportJustificationService:
         nouniversitari_reference_number = \
             self.number_of_stages \
             + self.number_of_activities
-        obj = self.get_sessions_obj(for_minors=True)
+        obj = self.get_sessions_obj()
         for activity in obj:
             self.export_manager.row_number += 1
             nouniversitari_reference_number += 1
