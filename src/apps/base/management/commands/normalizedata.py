@@ -70,6 +70,12 @@ class Command(BaseCommand):
                     'ignore_errors': True
                 },
                 {
+                    'name': "Exportació activitats per menors",
+                    'subsidy_period': period,
+                    'function_name': 'export_minors',
+                    'ignore_errors': True
+                },
+                {
                     'name': "Resultats enquestes de satisfacció",
                     'subsidy_period': period,
                     'function_name': 'export_polls_by_services',
