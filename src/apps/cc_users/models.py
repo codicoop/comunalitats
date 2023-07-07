@@ -1,5 +1,8 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Q
+
 from .managers import CCUserManager
 from tagulous.models import TagField
 
@@ -8,7 +11,7 @@ class BaseUser(AbstractUser):
     class Meta:
         abstract = True
 
-    email = models.EmailField('Correu electrònic', blank=False, null=False, unique=True)
+    email = models.EmailField('Correu electrònic', blank=False, null=False)
     is_confirmed = models.BooleanField(default=False)
     objects = CCUserManager()
 
@@ -18,6 +21,13 @@ class User(BaseUser):
         verbose_name = "persona"
         verbose_name_plural = "persones"
         ordering = ["-date_joined"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['email'],
+                name='unique_non_empty_emails',
+                condition=~Q(email=''),
+            ),
+        ]
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -144,3 +154,15 @@ class User(BaseUser):
         if self.projects.count() > 0:
             return self.projects.all()[0]
         return None
+
+    def clean(self):
+        super().clean()
+
+        # Perform uniqueness check only if the email field is not empty
+        if self.email != '':
+            existing_emails = User.objects.exclude(pk=self.pk).filter(
+                email=self.email,
+            )
+            if existing_emails.exists():
+                raise ValidationError(
+                    {'email': "Aquest correu ja està en ús."})
