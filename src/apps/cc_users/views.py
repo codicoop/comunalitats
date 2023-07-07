@@ -131,8 +131,11 @@ class SignUpView(CreateView):
     def form_valid(self, form):
         form.save()
         self.send_welcome_email(self.request.POST['email'])
-        username = self.request.POST['email']
-        password = self.request.POST['password1']
+        username_field = "email"
+        if not form.cleaned_data.get('email'):
+            username_field = "id_number"
+        username = form.cleaned_data.get(username_field)
+        password = form.cleaned_data.get('password1')
         user = authenticate(username=username, password=password)
         login(self.request, user)
         return HttpResponseRedirect(self.get_success_url())

@@ -30,4 +30,6 @@ class CCUserManager(TaggedManager, UserManager):
 
     def get_by_natural_key(self, username):
         username_field = f"{self.model.USERNAME_FIELD}__iexact"
+        if not username:
+            username_field = "id_number"
         return self.get(**{username_field: username})
