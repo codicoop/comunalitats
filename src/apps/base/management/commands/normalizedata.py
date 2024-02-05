@@ -33,6 +33,11 @@ class Command(BaseCommand):
                 'date_start': date(2023, 2, 16),
                 'date_end': date(2024, 2, 15),
             },
+            {
+                'name': '2024-2025',
+                'date_start': date(2024, 2, 16),
+                'date_end': date(2025, 2, 15),
+            },
         )
         for period in periods:
             obj, created = SubsidyPeriod.objects.get_or_create(
@@ -61,6 +66,29 @@ class Command(BaseCommand):
 
         exports = []
         period = SubsidyPeriod.objects.get(name="2022-2023")
+        exports.extend(
+            [
+                {
+                    'name': "Exportació justificació",
+                    'subsidy_period': period,
+                    'function_name': 'export_service',
+                    'ignore_errors': True
+                },
+                {
+                    'name': "Exportació activitats per menors",
+                    'subsidy_period': period,
+                    'function_name': 'export_minors',
+                    'ignore_errors': True
+                },
+                {
+                    'name': "Resultats enquestes de satisfacció",
+                    'subsidy_period': period,
+                    'function_name': 'export_polls_by_services',
+                    'ignore_errors': True
+                },
+            ]
+        )
+        period = SubsidyPeriod.objects.get(name="2023-2024")
         exports.extend(
             [
                 {
