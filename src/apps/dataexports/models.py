@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.timezone import now
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class SubsidyPeriod(models.Model):
@@ -23,9 +24,10 @@ class SubsidyPeriod(models.Model):
     @staticmethod
     def get_current():
         today = now()
-        return SubsidyPeriod.objects.get(
-            date_start__lte=today, date_end__gte=today
-        )
+        try:
+            return SubsidyPeriod.objects.get(date_start__lte=today, date_end__gte=today)
+        except ObjectDoesNotExist:
+            return None
 
     def clean(self):
         super().clean()
