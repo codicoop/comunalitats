@@ -56,23 +56,19 @@ class Project(models.Model):
         ('R', 'Roba')
     )
     sector = models.CharField(max_length=2, choices=SECTORS)
-    web = models.CharField("Web", max_length=200, blank=True)
+    web = models.CharField("Xarxes socials", max_length=200, blank=True)
     PROJECT_STATUS_OPTIONS = (
-        ("IN_MEDITATION_PROCESS", "En proces de debat/reflexió"),
+        ("IN_MEDITATION_PROCESS", "En procés de debat/reflexió"),
         ("IN_CONSTITUTION_PROCESS", "En constitució"),
         ("RUNNING", "Constituïda"),
+        ("IN_CONSOLIDATION_PROCESS", "En procés de consolidació"),
         ("DOWN", "Caigut")
     )
     project_status = models.CharField("estat del projecte", max_length=50,
                                       blank=True, null=True,
                                       choices=PROJECT_STATUS_OPTIONS)
     MOTIVATION_OPTIONS = (
-        ('COOPERATIVISM_EDUCATION', 'Formació en cooperativisme'),
-        ('COOPERATIVE_CREATION', "Constitució d'una cooperativa"),
-        ('TRANSFORM_FROM_ASSOCIATION',
-         "Transformació d'associació a cooperativa"),
-        ('TRANSFORM_FROM_SCP', "Transformació de SCP a cooperativa"),
-        ('ENTERPRISE_RELIEF', "Relleu empresarial"),
+        ('TERRITORIAL_ARRANGEMENT', 'Arrelament territorial'),
         ('CONSOLIDATION', "Consolidació"),
         ('OTHER', "Altres"),
     )
@@ -96,12 +92,12 @@ class Project(models.Model):
     cif = models.CharField("N.I.F.", max_length=11, blank=True, null=True)
     object_finality = models.TextField("objecte i finalitat", blank=True,
                                        null=True)
-    project_origins = models.TextField("orígens del projecte", blank=True,
+    project_origins = models.TextField("descripció del projecte", blank=True,
                                        null=True)
     solves_necessities = models.TextField(
         "quines necessitats resol el vostre projecte?", blank=True, null=True)
     social_base = models.TextField(
-        "compta el vostre projecte amb una base social?", blank=True,
+        "base social (quines entitats o persones en formen part)", blank=True,
         null=True)
     constitution_date = models.DateField("data de constitució", blank=True,
                                          null=True)

@@ -15,9 +15,8 @@ class ProjectForm(forms.ModelForm):
         model = Project
         fields = (
             'name', 'sector', 'web', 'project_status', 'motivation', 'mail',
-            'phone', 'town', 'neighborhood', 'number_people', 'estatuts',
-            'viability', 'sostenibility', 'object_finality', 'project_origins',
-            'solves_necessities', 'social_base'
+            'phone', 'town', 'neighborhood', 'number_people', 'project_origins',
+            'social_base'
         )
         exclude = ('cif', 'registration_date', 'constitution_date',
                    'partners', )
