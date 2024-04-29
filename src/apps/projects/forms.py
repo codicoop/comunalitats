@@ -18,8 +18,7 @@ class ProjectForm(forms.ModelForm):
             'phone', 'town', 'neighborhood', 'number_people', 'project_origins',
             'social_base'
         )
-        exclude = ('cif', 'registration_date', 'constitution_date',
-                   'partners', )
+        exclude = ('registration_date', 'partners', )
 
 
 class ProjectFormAdmin(ProjectForm):

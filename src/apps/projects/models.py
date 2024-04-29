@@ -36,7 +36,7 @@ class Project(models.Model):
 
     partners = models.ManyToManyField(
         User,
-        verbose_name="sòcies",
+        verbose_name="sòcies o membres del projecte",
         blank=True,
         related_name="projects",
     )
