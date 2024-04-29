@@ -65,16 +65,46 @@ class ProjectStageSessionsInline(admin.StackedInline):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
+class FilterBySubsidyPeriod(admin.SimpleListFilter):
+    """
+    Allows Activities to be filtered according to their date_start using a
+    dropdown with the subsidy periods.
+    In ProjectStage, we're using this instead of just specifying the field in
+    ProjectStageAdmin.list_filter because we wanted to skip the All option in
+    the filter, for consistency with the FilterByCurrentSubsidyPeriodMixin
+    behaviour.
+    """
+    title = "Convocatòria"
+    parameter_name = 'subsidy_period'
+
+    def lookups(self, request, model_admin):
+        qs = SubsidyPeriod.objects.all()
+        qs.order_by('name')
+        return list(qs.values_list('id', 'name'))
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value:
+            return queryset.filter(subsidy_period_id=value)
+        return queryset
+
+    def choices(self, changelist):
+        choices = super().choices(changelist)
+        choices.__next__()
+        for choice in choices:
+            yield choice
+
+
 class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     empty_value_display = '(cap)'
     list_display = (
         'project_field_ellipsis', 'date_start', 'stage_type',
         'responsible_field_ellipsis',
-        'service', '_has_certificate',
+        'service', 'subsidy_period', '_has_certificate',
         '_participants_count', 'project_field', 'justification_documents_total',
     )
     list_filter = (
-        'service',
+        FilterBySubsidyPeriod, 'service',
         ('responsible', admin.RelatedOnlyFieldListFilter),
         'date_start', 'stage_type',
         'project__sector'
@@ -84,9 +114,9 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     fieldsets = [
         (None, {
             'fields': [
-                'project', 'stage_type', 'stage_subtype',
-                'service', 'sub_service',
-                'responsible',
+                'project', 'stage_type',
+                'subsidy_period', 'service', 
+                'sub_service', 'responsible',
                 'scanned_certificate',
                 'hours_sum', 'date_start',
                 "earliest_session_field",
@@ -106,7 +136,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         "earliest_session_field",
         "justification_documents_total",
     )
-    # subsidy_period_filter_param = "subsidy_period"
+    subsidy_period_filter_param = "subsidy_period"
 
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
@@ -174,7 +204,7 @@ class ProjectStagesInline(admin.StackedInline):
             'fields': [
                 'project',
                 'stage_type',
-                'stage_subtype',
+                'subsidy_period',
                 'service',
                 'sub_service',
                 'responsible',
@@ -258,8 +288,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         'stages_field', 'last_stage_responsible',
     )
     search_fields = (
-        'id', 'name__unaccent', 'web', 'mail', 'phone', 'registration_date',
-        'project_origins', 'social_base', 'sector'
+        'id', 'name__unaccent', 'web', 'mail', 'phone', 'registration_date', 'project_origins', 'social_base', 'sector'
     )
     list_filter = ('registration_date', 'sector', 'project_status',
                    FilterByFounded, 'tags', )
@@ -402,8 +431,8 @@ class DerivationAdmin(admin.ModelAdmin):
 class EmploymentInsertionAdmin(admin.ModelAdmin):
     model = EmploymentInsertion
     form = EmploymentInsertionForm
-    list_display = ('insertion_date', 'activity', 'user', 'contract_type',)
-    list_filter = ('contract_type', 'insertion_date',)
+    list_display = ('insertion_date', 'activity', 'user', 'contract_type', 'subsidy_period', )
+    list_filter = ('subsidy_period', 'contract_type', 'insertion_date',)
     search_fields = ('activity__name__unaccent', 'user__first_name__unaccent', )
     raw_id_fields = ('user', 'activity',)
     autocomplete_lookup_fields = {
