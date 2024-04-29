@@ -412,7 +412,6 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         mail.body_strings = {
             'ateneu_nom': config.PROJECT_FULL_NAME,
             'projecte_nom': project_name,
-            'url_projectes': settings.ABSOLUTE_URL + reverse('project_info'),
             'url_backoffice': settings.ABSOLUTE_URL
         }
         mail.send_to_user(user_obj)
