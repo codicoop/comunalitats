@@ -56,7 +56,7 @@ class Project(models.Model):
         ('R', 'Roba')
     )
     sector = models.CharField(max_length=2, choices=SECTORS)
-    web = models.CharField("Xarxes socials", max_length=200, blank=True)
+    web = models.CharField("xarxes socials", max_length=200, blank=True)
     PROJECT_STATUS_OPTIONS = (
         ("IN_MEDITATION_PROCESS", "En procés de debat/reflexió"),
         ("IN_CONSTITUTION_PROCESS", "En constitució"),
@@ -68,8 +68,8 @@ class Project(models.Model):
                                       blank=True, null=True,
                                       choices=PROJECT_STATUS_OPTIONS)
     MOTIVATION_OPTIONS = (
-        ('TERRITORIAL_ARRANGEMENT', 'Arrelament territorial'),
         ('CONSOLIDATION', "Consolidació"),
+        ('TERRITORIAL_ARRANGEMENT', 'Arrelament territorial'),
         ('OTHER', "Altres"),
     )
     motivation = models.CharField("petició inicial", max_length=50, blank=True,
@@ -374,7 +374,7 @@ class ProjectStage(models.Model):
         "activada la opció 'Membre del personal'.",
     )
     scanned_certificate = models.FileField(
-        "Certificat", blank=True, null=True,
+        "Document justificació final", blank=True, null=True,
         storage=PrivateMediaStorage(), max_length=250)
     involved_partners = models.ManyToManyField(
         User, verbose_name="(obsolet) Persones involucrades", blank=True,
