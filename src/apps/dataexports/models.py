@@ -34,26 +34,27 @@ class SubsidyPeriod(models.Model):
         """
         Prevent the selected period from overlapping the one of any other.
         """
-        q = SubsidyPeriod.objects.filter(
-            models.Q(
-                date_start__gte=self.date_start, date_start__lt=self.date_end
+        if self.date_start and self.date_end:
+            q = SubsidyPeriod.objects.filter(
+                models.Q(
+                    date_start__gte=self.date_start, date_start__lt=self.date_end
+                )
+                | models.Q(
+                    date_end__gt=self.date_start, date_end__lte=self.date_end
+                )
+                | models.Q(
+                    date_start__lte=self.date_start, date_end__gte=self.date_end
+                )
             )
-            | models.Q(
-                date_end__gt=self.date_start, date_end__lte=self.date_end
-            )
-            | models.Q(
-                date_start__lte=self.date_start, date_end__gte=self.date_end
-            )
-        )
 
-        if self.id:
-            q = q.exclude(id=self.id)
+            if self.id:
+                q = q.exclude(id=self.id)
 
-        if q.count() > 0:
-            err = ("La data d'inici i/o la de finalització seleccionades "
-                   "trepitgen les d'alguna altra convocatòria, selecciona'n "
-                   "unes altres.")
-            raise ValidationError({'date_start': err, 'date_end': err})
+            if q.count() > 0:
+                err = ("La data d'inici i/o la de finalització seleccionades "
+                    "trepitgen les d'alguna altra convocatòria, selecciona'n "
+                    "unes altres.")
+                raise ValidationError({'date_start': err, 'date_end': err})
 
     def __str__(self):
         return self.name
