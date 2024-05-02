@@ -2,11 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 from apps.coopolis.choices import ServicesChoices
-
+from apps.projects.models import SubsidyPeriod
 
 @login_required
 def get_sub_services(request):
-    service = int(request.GET.get("service")) if request.GET.get("service") else None
+    service = int(request.GET.get("data")) if request.GET.get("data") else None
     sub_services = {}
     try:
         service = ServicesChoices(service)
@@ -21,14 +21,15 @@ def get_sub_services(request):
 
 @login_required
 def get_subsidy_period(request):
-    subsidy_period = request.GET.get("subsidy_period")
+    subsidy_period = request.GET.get("data")
+    last_subsidy_period = SubsidyPeriod.objects.filter().first()
+    selected_subsidy_period = SubsidyPeriod.objects.filter(name=subsidy_period).first()
     item_start = ServicesChoices.A
     item_end = ServicesChoices.E
     # !TODO: revisar
-    if subsidy_period == "1":
+    if last_subsidy_period == selected_subsidy_period:
         item_start = ServicesChoices.F
         item_end = ServicesChoices.J
-
     if not subsidy_period:
         services = None
     elif subsidy_period:
