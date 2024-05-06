@@ -75,14 +75,6 @@ La dockerització de develop monta la carpeta /src dins de la imatge de manera
 que quan facis canvis al codi automàticament es reflecteixin a la imatge i això
 farà que el gunicorn reiniciï l'aplicació al moment.
 
-Per aixecar el projecte, s'ha de reanomenar l'arxiu `settings.env.example` a `comunalitat_1.env` i posar-ho dins de la ruta _/docker/develop/_. Després, s'ha de aixecar el contenidor de la base de dades amb: `docker-compose up develop_comunalitats_db` 
-
-Per crear la base de dades s'ha de tirar el comandament: `docker exec develop_comunalitats_db createdb comunalitat_1 -U postgres` i per importar el backup de la base de dades si n'ha:
-- Mac: `cat dumps/<nom>.postgres.sql | docker exec -i develop_comunalitats_db psql -d comunalitat_1 -U postgres`
-- Windows: `docker exec -i develop_comunalitats_db psql -d comunalitat_1 -U postgres < dumps/<nom>.postgres.sql`
-
-Per últim, parar el contenidor docker de la base de dades i executar: `docker-compose up`. Anar a [localhost:4001](http://localhost:4001)
-
 El docker-compose per aixecar el servidor de develop és al fitxer `compose-dev.yml`.
 Aquest compose crea un contenidor de la imatge a un stage concret, és a dir:
 tant producció com develop fan servir la mateixa imatge, però el compose indica
@@ -92,6 +84,15 @@ Això ho pots veure al `compose-dev.yml` on fa el build, a:
 
 Per aixecar-lo cal fer:
 `docker-compose -f compose-dev.yml up`
+
+Per executar el projecte, s'ha de reanomenar l'arxiu `settings.env.example` a `comunalitat_1.env` i posar-ho dins de la ruta _/docker/develop/_. Després, s'ha de aixecar el contenidor de la base de dades amb: `docker-compose up develop_comunalitats_db` 
+
+Per crear la base de dades s'ha de tirar el comandament: `docker exec develop_comunalitats_db createdb comunalitat_1 -U postgres` i per importar el backup de la base de dades si n'ha:
+- Mac: `cat dumps/<nom>.postgres.sql | docker exec -i develop_comunalitats_db psql -d comunalitat_1 -U postgres`
+- Windows: `docker exec -i develop_comunalitats_db psql -d comunalitat_1 -U postgres < dumps/<nom>.postgres.sql`
+
+Per últim, parar el contenidor docker de la base de dades i executar: `docker-compose up`. Anar a [localhost:4001](http://localhost:4001)
+
 
 # Dockerització per producció
 
