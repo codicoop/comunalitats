@@ -89,16 +89,20 @@ class Project(models.Model):
     registration_date = models.DateField("data de registre", blank=True,
                                          null=True,
                                          default=datetime.date.today)
+    # Obsolet
     cif = models.CharField("N.I.F.", max_length=11, blank=True, null=True)
+    # Obsolet
     object_finality = models.TextField("objecte i finalitat", blank=True,
                                        null=True)
     project_origins = models.TextField("descripció del projecte", blank=True,
                                        null=True)
+    # Obsolet
     solves_necessities = models.TextField(
         "quines necessitats resol el vostre projecte?", blank=True, null=True)
     social_base = models.TextField(
         "base social (quines entitats o persones en formen part)", blank=True,
         null=True)
+    # Obsolet
     constitution_date = models.DateField("data de constitució", blank=True,
                                          null=True)
     subsidy_period = models.ForeignKey(
@@ -112,17 +116,22 @@ class Project(models.Model):
                   "l'excel de justificació (per aparèixer a "
                   "l'excel cal crear una Justificació d'Acompanyament)"
     )
+    # Obsolet
     estatuts = models.FileField("estatuts", blank=True, null=True,
                                 storage=PrivateMediaStorage(), max_length=250)
+    # Obsolet
     viability = models.FileField("pla de viabilitat", blank=True, null=True,
                                  storage=PrivateMediaStorage(),
                                  max_length=250)
+    # Obsolet
     sostenibility = models.FileField("pla de sostenibilitat", blank=True,
                                      null=True, storage=PrivateMediaStorage(),
                                      max_length=250)
+    # Obsolet                                     
     derivation = models.ForeignKey(Derivation, verbose_name="derivat",
                                    on_delete=models.SET_NULL, blank=True,
                                    null=True)
+    # Obsolet
     derivation_date = models.DateField("data de derivació", blank=True,
                                        null=True)
     description = models.TextField("descripció", blank=True, null=True)
@@ -336,6 +345,7 @@ class ProjectStage(models.Model):
     stage_type = models.CharField("tipus d'acompanyament", max_length=2,
                                   default=DEFAULT_STAGE_TYPE,
                                   choices=STAGE_TYPE_OPTIONS)
+    # Obsolet
     stage_subtype = models.ForeignKey(
         StageSubtype, verbose_name="subtipus", default=None, null=True,
         blank=True, on_delete=models.SET_NULL
