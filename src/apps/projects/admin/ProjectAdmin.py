@@ -224,7 +224,9 @@ class ProjectStagesInline(admin.StackedInline):
         "earliest_session_field",
         "justification_documents_total",
     )
-
+    class Media:
+        js = ('js/chained_dropdown.js', )
+        
     def stage_sessions_field(self, obj):
         count = obj.sessions_count()
         url = reverse_lazy(

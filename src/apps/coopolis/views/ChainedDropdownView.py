@@ -4,18 +4,18 @@ from django.http import JsonResponse
 from apps.coopolis.choices import ServicesChoices
 from apps.projects.models import SubsidyPeriod
 
+
 @login_required
 def get_sub_services(request):
     service = int(request.GET.get("data")) if request.GET.get("data") else None
+    print(service)
     sub_services = {}
     try:
         service = ServicesChoices(service)
     except ValueError:
         pass
     else:
-        sub_services = {
-            item.value: item.label for item in service.get_sub_services()
-        }
+        sub_services = {item.value: item.label for item in service.get_sub_services()}
     return JsonResponse(data=sub_services, safe=False)
 
 
@@ -26,6 +26,7 @@ def get_subsidy_period(request):
     selected_subsidy_period = SubsidyPeriod.objects.filter(name=subsidy_period).first()
     item_start = ServicesChoices.A
     item_end = ServicesChoices.E
+    print(last_subsidy_period, selected_subsidy_period)
     # !TODO: revisar
     if last_subsidy_period == selected_subsidy_period:
         item_start = ServicesChoices.F
