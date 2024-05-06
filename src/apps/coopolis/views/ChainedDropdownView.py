@@ -8,7 +8,7 @@ from apps.projects.models import SubsidyPeriod
 @login_required
 def get_sub_services(request):
     service = int(request.GET.get("data")) if request.GET.get("data") else None
-    print(service)
+    print("service", service)
     sub_services = {}
     try:
         service = ServicesChoices(service)
@@ -26,12 +26,11 @@ def get_subsidy_period(request):
     selected_subsidy_period = SubsidyPeriod.objects.filter(name=subsidy_period).first()
     item_start = ServicesChoices.A
     item_end = ServicesChoices.E
-    print(last_subsidy_period, selected_subsidy_period)
     # !TODO: revisar
     if last_subsidy_period == selected_subsidy_period:
         item_start = ServicesChoices.F
         item_end = ServicesChoices.J
-    if not subsidy_period:
+    if not subsidy_period or subsidy_period == "---------" or subsidy_period == "Sense justificar":
         services = None
     elif subsidy_period:
         services = {
