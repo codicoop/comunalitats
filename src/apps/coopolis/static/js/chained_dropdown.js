@@ -6,19 +6,17 @@ jQuery(function ($) {
     let cloneSubService0 = document.getElementById("id_stages-0-sub_service");
     if (cloneService1 || cloneService0) {
       let id_service, id_subsidy_period, cloneService, id_sub_service, cloneSubService;
-      if (cloneService0) {
+      if (cloneService0 && cloneSubService0) {
         cloneService = cloneService0.cloneNode(true);
         cloneSubService = cloneSubService0.cloneNode(true);
-        console.log(cloneService, "cloneService");
-        id_service = "id_stages-0-service";
         id_subsidy_period = "id_stages-0-subsidy_period";
+        id_service = "id_stages-0-service";
         id_sub_service = "id_stages-0-sub_service";
-      } else if (cloneService1) {
+      } else if (cloneService1 && cloneSubService1) {
         cloneService = cloneService1.cloneNode(true);
         cloneSubService = cloneSubService1.cloneNode(true);
-        console.log(cloneService, "cloneService");
-        id_service = "id_service";
         id_subsidy_period = "id_subsidy_period";
+        id_service = "id_service";
         id_sub_service = "id_sub_service";
       }
       $(`#${id_subsidy_period}`).change(function () {
@@ -45,6 +43,7 @@ jQuery(function ($) {
       success: function (result) {
         const cols = document.getElementById(id);
         cols.innerHTML = clone.innerHTML;
+        $(`#${id}`).val("").prop('selected', true);
         Array.from(cols.options).forEach(function (option_element) {
           let existing = false;
           for (let k in result) {
