@@ -202,6 +202,7 @@ class ProjectStagesInline(admin.StackedInline):
     fieldsets = (
         (None, {
             'fields': [
+                "stage_sessions_field",
                 'project',
                 'stage_type',
                 'subsidy_period',
@@ -212,12 +213,17 @@ class ProjectStagesInline(admin.StackedInline):
                 'hours_sum',
                 'date_start',
                 "earliest_session_field",
-                "stage_sessions_field",
                 "justification_documents_total",
             ]
         }),
     )
     readonly_fields = (
+        'stage_type',
+        'subsidy_period',
+        'service',
+        'sub_service',
+        'responsible',
+        'scanned_certificate',
         'hours_sum',
         'date_start',
         'stage_sessions_field',
