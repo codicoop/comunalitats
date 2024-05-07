@@ -144,7 +144,6 @@ class Command(BaseCommand):
             "projects": [
                 "delete_tagulous_project_tags",
                 "delete_project",
-                "delete_derivation",
                 "delete_employmentinsertion",
                 "delete_projectfile",
                 "delete_projectstage",
@@ -208,7 +207,6 @@ class Command(BaseCommand):
                 "add_tagulous_project_tags", "change_tagulous_project_tags",
                 "view_tagulous_project_tags",
                 "view_project", "change_project", "add_project",
-                "view_derivation", "change_derivation", "add_derivation",
                 "view_employmentinsertion", "change_employmentinsertion", 
                 "add_employmentinsertion",
                 "view_projectfile", "change_projectfile", 

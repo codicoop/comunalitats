@@ -362,9 +362,9 @@ class ExportJustificationService:
         columns = [
             ("Referència", 20),
             ("Nom actuació", 40),
-            ("Nom de projecte/ empresa o entitat", 35),
+            ("Nom de projecte/empresa o entitat", 35),
             ("Destinatari de l'acompanyament", 30),
-            ("Tipus d'acompanyament:  creació/consolidació/creixement", 30),
+            ("Tipus d'acompanyament: creació/consolidació/creixement", 30),
             ("Data d'inici", 13),
             ("Barri", 20),
             ("Municipi", 20),
@@ -402,7 +402,6 @@ class ExportJustificationService:
                     ),  # Referència.
                     "",  # Nom actuació. Camp no editable.
                     item.project.name,
-                    "",  # Destinatari de l'acompanyament
                     stage_type,  # Tipus d'acompanyament
                     item.date_start or ('', True),
                     item.project.neighborhood or ('', True),
@@ -422,7 +421,6 @@ class ExportJustificationService:
             ("Referència", 10),
             ("Nom actuació", 40),
             ("Nom de l'entitat", 40),
-            ("NIF de l'entitat", 12),
             ("Nom i cognoms persona de contacte", 30),
             ("Correu electrònic", 12),
             ("Telèfon", 10),
@@ -462,21 +460,12 @@ class ExportJustificationService:
                 name = project.name
 
             self.export_manager.row_number += 1
-            if project.cif is None:
-                self.export_manager.error_message.add(
-                    "<p><strong>Error: falta NIF</strong>. L'entitat '{}' "
-                    "apareix com a EntitatCreada"
-                    " perquè té una Data de constitució dins de "
-                    "la convocatòria, però si no té NIF, "
-                    "no pot ser inclosa a l'excel.</p>".format(project.name))
-                project.cif = ""
             row = [
                 reference_number,
                 # Referència. En aquest full no cal que tinguin relació amb Actuacions.
                 name,
                 # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
                 project.name,
-                project.cif,
                 project.partners.all()[
                     0].full_name if project.partners.all() else "",
                 project.mail,
@@ -498,7 +487,6 @@ class ExportJustificationService:
             ("Nom d'actuació", 40),
             ("Cognoms", 20),
             ("Nom", 10),
-            ("Document identificatiu (DNI,NIE,passaport)", 22),
             ("Gènere", 10),
             ("Data naixement", 10),
             ("[Situació laboral]", 20),
@@ -701,9 +689,7 @@ class ExportJustificationService:
         columns = [
             ("ID", 5),
             ("Data registre", 12),
-            ("Data constitució", 12),
             ("Nom de l'entitat", 40),
-            ("NIF de l'entitat", 12),
             ("Nom i cognoms persona de contacte", 30),
             ("Correu electrònic", 30),
             ("Telèfon", 15),
@@ -722,9 +708,7 @@ class ExportJustificationService:
             row = [
                 project.id,
                 project.registration_date if project.registration_date else "",
-                project.constitution_date if project.constitution_date else "",
                 project.name,
-                project.cif if project.cif else "",
                 project.partners.all()[
                     0].full_name if project.partners.all() else "",
                 project.mail,
