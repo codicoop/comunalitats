@@ -21,11 +21,11 @@ jQuery(function ($) {
       }
       $(`#${id_subsidy_period}`).change(function () {
         const selectedSubsidyPeriodText = $(`#${id_subsidy_period} option[value="${$(this).val()}"]`).text();
-        update_services_and_sub_services(selectedSubsidyPeriodText, cloneService, id_service, "get_subsidy_period");
+        update_services_and_sub_services(selectedSubsidyPeriodText, cloneService, id_service, "get_subsidy_period", true);
         $(`#${id_sub_service}`).empty();
       });
       $(`#${id_service}`).change(function () {
-        update_services_and_sub_services($(this).val(), cloneSubService, id_sub_service, "get_sub_services");
+        update_services_and_sub_services($(this).val(), cloneSubService, id_sub_service, "get_sub_services", true);
       });
       const selectedSubsidyPeriodText1 = $(
         `#${id_subsidy_period} option[value="${$(`#${id_subsidy_period}`).val()}"]`
@@ -35,7 +35,7 @@ jQuery(function ($) {
     }
   });
 
-  function update_services_and_sub_services(data, clone, id, url) {
+  function update_services_and_sub_services(data, clone, id, url, cap=false) {
     $.ajax({
       url: `/chained_dropdowns/${url}/`,
       type: "GET",
@@ -43,7 +43,7 @@ jQuery(function ($) {
       success: function (result) {
         const cols = document.getElementById(id);
         cols.innerHTML = clone.innerHTML;
-        $(`#${id}`).val("").prop('selected', true);
+        cap && $(`#${id}`).val('');
         Array.from(cols.options).forEach(function (option_element) {
           let existing = false;
           for (let k in result) {
