@@ -19,6 +19,7 @@ from conf.custom_mail_manager import MyMailTemplate
 
 class FilterByFounded(admin.SimpleListFilter):
     """
+    Deprecated in may 2024. Removed from ProjectAdmin's list_filter.
     If CIF and constitution_date are non empty.
     """
     title = 'Que tinguin CIF i Data de constitució'
@@ -304,8 +305,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     search_fields = (
         'id', 'name__unaccent', 'web', 'mail', 'phone', 'registration_date', 'project_origins', 'social_base', 'sector'
     )
-    list_filter = ('registration_date', 'sector', 'project_status',
-                   FilterByFounded, 'tags', )
+    list_filter = ('registration_date', 'sector', 'project_status', 'tags', )
     fieldsets = (
         ("Dades generals", {
             'fields': ['name', 'sector', 'web', 'project_status', 'motivation',
