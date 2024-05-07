@@ -234,11 +234,17 @@ class ProjectStagesInline(admin.StackedInline):
         js = ('js/chained_dropdown.js', )
         
     def stage_sessions_field(self, obj):
+        if not obj.id:
+            url = reverse_lazy('admin:projects_projectstage_add')
+            url = (f'Per crear un acompanyament <a href="{url}'
+            f'#stage_sessions-group"> clica aquí</a>.')
+            return mark_safe(url)
         count = obj.sessions_count()
         url = reverse_lazy(
             'admin:projects_projectstage_change',
             kwargs={'object_id': obj.id}
         )
+        print(url)
         url = (f'<a href="{url}#stage_sessions-group">Anar a la fitxa de la '
                f'Justificació (per veure i editar les sessions)</a>')
         txt = f"{count} - {url}"
