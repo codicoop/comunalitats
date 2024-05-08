@@ -85,13 +85,13 @@ Això ho pots veure al `compose-dev.yml` on fa el build, a:
 Per aixecar-lo cal fer:
 `docker-compose -f compose-dev.yml up`
 
-Per executar el projecte, s'ha de reanomenar l'arxiu `settings.env.example` a `comunalitat_1.env` i posar-ho dins de la ruta _/docker/develop/_. Després, s'ha de aixecar el contenidor de la base de dades amb: `docker-compose up develop_comunalitats_db` 
+Per **executar el projecte**, s'ha de reanomenar l'arxiu `settings.env.example` a `comunalitat_1.env` i posar-ho dins de la ruta _/docker/develop/_. Després, s'ha de aixecar el contenidor de la base de dades amb: `docker-compose up develop_comunalitats_db` 
 
 Per crear la base de dades s'ha de tirar el comandament: `docker exec develop_comunalitats_db createdb comunalitat_1 -U postgres` i per importar el backup de la base de dades si n'ha:
 - Mac: `cat dumps/<nom>.postgres.sql | docker exec -i develop_comunalitats_db psql -d comunalitat_1 -U postgres`
 - Windows: `docker exec -i develop_comunalitats_db psql -d comunalitat_1 -U postgres < dumps/<nom>.postgres.sql`
 
-Per últim, parar el contenidor docker de la base de dades i executar: `docker-compose up`. Anar a [localhost:4001](http://localhost:4001)
+Per últim, parar el contenidor docker de la base de dades i aixecar el contenidor amb: `docker-compose up`, executar `python manage.py migrate` des de la consola de Docker i anar a [localhost:4001](http://localhost:4001).
 
 
 # Dockerització per producció
