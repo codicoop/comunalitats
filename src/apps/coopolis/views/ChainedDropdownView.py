@@ -25,7 +25,6 @@ def get_subsidy_period(request):
     selected_subsidy_period = SubsidyPeriod.objects.filter(name=subsidy_period).first()
     item_start = ServicesChoices.A
     item_end = ServicesChoices.E
-    # !TODO: revisar
     if last_subsidy_period == selected_subsidy_period:
         item_start = ServicesChoices.F
         item_end = ServicesChoices.J

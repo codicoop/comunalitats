@@ -148,7 +148,6 @@ class Command(BaseCommand):
                 "delete_projectfile",
                 "delete_projectstage",
                 "delete_projectstagesession",
-                "delete_stagesubtype",
             ],
         }
 
@@ -221,8 +220,6 @@ class Command(BaseCommand):
                 "add_projectstage",
                 "view_projectstagesession", "change_projectstagesession",
                 "add_projectstagesession",
-                "view_stagesubtype",
-
             ],
         }
         group, created = Group.objects.get_or_create(

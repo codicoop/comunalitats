@@ -245,7 +245,6 @@ class ProjectStagesInline(admin.StackedInline):
             'admin:projects_projectstage_change',
             kwargs={'object_id': obj.id}
         )
-        print(url)
         url = (f'<a href="{url}#stage_sessions-group">Anar a la fitxa de la '
                f'Justificació (per veure i editar les sessions)</a>')
         txt = f"{count} - {url}"
