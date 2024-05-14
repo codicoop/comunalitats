@@ -1,14 +1,14 @@
 # Comunalitats: Back office
 
-Aplicació web per gestionar l'activitat de les comunalitats, facilitant la 
+Aplicació web per gestionar l'activitat de les comunalitats, facilitant la
 inscripció de les participants i la justificació de la convocatòria.
 
 ## Prepare the develop environment
 
-*⚠ For the file and image uploads to work, set a `DJANGO_SETTINGS_MODULE` environment variable pointing to a config
-module that sets `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` values.*
+_⚠ For the file and image uploads to work, set a `DJANGO_SETTINGS_MODULE` environment variable pointing to a config
+module that sets `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` values._
 
-*⚠ If you get the "failed to load a library: cairo" when generating attendees lists, it's because of Weasyprint,
+\*⚠ If you get the "failed to load a library: cairo" when generating attendees lists, it's because of Weasyprint,
 which uses Cairo.
 You need to install Weasyprint in your system following the [official website's instruccions](https://weasyprint.readthedocs.io/en/stable/install.html#macos).
 
@@ -24,7 +24,7 @@ Edit the files inside styles/scss, don't touch styles/stylesheet.css.
 To compile, go to styles/scss folder and do:
 
     sass main.scss ../stylesheet.css
-    
+
 There's an option to keep the service running so it detects changes and auto-compiles them, but I had
 problems running this and editing the files with PyCharm, I guess because PyCharm keeps the changes
 saved all the time and that messes up with the changes detection.
@@ -85,6 +85,15 @@ Això ho pots veure al `compose-dev.yml` on fa el build, a:
 Per aixecar-lo cal fer:
 `docker-compose -f compose-dev.yml up`
 
+Per **executar el projecte**, s'ha de reanomenar l'arxiu `settings.env.example` a `comunalitat_1.env` i posar-ho dins de la ruta _/docker/develop/_. Després, s'ha de aixecar el contenidor de la base de dades amb: `docker-compose up develop_comunalitats_db` 
+
+Per crear la base de dades s'ha de tirar el comandament: `docker exec develop_comunalitats_db createdb comunalitat_1 -U postgres` i per importar el backup de la base de dades si n'ha:
+- Mac: `cat dumps/<nom>.postgres.sql | docker exec -i develop_comunalitats_db psql -d comunalitat_1 -U postgres`
+- Windows: `docker exec -i develop_comunalitats_db psql -d comunalitat_1 -U postgres < dumps/<nom>.postgres.sql`
+
+Per últim, parar el contenidor docker de la base de dades i aixecar el contenidor amb: `docker-compose up`, executar `python manage.py migrate` des de la consola de Docker i anar a [localhost:4001](http://localhost:4001).
+
+
 # Dockerització per producció
 
 A `/docker` hi ha el Dockerfile per generar la imatge de producció.
@@ -126,18 +135,19 @@ Accedeix al compte de dockerhub per veure quines imatges hi ha generades, si
 l'última ja s'ha generat o ha fallat, etc.
 
 Si la vols pujar manualment:
+
 1. Crear la imatge, des de la carpeta /docker:
-`docker build --compress --target production --tag codicoop/comunalitats:latest --file Dockerfile ../`
+   `docker build --compress --target production --tag codicoop/comunalitats:latest --file Dockerfile ../`
 
 2. Fer `docker login` si no has fet abans.
 3. Pujar la imatge:
-`docker push codicoop/comunalitats:latest`
+   `docker push codicoop/comunalitats:latest`
 
-### Per generar la imatge :release-*tag*
+### Per generar la imatge :release-_tag_
 
 Tenint la versió final a la branch main, obrir el repositori a Github i anar a Tags - Releases - New release.
 
-A Choose a tag, desplegar i escriure el nom que tindrà el nou tag seguint la 
+A Choose a tag, desplegar i escriure el nom que tindrà el nou tag seguint la
 nomenclatura:
 **v22.02.001** on **22.02** son l'any i el mes de release, i **001** el nº de release dins del mateix mes.
 
@@ -151,5 +161,6 @@ La creació de la imatge es dispararà, ara cal que entris al cap d'uns 10 minut
 a hub.docker.com per comprovar que s'ha generat sense errors.
 
 ## Testejar la imatge de producció en local o a develop
+
 Assumint que tens l'última versió a dockerhub, fes:
 `docker-compose -f compose-develop-hub.yml up`

@@ -19,6 +19,7 @@ from conf.custom_mail_manager import MyMailTemplate
 
 class FilterByFounded(admin.SimpleListFilter):
     """
+    Deprecated in may 2024. Removed from ProjectAdmin's list_filter.
     If CIF and constitution_date are non empty.
     """
     title = 'Que tinguin CIF i Data de constitució'
@@ -69,7 +70,6 @@ class FilterBySubsidyPeriod(admin.SimpleListFilter):
     """
     Allows Activities to be filtered according to their date_start using a
     dropdown with the subsidy periods.
-
     In ProjectStage, we're using this instead of just specifying the field in
     ProjectStageAdmin.list_filter because we wanted to skip the All option in
     the filter, for consistency with the FilterByCurrentSubsidyPeriodMixin
@@ -105,8 +105,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         '_participants_count', 'project_field', 'justification_documents_total',
     )
     list_filter = (
-        FilterBySubsidyPeriod,
-        'service',
+        FilterBySubsidyPeriod, 'service',
         ('responsible', admin.RelatedOnlyFieldListFilter),
         'date_start', 'stage_type',
         'project__sector'
@@ -116,9 +115,9 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     fieldsets = [
         (None, {
             'fields': [
-                'project', 'stage_type', 'stage_subtype',
-                'subsidy_period', 'service', 'sub_service',
-                'responsible',
+                'project', 'stage_type',
+                'subsidy_period', 'service', 
+                'sub_service', 'responsible',
                 'scanned_certificate',
                 'hours_sum', 'date_start',
                 "earliest_session_field",
@@ -204,9 +203,9 @@ class ProjectStagesInline(admin.StackedInline):
     fieldsets = (
         (None, {
             'fields': [
+                "stage_sessions_field",
                 'project',
                 'stage_type',
-                'stage_subtype',
                 'subsidy_period',
                 'service',
                 'sub_service',
@@ -215,20 +214,32 @@ class ProjectStagesInline(admin.StackedInline):
                 'hours_sum',
                 'date_start',
                 "earliest_session_field",
-                "stage_sessions_field",
                 "justification_documents_total",
             ]
         }),
     )
     readonly_fields = (
+        'stage_type',
+        'subsidy_period',
+        'service',
+        'sub_service',
+        'responsible',
+        'scanned_certificate',
         'hours_sum',
         'date_start',
         'stage_sessions_field',
         "earliest_session_field",
         "justification_documents_total",
     )
-
+    class Media:
+        js = ('js/chained_dropdown.js', )
+        
     def stage_sessions_field(self, obj):
+        if not obj.id:
+            url = reverse_lazy('admin:projects_projectstage_add')
+            url = (f'Per crear un acompanyament <a href="{url}'
+            f'#stage_sessions-group"> clica aquí</a>.')
+            return mark_safe(url)
         count = obj.sessions_count()
         url = reverse_lazy(
             'admin:projects_projectstage_change',
@@ -288,28 +299,21 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     form = ProjectFormAdmin
     list_display = (
         'name', 'mail', 'phone', 'registration_date',
-        'constitution_date', 'stages_field', 'last_stage_responsible',
+        'stages_field', 'last_stage_responsible',
     )
     search_fields = (
-        'id', 'name__unaccent', 'web', 'mail', 'phone', 'registration_date',
-        'object_finality', 'project_origins', 'solves_necessities',
-        'social_base', 'sector'
+        'id', 'name__unaccent', 'web', 'mail', 'phone', 'registration_date', 'project_origins', 'social_base', 'sector'
     )
-    list_filter = ('registration_date', 'sector', 'project_status',
-                   FilterByFounded, 'tags', )
+    list_filter = ('registration_date', 'sector', 'project_status', 'tags', )
     fieldsets = (
-        ("Dades que s'omplen des de la web", {
+        ("Dades generals", {
             'fields': ['name', 'sector', 'web', 'project_status', 'motivation',
                        'mail', 'phone', 'town', 'neighborhood', 'number_people',
-                       'estatuts', 'viability', 'sostenibility',
-                       'object_finality', 'project_origins',
-                       'solves_necessities', 'social_base']
+                        'project_origins', 'social_base']
         }),
         ("Dades internes gestionades per la comunalitat", {
             'fields': ['partners', 'partners_participants',
-                       'registration_date', 'cif',
-                       'constitution_date', 'subsidy_period', 'derivation',
-                       'derivation_date', 'description',
+                       'registration_date', 'description',
                        'employment_estimation', 'other', 'follow_up_situation',
                        'follow_up_situation_update', 'tags']
         }),
@@ -415,7 +419,6 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         mail.body_strings = {
             'ateneu_nom': config.PROJECT_FULL_NAME,
             'projecte_nom': project_name,
-            'url_projectes': settings.ABSOLUTE_URL + reverse('project_info'),
             'url_backoffice': settings.ABSOLUTE_URL
         }
         mail.send_to_user(user_obj)
@@ -441,11 +444,8 @@ class DerivationAdmin(admin.ModelAdmin):
 class EmploymentInsertionAdmin(admin.ModelAdmin):
     model = EmploymentInsertion
     form = EmploymentInsertionForm
-    list_display = ('insertion_date', 'activity', 'user', 'contract_type',
-                    'subsidy_period', )
-    list_filter = (
-        'subsidy_period', 'contract_type', 'insertion_date',
-    )
+    list_display = ('insertion_date', 'activity', 'user', 'contract_type', 'subsidy_period', )
+    list_filter = ('subsidy_period', 'contract_type', 'insertion_date',)
     search_fields = ('activity__name__unaccent', 'user__first_name__unaccent', )
     raw_id_fields = ('user', 'activity',)
     autocomplete_lookup_fields = {

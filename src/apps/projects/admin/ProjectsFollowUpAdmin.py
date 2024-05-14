@@ -38,7 +38,7 @@ class ProjectsFollowUpServicesAdmin(FilterByCurrentSubsidyPeriodMixin, admin.Mod
         ('stages__responsible', admin.RelatedOnlyFieldListFilter),
         'project_status',
     )
-    search_fields = ('id', 'name', 'cif', )
+    search_fields = ('id', 'name', )
     show_full_result_count = False
     list_display = ('name', )
     list_per_page = 99999

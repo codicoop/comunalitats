@@ -36,7 +36,7 @@ class Project(models.Model):
 
     partners = models.ManyToManyField(
         User,
-        verbose_name="sòcies",
+        verbose_name="sòcies o membres del projecte",
         blank=True,
         related_name="projects",
     )
@@ -56,24 +56,20 @@ class Project(models.Model):
         ('R', 'Roba')
     )
     sector = models.CharField(max_length=2, choices=SECTORS)
-    web = models.CharField("Web", max_length=200, blank=True)
+    web = models.CharField("xarxes socials", max_length=200, blank=True)
     PROJECT_STATUS_OPTIONS = (
-        ("IN_MEDITATION_PROCESS", "En proces de debat/reflexió"),
+        ("IN_MEDITATION_PROCESS", "En procés de debat/reflexió"),
         ("IN_CONSTITUTION_PROCESS", "En constitució"),
         ("RUNNING", "Constituïda"),
+        ("IN_CONSOLIDATION_PROCESS", "En procés de consolidació"),
         ("DOWN", "Caigut")
     )
     project_status = models.CharField("estat del projecte", max_length=50,
                                       blank=True, null=True,
                                       choices=PROJECT_STATUS_OPTIONS)
     MOTIVATION_OPTIONS = (
-        ('COOPERATIVISM_EDUCATION', 'Formació en cooperativisme'),
-        ('COOPERATIVE_CREATION', "Constitució d'una cooperativa"),
-        ('TRANSFORM_FROM_ASSOCIATION',
-         "Transformació d'associació a cooperativa"),
-        ('TRANSFORM_FROM_SCP', "Transformació de SCP a cooperativa"),
-        ('ENTERPRISE_RELIEF', "Relleu empresarial"),
         ('CONSOLIDATION', "Consolidació"),
+        ('TERRITORIAL_ARRANGEMENT', 'Arrelament territorial'),
         ('OTHER', "Altres"),
     )
     motivation = models.CharField("petició inicial", max_length=50, blank=True,
@@ -93,16 +89,20 @@ class Project(models.Model):
     registration_date = models.DateField("data de registre", blank=True,
                                          null=True,
                                          default=datetime.date.today)
+    # Obsolet
     cif = models.CharField("N.I.F.", max_length=11, blank=True, null=True)
+    # Obsolet
     object_finality = models.TextField("objecte i finalitat", blank=True,
                                        null=True)
-    project_origins = models.TextField("orígens del projecte", blank=True,
+    project_origins = models.TextField("descripció del projecte", blank=True,
                                        null=True)
+    # Obsolet
     solves_necessities = models.TextField(
         "quines necessitats resol el vostre projecte?", blank=True, null=True)
     social_base = models.TextField(
-        "compta el vostre projecte amb una base social?", blank=True,
+        "base social (quines entitats o persones en formen part)", blank=True,
         null=True)
+    # Obsolet
     constitution_date = models.DateField("data de constitució", blank=True,
                                          null=True)
     subsidy_period = models.ForeignKey(
@@ -116,17 +116,22 @@ class Project(models.Model):
                   "l'excel de justificació (per aparèixer a "
                   "l'excel cal crear una Justificació d'Acompanyament)"
     )
+    # Obsolet
     estatuts = models.FileField("estatuts", blank=True, null=True,
                                 storage=PrivateMediaStorage(), max_length=250)
+    # Obsolet
     viability = models.FileField("pla de viabilitat", blank=True, null=True,
                                  storage=PrivateMediaStorage(),
                                  max_length=250)
+    # Obsolet
     sostenibility = models.FileField("pla de sostenibilitat", blank=True,
                                      null=True, storage=PrivateMediaStorage(),
                                      max_length=250)
+    # Obsolet                                     
     derivation = models.ForeignKey(Derivation, verbose_name="derivat",
                                    on_delete=models.SET_NULL, blank=True,
                                    null=True)
+    # Obsolet
     derivation_date = models.DateField("data de derivació", blank=True,
                                        null=True)
     description = models.TextField("descripció", blank=True, null=True)
@@ -340,6 +345,7 @@ class ProjectStage(models.Model):
     stage_type = models.CharField("tipus d'acompanyament", max_length=2,
                                   default=DEFAULT_STAGE_TYPE,
                                   choices=STAGE_TYPE_OPTIONS)
+    # Obsolet
     stage_subtype = models.ForeignKey(
         StageSubtype, verbose_name="subtipus", default=None, null=True,
         blank=True, on_delete=models.SET_NULL
@@ -378,7 +384,7 @@ class ProjectStage(models.Model):
         "activada la opció 'Membre del personal'.",
     )
     scanned_certificate = models.FileField(
-        "Certificat", blank=True, null=True,
+        "Document justificació final", blank=True, null=True,
         storage=PrivateMediaStorage(), max_length=250)
     involved_partners = models.ManyToManyField(
         User, verbose_name="(obsolet) Persones involucrades", blank=True,

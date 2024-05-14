@@ -78,7 +78,6 @@
                 <li><a href="{% url 'user_profile' %}">Les meves dades</a></li>
                 <li><a href="{% url 'my_activities' %}">Els meus cursos</a></li>
             {% endif %}
-                <li><a href="{% url 'project_info' %}">Projecte</a></li>
                 <li><a href="{% url 'courses' %}">Inscripcions</a></li>
             {% if user.is_superuser or user.is_staff %}
                 <li><a href="{% url 'admin:index'%}">Backoffice</a></li>

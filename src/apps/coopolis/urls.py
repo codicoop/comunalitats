@@ -6,7 +6,7 @@ from django.views.generic.base import RedirectView
 from django.views.generic import TemplateView
 
 from .views import (
-    HomeView, CustomPasswordResetView, ActivityPollView, get_sub_services
+    HomeView, CustomPasswordResetView, ActivityPollView, get_sub_services, get_subsidy_period
 )
 
 urlpatterns = [
@@ -32,6 +32,6 @@ urlpatterns += [
     path('activities/<uuid:uuid>/poll',
          ActivityPollView.as_view(), name='activity_poll'),
     path('chained_dropdowns/get_sub_services/', get_sub_services),
-
+    path('chained_dropdowns/get_subsidy_period/', get_subsidy_period),
     path('admin/', admin.site.urls),
 ]
