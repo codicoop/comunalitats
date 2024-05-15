@@ -20,6 +20,24 @@ def get_sub_services(request):
 
 @login_required
 def get_subsidy_period(request):
+    """
+    Maig de 2024:
+    Hi ha canvis a Serveis i Subserveis que impliquen que els items de la
+    convocatòria 2024-2026 han de tenir unes opcions diferents dels de la
+    convocatòria 2022-2024.
+
+    S'ha resolt afegint les opcions als ServicesChoices i SubServicesChoices,
+    i al "front" (admin) s'ha implementat un JS que mostra unes opcions o altres
+    segons la convocatòria seleccionada.
+
+    Per això es fa aquest sistema de definir el rang que ha de retornar amb
+    item_start i item_end.
+
+    EN CAS QUE S'HAGI DE SEGUIR AFEGINT OPCIONS DIFERENTS EN NOVES
+    CONVOCATÒRIES:
+    Crec que caldrà migrar cap a un sistema de models en el que servei i
+    subservei pengin de Convocatòria.
+    """
     subsidy_period = request.GET.get("data")
     last_subsidy_period = SubsidyPeriod.objects.filter().first()
     selected_subsidy_period = SubsidyPeriod.objects.filter(name=subsidy_period).first()
