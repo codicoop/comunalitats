@@ -1,19 +1,29 @@
 jQuery(function($){
   $(document).ready(function(){
+        console.log("heol")
       let cloneService = document.getElementById("id_service")
       let cloneSubService = document.getElementById("id_sub_service")
+    
       if (cloneService && cloneSubService){
           cloneService = cloneService.cloneNode(true);
           cloneSubService = cloneSubService.cloneNode(true);
-          $("#id_subsidy_period").change(function(){
-              const selectedSubsidyPeriodText = $('#id_subsidy_period option[value="' + $(this).val() + '"]').text();
+          subsidyPeriod = document.getElementById("id_subsidy_period");
+          dateStart = document.getElementById("id_date_start");
+          console.log(subsidyPeriod, dateStart); 
+          if (dateStart) {
+              id_date_subsidy = "#id_date_start"
+            } else if (subsidyPeriod) { 
+              id_date_subsidy = "#id_subsidy_period"
+          }
+          $(id_date_subsidy).change(function(){
+              const selectedSubsidyPeriodText = $(`${id_date_subsidy} option[value="${$(this).val()}"]`).text();
               update_services_and_sub_services(selectedSubsidyPeriodText, cloneService, "id_service", "get_subsidy_period", true); 
               $("#id_sub_service").empty();
           });
           $("#id_service").change(function(){
             update_services_and_sub_services($(this).val(), cloneSubService, "id_sub_service", "get_sub_services", true)
           });
-          const selectedSubsidyPeriodText = $('#id_subsidy_period option[value="' + $("#id_subsidy_period").val() + '"]').text();
+          const selectedSubsidyPeriodText = $(`${id_date_subsidy} option[value="${$(id_date_subsidy).val()}"]`).text();
           update_services_and_sub_services(selectedSubsidyPeriodText, cloneService, "id_service", "get_subsidy_period")
           update_services_and_sub_services($("#id_service").val(), cloneSubService, "id_sub_service", "get_sub_services")   
       }
