@@ -1,6 +1,5 @@
 jQuery(function($){
   $(document).ready(function(){
-        console.log("heol")
       let cloneService = document.getElementById("id_service")
       let cloneSubService = document.getElementById("id_sub_service")
     
@@ -9,7 +8,6 @@ jQuery(function($){
           cloneSubService = cloneSubService.cloneNode(true);
           subsidyPeriod = document.getElementById("id_subsidy_period");
           dateStart = document.getElementById("id_date_start");
-          console.log(subsidyPeriod, dateStart); 
           if (dateStart) {
             $("#id_date_start").change(function(){
                 update_services_and_sub_services($(this).val(), cloneService, "id_service", "get_subsidy_period", true); 

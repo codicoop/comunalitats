@@ -44,7 +44,6 @@ def get_subsidy_period(request):
     try:
         date_start = datetime.strptime(subsidy_period_or_start_date, "%d/%m/%Y").date()
         selected_subsidy_period = SubsidyPeriod.objects.filter(date_start__lte=date_start, date_end__gte=date_start).first()
-        print("date_start", date_start)
     except ValueError:
         selected_subsidy_period = SubsidyPeriod.objects.filter(name=subsidy_period_or_start_date).first()
 
