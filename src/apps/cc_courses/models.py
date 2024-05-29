@@ -203,6 +203,8 @@ class Activity(models.Model):
         choices=ServicesChoices.choices,
         null=True,
         blank=True,
+        help_text="Els Serveis disponibles s'actualitzen segons la convocatòria"
+                  ", que es calcula amb el valor del camp \"Data d'inici\"."
     )
     sub_service = models.SmallIntegerField(
         "Sub-servei",
