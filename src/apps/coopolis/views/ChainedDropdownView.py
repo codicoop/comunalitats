@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from datetime import datetime
 
 from apps.coopolis.choices import ServicesChoices
 from apps.projects.models import SubsidyPeriod
@@ -38,17 +39,24 @@ def get_subsidy_period(request):
     Crec que caldrà migrar cap a un sistema de models en el que servei i
     subservei pengin de Convocatòria.
     """
-    subsidy_period = request.GET.get("data")
+
+    subsidy_period_or_start_date = request.GET.get("data")
+    try:
+        date_start = datetime.strptime(subsidy_period_or_start_date, "%d/%m/%Y").date()
+        selected_subsidy_period = SubsidyPeriod.objects.filter(date_start__lte=date_start, date_end__gte=date_start).first()
+        print("date_start", date_start)
+    except ValueError:
+        selected_subsidy_period = SubsidyPeriod.objects.filter(name=subsidy_period_or_start_date).first()
+
     last_subsidy_period = SubsidyPeriod.objects.filter().first()
-    selected_subsidy_period = SubsidyPeriod.objects.filter(name=subsidy_period).first()
     item_start = ServicesChoices.A
     item_end = ServicesChoices.E
     if last_subsidy_period == selected_subsidy_period:
         item_start = ServicesChoices.F
         item_end = ServicesChoices.J
-    if not selected_subsidy_period or subsidy_period == "Sense justificar":
+    if not selected_subsidy_period or subsidy_period_or_start_date == "Sense justificar":
         services = None
-    elif subsidy_period:
+    elif subsidy_period_or_start_date:
         services = {
             item.value: item.label
             for item in ServicesChoices
