@@ -165,6 +165,7 @@ class Activity(models.Model):
     place = models.ForeignKey(
         CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc"
     )
+    neighborhood = models.CharField("barri on s'ha fet",blank=True, null=True,max_length=150)
     date_start = models.DateField("dia inici")
     date_end = models.DateField("dia finalització", blank=True, null=True)
     starting_time = models.TimeField("hora d'inici")
