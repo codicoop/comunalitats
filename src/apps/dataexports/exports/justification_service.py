@@ -63,12 +63,22 @@ class ExportJustificationService:
         self.export_manager.worksheet.title = "Actuacions"
 
         columns = [
+            ("Projecte al qual s'engloba", 40),
+            ("Sector del projecte", 40),
+            ("Descripció actuació", 40),
+            ("Nom de l'actuació", 40),
+            ("Descripció actuació", 40),
+            ("Tipus actuació", 40),
             ("Servei", 40),
             ("Actuacions", 70),
-            ("Nom de l'actuació", 70),
+            ("Rol Comunalitat", 40),
+            ("Treball en Xarxa", 40),
+            ("Agents implicats", 40),
             ("Data inici d'actuació", 16),
             ("Període actuacions", 30),
             ("Municipi", 30),
+            ("Barri", 30),
+            ("Estimació hores dedicació", 20),
             ("Material de difusió (S/N)", 21),
             ("Incidències", 20),
             ("[Document acreditatiu]", 21),
@@ -245,16 +255,29 @@ class ExportJustificationService:
                 service = item.get_service_display() if item.service else ""
                 sub_service = item.get_sub_service_display() if item.sub_service else ""
                 town = ("", True)
+                neighborhood = ("", True)
                 if item.project.town:
                     town = str(item.project.town)
+                if item.project.neighborhood:
+                    neighborhood = str(item.project.neighborhood)
 
                 row = [
+                    "",  # Projecte al qual s'engloba
+                    "",  # Sector del projecte
+                    "",  # Descripció actuació
+                    item.project.name,
+                    "",  # Descripció actuació
+                    "",  # Tipus actuació
                     service,
                     sub_service,
-                    item.project.name,
+                    "",  # Rol Comunalitat
+                    "",  # Treball en Xarxa
+                    "",  # Agents implicats
                     item.date_start or '',
                     "",  # Període d'actuacions
                     town,
+                    neighborhood,  # Barri
+                    "",  # Estimació hores dedicació
                     "No",  # Material de difusió
                     "",  # Incidències
                     "",  # Document acreditatiu
