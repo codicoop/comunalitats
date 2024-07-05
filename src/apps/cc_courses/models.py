@@ -242,6 +242,7 @@ class Activity(models.Model):
     agents_involved = models.CharField(
         "agents implicats", blank=True, null=True, max_length=200
     )
+    neighborhood = models.CharField("barri on s'ha fet", blank=True, null=True, max_length=150)
     estimated_hours = models.PositiveIntegerField(
         "estimació hores dedicació", blank=True, null=True
     )
