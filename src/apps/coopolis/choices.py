@@ -230,7 +230,6 @@ class SubServicesChoices(models.IntegerChoices):
 
 
 class ProjectSectorChoices(models.IntegerChoices):
-    __empty__ = "Cap"
     A = 10, "Agricultura i ramaderia",
     B = 20, "Alimentació i consum",
     C = 30, "Atenció a les persones i cures (criança, col·lectius vulnerables...)",
