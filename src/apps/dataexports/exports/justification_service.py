@@ -258,19 +258,40 @@ class ExportJustificationService:
                     self.export_manager.row_number - 1
                 )
 
+                project_sector = item.get_project_sector_display() if item.project_sector else ""
+                types = item.get_types_display() if item.types else ""
                 service = item.get_service_display() if item.service else ""
                 sub_service = item.get_sub_service_display() if item.sub_service else ""
+                communality_role = (
+                    item.get_communality_role_display() if item.communality_role else ""
+                )
+                networking = item.get_networking_display() if item.networking else ""
                 town = ("", True)
                 if item.project.town:
                     town = str(item.project.town)
-
+                neighborhood = ("", True)
+                if item.project.neighborhood:
+                    neighborhood = str(item.project.neighborhood)
+                hours_sum = ("", True)
+                if item.hours_sum():
+                    hours_sum = str(item.hours_sum())
+        
                 row = [
-                    service,
-                    sub_service,
-                    item.project.name,
-                    item.date_start or "",
+                    "",  # Projecte al qual s'engloba
+                    project_sector,  # Sector del projecte
+                    item.project.name,  # Nom de l'actuació
+                    item.project.description,  # Descripció actuació
+                    types,  # Tipus actuació
+                    service,  # Servei
+                    sub_service,  # Actuacions
+                    communality_role,  # Rol communalitat
+                    networking,  # Treball en Xarxa
+                    item.agents_involved,  # Agents implicats
+                    item.date_start or "",  # Data inici d'actuació
                     "",  # Període d'actuacions
                     town,
+                    neighborhood,  # Barri
+                    hours_sum,  # Estimació hores dedicació
                     "No",  # Material de difusió
                     "",  # Incidències
                     "",  # Document acreditatiu

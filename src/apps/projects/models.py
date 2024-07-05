@@ -9,7 +9,7 @@ from django.utils.timezone import now
 import tagulous.models
 
 from apps.cc_courses.models import Entity, Organizer, Activity
-from apps.coopolis.choices import ServicesChoices, SubServicesChoices
+from apps.coopolis.choices import ServicesChoices, SubServicesChoices, ProjectSectorChoices, CommunalityRoleChoices, NetworkingChoices, TypesChoices
 from apps.cc_users.models import User
 from apps.towns.models import Town
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
@@ -337,6 +337,18 @@ class ProjectStage(models.Model):
     project = models.ForeignKey(
         Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat",
         related_name="stages")
+    project_sector = models.SmallIntegerField(
+        "sector del projecte",
+        blank=True,
+        null=True,
+        choices=ProjectSectorChoices.choices,
+    )
+    types = models.SmallIntegerField(
+        "tipus actuació", 
+        blank=True,
+        null=True,
+        choices=TypesChoices.choices,
+    )
     STAGE_TYPE_OPTIONS = (
         ('11', "Creació"),
         ('12', "Consolidació"),
@@ -368,6 +380,21 @@ class ProjectStage(models.Model):
         choices=SubServicesChoices.choices,
         null=True,
         blank=True,
+    )
+    communality_role = models.SmallIntegerField(
+        "rol comunalitat",
+        choices=CommunalityRoleChoices.choices,
+        null=True,
+        blank=True,
+    )
+    networking = models.SmallIntegerField(
+        "treball en xarxa",
+        choices=NetworkingChoices.choices,
+        null=True,
+        blank=True,
+    )
+    agents_involved = models.CharField(
+        "agents implicats", blank=True, null=True, max_length=200
     )
     organizer = models.ForeignKey(
         Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL,

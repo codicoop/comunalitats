@@ -115,10 +115,9 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     fieldsets = [
         (None, {
             'fields': [
-                'project', 'stage_type',
+                'project', 'project_sector', 'stage_type', 'types',
                 'subsidy_period', 'service', 
-                'sub_service', 'responsible',
-                'scanned_certificate',
+                'sub_service', 'communality_role', 'networking', 'agents_involved', 'responsible', 'scanned_certificate',
                 'hours_sum', 'date_start',
                 "earliest_session_field",
                 "justification_documents_total",
