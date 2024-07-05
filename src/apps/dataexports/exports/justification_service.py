@@ -66,7 +66,6 @@ class ExportJustificationService:
         columns = [
             ("Projecte al qual s'engloba", 40),
             ("Sector del projecte", 40),
-            ("Descripció actuació", 40),
             ("Nom de l'actuació", 40),
             ("Descripció actuació", 40),
             ("Tipus actuació", 40),
@@ -109,8 +108,16 @@ class ExportJustificationService:
         for item in obj:
             self.export_manager.row_number += 1
 
+            project_sector = (
+                item.get_project_sector_display() if item.project_sector else ""
+            )
+            types = item.get_types_display() if item.types else ""
             service = item.get_service_display() if item.service else ""
             sub_service = item.get_sub_service_display() if item.sub_service else ""
+            communality_role = (
+                item.get_communality_role_display() if item.communality_role else ""
+            )
+            networking = item.get_networking_display() if item.networking else ""
             town = ("", True)
             if item.place is not None and item.place.town:
                 town = str(item.place.town)
@@ -122,22 +129,21 @@ class ExportJustificationService:
                 document_acreditatiu = "Sí"
 
             row = [
-                "",  # Projecte al qual s'engloba
-                "",  # Sector del projecte
-                "",  # Descripció actuació
+                item.included_project,  # Projecte al qual s'engloba
+                project_sector,  # Sector del projecte
                 item.name,
-                "",  # Descripció actuació
-                "",  # Tipus actuació
+                item.description,  # Descripció actuació
+                types,  # Tipus actuació
                 service,
                 sub_service,
-                "",  # Rol Comunalitat
-                "",  # Treball en Xarxa
-                "",  # Agents implicats
+                communality_role,  # Rol Comunalitat
+                networking,  # Treball en Xarxa
+                item.agents_involved,  # Agents implicats
                 item.date_start,
                 "",  # Període d'actuacions
                 town,
-                "",  # Barri
-                "",  # Estimació hores dedicació
+                item.neighborhood,  # Barri
+                item.estimated_hours,  # Estimació hores dedicació
                 material_difusio,  # Material de difusió
                 "",  # Incidències
                 document_acreditatiu,  # Document acreditatiu
@@ -262,15 +268,15 @@ class ExportJustificationService:
                     service,
                     sub_service,
                     item.project.name,
-                    item.date_start or '',
+                    item.date_start or "",
                     "",  # Període d'actuacions
                     town,
                     "No",  # Material de difusió
                     "",  # Incidències
                     "",  # Document acreditatiu
                     "",  # Entitat
-                    '(no aplicable)',  # Lloc
-                    '(no aplicable)',  # Acció
+                    "(no aplicable)",  # Lloc
+                    "(no aplicable)",  # Acció
                 ]
                 self.export_manager.fill_row_data(row)
 
