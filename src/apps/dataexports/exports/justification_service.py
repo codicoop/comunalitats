@@ -667,17 +667,20 @@ class ExportJustificationService:
 
         columns = [
             ("Referència (omplir a ma)", 20),
+            ("Projecte al qual s'engloba", 20),
+            ("Sector de l'activitat", 20),
             ("Nom actuació", 20),
+            ("DNI o NIE persona inserida", 20),
             ("Cognoms", 20),
             ("Nom", 20),
-            ("DNI o NIE persona inserida", 20),
-            ("Data alta SS", 20),
-            ("Data baixa SS", 20),
-            ("Tipus contracte o vinculació", 20),
             ("Gènere", 20),
             ("Data naixement", 20),
-            ("Nom entitat on s'insereix", 20),
             ("NIF Entitat", 20),
+            ("Nom entitat on s'insereix", 20),
+            ("Sector de l'entitat", 20),
+            ("Tipus contracte o vinculació", 20),
+            ("Data alta SS", 20),
+            ("Data baixa SS", 20),
             ("Municipi Entitat", 20),
             ("Barri Entitat", 20),
             ("[ convocatòria ]", 20),
@@ -705,27 +708,30 @@ class ExportJustificationService:
             birthdate = insertion.user.birthdate
             if not birthdate:
                 birthdate = ("", True)
-
             if insertion.user.gender is None:
                 gender = ""
             else:
                 gender = self.export_manager.get_correlation(
                     "gender", insertion.user.gender
                 )
+            entity_sector = insertion.get_entity_sector_display()
 
             row = [
                 "",  # TODO: des d'aquí no podem saber la referència de l'Activitat
+                "",  # Projecte al qual s'engloba
+                "",  # Sector de l'activitat
                 "",  # Nom actuació
+                id_number,
                 insertion.user.surname,
                 insertion.user.first_name,
-                id_number,
-                insertion_date,  # Data d'alta SS
-                end_date,  # Data baixa SS
-                contract_type,
                 gender,
                 birthdate,
-                insertion.entity_name,
                 insertion.entity_nif,
+                insertion.entity_name,
+                entity_sector,
+                contract_type,
+                insertion_date,  # Data d'alta SS
+                end_date,  # Data baixa SS
                 str(insertion.entity_town),
                 insertion.entity_neighborhood,
                 str(insertion.subsidy_period),  # Convocatòria

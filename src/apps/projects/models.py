@@ -594,6 +594,12 @@ class EmploymentInsertion(models.Model):
         "NIF de l'entitat on s'insereix",
         max_length=11,
     )
+    entity_sector = models.SmallIntegerField(
+        "sector de l'entitat", 
+        choices=ProjectSectorChoices.choices,
+        null=True,
+        blank=True,
+    )
     entity_town = models.ForeignKey(
         "towns.Town",
         verbose_name="població de l'entitat on s'insereix",

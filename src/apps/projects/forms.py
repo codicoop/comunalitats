@@ -1,5 +1,5 @@
 from django import forms
-from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
+from django.core.exceptions import ValidationError
 from django.forms import models
 from django.urls import reverse
 
@@ -38,6 +38,7 @@ class EmploymentInsertionForm(models.ModelForm):
             "end_date",
             "contract_type",
             "entity_name",
+            "entity_sector",
             "entity_nif",
             "entity_town",
             "entity_neighborhood",
