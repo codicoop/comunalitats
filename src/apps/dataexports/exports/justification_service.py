@@ -467,11 +467,16 @@ class ExportJustificationService:
 
         columns = [
             ("Referència", 10),
-            ("Nom actuació", 40),
-            ("Nom de l'entitat", 40),
+            ("Projecte al qual s'engloba", 40),
+            ("Sector de l'activitat", 40),
+            ("Nom d'actuació", 40),
+            ("Sector activitat", 40),
             ("Nom i cognoms persona de contacte", 30),
+            ("Municipi", 30),
+            ("Barri", 30),
             ("Correu electrònic", 12),
             ("Telèfon", 10),
+            ("Anualitat", 20),
             ("Economia solidària (revisar)", 35),
             ("[Acompanyaments]", 10),
         ]
@@ -507,17 +512,23 @@ class ExportJustificationService:
                     project.name,
                 )
                 name = project.name
+            project_sector = project.get_project_sector_display() if project.project_sector else ""
+            annuity = project.get_annuity_display() if project.annuity else ""
 
             self.export_manager.row_number += 1
             row = [
                 reference_number,
                 # Referència. En aquest full no cal que tinguin relació amb Actuacions.
-                name,
-                # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
-                project.name,
+                "", # Projecte al qual s'engloba
+                "", # Sector de l'activitaxt
+                name, # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
+                project_sector, # Sector activitat
                 project.partners.all()[0].full_name if project.partners.all() else "",
+                str(project.town), 
+                project.neighborhood,
                 project.mail,
                 project.phone,
+                annuity, # Anualitat
                 "Sí",  # Economia solidària
                 project.stages_list,
             ]

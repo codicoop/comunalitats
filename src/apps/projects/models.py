@@ -9,7 +9,7 @@ from django.utils.timezone import now
 import tagulous.models
 
 from apps.cc_courses.models import Entity, Organizer, Activity
-from apps.coopolis.choices import ServicesChoices, SubServicesChoices, ProjectSectorChoices, CommunalityRoleChoices, NetworkingChoices, TypesChoices
+from apps.coopolis.choices import ServicesChoices, SubServicesChoices, ProjectSectorChoices, CommunalityRoleChoices, NetworkingChoices, TypesChoices, AnnuityChoices
 from apps.cc_users.models import User
 from apps.towns.models import Town
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
@@ -76,6 +76,12 @@ class Project(models.Model):
                                   null=True, choices=MOTIVATION_OPTIONS)
     mail = models.EmailField("correu electrònic")
     phone = models.CharField("telèfon", max_length=25)
+    project_sector = models.SmallIntegerField(
+        "sector activitat",
+        blank=True,
+        null=True,
+        choices=ProjectSectorChoices.choices,
+    )
     town = models.ForeignKey(Town, verbose_name="població",
                              on_delete=models.SET_NULL, null=True, blank=True)
     neighborhood = models.CharField(
@@ -83,6 +89,12 @@ class Project(models.Model):
         default="",
         blank=True,
         max_length=50,
+    )
+    annuity = models.SmallIntegerField(
+        "anunalitat",
+        blank=True,
+        null=True,
+        choices=AnnuityChoices.choices,
     )
     number_people = models.IntegerField("número de persones", blank=True,
                                         null=True)

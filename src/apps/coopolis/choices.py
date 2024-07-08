@@ -284,3 +284,8 @@ class CommunalityRoleChoices(models.IntegerChoices):
 class NetworkingChoices(models.IntegerChoices):
     A = 1, "Individual",
     B = 2, "Conjunta",
+
+
+class AnnuityChoices(models.IntegerChoices):
+    A = 24, "2024-25",
+    B = 25, "2025-26",
