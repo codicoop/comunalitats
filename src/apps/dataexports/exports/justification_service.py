@@ -470,6 +470,9 @@ class ExportJustificationService:
             ("Projecte al qual s'engloba", 40),
             ("Sector de l'activitat", 40),
             ("Nom d'actuació", 40),
+            ("Nom entitat", 40),
+            ("NIF entitat", 40),
+            ("Tipus d'entitat", 40),
             ("Sector activitat", 40),
             ("Nom i cognoms persona de contacte", 30),
             ("Municipi", 30),
@@ -514,6 +517,7 @@ class ExportJustificationService:
                 name = project.name
             project_sector = project.get_project_sector_display() if project.project_sector else ""
             annuity = project.get_annuity_display() if project.annuity else ""
+            entity_type = project.get_entity_type_display() if project.entity_type else ""
 
             self.export_manager.row_number += 1
             row = [
@@ -522,6 +526,9 @@ class ExportJustificationService:
                 "", # Projecte al qual s'engloba
                 "", # Sector de l'activitaxt
                 name, # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
+                project.entity_name, # Nom entitat
+                project.entity_cif, # NIF entitat
+                entity_type, # Tipus d'entitat
                 project_sector, # Sector activitat
                 project.partners.all()[0].full_name if project.partners.all() else "",
                 str(project.town), 

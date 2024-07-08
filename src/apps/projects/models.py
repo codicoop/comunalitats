@@ -9,7 +9,7 @@ from django.utils.timezone import now
 import tagulous.models
 
 from apps.cc_courses.models import Entity, Organizer, Activity
-from apps.coopolis.choices import ServicesChoices, SubServicesChoices, ProjectSectorChoices, CommunalityRoleChoices, NetworkingChoices, TypesChoices, AnnuityChoices
+from apps.coopolis.choices import ServicesChoices, SubServicesChoices, ProjectSectorChoices, CommunalityRoleChoices, NetworkingChoices, TypesChoices, AnnuityChoices, EntityTypesChoices
 from apps.cc_users.models import User
 from apps.towns.models import Town
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
@@ -91,7 +91,7 @@ class Project(models.Model):
         max_length=50,
     )
     annuity = models.SmallIntegerField(
-        "anunalitat",
+        "anualitat",
         blank=True,
         null=True,
         choices=AnnuityChoices.choices,
@@ -101,8 +101,14 @@ class Project(models.Model):
     registration_date = models.DateField("data de registre", blank=True,
                                          null=True,
                                          default=datetime.date.today)
-    # Obsolet
-    cif = models.CharField("N.I.F.", max_length=11, blank=True, null=True)
+    entity_name = models.CharField("nom entitat", max_length=15, blank=True, null=True)
+    entity_cif = models.CharField("NIF entitat", max_length=15, blank=True, null=True)
+    entity_type = models.SmallIntegerField(
+        "tipus d'entitat",
+        blank=True,
+        null=True,
+        choices=EntityTypesChoices.choices,
+    )
     # Obsolet
     object_finality = models.TextField("objecte i finalitat", blank=True,
                                        null=True)

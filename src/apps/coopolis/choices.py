@@ -289,3 +289,8 @@ class NetworkingChoices(models.IntegerChoices):
 class AnnuityChoices(models.IntegerChoices):
     A = 24, "2024-25",
     B = 25, "2025-26",
+
+
+class EntityTypesChoices(models.IntegerChoices):
+    A = 1, "Associació",
+    B = 2, "Cooperativa",
