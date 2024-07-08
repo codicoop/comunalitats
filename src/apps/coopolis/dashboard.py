@@ -128,6 +128,7 @@ class MyDashboard(Dashboard):
         ]
         if context['request'].user.is_superuser:
             links_children.append(["Registre d'activitat al panell d'administració", 'admin/logentry/'])
+            links_children.append(["Descàrrega de la base de dades de les 00:00", reverse('db_backup_download')])
 
         self.children.append(modules.LinkList(
             title='Enllaços',
