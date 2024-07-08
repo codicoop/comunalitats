@@ -1,5 +1,3 @@
-from calendar import monthrange
-
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group, Permission
 from datetime import date
@@ -89,6 +87,29 @@ class Command(BaseCommand):
             ]
         )
         period = SubsidyPeriod.objects.get(name="2023-2024")
+        exports.extend(
+            [
+                {
+                    'name': "Exportació justificació",
+                    'subsidy_period': period,
+                    'function_name': 'export_service',
+                    'ignore_errors': True
+                },
+                {
+                    'name': "Exportació activitats per menors",
+                    'subsidy_period': period,
+                    'function_name': 'export_minors',
+                    'ignore_errors': True
+                },
+                {
+                    'name': "Resultats enquestes de satisfacció",
+                    'subsidy_period': period,
+                    'function_name': 'export_polls_by_services',
+                    'ignore_errors': True
+                },
+            ]
+        )
+        period = SubsidyPeriod.objects.get(name="2024-2025")
         exports.extend(
             [
                 {
