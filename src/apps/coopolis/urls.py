@@ -8,6 +8,7 @@ from django.views.generic import TemplateView
 from .views import (
     HomeView, CustomPasswordResetView, ActivityPollView, get_sub_services, get_subsidy_period
 )
+from .views.db_backup_download import db_backup_download_view
 
 urlpatterns = [
     url(
@@ -34,4 +35,9 @@ urlpatterns += [
     path('chained_dropdowns/get_sub_services/', get_sub_services),
     path('chained_dropdowns/get_subsidy_period/', get_subsidy_period),
     path('admin/', admin.site.urls),
+    path(
+        "db_backup_download/",
+        db_backup_download_view,
+        name="db_backup_download",
+    ),
 ]
