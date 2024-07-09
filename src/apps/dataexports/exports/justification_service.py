@@ -550,6 +550,8 @@ class ExportJustificationService:
         columns = [
             ("Referència", 40),
             ("Nom d'actuació", 40),
+            ("Projecte al qual s'engloba", 40),
+            ("Sector de l'activitat", 40),
             ("Cognoms", 20),
             ("Nom", 10),
             ("Gènere", 10),
@@ -586,6 +588,8 @@ class ExportJustificationService:
                             activity.project.name,
                         ),
                         "",  # Nom de l'actuació. Camp automàtic de l'excel.
+                        "",  # Projecte al qual s'engloba. Camp automàtic de l'excel.
+                        "",  # Sector de l'activitat. Camp automàtic de l'excel.
                         participant.surname or "",
                         participant.first_name,
                         participant.id_number or ("", True),
