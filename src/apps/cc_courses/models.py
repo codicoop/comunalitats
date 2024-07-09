@@ -154,7 +154,13 @@ class Activity(models.Model):
         choices=ProjectSectorChoices.choices,
     )
     name = models.CharField("títol", max_length=200, blank=False, null=False)
-    description = models.CharField("descripció actuació", max_length=150, blank=True, null=True)
+    description = models.CharField(
+        "descripció actuació",
+        max_length=150,
+        blank=True,
+        null=True,
+        help_text="Descripció breu per l'excel de justificació."
+    )
     types = models.SmallIntegerField(
         "tipus actuació", 
         blank=True,
