@@ -146,7 +146,7 @@ class Activity(models.Model):
         help_text=("Escriu el nom de l'acció i selecciona-la del desplegable."
         " Si no existeix, clica a la lupa i després a 'Crear acció'.")
     )
-    included_project = models.CharField("projecte al qual s'engloba", max_length=40, blank=True, null=True)
+    included_project = models.CharField("projecte al qual s'engloba", max_length=40, blank=True, default="")
     project_sector = models.SmallIntegerField(
         "sector del projecte",
         blank=True,
@@ -165,7 +165,7 @@ class Activity(models.Model):
     place = models.ForeignKey(
         CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc"
     )
-    neighborhood = models.CharField("barri on s'ha fet",blank=True, null=True,max_length=150)
+    neighborhood = models.CharField("barri on s'ha fet",blank=True, default="",max_length=150)
     date_start = models.DateField("dia inici")
     date_end = models.DateField("dia finalització", blank=True, null=True)
     starting_time = models.TimeField("hora d'inici")
@@ -240,9 +240,9 @@ class Activity(models.Model):
         blank=True,
     )
     agents_involved = models.CharField(
-        "agents implicats", blank=True, null=True, max_length=200
+        "agents implicats", blank=True, default="", max_length=200
     )
-    neighborhood = models.CharField("barri on s'ha fet", blank=True, null=True, max_length=150)
+    neighborhood = models.CharField("barri on s'ha fet", blank=True, default="", max_length=150)
     estimated_hours = models.PositiveIntegerField(
         "estimació hores dedicació", blank=True, null=True
     )

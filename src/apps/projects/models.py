@@ -101,8 +101,8 @@ class Project(models.Model):
     registration_date = models.DateField("data de registre", blank=True,
                                          null=True,
                                          default=datetime.date.today)
-    entity_name = models.CharField("nom entitat", max_length=15, blank=True, null=True)
-    entity_cif = models.CharField("NIF entitat", max_length=15, blank=True, null=True)
+    entity_name = models.CharField("nom entitat", max_length=15, blank=True, default="")
+    cif = models.CharField("NIF entitat", max_length=11, blank=True, default="",)
     entity_type = models.SmallIntegerField(
         "tipus d'entitat",
         blank=True,
@@ -412,7 +412,7 @@ class ProjectStage(models.Model):
         blank=True,
     )
     agents_involved = models.CharField(
-        "agents implicats", blank=True, null=True, max_length=200
+        "agents implicats", blank=True, default="", max_length=200
     )
     organizer = models.ForeignKey(
         Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL,
