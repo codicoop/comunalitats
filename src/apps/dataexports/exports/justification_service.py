@@ -449,7 +449,7 @@ class ExportJustificationService:
                         item.project.name,
                     ),  # Referència.
                     "",  # Projecte al qual s'engloba
-                    "",  # Sector de l'activitaxt
+                    "",  # Sector de l'activitat
                     "",  # Nom actuació. Camp no editable.
                     item.project.name,
                     stage_type,  # Tipus d'acompanyament
