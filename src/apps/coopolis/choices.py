@@ -227,3 +227,70 @@ class SubServicesChoices(models.IntegerChoices):
                "per a la resolució de necessitats col·lectives")
     J2 = 902, ("D.2) Generació de nous projectes d'intercooperació o ajuda "
                "mútua dirigides i realitzades amb col·lectius específics")
+
+
+class ProjectSectorChoices(models.IntegerChoices):
+    A = 10, "Agricultura i ramaderia",
+    B = 20, "Alimentació i consum",
+    C = 30, "Atenció a les persones i cures (criança, col·lectius vulnerables...)",
+    D = 40, "Comerç (just, proximitat, etc.)",
+    E = 50, "Cultura i oci (lleure, esport, esdeveniments...)",
+    F = 60, "Economia circular (reciclatge, recuperació i reutilització de residus)",
+    G = 70, "Educació / Formació",
+    H = 80, "Feminismes LGTBIQ+",
+    J = 90, "Finançament i assegurances (micromecenatge, finances ètiques, ....)",
+    K = 100, "Gestió i conservació de l'espai natural (gestió de residus,",
+    L = 110, "Hosteleria i restauració",
+    M = 120, "Industria",
+    N = 130, "Joventut",
+    P = 140, "Logística i mobilitat (transports, bancs de recursos, emmagatzematge...)",
+    Q = 150, "Màrqueting i comunicació (xarxes, audiovisual, arts gràfiques, disseny...)",
+    R = 160, "Ruralitats (despoblament, relleu,...)",
+    S = 170, "Salut (mental, sexualitat, ...)",
+    T = 180, "Serveis d'assessoria i gestoria",
+    U = 190, "Tecnologies i innovació",
+    V = 200, "Transició energètica / recursos naturals",
+    W = 210, "Turisme (rural, sostenible,...)",
+    X = 220, "Urbanisme i habitatge (arquitectura, rehabilitació, masoveria, ...)",
+
+class TypesChoices(models.IntegerChoices):
+    A = 1, "Acompanyament",
+    B = 2, "Acte",
+    C = 3, "Cartografia /mapeig",
+    D = 4, "Cicle",
+    E = 5, "Entrevista",
+    F = 6, "Exposició",
+    G = 7, "Festival",
+    H = 8, "Fira",
+    J = 9, "Inauguració",
+    K = 10, "Jornada",
+    L = 11, "Premi",
+    M = 12, "Presentació",
+    N = 13, "Publicació",
+    P = 14, "Punt informació",
+    Q = 15, "Reunió",
+    R = 16, "Sessió formativa/ informativa",
+    S = 17, "Taller",
+    T = 18, "Trobada",
+    U = 19, "Trobades assemblea",
+    V = 20, "Visita",
+    W = 21, "Xerrada",
+
+class CommunalityRoleChoices(models.IntegerChoices):
+    A = 1, "Participant / Assistent (rol passiu)",
+    B = 2, "Organitzador / Col·laborador (rol actiu)",
+
+
+class NetworkingChoices(models.IntegerChoices):
+    A = 1, "Individual",
+    B = 2, "Conjunta",
+
+
+class AnnuityChoices(models.IntegerChoices):
+    A = 24, "2024-25",
+    B = 25, "2025-26",
+
+
+class EntityTypesChoices(models.IntegerChoices):
+    A = 1, "Associació",
+    B = 2, "Cooperativa",

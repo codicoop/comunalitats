@@ -150,11 +150,11 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     )
     fieldsets = [
         (None, {
-            'fields': ['course', 'name', 'objectives', 'place', 'room',
-                       'date_start',
-                       'date_end', 'starting_time', 'ending_time', 'spots',
-                       'service', 'sub_service', 'entities',
-                       'responsible', 'publish', ]
+            'fields': ['course', 'name', 'included_project', 'project_sector',  'types', 'description', 'objectives', 'place', 'room', 'date_start',
+            'date_end', 'starting_time', 'ending_time', 'spots',
+            'service', 'sub_service', 'communality_role', 'networking', 'agents_involved', 'neighborhood', 'estimated_hours', 'entities',
+            'responsible', 'publish', 
+            ]
         }),
         ("Documents per la justificació", {
             'classes': ('grp-collapse grp-closed',),

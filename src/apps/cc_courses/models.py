@@ -15,7 +15,7 @@ from django.core.validators import ValidationError
 
 from apps.base.choices import ActivityFileType
 from apps.cc_lib.utils import slugify_model
-from apps.coopolis.choices import ServicesChoices, SubServicesChoices
+from apps.coopolis.choices import ServicesChoices, SubServicesChoices, ProjectSectorChoices, TypesChoices, CommunalityRoleChoices, NetworkingChoices
 from apps.cc_courses.exceptions import EnrollToActivityNotValidException
 from apps.coopolis.managers import Published
 from apps.coopolis.storage_backends import (
@@ -146,11 +146,32 @@ class Activity(models.Model):
         help_text=("Escriu el nom de l'acció i selecciona-la del desplegable."
         " Si no existeix, clica a la lupa i després a 'Crear acció'.")
     )
+    included_project = models.CharField("projecte al qual s'engloba", max_length=40, blank=True, default="")
+    project_sector = models.SmallIntegerField(
+        "sector del projecte",
+        blank=True,
+        null=True,
+        choices=ProjectSectorChoices.choices,
+    )
     name = models.CharField("títol", max_length=200, blank=False, null=False)
+    description = models.CharField(
+        "descripció actuació",
+        max_length=150,
+        blank=True,
+        default="",
+        help_text="Descripció breu per l'excel de justificació.",
+    )
+    types = models.SmallIntegerField(
+        "tipus actuació", 
+        blank=True,
+        null=True,
+        choices=TypesChoices.choices,
+    )
     objectives = models.TextField("descripció", null=True)
     place = models.ForeignKey(
         CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc"
     )
+    neighborhood = models.CharField("barri on s'ha fet",blank=True, default="",max_length=150)
     date_start = models.DateField("dia inici")
     date_end = models.DateField("dia finalització", blank=True, null=True)
     starting_time = models.TimeField("hora d'inici")
@@ -211,6 +232,25 @@ class Activity(models.Model):
         choices=SubServicesChoices.choices,
         null=True,
         blank=True,
+    )
+    communality_role = models.SmallIntegerField(
+        "rol comunalitat",
+        choices=CommunalityRoleChoices.choices,
+        null=True,
+        blank=True,
+    )
+    networking = models.SmallIntegerField(
+        "treball en xarxa",
+        choices=NetworkingChoices.choices,
+        null=True,
+        blank=True,
+    )
+    agents_involved = models.CharField(
+        "agents implicats", blank=True, default="", max_length=200
+    )
+    neighborhood = models.CharField("barri on s'ha fet", blank=True, default="", max_length=150)
+    estimated_hours = models.PositiveIntegerField(
+        "estimació hores dedicació", blank=True, null=True
     )
     photo1 = models.FileField("fotografia", blank=True, null=True,
                               storage=PrivateMediaStorage(), max_length=250)

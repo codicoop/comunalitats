@@ -9,7 +9,7 @@ from django.utils.timezone import now
 import tagulous.models
 
 from apps.cc_courses.models import Entity, Organizer, Activity
-from apps.coopolis.choices import ServicesChoices, SubServicesChoices
+from apps.coopolis.choices import ServicesChoices, SubServicesChoices, ProjectSectorChoices, CommunalityRoleChoices, NetworkingChoices, TypesChoices, AnnuityChoices, EntityTypesChoices
 from apps.cc_users.models import User
 from apps.towns.models import Town
 from apps.coopolis.storage_backends import PrivateMediaStorage, PublicMediaStorage
@@ -76,6 +76,12 @@ class Project(models.Model):
                                   null=True, choices=MOTIVATION_OPTIONS)
     mail = models.EmailField("correu electrònic")
     phone = models.CharField("telèfon", max_length=25)
+    project_sector = models.SmallIntegerField(
+        "sector activitat",
+        blank=True,
+        null=True,
+        choices=ProjectSectorChoices.choices,
+    )
     town = models.ForeignKey(Town, verbose_name="població",
                              on_delete=models.SET_NULL, null=True, blank=True)
     neighborhood = models.CharField(
@@ -84,13 +90,25 @@ class Project(models.Model):
         blank=True,
         max_length=50,
     )
+    annuity = models.SmallIntegerField(
+        "anualitat",
+        blank=True,
+        null=True,
+        choices=AnnuityChoices.choices,
+    )
     number_people = models.IntegerField("número de persones", blank=True,
                                         null=True)
     registration_date = models.DateField("data de registre", blank=True,
                                          null=True,
                                          default=datetime.date.today)
-    # Obsolet
-    cif = models.CharField("N.I.F.", max_length=11, blank=True, null=True)
+    entity_name = models.CharField("nom entitat", max_length=15, blank=True, default="")
+    cif = models.CharField("NIF entitat", max_length=11, blank=True, default="",)
+    entity_type = models.SmallIntegerField(
+        "tipus d'entitat",
+        blank=True,
+        null=True,
+        choices=EntityTypesChoices.choices,
+    )
     # Obsolet
     object_finality = models.TextField("objecte i finalitat", blank=True,
                                        null=True)
@@ -337,6 +355,18 @@ class ProjectStage(models.Model):
     project = models.ForeignKey(
         Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat",
         related_name="stages")
+    project_sector = models.SmallIntegerField(
+        "sector del projecte",
+        blank=True,
+        null=True,
+        choices=ProjectSectorChoices.choices,
+    )
+    types = models.SmallIntegerField(
+        "tipus actuació", 
+        blank=True,
+        null=True,
+        choices=TypesChoices.choices,
+    )
     STAGE_TYPE_OPTIONS = (
         ('11', "Creació"),
         ('12', "Consolidació"),
@@ -368,6 +398,21 @@ class ProjectStage(models.Model):
         choices=SubServicesChoices.choices,
         null=True,
         blank=True,
+    )
+    communality_role = models.SmallIntegerField(
+        "rol comunalitat",
+        choices=CommunalityRoleChoices.choices,
+        null=True,
+        blank=True,
+    )
+    networking = models.SmallIntegerField(
+        "treball en xarxa",
+        choices=NetworkingChoices.choices,
+        null=True,
+        blank=True,
+    )
+    agents_involved = models.CharField(
+        "agents implicats", blank=True, default="", max_length=200
     )
     organizer = models.ForeignKey(
         Organizer, verbose_name="organitzadora", on_delete=models.SET_NULL,
@@ -566,6 +611,12 @@ class EmploymentInsertion(models.Model):
     entity_nif = models.CharField(
         "NIF de l'entitat on s'insereix",
         max_length=11,
+    )
+    entity_sector = models.SmallIntegerField(
+        "sector de l'entitat", 
+        choices=ProjectSectorChoices.choices,
+        null=True,
+        blank=True,
     )
     entity_town = models.ForeignKey(
         "towns.Town",
