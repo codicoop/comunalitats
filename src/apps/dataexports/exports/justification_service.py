@@ -596,7 +596,6 @@ class ExportJustificationService:
                         participant.id_number or "",
                         participant.surname or "",
                         participant.first_name,
-                        participant.id_number or ("", True),
                         gender,
                         participant.birthdate or ("", True),
                         participant.get_employment_situation_display() or "",
@@ -631,10 +630,12 @@ class ExportJustificationService:
                         activity.service,
                         activity.name,
                     ),
+                    "",  # Projecte al qual s'engloba. Camp automàtic de l'excel.
+                    "",  # Sector de l'activitat. Camp automàtic de l'excel.
                     "",  # Nom de l'actuació. Camp automàtic de l'excel.
+                    participant.id_number or ("", True),
                     participant.surname or "",
                     participant.first_name,
-                    participant.id_number or ("", True),
                     gender,
                     participant.birthdate or ("", True),
                     participant.get_employment_situation_display() or "",
