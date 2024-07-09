@@ -549,9 +549,10 @@ class ExportJustificationService:
 
         columns = [
             ("Referència", 40),
-            ("Nom d'actuació", 40),
             ("Projecte al qual s'engloba", 40),
             ("Sector de l'activitat", 40),
+            ("Nom d'actuació", 40),
+            ("Document identificatiu (DNI, NIE, passaport)", 20),
             ("Cognoms", 20),
             ("Nom", 10),
             ("Gènere", 10),
@@ -587,9 +588,10 @@ class ExportJustificationService:
                             activity.service,
                             activity.project.name,
                         ),
-                        "",  # Nom de l'actuació. Camp automàtic de l'excel.
                         "",  # Projecte al qual s'engloba. Camp automàtic de l'excel.
                         "",  # Sector de l'activitat. Camp automàtic de l'excel.
+                        "",  # Nom de l'actuació. Camp automàtic de l'excel.
+                        participant.id_number or "",
                         participant.surname or "",
                         participant.first_name,
                         participant.id_number or ("", True),
