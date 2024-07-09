@@ -408,6 +408,8 @@ class ExportJustificationService:
 
         columns = [
             ("Referència", 20),
+            ("Projecte al qual s'engloba", 40),
+            ("Sector de l'activitat", 40),
             ("Nom actuació", 40),
             ("Nom de projecte/empresa o entitat", 35),
             ("Destinatari de l'acompanyament", 30),
@@ -447,6 +449,8 @@ class ExportJustificationService:
                         item.service,
                         item.project.name,
                     ),  # Referència.
+                    "",  # Projecte al qual s'engloba
+                    "",  # Sector de l'activitaxt
                     "",  # Nom actuació. Camp no editable.
                     item.project.name,
                     stage_type,  # Tipus d'acompanyament
@@ -514,7 +518,6 @@ class ExportJustificationService:
                     stage.service,
                     project.name,
                 )
-                name = project.name
             project_sector = project.get_project_sector_display() if project.project_sector else ""
             annuity = project.get_annuity_display() if project.annuity else ""
             entity_type = project.get_entity_type_display() if project.entity_type else ""
@@ -525,7 +528,7 @@ class ExportJustificationService:
                 # Referència. En aquest full no cal que tinguin relació amb Actuacions.
                 "", # Projecte al qual s'engloba
                 "", # Sector de l'activitaxt
-                name, # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
+                "", # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
                 project.entity_name, # Nom entitat
                 project.cif, # NIF entitat
                 entity_type, # Tipus d'entitat
