@@ -527,7 +527,7 @@ class ExportJustificationService:
                 "", # Sector de l'activitaxt
                 name, # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
                 project.entity_name, # Nom entitat
-                project.entity_cif, # NIF entitat
+                project.cif, # NIF entitat
                 entity_type, # Tipus d'entitat
                 project_sector, # Sector activitat
                 project.partners.all()[0].full_name if project.partners.all() else "",
