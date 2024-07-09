@@ -159,7 +159,7 @@ class Activity(models.Model):
         max_length=150,
         blank=True,
         default="",
-        help_text="Descripció breu per l'excel de justificació."
+        help_text="Descripció breu per l'excel de justificació.",
     )
     types = models.SmallIntegerField(
         "tipus actuació", 
