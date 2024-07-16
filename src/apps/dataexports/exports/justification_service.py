@@ -69,7 +69,7 @@ class ExportJustificationService:
             ("Nom de l'actuació", 40),
             ("Descripció actuació", 40),
             ("Tipus actuació", 40),
-            ("Servei", 40),
+            ("Serveis", 40),
             ("Actuacions", 70),
             ("Rol Comunalitat", 40),
             ("Treball en Xarxa", 40),
