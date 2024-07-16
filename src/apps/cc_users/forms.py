@@ -11,6 +11,7 @@ from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
+from apps.base.helpers import add_justification_required_text_to_field
 from apps.cc_users.models import User
 from apps.coopolis.widgets import XDSoftDatePickerInput
 from conf.custom_mail_manager import MyMailTemplate
@@ -233,6 +234,21 @@ class MySignUpAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["email"].required = False
         self.fields["id_number"].required = False
+        self.fields["id_number"] = add_justification_required_text_to_field(
+            self.fields["id_number"],
+        )
+        self.fields["first_name"] = add_justification_required_text_to_field(
+            self.fields["first_name"],
+        )
+        self.fields["last_name"] = add_justification_required_text_to_field(
+            self.fields["last_name"],
+        )
+        self.fields["gender"] = add_justification_required_text_to_field(
+            self.fields["gender"],
+        )
+        self.fields["birthdate"] = add_justification_required_text_to_field(
+            self.fields["birthdate"],
+        )
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
