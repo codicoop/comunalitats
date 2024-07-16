@@ -134,8 +134,8 @@ class ExportJustificationService:
                 item.name,
                 item.description,  # Descripció actuació
                 types,  # Tipus actuació
-                service,
-                sub_service,
+                service,  # Serveis
+                sub_service,  # Actuacions
                 communality_role,  # Rol Comunalitat
                 networking,  # Treball en Xarxa
                 item.agents_involved,  # Agents implicats

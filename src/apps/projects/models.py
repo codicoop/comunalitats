@@ -393,13 +393,13 @@ class ProjectStage(models.Model):
         auto_now_add=True
     )
     service = models.SmallIntegerField(
-        "Servei",
+        "Serveis",
         choices=ServicesChoices.choices,
         null=True,
         blank=True,
     )
     sub_service = models.SmallIntegerField(
-        "Sub-servei",
+        "Actuacions",
         choices=SubServicesChoices.choices,
         null=True,
         blank=True,

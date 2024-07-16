@@ -225,7 +225,7 @@ class Activity(models.Model):
                   "'Membre del personal'."
     )
     service = models.SmallIntegerField(
-        "Servei",
+        "Serveis",
         choices=ServicesChoices.choices,
         null=True,
         blank=True,
@@ -233,7 +233,7 @@ class Activity(models.Model):
                   ", que es calcula amb el valor del camp \"Data d'inici\"."
     )
     sub_service = models.SmallIntegerField(
-        "Sub-servei",
+        "Actuacions",
         choices=SubServicesChoices.choices,
         null=True,
         blank=True,
