@@ -411,7 +411,7 @@ class ExportJustificationService:
             ("Projecte al qual s'engloba", 40),
             ("Sector de l'activitat", 40),
             ("Nom actuació", 40),
-            ("Nom de projecte/empresa o entitat", 35),
+            ("Nom de projecte/ empresa o entitat", 35),
             ("Tipus d'acompanyament", 30),
             ("Data d'inici", 13),
             ("Barri", 20),
@@ -451,12 +451,12 @@ class ExportJustificationService:
                     "",  # Projecte al qual s'engloba
                     "",  # Sector de l'activitat
                     "",  # Nom actuació. Camp no editable.
-                    item.project.name,
+                    item.project.name,  # Nom de projecte/ empresa o entitat
                     stage_type,  # Tipus d'acompanyament
-                    item.date_start or ("", True),
-                    item.project.neighborhood or ("", True),
+                    item.date_start or ("", True),  # Data d'inici
+                    item.project.neighborhood or ("", True),  # Barri
                     town,  # Municipi
-                    item.project.description,  # Breu descripció.
+                    item.project.description,  # Breu descripció de l'actuació
                     hours,  # Total d'hores d'acompanyament.
                     item.latest_session.date if item.latest_session else "",
                 ]
