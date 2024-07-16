@@ -528,15 +528,15 @@ class ExportJustificationService:
                 "",  # Sector de l'activitaxt
                 "",  # Nom de l'actuació. En aquest full no cal que tinguin
                      # relació amb Actuacions.
-                project.entity_name,  # Nom entitat
+                project.name,  # Nom entitat
                 project.cif,  # NIF entitat
                 entity_type,  # Tipus d'entitat
                 project_sector,  # Sector activitat
                 project.partners.all()[0].full_name if project.partners.all() else "",
-                str(project.town), 
-                project.neighborhood,
-                project.mail,
-                project.phone,
+                str(project.town),  # Municipi
+                project.neighborhood,  # Barri
+                project.mail,  # Correu electrònic
+                project.phone,  # Telèfon
                 annuity,  # Anualitat
                 "Sí",  # Economia solidària
                 project.stages_list,
