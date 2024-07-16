@@ -545,7 +545,7 @@ class ExportJustificationService:
 
     def export_participants(self):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
-            "Persones Participants o Ateses",
+            "Participants",
         )
         self.export_manager.row_number = 1
 
@@ -593,7 +593,8 @@ class ExportJustificationService:
                         "",  # Projecte al qual s'engloba. Camp automàtic de l'excel.
                         "",  # Sector de l'activitat. Camp automàtic de l'excel.
                         "",  # Nom de l'actuació. Camp automàtic de l'excel.
-                        participant.id_number or "",
+                        participant.id_number or "",  # Document identificatiu
+                                                      # (DNI, NIE, passaport)
                         participant.surname or "",
                         participant.first_name,
                         gender,
