@@ -57,10 +57,11 @@ class Entity(models.Model):
         help_text="Si la desactives no apareixerà al desplegable.",
     )
     neighborhood = models.CharField(
-        "Barri",
+        "Barri de l'entitat",
         default="",
         blank=True,
         max_length=50,
+        help_text="Aquest camp NO és el que apareix a l'excel de justificació."
     )
     town = models.ForeignKey(
         "towns.Town",
@@ -176,7 +177,7 @@ class Activity(models.Model):
     place = models.ForeignKey(
         CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc"
     )
-    neighborhood = models.CharField("barri on s'ha fet",blank=True, default="",max_length=150)
+    neighborhood = models.CharField("barri", blank=True, default="", max_length=150)
     date_start = models.DateField("dia inici d'actuació")
     date_end = models.DateField("dia finalització", blank=True, null=True)
     starting_time = models.TimeField("hora d'inici")
