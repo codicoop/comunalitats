@@ -412,7 +412,7 @@ class ExportJustificationService:
             ("Sector de l'activitat", 40),
             ("Nom actuació", 40),
             ("Nom de projecte/empresa o entitat", 35),
-            ("Tipus d'acompanyament: creació/consolidació/creixement", 30),
+            ("Tipus d'acompanyament", 30),
             ("Data d'inici", 13),
             ("Barri", 20),
             ("Municipi", 20),
