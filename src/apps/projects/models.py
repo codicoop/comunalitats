@@ -157,7 +157,7 @@ class Project(models.Model):
     # Obsolet
     derivation_date = models.DateField("data de derivació", blank=True,
                                        null=True)
-    description = models.TextField("descripció", blank=True, null=True)
+    description = models.TextField("descripció actuació", blank=True, null=True)
     other = models.CharField(
         "altres", max_length=240, blank=True, null=True,
         help_text="Apareix a la taula de Seguiment d'Acompanyaments")
