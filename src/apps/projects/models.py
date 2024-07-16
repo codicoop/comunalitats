@@ -40,7 +40,12 @@ class Project(models.Model):
         blank=True,
         related_name="projects",
     )
-    name = models.CharField("nom", max_length=200, blank=False, unique=True)
+    name = models.CharField(
+        "nom de l'actuació",
+        max_length=200,
+        blank=False,
+        unique=True,
+    )
     SECTORS = (
         ('M', 'Alimentació'),
         ('S', 'Assessorament'),
