@@ -596,8 +596,8 @@ class EmploymentInsertion(models.Model):
     subsidy_period = models.ForeignKey(
         SubsidyPeriod, verbose_name="convocatòria", null=True,
         on_delete=models.SET_NULL)
-    insertion_date = models.DateField("alta seguretat social")
-    end_date = models.DateField("baixa seg. social", null=True, blank=True)
+    insertion_date = models.DateField("data alta SS")
+    end_date = models.DateField("data baixa SS", null=True, blank=True)
     CONTRACT_TYPE_CHOICES = (
         (1, "Indefinit"),
         (5, "Temporal"),
@@ -605,7 +605,7 @@ class EmploymentInsertion(models.Model):
         (3, "Autònom"),
     )
     contract_type = models.SmallIntegerField(
-        "tipus de contracte",
+        "tipus de contracte o vinculació",
         choices=CONTRACT_TYPE_CHOICES,
         null=True
     )
@@ -618,19 +618,19 @@ class EmploymentInsertion(models.Model):
         max_length=11,
     )
     entity_sector = models.SmallIntegerField(
-        "sector de l'entitat", 
+        "sector de l'empresa",
         choices=ProjectSectorChoices.choices,
         null=True,
         blank=True,
     )
     entity_town = models.ForeignKey(
         "towns.Town",
-        verbose_name="població de l'entitat on s'insereix",
+        verbose_name="municipi entitat",
         on_delete=models.SET_NULL,
         null=True,
     )
     entity_neighborhood = models.CharField(
-        "Barri de l'entitat on s'insereix",
+        "barri entitat",
         max_length=50,
     )
 
