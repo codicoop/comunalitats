@@ -153,7 +153,12 @@ class Activity(models.Model):
         null=True,
         choices=ProjectSectorChoices.choices,
     )
-    name = models.CharField("títol", max_length=200, blank=False, null=False)
+    name = models.CharField(
+        "nom de l'actuació",
+        max_length=200,
+        blank=False,
+        null=False,
+    )
     description = models.CharField(
         "descripció actuació",
         max_length=150,
