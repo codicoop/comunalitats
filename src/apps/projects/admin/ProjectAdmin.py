@@ -132,7 +132,6 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     inlines = (ProjectStageSessionsInline, )
     readonly_fields = (
         'hours_sum',
-        'date_start',
         "earliest_session_field",
         "justification_documents_total",
     )
