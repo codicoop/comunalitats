@@ -689,7 +689,7 @@ class ExportJustificationService:
 
     def export_insercionslaborals(self):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
-            "Persones Inserides"
+            "Insercions"
         )
         self.export_manager.row_number = 1
 
@@ -703,14 +703,14 @@ class ExportJustificationService:
             ("Nom", 20),
             ("Gènere", 20),
             ("Data naixement", 20),
-            ("NIF Entitat", 20),
+            ("NIF empresa on s'insereix", 20),
             ("Nom entitat on s'insereix", 20),
             ("Sector de l'entitat", 20),
             ("Tipus contracte o vinculació", 20),
             ("Data alta SS", 20),
             ("Data baixa SS", 20),
-            ("Municipi Entitat", 20),
-            ("Barri Entitat", 20),
+            ("Municipi entitat", 20),
+            ("Barri entitat", 20),
             ("[ convocatòria ]", 20),
         ]
         self.export_manager.create_columns(columns)
