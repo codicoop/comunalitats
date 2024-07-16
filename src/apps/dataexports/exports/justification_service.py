@@ -75,7 +75,7 @@ class ExportJustificationService:
             ("Treball en Xarxa", 40),
             ("Agents implicats", 40),
             ("Data inici d'actuació", 16),
-            ("Període actuacions", 30),
+            ("Periode actuacions", 30),
             ("Municipi", 30),
             ("Barri", 30),
             ("Estimació hores dedicació", 20),
@@ -140,7 +140,7 @@ class ExportJustificationService:
                 networking,  # Treball en Xarxa
                 item.agents_involved,  # Agents implicats
                 item.date_start,
-                "",  # Període d'actuacions
+                "",  # Periode actuacions
                 town,  # Municipi
                 item.neighborhood,  # Barri
                 item.estimated_hours,  # Estimació hores dedicació
@@ -288,7 +288,7 @@ class ExportJustificationService:
                     networking,  # Treball en Xarxa
                     item.agents_involved,  # Agents implicats
                     item.date_start or "",  # Data inici d'actuació
-                    "",  # Període d'actuacions
+                    "",  # Periode actuacions
                     town,  # Municipi
                     neighborhood,  # Barri
                     hours_sum,  # Estimació hores dedicació
@@ -324,8 +324,8 @@ class ExportJustificationService:
                 sub_service,
                 item.name,
                 item.date_start,
-                "",  # Període
-                town,
+                "",  # Periode actuacions
+                town,  # Municipi
                 material_difusio,
                 "",  # Incidències
                 document_acreditatiu,
@@ -387,8 +387,8 @@ class ExportJustificationService:
                 "",  # Treball en Xarxa
                 "",  # Agents implicats
                 stage.date_start,
-                "",  # Període
-                town,
+                "",  # Periode actuacions
+                town,  # Municipi
                 "",  # Barri
                 "",  # Estimació hores dedicació
                 "No",  # Material de difusió
@@ -455,7 +455,7 @@ class ExportJustificationService:
                     stage_type,  # Tipus d'acompanyament
                     item.date_start or ("", True),
                     item.project.neighborhood or ("", True),
-                    town,
+                    town,  # Municipi
                     item.project.description,  # Breu descripció.
                     hours,  # Total d'hores d'acompanyament.
                     item.latest_session.date if item.latest_session else "",
@@ -759,7 +759,7 @@ class ExportJustificationService:
                 contract_type,
                 insertion_date,  # Data d'alta SS
                 end_date,  # Data baixa SS
-                str(insertion.entity_town),
+                str(insertion.entity_town),  # Municipi
                 insertion.entity_neighborhood,
                 str(insertion.subsidy_period),  # Convocatòria
             ]
