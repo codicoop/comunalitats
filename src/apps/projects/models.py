@@ -523,8 +523,9 @@ class ProjectStageSession(models.Model):
         null=True, blank=False
     )
     hours = models.FloatField(
-        "número d'hores",
-        help_text="Camp necessari per la justificació.",
+        "Estimació hores dedicació",
+        help_text="A la justificació es sumaran les hores de totes les "
+                  "sessions de l'acompanyament.",
         null=True,
         blank=True,
     )
