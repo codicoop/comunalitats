@@ -5,6 +5,7 @@ from django.urls import reverse
 
 from django.utils.safestring import mark_safe
 
+from apps.base.helpers import add_justification_required_text_to_field
 from apps.projects.models import Project, EmploymentInsertion
 
 
@@ -25,6 +26,50 @@ class ProjectFormAdmin(ProjectForm):
     class Meta:
         # Un-excluding the fields that we were hiding for the front-end.
         exclude = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["sector"] = add_justification_required_text_to_field(
+            self.fields["sector"],
+        )
+        self.fields["name"] = add_justification_required_text_to_field(
+            self.fields["name"],
+        )
+        self.fields["description"] = add_justification_required_text_to_field(
+            self.fields["description"],
+        )
+        self.fields["town"] = add_justification_required_text_to_field(
+            self.fields["town"],
+        )
+        self.fields["neighborhood"] = add_justification_required_text_to_field(
+            self.fields["neighborhood"],
+        )
+        self.fields["partners"] = add_justification_required_text_to_field(
+            self.fields["partners"],
+            "Dada necessària per la justificació en cas que el "
+            "justifiqueu com a Entitat Creada."
+        )
+        self.fields["mail"] = add_justification_required_text_to_field(
+            self.fields["mail"],
+            "Dada necessària per la justificació en cas que el "
+            "justifiqueu com a Entitat Creada."
+        )
+        self.fields["phone"] = add_justification_required_text_to_field(
+            self.fields["phone"],
+            "Dada necessària per la justificació en cas que el "
+            "justifiqueu com a Entitat Creada."
+        )
+        self.fields["cif"] = add_justification_required_text_to_field(
+            self.fields["cif"],
+            "Dada necessària per la justificació en cas que el "
+            "justifiqueu com a Entitat Creada."
+        )
+        self.fields["entity_type"] = add_justification_required_text_to_field(
+            self.fields["entity_type"],
+            "Dada necessària per la justificació en cas que el "
+            "justifiqueu com a Entitat Creada."
+        )
+
 
 
 class EmploymentInsertionForm(models.ModelForm):
