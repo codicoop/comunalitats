@@ -87,7 +87,7 @@ class Project(models.Model):
         null=True,
         choices=ProjectSectorChoices.choices,
     )
-    town = models.ForeignKey(Town, verbose_name="població",
+    town = models.ForeignKey(Town, verbose_name="municipi",
                              on_delete=models.SET_NULL, null=True, blank=True)
     neighborhood = models.CharField(
         "Barri",

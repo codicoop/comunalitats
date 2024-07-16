@@ -141,7 +141,7 @@ class ExportJustificationService:
                 item.agents_involved,  # Agents implicats
                 item.date_start,
                 "",  # Període d'actuacions
-                town,
+                town,  # Municipi
                 item.neighborhood,  # Barri
                 item.estimated_hours,  # Estimació hores dedicació
                 material_difusio,  # Material de difusió
@@ -289,7 +289,7 @@ class ExportJustificationService:
                     item.agents_involved,  # Agents implicats
                     item.date_start or "",  # Data inici d'actuació
                     "",  # Període d'actuacions
-                    town,
+                    town,  # Municipi
                     neighborhood,  # Barri
                     hours_sum,  # Estimació hores dedicació
                     "No",  # Material de difusió

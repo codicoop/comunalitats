@@ -32,7 +32,7 @@ class CoursePlace(models.Model):
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     town = models.ForeignKey(
         "towns.Town",
-        verbose_name="població",
+        verbose_name="municipi",
         on_delete=models.SET_NULL,
         null=True,
         blank=True
