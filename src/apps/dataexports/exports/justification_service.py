@@ -523,21 +523,21 @@ class ExportJustificationService:
 
             self.export_manager.row_number += 1
             row = [
-                reference_number,
-                # Referència. En aquest full no cal que tinguin relació amb Actuacions.
-                "", # Projecte al qual s'engloba
-                "", # Sector de l'activitaxt
-                "", # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
-                project.entity_name, # Nom entitat
-                project.cif, # NIF entitat
-                entity_type, # Tipus d'entitat
-                project_sector, # Sector activitat
+                reference_number,  # Referència
+                "",  # Projecte al qual s'engloba
+                "",  # Sector de l'activitaxt
+                "",  # Nom de l'actuació. En aquest full no cal que tinguin
+                     # relació amb Actuacions.
+                project.entity_name,  # Nom entitat
+                project.cif,  # NIF entitat
+                entity_type,  # Tipus d'entitat
+                project_sector,  # Sector activitat
                 project.partners.all()[0].full_name if project.partners.all() else "",
                 str(project.town), 
                 project.neighborhood,
                 project.mail,
                 project.phone,
-                annuity, # Anualitat
+                annuity,  # Anualitat
                 "Sí",  # Economia solidària
                 project.stages_list,
             ]
