@@ -376,16 +376,16 @@ class ExportJustificationService:
                 town = str(project.town)
 
             row = [
-                "", # Projecte al qual s'engloba
-                "", # Sector del projecte
+                "",  # Projecte al qual s'engloba
+                "",  # Sector del projecte
                 project.name,
-                "", # Descripció actuació
-                "", # Tipus actuació
+                "",  # Descripció actuació
+                "",  # Tipus actuació
                 service,
                 sub_service,
-                "", # Rol Comunalitat
-                "", # Treball en Xarxa
-                "", # Agents implicats
+                "",  # Rol Comunalitat
+                "",  # Treball en Xarxa
+                "",  # Agents implicats
                 stage.date_start,
                 "",  # Període
                 town,
