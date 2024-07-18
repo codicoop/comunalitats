@@ -71,7 +71,6 @@ class ProjectFormAdmin(ProjectForm):
         )
 
 
-
 class EmploymentInsertionForm(models.ModelForm):
     class Meta:
         model = EmploymentInsertion
