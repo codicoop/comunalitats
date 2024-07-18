@@ -11,7 +11,8 @@ from django.conf.urls import url
 from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
 from apps.cc_users.models import User
 from apps.projects.models import Project, ProjectStage, EmploymentInsertion
-from apps.projects.forms import ProjectFormAdmin, EmploymentInsertionForm
+from apps.projects.forms import ProjectFormAdmin, EmploymentInsertionForm, \
+    ProjectStageFormAdmin
 from apps.projects.models import ProjectStageSession, ProjectFile
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
@@ -97,6 +98,7 @@ class FilterBySubsidyPeriod(admin.SimpleListFilter):
 
 
 class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
+    form = ProjectStageFormAdmin
     empty_value_display = '(cap)'
     list_display = (
         'project_field_ellipsis', 'date_start', 'stage_type',

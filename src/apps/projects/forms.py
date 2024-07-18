@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from apps.base.helpers import add_justification_required_text_to_field
-from apps.projects.models import Project, EmploymentInsertion
+from apps.projects.models import Project, EmploymentInsertion, ProjectStage
 
 
 class ProjectForm(forms.ModelForm):
@@ -68,6 +68,41 @@ class ProjectFormAdmin(ProjectForm):
             self.fields["entity_type"],
             "Dada necessària per la justificació en cas que el "
             "justifiqueu com a Entitat Creada."
+        )
+
+
+class ProjectStageFormAdmin(ProjectForm):
+    class Meta:
+        model = ProjectStage
+        fields = (
+            'project', 'project_sector', 'types', 'stage_type', 'stage_subtype',
+            'subsidy_period', 'date_start', 'service', 'sub_service',
+            'communality_role', 'networking', 'agents_involved', 'organizer',
+            'responsible', 'scanned_certificate', 'involved_partners',
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["types"] = add_justification_required_text_to_field(
+            self.fields["types"],
+        )
+        self.fields["service"] = add_justification_required_text_to_field(
+            self.fields["service"],
+        )
+        self.fields["sub_service"] = add_justification_required_text_to_field(
+            self.fields["sub_service"],
+        )
+        self.fields["communality_role"] = add_justification_required_text_to_field(
+            self.fields["communality_role"],
+        )
+        self.fields["networking"] = add_justification_required_text_to_field(
+            self.fields["networking"],
+        )
+        self.fields["agents_involved"] = add_justification_required_text_to_field(
+            self.fields["agents_involved"],
+        )
+        self.fields["date_start"] = add_justification_required_text_to_field(
+            self.fields["date_start"],
         )
 
 
