@@ -147,7 +147,6 @@ class Activity(models.Model):
         help_text=("Escriu el nom de l'acció i selecciona-la del desplegable."
         " Si no existeix, clica a la lupa i després a 'Crear acció'.")
     )
-    included_project = models.CharField("projecte al qual s'engloba", max_length=40, blank=True, default="")
     project_sector = models.SmallIntegerField(
         "sector del projecte",
         blank=True,
