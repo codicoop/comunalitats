@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 import tagulous.models
 
-from apps.cc_courses.models import Entity, Organizer, Activity
+from apps.cc_courses.models import Entity, Organizer, Activity, Course
 from apps.coopolis.choices import ServicesChoices, SubServicesChoices, ProjectSectorChoices, CommunalityRoleChoices, NetworkingChoices, TypesChoices, AnnuityChoices, EntityTypesChoices
 from apps.cc_users.models import User
 from apps.towns.models import Town
@@ -357,6 +357,16 @@ class ProjectStage(models.Model):
 
     DEFAULT_STAGE_TYPE = 1
 
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.SET_NULL,
+        verbose_name="Projecte al qual s'engloba",
+        related_name="stage_activities",
+        help_text=("Escriu el nom del projecte i selecciona'l del desplegable."
+        " Si no existeix, clica a la lupa i després a 'Crear projecte'."),
+        null=True,
+        blank=False,
+    )
     project = models.ForeignKey(
         Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat",
         related_name="stages")

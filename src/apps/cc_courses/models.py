@@ -144,8 +144,8 @@ class Activity(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Projecte al qual s'engloba",
         related_name="activities",
-        help_text=("Escriu el nom de l'acció i selecciona-la del desplegable."
-        " Si no existeix, clica a la lupa i després a 'Crear acció'.")
+        help_text=("Escriu el nom del projecte i selecciona'l del desplegable."
+        " Si no existeix, clica a la lupa i després a 'Crear projecte'.")
     )
     project_sector = models.SmallIntegerField(
         "sector del projecte",
