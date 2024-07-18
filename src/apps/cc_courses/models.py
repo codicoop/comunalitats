@@ -93,8 +93,8 @@ class Organizer(models.Model):
 
 class Course(models.Model):
     class Meta:
-        verbose_name = "acció"
-        verbose_name_plural = "accions"
+        verbose_name = "projecte"
+        verbose_name_plural = "projectes"
         ordering = ["title"]
 
     title = models.CharField("títol", max_length=250, blank=False)
@@ -142,7 +142,7 @@ class Activity(models.Model):
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
-        verbose_name="acció",
+        verbose_name="Projecte al qual s'engloba",
         related_name="activities",
         help_text=("Escriu el nom de l'acció i selecciona-la del desplegable."
         " Si no existeix, clica a la lupa i després a 'Crear acció'.")

@@ -31,8 +31,8 @@ class Derivation(models.Model):
 
 class Project(models.Model):
     class Meta:
-        verbose_name_plural = "projectes"
-        verbose_name = "projecte"
+        verbose_name_plural = "projectes acompanyats"
+        verbose_name = "projecte acompanyat"
 
     partners = models.ManyToManyField(
         User,
