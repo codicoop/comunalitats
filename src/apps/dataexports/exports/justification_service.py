@@ -129,7 +129,7 @@ class ExportJustificationService:
                 document_acreditatiu = "Sí"
 
             row = [
-                item.included_project,  # Projecte al qual s'engloba
+                item.course.title,  # Projecte al qual s'engloba
                 project_sector,  # Sector del projecte
                 item.name,
                 item.description,  # Descripció actuació
@@ -277,7 +277,8 @@ class ExportJustificationService:
                     hours_sum = str(item.hours_sum())
         
                 row = [
-                    "",  # Projecte al qual s'engloba
+                    # Projecte al qual s'engloba
+                    item.course.title if item.course else "",
                     project_sector,  # Sector del projecte
                     item.project.name,  # Nom de l'actuació
                     item.project.description,  # Descripció actuació
@@ -376,7 +377,8 @@ class ExportJustificationService:
                 town = str(project.town)
 
             row = [
-                "",  # Projecte al qual s'engloba
+                # Projecte al qual s'engloba
+                stage.course.title if stage.course else "",
                 "",  # Sector del projecte
                 project.name,
                 "",  # Descripció actuació
@@ -448,9 +450,9 @@ class ExportJustificationService:
                         item.service,
                         item.project.name,
                     ),  # Referència.
-                    "",  # Projecte al qual s'engloba
-                    "",  # Sector de l'activitat
-                    "",  # Nom actuació. Camp no editable.
+                    "",  # Automàtic. Projecte al qual s'engloba
+                    "",  # Automàtic. Sector de l'activitat
+                    "",  # Automàtic. Nom actuació. Camp no editable.
                     item.project.name,  # Nom de projecte/ empresa o entitat
                     stage_type,  # Tipus d'acompanyament
                     item.date_start or ("", True),  # Data d'inici
@@ -746,9 +748,9 @@ class ExportJustificationService:
 
             row = [
                 "",  # TODO: des d'aquí no podem saber la referència de l'Activitat
-                "",  # Projecte al qual s'engloba
-                "",  # Sector de l'activitat
-                "",  # Nom actuació
+                "",  # Automàtic. Projecte al qual s'engloba.
+                "",  # Automàtic. Sector de l'activitat
+                "",  # Automàtic. Nom actuació
                 id_number,
                 insertion.user.surname,
                 insertion.user.first_name,
