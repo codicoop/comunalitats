@@ -123,6 +123,42 @@ class EmploymentInsertionForm(models.ModelForm):
             "entity_neighborhood",
         )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["activity"] = add_justification_required_text_to_field(
+            self.fields["activity"],
+        )
+        self.fields["user"] = add_justification_required_text_to_field(
+            self.fields["user"],
+        )
+        self.fields["subsidy_period"] = add_justification_required_text_to_field(
+            self.fields["subsidy_period"],
+        )
+        self.fields["insertion_date"] = add_justification_required_text_to_field(
+            self.fields["insertion_date"],
+        )
+        self.fields["end_date"] = add_justification_required_text_to_field(
+            self.fields["end_date"],
+        )
+        self.fields["contract_type"] = add_justification_required_text_to_field(
+            self.fields["contract_type"],
+        )
+        self.fields["entity_name"] = add_justification_required_text_to_field(
+            self.fields["entity_name"],
+        )
+        self.fields["entity_sector"] = add_justification_required_text_to_field(
+            self.fields["entity_sector"],
+        )
+        self.fields["entity_nif"] = add_justification_required_text_to_field(
+            self.fields["entity_nif"],
+        )
+        self.fields["entity_town"] = add_justification_required_text_to_field(
+            self.fields["entity_town"],
+        )
+        self.fields["entity_neighborhood"] = add_justification_required_text_to_field(
+            self.fields["entity_neighborhood"],
+        )
+
     def clean(self):
         super().clean()
         errors = {}
