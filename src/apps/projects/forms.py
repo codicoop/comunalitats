@@ -75,6 +75,7 @@ class ProjectStageFormAdmin(ProjectForm):
     class Meta:
         model = ProjectStage
         fields = (
+            'course',
             'project', 'project_sector', 'types', 'stage_type', 'stage_subtype',
             'subsidy_period', 'date_start', 'service', 'sub_service',
             'communality_role', 'networking', 'agents_involved', 'organizer',
@@ -83,8 +84,17 @@ class ProjectStageFormAdmin(ProjectForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["types"] = add_justification_required_text_to_field(
-            self.fields["types"],
+        self.fields["course"] = add_justification_required_text_to_field(
+            self.fields["course"],
+        )
+        self.fields["project"] = add_justification_required_text_to_field(
+            self.fields["project"],
+        )
+        self.fields["project_sector"] = add_justification_required_text_to_field(
+            self.fields["project_sector"],
+        )
+        self.fields["stage_type"] = add_justification_required_text_to_field(
+            self.fields["stage_type"],
         )
         self.fields["service"] = add_justification_required_text_to_field(
             self.fields["service"],

@@ -117,7 +117,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     fieldsets = [
         (None, {
             'fields': [
-                'project', 'project_sector', 'stage_type', 'types',
+                'course', 'project', 'project_sector', 'stage_type', 'types',
                 'subsidy_period', 'service', 
                 'sub_service', 'communality_role', 'networking', 'agents_involved', 'responsible', 'scanned_certificate',
                 'hours_sum', 'date_start',
@@ -138,6 +138,10 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
         "justification_documents_total",
     )
     subsidy_period_filter_param = "subsidy_period"
+    raw_id_fields = ('course', )
+    autocomplete_lookup_fields = {
+        'fk': ['course'],
+    }
 
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
