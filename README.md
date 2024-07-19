@@ -164,3 +164,4 @@ a hub.docker.com per comprovar que s'ha generat sense errors.
 
 Assumint que tens l'última versió a dockerhub, fes:
 `docker-compose -f compose-develop-hub.yml up`
+ 

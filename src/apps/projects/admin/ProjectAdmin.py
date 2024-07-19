@@ -11,7 +11,8 @@ from django.conf.urls import url
 from apps.coopolis.mixins import FilterByCurrentSubsidyPeriodMixin
 from apps.cc_users.models import User
 from apps.projects.models import Project, ProjectStage, EmploymentInsertion
-from apps.projects.forms import ProjectFormAdmin, EmploymentInsertionForm
+from apps.projects.forms import ProjectFormAdmin, EmploymentInsertionForm, \
+    ProjectStageFormAdmin
 from apps.projects.models import ProjectStageSession, ProjectFile
 from apps.dataexports.models import SubsidyPeriod
 from conf.custom_mail_manager import MyMailTemplate
@@ -97,6 +98,7 @@ class FilterBySubsidyPeriod(admin.SimpleListFilter):
 
 
 class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
+    form = ProjectStageFormAdmin
     empty_value_display = '(cap)'
     list_display = (
         'project_field_ellipsis', 'date_start', 'stage_type',
@@ -115,7 +117,7 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     fieldsets = [
         (None, {
             'fields': [
-                'project', 'project_sector', 'stage_type', 'types',
+                'course', 'project', 'project_sector', 'stage_type', 'types',
                 'subsidy_period', 'service', 
                 'sub_service', 'communality_role', 'networking', 'agents_involved', 'responsible', 'scanned_certificate',
                 'hours_sum', 'date_start',
@@ -132,11 +134,14 @@ class ProjectStageAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
     inlines = (ProjectStageSessionsInline, )
     readonly_fields = (
         'hours_sum',
-        'date_start',
         "earliest_session_field",
         "justification_documents_total",
     )
     subsidy_period_filter_param = "subsidy_period"
+    raw_id_fields = ('course', )
+    autocomplete_lookup_fields = {
+        'fk': ['course'],
+    }
 
     class Media:
         js = ('js/grappellihacks.js', 'js/chained_dropdown.js', )
@@ -297,7 +302,7 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
 
     form = ProjectFormAdmin
     list_display = (
-        'name', 'mail', 'phone', 'registration_date',
+        'name', 'mail', 'phone', 'registration_date', 'constitution_date',
         'stages_field', 'last_stage_responsible',
     )
     search_fields = (
@@ -307,12 +312,14 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
     fieldsets = (
         ("Dades generals", {
             'fields': ['name', 'sector', 'web', 'project_status', 'motivation',
-                       'mail', 'phone', 'entity_name', 'cif', 'entity_type', 'project_sector', 'town', 'neighborhood', 'annuity', 'number_people',
-                        'project_origins', 'social_base']
+                       'mail', 'phone', 'entity_name', 'cif', 'entity_type',
+                       'project_sector', 'town', 'neighborhood', 'annuity',
+                       'number_people',
+                       'project_origins', 'social_base']
         }),
         ("Dades internes gestionades per la comunalitat", {
             'fields': ['partners', 'partners_participants',
-                       'registration_date', 'description',
+                       'registration_date', 'constitution_date', 'description',
                        'employment_estimation', 'other', 'follow_up_situation',
                        'follow_up_situation_update', 'tags']
         }),
@@ -377,50 +384,6 @@ class ProjectAdmin(DjangoObjectActions, admin.ModelAdmin):
         return None
 
     stages_field.short_description = 'Acompanyaments'
-
-    def save_model(self, request, obj, form, change):
-        if request.POST['partners']:
-            """ Sending a notification e-mail to newly added partners. """
-
-            # request.POST['partners'] is a string: '1594,98'
-            # Transforming it to a list:
-            post_partners_list = request.POST['partners'].split(',')
-            post_partners_list = [int(i) for i in post_partners_list]
-            post_partners_list = set(sorted(post_partners_list))
-
-            # Determine which are the newly added partners depending on editing or creating project.
-            if change:
-                current_partners = obj.partners.all()
-                current_partners_list = set()
-                for partner in current_partners:
-                    current_partners_list.add(partner.pk)
-                current_partners_list = set(sorted(current_partners_list))
-
-                new_partners_list = post_partners_list.difference(
-                    current_partners_list)
-            else:
-                new_partners_list = post_partners_list
-
-            new_partner_objects = User.objects.filter(pk__in=new_partners_list)
-            for new_partner in new_partner_objects:
-                self.send_added_to_project_email(
-                    new_partner,
-                    request.POST['name'],
-                )
-
-        super().save_model(request, obj, form, change)
-
-    def send_added_to_project_email(self, user_obj, project_name):
-        mail = MyMailTemplate('EMAIL_ADDED_TO_PROJECT')
-        mail.subject_strings = {
-            'projecte_nom': project_name
-        }
-        mail.body_strings = {
-            'ateneu_nom': config.PROJECT_FULL_NAME,
-            'projecte_nom': project_name,
-            'url_backoffice': settings.ABSOLUTE_URL
-        }
-        mail.send_to_user(user_obj)
 
 
 class DerivationAdmin(admin.ModelAdmin):

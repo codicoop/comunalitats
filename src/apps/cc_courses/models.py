@@ -32,7 +32,7 @@ class CoursePlace(models.Model):
     name = models.CharField("nom", max_length=200, blank=False, unique=True)
     town = models.ForeignKey(
         "towns.Town",
-        verbose_name="població",
+        verbose_name="municipi",
         on_delete=models.SET_NULL,
         null=True,
         blank=True
@@ -57,10 +57,11 @@ class Entity(models.Model):
         help_text="Si la desactives no apareixerà al desplegable.",
     )
     neighborhood = models.CharField(
-        "Barri",
+        "Barri de l'entitat",
         default="",
         blank=True,
         max_length=50,
+        help_text="Aquest camp NO és el que apareix a l'excel de justificació."
     )
     town = models.ForeignKey(
         "towns.Town",
@@ -92,8 +93,8 @@ class Organizer(models.Model):
 
 class Course(models.Model):
     class Meta:
-        verbose_name = "acció"
-        verbose_name_plural = "accions"
+        verbose_name = "projecte"
+        verbose_name_plural = "projectes"
         ordering = ["title"]
 
     title = models.CharField("títol", max_length=250, blank=False)
@@ -141,19 +142,23 @@ class Activity(models.Model):
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
-        verbose_name="acció",
+        verbose_name="Projecte al qual s'engloba",
         related_name="activities",
-        help_text=("Escriu el nom de l'acció i selecciona-la del desplegable."
-        " Si no existeix, clica a la lupa i després a 'Crear acció'.")
+        help_text=("Escriu el nom del projecte i selecciona'l del desplegable."
+        " Si no existeix, clica a la lupa i després a 'Crear projecte'.")
     )
-    included_project = models.CharField("projecte al qual s'engloba", max_length=40, blank=True, default="")
     project_sector = models.SmallIntegerField(
         "sector del projecte",
         blank=True,
         null=True,
         choices=ProjectSectorChoices.choices,
     )
-    name = models.CharField("títol", max_length=200, blank=False, null=False)
+    name = models.CharField(
+        "nom de l'actuació",
+        max_length=200,
+        blank=False,
+        null=False,
+    )
     description = models.CharField(
         "descripció actuació",
         max_length=150,
@@ -171,8 +176,8 @@ class Activity(models.Model):
     place = models.ForeignKey(
         CoursePlace, on_delete=models.SET_NULL, null=True, verbose_name="lloc"
     )
-    neighborhood = models.CharField("barri on s'ha fet",blank=True, default="",max_length=150)
-    date_start = models.DateField("dia inici")
+    neighborhood = models.CharField("barri", blank=True, default="", max_length=150)
+    date_start = models.DateField("dia inici d'actuació")
     date_end = models.DateField("dia finalització", blank=True, null=True)
     starting_time = models.TimeField("hora d'inici")
     ending_time = models.TimeField("hora de finalització")
@@ -220,7 +225,7 @@ class Activity(models.Model):
                   "'Membre del personal'."
     )
     service = models.SmallIntegerField(
-        "Servei",
+        "Serveis",
         choices=ServicesChoices.choices,
         null=True,
         blank=True,
@@ -228,7 +233,7 @@ class Activity(models.Model):
                   ", que es calcula amb el valor del camp \"Data d'inici\"."
     )
     sub_service = models.SmallIntegerField(
-        "Sub-servei",
+        "Actuacions",
         choices=SubServicesChoices.choices,
         null=True,
         blank=True,

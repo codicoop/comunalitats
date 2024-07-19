@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 import tagulous.models
 
-from apps.cc_courses.models import Entity, Organizer, Activity
+from apps.cc_courses.models import Entity, Organizer, Activity, Course
 from apps.coopolis.choices import ServicesChoices, SubServicesChoices, ProjectSectorChoices, CommunalityRoleChoices, NetworkingChoices, TypesChoices, AnnuityChoices, EntityTypesChoices
 from apps.cc_users.models import User
 from apps.towns.models import Town
@@ -31,8 +31,8 @@ class Derivation(models.Model):
 
 class Project(models.Model):
     class Meta:
-        verbose_name_plural = "projectes"
-        verbose_name = "projecte"
+        verbose_name_plural = "projectes acompanyats"
+        verbose_name = "projecte acompanyat"
 
     partners = models.ManyToManyField(
         User,
@@ -40,7 +40,12 @@ class Project(models.Model):
         blank=True,
         related_name="projects",
     )
-    name = models.CharField("nom", max_length=200, blank=False, unique=True)
+    name = models.CharField(
+        "nom de l'actuació",
+        max_length=200,
+        blank=False,
+        unique=True,
+    )
     SECTORS = (
         ('M', 'Alimentació'),
         ('S', 'Assessorament'),
@@ -82,7 +87,7 @@ class Project(models.Model):
         null=True,
         choices=ProjectSectorChoices.choices,
     )
-    town = models.ForeignKey(Town, verbose_name="població",
+    town = models.ForeignKey(Town, verbose_name="municipi",
                              on_delete=models.SET_NULL, null=True, blank=True)
     neighborhood = models.CharField(
         "Barri",
@@ -120,9 +125,11 @@ class Project(models.Model):
     social_base = models.TextField(
         "base social (quines entitats o persones en formen part)", blank=True,
         null=True)
-    # Obsolet
-    constitution_date = models.DateField("data de constitució", blank=True,
-                                         null=True)
+    constitution_date = models.DateField(
+        "data de constitució",
+        blank=True,
+        null=True,
+    )
     subsidy_period = models.ForeignKey(
         SubsidyPeriod, verbose_name="convocatòria de la constitució",
         null=True, blank=True, on_delete=models.SET_NULL,
@@ -152,7 +159,7 @@ class Project(models.Model):
     # Obsolet
     derivation_date = models.DateField("data de derivació", blank=True,
                                        null=True)
-    description = models.TextField("descripció", blank=True, null=True)
+    description = models.TextField("descripció actuació", blank=True, null=True)
     other = models.CharField(
         "altres", max_length=240, blank=True, null=True,
         help_text="Apareix a la taula de Seguiment d'Acompanyaments")
@@ -352,6 +359,16 @@ class ProjectStage(models.Model):
 
     DEFAULT_STAGE_TYPE = 1
 
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.SET_NULL,
+        verbose_name="Projecte al qual s'engloba",
+        related_name="stage_activities",
+        help_text=("Escriu el nom del projecte i selecciona'l del desplegable."
+        " Si no existeix, clica a la lupa i després a 'Crear projecte'."),
+        null=True,
+        blank=False,
+    )
     project = models.ForeignKey(
         Project, on_delete=models.CASCADE, verbose_name="projecte acompanyat",
         related_name="stages")
@@ -384,17 +401,16 @@ class ProjectStage(models.Model):
         SubsidyPeriod, verbose_name="convocatòria", null=True,
         on_delete=models.SET_NULL)
     date_start = models.DateField(
-        "data creació acompanyament", null=False, blank=False,
-        auto_now_add=True
+        "data inici d'actuació", null=False, blank=False,
     )
     service = models.SmallIntegerField(
-        "Servei",
+        "Serveis",
         choices=ServicesChoices.choices,
         null=True,
         blank=True,
     )
     sub_service = models.SmallIntegerField(
-        "Sub-servei",
+        "Actuacions",
         choices=SubServicesChoices.choices,
         null=True,
         blank=True,
@@ -519,8 +535,9 @@ class ProjectStageSession(models.Model):
         null=True, blank=False
     )
     hours = models.FloatField(
-        "número d'hores",
-        help_text="Camp necessari per la justificació.",
+        "Estimació hores dedicació",
+        help_text="A la justificació es sumaran les hores de totes les "
+                  "sessions de l'acompanyament.",
         null=True,
         blank=True,
     )
@@ -591,8 +608,8 @@ class EmploymentInsertion(models.Model):
     subsidy_period = models.ForeignKey(
         SubsidyPeriod, verbose_name="convocatòria", null=True,
         on_delete=models.SET_NULL)
-    insertion_date = models.DateField("alta seguretat social")
-    end_date = models.DateField("baixa seg. social", null=True, blank=True)
+    insertion_date = models.DateField("data alta SS")
+    end_date = models.DateField("data baixa SS", null=True, blank=True)
     CONTRACT_TYPE_CHOICES = (
         (1, "Indefinit"),
         (5, "Temporal"),
@@ -600,7 +617,7 @@ class EmploymentInsertion(models.Model):
         (3, "Autònom"),
     )
     contract_type = models.SmallIntegerField(
-        "tipus de contracte",
+        "tipus de contracte o vinculació",
         choices=CONTRACT_TYPE_CHOICES,
         null=True
     )
@@ -613,19 +630,19 @@ class EmploymentInsertion(models.Model):
         max_length=11,
     )
     entity_sector = models.SmallIntegerField(
-        "sector de l'entitat", 
+        "sector de l'empresa",
         choices=ProjectSectorChoices.choices,
         null=True,
         blank=True,
     )
     entity_town = models.ForeignKey(
         "towns.Town",
-        verbose_name="població de l'entitat on s'insereix",
+        verbose_name="municipi entitat",
         on_delete=models.SET_NULL,
         null=True,
     )
     entity_neighborhood = models.CharField(
-        "Barri de l'entitat on s'insereix",
+        "barri entitat",
         max_length=50,
     )
 

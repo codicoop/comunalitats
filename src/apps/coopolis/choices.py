@@ -253,6 +253,7 @@ class ProjectSectorChoices(models.IntegerChoices):
     W = 210, "Turisme (rural, sostenible,...)",
     X = 220, "Urbanisme i habitatge (arquitectura, rehabilitació, masoveria, ...)",
 
+
 class TypesChoices(models.IntegerChoices):
     A = 1, "Acompanyament",
     B = 2, "Acte",
@@ -275,6 +276,7 @@ class TypesChoices(models.IntegerChoices):
     U = 19, "Trobades assemblea",
     V = 20, "Visita",
     W = 21, "Xerrada",
+
 
 class CommunalityRoleChoices(models.IntegerChoices):
     A = 1, "Participant / Assistent (rol passiu)",

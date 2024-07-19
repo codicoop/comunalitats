@@ -150,7 +150,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     )
     fieldsets = [
         (None, {
-            'fields': ['course', 'name', 'included_project', 'project_sector',  'types', 'description', 'objectives', 'place', 'room', 'date_start',
+            'fields': ['course', 'name', 'project_sector',  'types', 'description', 'objectives', 'place', 'room', 'date_start',
             'date_end', 'starting_time', 'ending_time', 'spots',
             'service', 'sub_service', 'communality_role', 'networking', 'agents_involved', 'neighborhood', 'estimated_hours', 'entities',
             'responsible', 'publish', 
@@ -185,9 +185,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             'fields': (),
         }),
     ]
-    # define the raw_id_fields
     raw_id_fields = ('enrolled', 'course', 'entities',)
-    # define the autocomplete_lookup_fields
     autocomplete_lookup_fields = {
         'm2m': ['enrolled', 'entities'],
         'fk': ['course'],

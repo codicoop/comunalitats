@@ -69,13 +69,13 @@ class ExportJustificationService:
             ("Nom de l'actuació", 40),
             ("Descripció actuació", 40),
             ("Tipus actuació", 40),
-            ("Servei", 40),
+            ("Serveis", 40),
             ("Actuacions", 70),
             ("Rol Comunalitat", 40),
             ("Treball en Xarxa", 40),
             ("Agents implicats", 40),
             ("Data inici d'actuació", 16),
-            ("Període actuacions", 30),
+            ("Periode actuacions", 30),
             ("Municipi", 30),
             ("Barri", 30),
             ("Estimació hores dedicació", 20),
@@ -129,19 +129,19 @@ class ExportJustificationService:
                 document_acreditatiu = "Sí"
 
             row = [
-                item.included_project,  # Projecte al qual s'engloba
+                item.course.title,  # Projecte al qual s'engloba
                 project_sector,  # Sector del projecte
                 item.name,
                 item.description,  # Descripció actuació
                 types,  # Tipus actuació
-                service,
-                sub_service,
+                service,  # Serveis
+                sub_service,  # Actuacions
                 communality_role,  # Rol Comunalitat
                 networking,  # Treball en Xarxa
                 item.agents_involved,  # Agents implicats
                 item.date_start,
-                "",  # Període d'actuacions
-                town,
+                "",  # Periode actuacions
+                town,  # Municipi
                 item.neighborhood,  # Barri
                 item.estimated_hours,  # Estimació hores dedicació
                 material_difusio,  # Material de difusió
@@ -277,7 +277,8 @@ class ExportJustificationService:
                     hours_sum = str(item.hours_sum())
         
                 row = [
-                    "",  # Projecte al qual s'engloba
+                    # Projecte al qual s'engloba
+                    item.course.title if item.course else "",
                     project_sector,  # Sector del projecte
                     item.project.name,  # Nom de l'actuació
                     item.project.description,  # Descripció actuació
@@ -288,8 +289,8 @@ class ExportJustificationService:
                     networking,  # Treball en Xarxa
                     item.agents_involved,  # Agents implicats
                     item.date_start or "",  # Data inici d'actuació
-                    "",  # Període d'actuacions
-                    town,
+                    "",  # Periode actuacions
+                    town,  # Municipi
                     neighborhood,  # Barri
                     hours_sum,  # Estimació hores dedicació
                     "No",  # Material de difusió
@@ -324,8 +325,8 @@ class ExportJustificationService:
                 sub_service,
                 item.name,
                 item.date_start,
-                "",  # Període
-                town,
+                "",  # Periode actuacions
+                town,  # Municipi
                 material_difusio,
                 "",  # Incidències
                 document_acreditatiu,
@@ -376,19 +377,20 @@ class ExportJustificationService:
                 town = str(project.town)
 
             row = [
-                "", # Projecte al qual s'engloba
-                "", # Sector del projecte
+                # Projecte al qual s'engloba
+                stage.course.title if stage.course else "",
+                "",  # Sector del projecte
                 project.name,
-                "", # Descripció actuació
-                "", # Tipus actuació
+                "",  # Descripció actuació
+                "",  # Tipus actuació
                 service,
                 sub_service,
-                "", # Rol Comunalitat
-                "", # Treball en Xarxa
-                "", # Agents implicats
+                "",  # Rol Comunalitat
+                "",  # Treball en Xarxa
+                "",  # Agents implicats
                 stage.date_start,
-                "",  # Període
-                town,
+                "",  # Periode actuacions
+                town,  # Municipi
                 "",  # Barri
                 "",  # Estimació hores dedicació
                 "No",  # Material de difusió
@@ -411,8 +413,8 @@ class ExportJustificationService:
             ("Projecte al qual s'engloba", 40),
             ("Sector de l'activitat", 40),
             ("Nom actuació", 40),
-            ("Nom de projecte/empresa o entitat", 35),
-            ("Tipus d'acompanyament: creació/consolidació/creixement", 30),
+            ("Nom de projecte/ empresa o entitat", 35),
+            ("Tipus d'acompanyament", 30),
             ("Data d'inici", 13),
             ("Barri", 20),
             ("Municipi", 20),
@@ -448,15 +450,15 @@ class ExportJustificationService:
                         item.service,
                         item.project.name,
                     ),  # Referència.
-                    "",  # Projecte al qual s'engloba
-                    "",  # Sector de l'activitat
-                    "",  # Nom actuació. Camp no editable.
-                    item.project.name,
+                    "",  # Automàtic. Projecte al qual s'engloba
+                    "",  # Automàtic. Sector de l'activitat
+                    "",  # Automàtic. Nom actuació. Camp no editable.
+                    item.project.name,  # Nom de projecte/ empresa o entitat
                     stage_type,  # Tipus d'acompanyament
-                    item.date_start or ("", True),
-                    item.project.neighborhood or ("", True),
-                    town,
-                    item.project.description,  # Breu descripció.
+                    item.date_start or ("", True),  # Data d'inici
+                    item.project.neighborhood or ("", True),  # Barri
+                    town,  # Municipi
+                    item.project.description,  # Breu descripció de l'actuació
                     hours,  # Total d'hores d'acompanyament.
                     item.latest_session.date if item.latest_session else "",
                 ]
@@ -523,21 +525,21 @@ class ExportJustificationService:
 
             self.export_manager.row_number += 1
             row = [
-                reference_number,
-                # Referència. En aquest full no cal que tinguin relació amb Actuacions.
-                "", # Projecte al qual s'engloba
-                "", # Sector de l'activitaxt
-                "", # Nom de l'actuació. En aquest full no cal que tinguin relació amb Actuacions.
-                project.entity_name, # Nom entitat
-                project.cif, # NIF entitat
-                entity_type, # Tipus d'entitat
-                project_sector, # Sector activitat
+                reference_number,  # Referència
+                "",  # Projecte al qual s'engloba
+                "",  # Sector de l'activitaxt
+                "",  # Nom de l'actuació. En aquest full no cal que tinguin
+                     # relació amb Actuacions.
+                project.name,  # Nom entitat
+                project.cif,  # NIF entitat
+                entity_type,  # Tipus d'entitat
+                project_sector,  # Sector activitat
                 project.partners.all()[0].full_name if project.partners.all() else "",
-                str(project.town), 
-                project.neighborhood,
-                project.mail,
-                project.phone,
-                annuity, # Anualitat
+                str(project.town),  # Municipi
+                project.neighborhood,  # Barri
+                project.mail,  # Correu electrònic
+                project.phone,  # Telèfon
+                annuity,  # Anualitat
                 "Sí",  # Economia solidària
                 project.stages_list,
             ]
@@ -545,7 +547,7 @@ class ExportJustificationService:
 
     def export_participants(self):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
-            "Persones Participants o Ateses",
+            "Participants",
         )
         self.export_manager.row_number = 1
 
@@ -593,7 +595,8 @@ class ExportJustificationService:
                         "",  # Projecte al qual s'engloba. Camp automàtic de l'excel.
                         "",  # Sector de l'activitat. Camp automàtic de l'excel.
                         "",  # Nom de l'actuació. Camp automàtic de l'excel.
-                        participant.id_number or "",
+                        participant.id_number or "",  # Document identificatiu
+                                                      # (DNI, NIE, passaport)
                         participant.surname or "",
                         participant.first_name,
                         gender,
@@ -688,7 +691,7 @@ class ExportJustificationService:
 
     def export_insercionslaborals(self):
         self.export_manager.worksheet = self.export_manager.workbook.create_sheet(
-            "Persones Inserides"
+            "Insercions"
         )
         self.export_manager.row_number = 1
 
@@ -702,14 +705,14 @@ class ExportJustificationService:
             ("Nom", 20),
             ("Gènere", 20),
             ("Data naixement", 20),
-            ("NIF Entitat", 20),
+            ("NIF empresa on s'insereix", 20),
             ("Nom entitat on s'insereix", 20),
             ("Sector de l'entitat", 20),
             ("Tipus contracte o vinculació", 20),
             ("Data alta SS", 20),
             ("Data baixa SS", 20),
-            ("Municipi Entitat", 20),
-            ("Barri Entitat", 20),
+            ("Municipi entitat", 20),
+            ("Barri entitat", 20),
             ("[ convocatòria ]", 20),
         ]
         self.export_manager.create_columns(columns)
@@ -745,9 +748,9 @@ class ExportJustificationService:
 
             row = [
                 "",  # TODO: des d'aquí no podem saber la referència de l'Activitat
-                "",  # Projecte al qual s'engloba
-                "",  # Sector de l'activitat
-                "",  # Nom actuació
+                "",  # Automàtic. Projecte al qual s'engloba.
+                "",  # Automàtic. Sector de l'activitat
+                "",  # Automàtic. Nom actuació
                 id_number,
                 insertion.user.surname,
                 insertion.user.first_name,
@@ -759,7 +762,7 @@ class ExportJustificationService:
                 contract_type,
                 insertion_date,  # Data d'alta SS
                 end_date,  # Data baixa SS
-                str(insertion.entity_town),
+                str(insertion.entity_town),  # Municipi
                 insertion.entity_neighborhood,
                 str(insertion.subsidy_period),  # Convocatòria
             ]

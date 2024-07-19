@@ -39,11 +39,20 @@ class User(BaseUser):
                   "desmarca-la si mai el canvieu pel correu real. Ens ajudarà "
                   "a mantenir la base de dadesneta."
     )
-    username = models.CharField(unique=False, null=True, max_length=150,
-                                verbose_name="nom d'usuari/a")
+    # Obsolet el 17/7/2024, pendent d'eliminar.
+    username = models.CharField(
+        unique=False,
+        null=True,
+        max_length=150,
+        verbose_name="(obsolet) nom d'usuari/a",
+    )
     surname2 = models.CharField("segon cognom", max_length=50, blank=True,
                                 null=True)
-    id_number = models.CharField("DNI/NIE/Passaport", null=True, max_length=11)
+    id_number = models.CharField(
+        "DNI/NIE/Passaport",
+        null=True,
+        max_length=11,
+    )
     cannot_share_id = models.BooleanField(
         "Si degut a la teva situació legal et suposa un inconvenient"
         " indicar el DNI, deixa'l en blanc i marca aquesta casella",
