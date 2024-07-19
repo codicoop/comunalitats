@@ -125,9 +125,11 @@ class Project(models.Model):
     social_base = models.TextField(
         "base social (quines entitats o persones en formen part)", blank=True,
         null=True)
-    # Obsolet
-    constitution_date = models.DateField("data de constitució", blank=True,
-                                         null=True)
+    constitution_date = models.DateField(
+        "data de constitució",
+        blank=True,
+        null=True,
+    )
     subsidy_period = models.ForeignKey(
         SubsidyPeriod, verbose_name="convocatòria de la constitució",
         null=True, blank=True, on_delete=models.SET_NULL,
