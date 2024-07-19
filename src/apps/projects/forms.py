@@ -59,6 +59,11 @@ class ProjectFormAdmin(ProjectForm):
             "Dada necessària per la justificació en cas que el "
             "justifiqueu com a Entitat Creada."
         )
+        self.fields["entity_name"] = add_justification_required_text_to_field(
+            self.fields["entity_name"],
+            "Dada necessària per la justificació en cas que el "
+            "justifiqueu com a Entitat Creada."
+        )
         self.fields["cif"] = add_justification_required_text_to_field(
             self.fields["cif"],
             "Dada necessària per la justificació en cas que el "
@@ -66,6 +71,11 @@ class ProjectFormAdmin(ProjectForm):
         )
         self.fields["entity_type"] = add_justification_required_text_to_field(
             self.fields["entity_type"],
+            "Dada necessària per la justificació en cas que el "
+            "justifiqueu com a Entitat Creada."
+        )
+        self.fields["constitution_date"] = add_justification_required_text_to_field(
+            self.fields["constitution_date"],
             "Dada necessària per la justificació en cas que el "
             "justifiqueu com a Entitat Creada."
         )
