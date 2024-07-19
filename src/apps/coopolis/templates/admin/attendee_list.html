@@ -33,7 +33,7 @@ td {
 }
 
 .llista {
-    height: 100%;
+    height: 80%;
 }
 
 .llista td {
@@ -88,15 +88,21 @@ td {
     <thead>
       <tr>
         <th>Nom complet</th>
-        <th style="width: 18%;">DNI/NIE/Passaport</th>
-        <th style="width: 47%;">Signatura, accepto política de privacitat de dades</th>
+        <th style="width: 15%;">DNI/NIE/Passaport</th>
+        <th style="width: 10%;">Data naixement</th>
+        <th style="width: 10%;">Gènere</th>
+        <th style="width: 25%;">Email</th>
+        <th style="width: 15%;">Signatura, accepto política de privacitat de dades</th>
       </tr>
     </thead>
     <tbody style="height: auto;">
       {% for assistant in assistants %}
       <tr>
-        <td>{{ assistant.full_name }}</td>
-        <td>{{ assistant.id_number }}</td>
+        <td>{{ assistant.full_name|default_if_none:"" }}</td>
+        <td>{{ assistant.id_number|default_if_none:"" }}</td>
+        <td>{{ assistant.birthdate|default_if_none:"" }}</td>
+        <td>{{ assistant.get_gender_display|default_if_none:"" }}</td>
+        <td>{{ assistant.email|default_if_none:"" }}</td>
         <td></td>
       </tr>
       {% endfor %}
@@ -104,13 +110,22 @@ td {
         <td></td>
         <td></td>
         <td></td>
-      </tr>
-      <tr>
         <td></td>
         <td></td>
         <td></td>
       </tr>
       <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
