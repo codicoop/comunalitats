@@ -36,6 +36,7 @@ class ServicesChoices(models.IntegerChoices):
         "D) Servei d’acompanyament a la creació i "
         "a la consolidació de projectes d'ajuda mútua"
     )
+    K = 100, "E) Punt de trobada i d'informació de comunalitat urbana"
 
     def get_sub_services(self):
         range_start = self.value * 10
@@ -227,6 +228,10 @@ class SubServicesChoices(models.IntegerChoices):
                "per a la resolució de necessitats col·lectives")
     J2 = 902, ("D.2) Generació de nous projectes d'intercooperació o ajuda "
                "mútua dirigides i realitzades amb col·lectius específics")
+
+    # E) Punt de trobada i d'informació de comunalitat urbana
+    K1 = 1001, "E.1) Atenció als usuaris a l'espai físic de referència"
+    K2 = 1002, "E.2) Difusió del punt d'informació"
 
 
 class ProjectSectorChoices(models.IntegerChoices):

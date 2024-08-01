@@ -52,7 +52,7 @@ def get_subsidy_period(request):
     item_end = ServicesChoices.E
     if last_subsidy_period == selected_subsidy_period:
         item_start = ServicesChoices.F
-        item_end = ServicesChoices.J
+        item_end = ServicesChoices.K
     if not selected_subsidy_period or subsidy_period_or_start_date == "Sense justificar":
         services = None
     elif subsidy_period_or_start_date:
