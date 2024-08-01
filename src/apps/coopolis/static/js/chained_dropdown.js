@@ -16,7 +16,7 @@ jQuery(function($){
             });
             const selectedSubsidyPeriodText = $('#id_subsidy_period option[value="' + $("#id_subsidy_period").val() + '"]').text();
             update_services_and_sub_services(selectedSubsidyPeriodText, cloneService, "id_service", "get_subsidy_period")
-          } else {
+          } else if (dateStart) {
             $("#id_date_start").change(function(){
                 update_services_and_sub_services($(this).val(), cloneService, "id_service", "get_subsidy_period", true); 
                 $("#id_sub_service").empty();
