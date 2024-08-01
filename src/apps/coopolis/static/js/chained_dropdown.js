@@ -30,15 +30,15 @@ jQuery(function($){
       }
   });
 
-  function update_services_and_sub_services(data, clone, id, url,cap=false) {
+  function update_services_and_sub_services(data, clone, id, url, cap=false) {
       $.ajax({
           url:`/chained_dropdowns/${url}/`,
           type:"GET",
           data:{data: data,},
           success: function(result) {
               const cols = document.getElementById(id);
-              cols.innerHTML = clone.innerHTML
-              cap && $(`#${id}`).val("");
+              cols.innerHTML = clone.innerHTML   
+              if (cap) $(`#${id}`).val("");
               Array.from(cols.options).forEach(function(option_element) {
                   let existing = false;
                   for (let k in result) {
