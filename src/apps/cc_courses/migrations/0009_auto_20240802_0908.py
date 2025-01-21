@@ -41,6 +41,7 @@ def migrate_service_2024(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('dataexports', '0001_initial'),
         ('cc_courses', '0008_auto_20240719_1559'),
     ]
 
