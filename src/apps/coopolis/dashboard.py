@@ -30,7 +30,7 @@ class MyDashboard(Dashboard):
 
         group_children = [
             modules.ModelList(
-                title='Accions i activitats',
+                title='Projectes i activitats',
                 column=1,
                 collapsible=False,
                 models=('apps.cc_courses.models.Course', 'apps.cc_courses.models.Activity',),
