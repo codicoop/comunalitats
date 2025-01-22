@@ -264,6 +264,9 @@ CONSTANCE_CONFIG = {
         "amb les vostres dades personals, i podreu realitzar les inscripcions "
         "de les formacions.</p>",
         "Text d'introducció de la home."),
+    'CONTENT_COURSES': (
+        "Oferta formativa",
+        "Text de botó que porta a la llista de cursos."),
     # Sign up
     'CONTENT_SIGNUP_LEGAL1': (
         "Paràgraf text legal #1",
@@ -343,7 +346,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
     ),
     "Apartat Portada": (
         'CONTENT_HOME_COURSES_TITLE', 'CONTENT_HOME_COURSES_TEXT',
-        'CONTENT_HOME_INTRODUCTION'
+        'CONTENT_HOME_INTRODUCTION', 'CONTENT_COURSES'
     ),
     "Apartat Formació": ('CONTENT_COURSES_INTRODUCTION',),
     "Formulari d'alta": ('CONTENT_SIGNUP_LEGAL1', 'CONTENT_SIGNUP_LEGAL2',),
