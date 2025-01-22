@@ -158,9 +158,11 @@ class Command(BaseCommand):
             ],
             "cc_courses": [
                 "add_courseplace",
+                "delete_activity"
             ],
             "cc_users": [
                 "delete_tagulous_user_tags",
+                "delete_user",
             ],
             "projects": [
                 "delete_tagulous_project_tags",
