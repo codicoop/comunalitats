@@ -75,7 +75,12 @@ td {
         <td>{{ activity.date_start }}</td>
       </tr>
       <tr>
-        <td class="table-header-caption">ENTITAT</td><td>{{ activity.entity|default_if_none:"" }}</td>
+        <td class="table-header-caption">ENTITAT</td>
+        <td>
+          {% for entity in activity.entities.all %}
+            {{ entity.name|default_if_none:"" }}</br>
+          {% endfor %}
+        </td>
         <td class="table-header-caption">DATA FI</td><td>{{ activity.date_end|default_if_none:activity.date_start }}</td>
       </tr>
       <tr>
