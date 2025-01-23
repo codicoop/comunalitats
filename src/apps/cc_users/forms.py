@@ -7,7 +7,7 @@ from django.contrib.auth.forms import (
     ReadOnlyPasswordHashField,
 )
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
+from django.core.exceptions import NON_FIELD_ERRORS
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
@@ -83,19 +83,6 @@ class MyAccountForm(UserChangeForm):
                    "electrònic o bé omplir el camp DNI/NIE/Passaport.")
             self.add_error(NON_FIELD_ERRORS, msg)
         return self.cleaned_data
-
-    def clean_id_number(self):
-        model = get_user_model()
-        value = self.cleaned_data.get("id_number")
-        if (
-            value and
-            model.objects
-            .filter(id_number__iexact=value)
-            .exclude(id=self.request.user.id)
-            .exists()
-        ):
-            raise ValidationError("El DNI ja existeix.")
-        return value
 
 
 class PasswordResetForm(BasePasswordResetForm):
@@ -179,13 +166,6 @@ class MySignUpForm(UserCreationForm):
                    "electrònic o bé omplir el camp DNI/NIE/Passaport.")
             self.add_error(NON_FIELD_ERRORS, msg)
         return self.cleaned_data
-
-    def clean_id_number(self):
-        model = get_user_model()
-        value = self.cleaned_data.get("id_number")
-        if value and model.objects.filter(id_number__iexact=value).exists():
-            raise ValidationError("El DNI ja existeix.")
-        return value
 
 
 class MySignUpAdminForm(forms.ModelForm):
