@@ -154,7 +154,7 @@ class Command(BaseCommand):
                 "add_permission",
             ],
             "dataexports": [
-                "change_subsidyperiod", "add_subsidyperiod",
+                "change_subsidyperiod",
             ],
             "cc_courses": [
                 "add_courseplace",
