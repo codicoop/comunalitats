@@ -125,8 +125,7 @@ class MyDashboard(Dashboard):
 
         links_children = [
         ]
-        if context['request'].user.is_superuser or context['request'].user.is_staff:
-            links_children.append(["Registre d'activitat al panell d'administració", 'admin/logentry/'])
+        links_children.append(["Registre d'activitat al panell d'administració", 'admin/logentry/'])
         if context['request'].user.is_superuser:
             links_children.append(["Descàrrega de la base de dades de les 00:00", reverse('db_backup_download')])
 
