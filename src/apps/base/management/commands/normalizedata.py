@@ -18,8 +18,8 @@ class Command(BaseCommand):
         periods = (
             {
                 'name': 'Sense justificar',
-                'date_start': date(1975, 1, 1),
-                'date_end': date(1975, 1, 1),
+                'date_start': date(1976, 1, 1),
+                'date_end': date(1976, 1, 1),
             },
             {
                 'name': '2022-2023',
@@ -45,10 +45,10 @@ class Command(BaseCommand):
                     "date_end": period['date_end'],
                 },
             )
-            if not created:
-                obj.date_start = period['date_start']
-                obj.date_end = period['date_end']
-                obj.save()
+            # if not created:
+            #     obj.date_start = period['date_start']
+            #     obj.date_end = period['date_end']
+            #     obj.save()
             if created:
                 msg = f"SubsidyPeriod {period['name']} did NOT exist and was" \
                       f" created."
