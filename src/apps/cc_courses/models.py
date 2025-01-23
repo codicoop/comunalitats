@@ -450,6 +450,20 @@ class Activity(models.Model):
                         ),
                     }
                 )
+                
+        model = apps.get_model('dataexports', 'SubsidyPeriod')
+        subsidy_period = model.objects.filter(
+            date_start__lte=self.date_start,
+            date_end__gte=self.date_start)
+        if not subsidy_period.exists():
+            errors.update(
+                {
+                    "date_start": ValidationError(
+                        "No hi ha cap convocatòria que cobreixi la data d'inici d'actuació."
+                    ),
+                }
+            )
+
         if errors:
             raise ValidationError(errors)
 
