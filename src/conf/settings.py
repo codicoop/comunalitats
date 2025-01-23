@@ -246,6 +246,9 @@ CONSTANCE_CONFIG = {
         " descentralitzades en altres espais comunitaris i seus de l’economia "
         "social i solidària barcelonina.",
         "Formació: text d'introducció."),
+    'CONTENT_COURSES_DETAIL': (
+        "Veure les activitats",
+        "Text de botó que porta a la informació d'un curso."),
     # Home
     'CONTENT_HOME_COURSES_TITLE': (
         "Formació i activitats",
@@ -348,7 +351,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
         'CONTENT_HOME_COURSES_TITLE', 'CONTENT_HOME_COURSES_TEXT',
         'CONTENT_HOME_INTRODUCTION', 'CONTENT_COURSES'
     ),
-    "Apartat Formació": ('CONTENT_COURSES_INTRODUCTION',),
+    "Apartat Formació": ('CONTENT_COURSES_INTRODUCTION', 'CONTENT_COURSES_DETAIL'),
     "Formulari d'alta": ('CONTENT_SIGNUP_LEGAL1', 'CONTENT_SIGNUP_LEGAL2',),
     "Variables avançades": (
         'CUSTOM_STYLESHEET_URL',
