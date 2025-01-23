@@ -18,8 +18,8 @@ class Command(BaseCommand):
         periods = (
             {
                 'name': 'Sense justificar',
-                'date_start': date(1976, 1, 1),
-                'date_end': date(1976, 1, 1),
+                'date_start': date(1975, 1, 1),
+                'date_end': date(1975, 1, 1),
             },
             {
                 'name': '2022-2023',
