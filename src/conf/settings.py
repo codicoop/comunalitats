@@ -248,7 +248,7 @@ CONSTANCE_CONFIG = {
         "Formació: text d'introducció."),
     'CONTENT_COURSES_DETAIL': (
         "Veure les activitats",
-        "Text de botó que porta a la informació d'un curso."),
+        "Text de botó que porta a la informació d'un curs."),
     # Home
     'CONTENT_HOME_COURSES_TITLE': (
         "Formació i activitats",
