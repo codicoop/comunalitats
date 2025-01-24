@@ -450,6 +450,32 @@ class Activity(models.Model):
                         ),
                     }
                 )
+        if self.for_minors:
+            required_fields = [
+                "minors_school_name",
+                "minors_school_cif",
+                "minors_grade",
+                "minors_participants_number",
+                "minors_teacher",
+            ]
+            error_message = "Si l'acció és dirigida a menors, aquest camp és obligatori."
+            for field in required_fields:
+                if not getattr(self, field):
+                    errors[field] = ValidationError(error_message)    
+                        
+        model = apps.get_model('dataexports', 'SubsidyPeriod')
+        subsidy_period = model.objects.filter(
+            date_start__lte=self.date_start,
+            date_end__gte=self.date_start)
+        if not subsidy_period.exists():
+            errors.update(
+                {
+                    "date_start": ValidationError(
+                        "No hi ha cap convocatòria que cobreixi la data d'inici d'actuació."
+                    ),
+                }
+            )
+
         if errors:
             raise ValidationError(errors)
 
