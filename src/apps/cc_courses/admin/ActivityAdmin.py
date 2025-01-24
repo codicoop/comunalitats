@@ -135,18 +135,20 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     list_display = (
         'date_start', 'calculated_date_end', 'spots', 'remaining_spots', 'name',
         'service',
-        'attendee_filter_field', 'attendee_list_field', 'send_reminder_field')
+        'attendee_filter_field', 'attendee_list_field', 'send_reminder_field',
+        'ready_for_justification')
     readonly_fields = (
         'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',
         'activity_poll_field', )
     summernote_fields = ('objectives', 'instructions',)
-    search_fields = ('date_start', 'name', 'objectives',)
+    search_fields = ('date_start', 'name', 'objectives')
     list_filter = (
         FilterBySubsidyPeriod, FilterByJustificationFiles,
         "service", ("place__town", admin.RelatedOnlyFieldListFilter),
         'course', 'date_start', 'room', 'entities', 'place',
         'for_minors',
         ("responsible", admin.RelatedOnlyFieldListFilter),
+
     )
     fieldsets = [
         (None, {
@@ -229,6 +231,21 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             ),
         ]
         return custom_urls + urls
+
+    @admin.display(boolean=True, description="Preparat per justificació")
+    def ready_for_justification(self, obj):
+        if (
+            obj.enrolled.count() > 0 
+            and obj.photo2 # Document acreditatiu
+            and (obj.photo1 or obj.photo3) 
+            and obj.service
+            and obj.sub_service
+            and obj.project_sector
+            and obj.types
+            ):
+            return True
+        return False
+
 
     def tweak_cloned_inline_fields(self, related_name, fields_list):
         """
