@@ -517,6 +517,18 @@ class Activity(models.Model):
     def autocomplete_search_fields():
         return ('name__icontains',)
 
+    def ready_for_justification(self):
+        if (
+            self.enrolled.count() > 0 
+            and self.photo2 # Document acreditatiu
+            and (self.photo1 or self.photo3) 
+            and self.service
+            and self.sub_service
+            and self.project_sector
+            and self.types
+            ):
+            return True
+        return False
 
 class ActivityResourceFile(models.Model):
     class Meta:
