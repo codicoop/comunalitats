@@ -78,7 +78,7 @@ td {
         <td class="table-header-caption">ENTITAT</td>
         <td>
           {% for entity in activity.entities.all %}
-            {{ entity.name|default_if_none:"" }}</br>
+            {{ entity.name|default_if_none:"" }}{% if not forloop.last %}, {% endif %}
           {% endfor %}
         </td>
         <td class="table-header-caption">DATA FI</td><td>{{ activity.date_end|default_if_none:activity.date_start }}</td>
