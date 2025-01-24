@@ -45,10 +45,6 @@ class Command(BaseCommand):
                     "date_end": period['date_end'],
                 },
             )
-            # if not created:
-            #     obj.date_start = period['date_start']
-            #     obj.date_end = period['date_end']
-            #     obj.save()
             if created:
                 msg = f"SubsidyPeriod {period['name']} did NOT exist and was" \
                       f" created."
