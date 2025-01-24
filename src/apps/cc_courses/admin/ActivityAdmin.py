@@ -75,6 +75,24 @@ class FilterByJustificationFiles(admin.SimpleListFilter):
             )
         return queryset
 
+class FilterByReadyForJustification(admin.SimpleListFilter):
+    title = "Preparat per justificació"
+    parameter_name = 'ready_for_justification'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('Yes', 'Sí'),
+            ('No', 'No'),
+        )
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == "Yes":
+            filtered_ids = [obj.id for obj in queryset if obj.ready_for_justification()]
+            return queryset.filter(id__in=filtered_ids)
+        elif value == "No":
+            filtered_ids = [obj.id for obj in queryset if not obj.ready_for_justification()]
+            return queryset.filter(id__in=filtered_ids)
+        return queryset
 
 class ActivityEnrolledInline(admin.TabularInline):
     class Media:
@@ -148,7 +166,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
         'course', 'date_start', 'room', 'entities', 'place',
         'for_minors',
         ("responsible", admin.RelatedOnlyFieldListFilter),
-
+        FilterByReadyForJustification,
     )
     fieldsets = [
         (None, {
@@ -234,17 +252,7 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
 
     @admin.display(boolean=True, description="Preparat per justificació")
     def ready_for_justification(self, obj):
-        if (
-            obj.enrolled.count() > 0 
-            and obj.photo2 # Document acreditatiu
-            and (obj.photo1 or obj.photo3) 
-            and obj.service
-            and obj.sub_service
-            and obj.project_sector
-            and obj.types
-            ):
-            return True
-        return False
+        return obj.ready_for_justification()
 
 
     def tweak_cloned_inline_fields(self, related_name, fields_list):
