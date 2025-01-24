@@ -134,8 +134,8 @@ class Command(BaseCommand):
         print("Done!")
 
     def normalize_permissions(self):
-        gruop_names = ["Responsable de backoffice", "Equip"]
-        Group.objects.exclude(name__in=gruop_names).delete()
+        group_names = ["Responsable de backoffice", "Equip"]
+        Group.objects.exclude(name__in=group_names).delete()
         # Administradors
         permissions = {
             "constance": [
@@ -171,7 +171,7 @@ class Command(BaseCommand):
         }
 
         group, created = Group.objects.get_or_create(
-            name=gruop_names[0]
+            name=group_names[0]
         )
         group.permissions.set(self._get_permissions(Permission, permissions))
         group.save()
@@ -242,7 +242,7 @@ class Command(BaseCommand):
             ],
         }
         group, created = Group.objects.get_or_create(
-            name=gruop_names[1]
+            name=group_names[1]
         )
         group.permissions.set(self._get_permissions(Permission, permissions))
         group.save()
