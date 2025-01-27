@@ -145,7 +145,7 @@ Si la vols pujar manualment:
 
 ### Per generar la imatge :release-_tag_
 
-Tenint la versió final a la branch main, obrir el repositori a Github i anar a Tags - Releases - New release.
+Tenint la versió final a la branch main, obrir el repositori a Github i anar a Tags - Releases - Draft a New release.
 
 A Choose a tag, desplegar i escriure el nom que tindrà el nou tag seguint la
 nomenclatura:
@@ -160,8 +160,4 @@ Clicar a Publish Release.
 La creació de la imatge es dispararà, ara cal que entris al cap d'uns 10 minuts
 a hub.docker.com per comprovar que s'ha generat sense errors.
 
-## Testejar la imatge de producció en local o a develop
-
-Assumint que tens l'última versió a dockerhub, fes:
-`docker-compose -f compose-develop-hub.yml up`
  
