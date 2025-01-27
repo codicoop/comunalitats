@@ -45,10 +45,6 @@ class Command(BaseCommand):
                     "date_end": period['date_end'],
                 },
             )
-            if not created:
-                obj.date_start = period['date_start']
-                obj.date_end = period['date_end']
-                obj.save()
             if created:
                 msg = f"SubsidyPeriod {period['name']} did NOT exist and was" \
                       f" created."
@@ -138,6 +134,8 @@ class Command(BaseCommand):
         print("Done!")
 
     def normalize_permissions(self):
+        group_names = ["Responsable de backoffice", "Equip"]
+        Group.objects.exclude(name__in=group_names).delete()
         # Administradors
         permissions = {
             "constance": [
@@ -154,13 +152,15 @@ class Command(BaseCommand):
                 "add_permission",
             ],
             "dataexports": [
-                "change_subsidyperiod", "add_subsidyperiod",
+                "change_subsidyperiod",
             ],
             "cc_courses": [
                 "add_courseplace",
+                "delete_activity"
             ],
             "cc_users": [
                 "delete_tagulous_user_tags",
+                "delete_user",
             ],
             "projects": [
                 "delete_tagulous_project_tags",
@@ -173,7 +173,7 @@ class Command(BaseCommand):
         }
 
         group, created = Group.objects.get_or_create(
-            name="Responsable de backoffice"
+            name=group_names[0]
         )
         group.permissions.set(self._get_permissions(Permission, permissions))
         group.save()
@@ -244,7 +244,7 @@ class Command(BaseCommand):
             ],
         }
         group, created = Group.objects.get_or_create(
-            name="Equip"
+            name=group_names[1]
         )
         group.permissions.set(self._get_permissions(Permission, permissions))
         group.save()

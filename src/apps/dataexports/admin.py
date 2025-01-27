@@ -9,7 +9,7 @@ from apps.dataexports.models import DataExports, SubsidyPeriod
 @admin.register(SubsidyPeriod)
 class SubsidyPeriodAdmin(admin.ModelAdmin):
     list_display = ('name', 'number', 'date_start', 'date_end')
-
+    readonly_fields = ('name',)
 
 @admin.register(DataExports)
 class DataExportsAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):

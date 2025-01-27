@@ -75,6 +75,24 @@ class FilterByJustificationFiles(admin.SimpleListFilter):
             )
         return queryset
 
+class FilterByReadyForJustification(admin.SimpleListFilter):
+    title = "Preparat per justificació"
+    parameter_name = 'ready_for_justification'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('Yes', 'Sí'),
+            ('No', 'No'),
+        )
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == "Yes":
+            filtered_ids = [obj.id for obj in queryset if obj.ready_for_justification()]
+            return queryset.filter(id__in=filtered_ids)
+        elif value == "No":
+            filtered_ids = [obj.id for obj in queryset if not obj.ready_for_justification()]
+            return queryset.filter(id__in=filtered_ids)
+        return queryset
 
 class ActivityEnrolledInline(admin.TabularInline):
     class Media:
@@ -135,18 +153,20 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
     list_display = (
         'date_start', 'calculated_date_end', 'spots', 'remaining_spots', 'name',
         'service',
-        'attendee_filter_field', 'attendee_list_field', 'send_reminder_field')
+        'attendee_filter_field', 'attendee_list_field', 'send_reminder_field',
+        'ready_for_justification')
     readonly_fields = (
         'attendee_list_field', 'attendee_filter_field', 'send_reminder_field',
         'activity_poll_field', )
     summernote_fields = ('objectives', 'instructions',)
-    search_fields = ('date_start', 'name', 'objectives',)
+    search_fields = ('date_start', 'name', 'objectives')
     list_filter = (
         FilterBySubsidyPeriod, FilterByJustificationFiles,
         "service", ("place__town", admin.RelatedOnlyFieldListFilter),
         'course', 'date_start', 'room', 'entities', 'place',
         'for_minors',
         ("responsible", admin.RelatedOnlyFieldListFilter),
+        FilterByReadyForJustification,
     )
     fieldsets = [
         (None, {
@@ -229,6 +249,11 @@ class ActivityAdmin(FilterByCurrentSubsidyPeriodMixin, SummernoteModelAdminMixin
             ),
         ]
         return custom_urls + urls
+
+    @admin.display(boolean=True, description="Preparat per justificació")
+    def ready_for_justification(self, obj):
+        return obj.ready_for_justification()
+
 
     def tweak_cloned_inline_fields(self, related_name, fields_list):
         """

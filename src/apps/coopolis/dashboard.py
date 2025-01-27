@@ -9,7 +9,6 @@ To activate your index dashboard add the following to your settings.py::
 from grappelli.dashboard import modules, Dashboard
 from django.conf import settings
 from django.urls import reverse
-from constance import config
 
 
 class MyDashboard(Dashboard):
@@ -30,7 +29,7 @@ class MyDashboard(Dashboard):
 
         group_children = [
             modules.ModelList(
-                title='Accions i activitats',
+                title='Projectes i activitats',
                 column=1,
                 collapsible=False,
                 models=('apps.cc_courses.models.Course', 'apps.cc_courses.models.Activity',),
@@ -126,8 +125,8 @@ class MyDashboard(Dashboard):
 
         links_children = [
         ]
+        links_children.append(["Registre d'activitat al panell d'administració", 'admin/logentry/'])
         if context['request'].user.is_superuser:
-            links_children.append(["Registre d'activitat al panell d'administració", 'admin/logentry/'])
             links_children.append(["Descàrrega de la base de dades de les 00:00", reverse('db_backup_download')])
 
         self.children.append(modules.LinkList(
