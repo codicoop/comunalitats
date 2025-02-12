@@ -9,7 +9,14 @@ from apps.dataexports.models import DataExports, SubsidyPeriod
 @admin.register(SubsidyPeriod)
 class SubsidyPeriodAdmin(admin.ModelAdmin):
     list_display = ('name', 'number', 'date_start', 'date_end')
-    readonly_fields = ('name',)
+
+    def get_readonly_fields(self, request, obj=None):
+        readonly = list(super().get_readonly_fields(request, obj))
+        if not request.user.is_superuser:
+            readonly.append("name")
+
+        return tuple(readonly)
+
 
 @admin.register(DataExports)
 class DataExportsAdmin(FilterByCurrentSubsidyPeriodMixin, admin.ModelAdmin):
