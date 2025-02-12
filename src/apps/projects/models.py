@@ -479,6 +479,13 @@ class ProjectStage(models.Model):
             return None
 
     @property
+    def earliest_session(self):
+        try:
+            return self.stage_sessions.earliest("date")
+        except ProjectStageSession.DoesNotExist:
+            return None
+
+    @property
     def involved_partners_count(self):
         return self.partners_involved_in_sessions.count()
 

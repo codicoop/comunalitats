@@ -455,7 +455,7 @@ class ExportJustificationService:
                     "",  # Automàtic. Nom actuació. Camp no editable.
                     item.project.name,  # Nom de projecte/ empresa o entitat
                     stage_type,  # Tipus d'acompanyament
-                    item.date_start or ("", True),  # Data d'inici
+                    item.earliest_session.date if item.earliest_session else ("", True),  # Data d'inici
                     item.project.neighborhood or ("", True),  # Barri
                     town,  # Municipi
                     item.project.description,  # Breu descripció de l'actuació
