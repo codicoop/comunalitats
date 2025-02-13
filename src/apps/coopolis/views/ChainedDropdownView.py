@@ -41,10 +41,10 @@ def get_subsidy_period(request):
     """
 
     subsidy_period = None
-    start_date = request.GET.get("data")
-    if start_date:
+    date_start = request.GET.get("date_start")
+    if date_start:
         try:
-            date_start = datetime.strptime(start_date, "%d/%m/%Y").date()
+            date_start = datetime.strptime(date_start, "%d/%m/%Y").date()
         except ValueError:
             return JsonResponse(
                 data=None,
