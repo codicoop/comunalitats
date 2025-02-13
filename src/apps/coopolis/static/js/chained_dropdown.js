@@ -88,7 +88,7 @@ jQuery(function($){
         $.ajax({
             url:`/chained_dropdowns/${url}/`,
             type:"GET",
-            data:{data: service,},
+            data:{service: service,},
             success: function(result) {
                 const cols = document.getElementById(id);
                 cols.innerHTML = clone.innerHTML

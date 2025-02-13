@@ -8,7 +8,7 @@ from apps.projects.models import SubsidyPeriod
 
 @login_required
 def get_sub_services(request):
-    service = int(request.GET.get("data")) if request.GET.get("data") else None
+    service = int(request.GET.get("service")) if request.GET.get("service") else None
     sub_services = {}
     try:
         service = ServicesChoices(service)
