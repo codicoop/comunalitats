@@ -47,6 +47,26 @@ class ServicesChoices(models.IntegerChoices):
             if member in range(range_start, range_end + 1)
         ]
 
+    @classmethod
+    def get_services_for_subsidy_period_name(cls, subsidy_period_name):
+        item_start = ""
+        item_end = ""
+        if subsidy_period_name in ("2022-2023", "2023-2024"):
+            item_start = cls.A
+            item_end = cls.E
+        if subsidy_period_name in ("2024-2025", "2025-2026"):
+            item_start = cls.F
+            item_end = cls.K
+
+        if item_start and item_end:
+            services = {
+                item.value: item.label
+                for item in cls
+                if item in range(item_start, item_end + 1)
+            }
+            return services
+        return None
+
 
 class SubServicesChoices(models.IntegerChoices):
     """

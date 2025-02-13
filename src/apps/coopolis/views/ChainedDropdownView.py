@@ -40,25 +40,41 @@ def get_subsidy_period(request):
     subservei pengin de Convocatòria.
     """
 
-    subsidy_period_or_start_date = request.GET.get("data")
-    try:
-        date_start = datetime.strptime(subsidy_period_or_start_date, "%d/%m/%Y").date()
-        selected_subsidy_period = SubsidyPeriod.objects.filter(date_start__lte=date_start, date_end__gte=date_start).first()
-    except ValueError:
-        selected_subsidy_period = SubsidyPeriod.objects.filter(name=subsidy_period_or_start_date).first()
+    subsidy_period = None
+    start_date = request.GET.get("data")
+    if start_date:
+        try:
+            date_start = datetime.strptime(start_date, "%d/%m/%Y").date()
+        except ValueError:
+            return JsonResponse(
+                data=None,
+                safe=False,
+            )
+        try:
+            subsidy_period = SubsidyPeriod.objects.get(date_start__lte=date_start, date_end__gte=date_start)
+        except SubsidyPeriod.DoesNotExist:
+            return JsonResponse(
+                data=None,
+                safe=False,
+            )
+    selected_subsidy_period = request.GET.get("selected_subsidy_period")
+    if selected_subsidy_period:
+        try:
+            subsidy_period = SubsidyPeriod.objects.get(id=selected_subsidy_period)
+        except SubsidyPeriod.DoesNotExist:
+            return JsonResponse(
+                data=None,
+                safe=False,
+            )
 
-    last_subsidy_period = SubsidyPeriod.objects.filter().first()
-    item_start = ServicesChoices.A
-    item_end = ServicesChoices.E
-    if last_subsidy_period == selected_subsidy_period:
-        item_start = ServicesChoices.F
-        item_end = ServicesChoices.K
-    if not selected_subsidy_period or subsidy_period_or_start_date == "Sense justificar":
-        services = None
-    elif subsidy_period_or_start_date:
-        services = {
-            item.value: item.label
-            for item in ServicesChoices
-            if item in range(item_start, item_end + 1)
-        }
+    if not subsidy_period:
+        # Could reach it if none of the GET parameters are present
+        return JsonResponse(
+            data=None,
+            safe=False,
+        )
+
+    services = ServicesChoices.get_services_for_subsidy_period_name(
+        subsidy_period.name,
+    )
     return JsonResponse(data=services, safe=False)
