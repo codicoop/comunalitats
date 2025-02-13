@@ -11,17 +11,17 @@ jQuery(function($){
             if (subsidyPeriod) {
                 $("#id_subsidy_period").change(function(){
                     const selectedSubsidyPeriodText = $('#id_subsidy_period option[value="' + $(this).val() + '"]').text();
-                    update_services_and_sub_services(selectedSubsidyPeriodText, cloneService, "id_service", "get_subsidy_period", true);
+                    update_services_by_subsidy_period(selectedSubsidyPeriodText, cloneService, "id_service", "get_subsidy_period", true);
                     $("#id_sub_service").empty();
                 });
                 const selectedSubsidyPeriodText = $('#id_subsidy_period option[value="' + $("#id_subsidy_period").val() + '"]').text();
-                update_services_and_sub_services(selectedSubsidyPeriodText, cloneService, "id_service", "get_subsidy_period")
+                update_services_by_subsidy_period(selectedSubsidyPeriodText, cloneService, "id_service", "get_subsidy_period")
             } else if (dateStart) {
                 $("#id_date_start").change(function(){
-                    update_services_and_sub_services_by_date($(this).val(), cloneService, "id_service", "get_subsidy_period", true);
+                    update_services_by_date($(this).val(), cloneService, "id_service", "get_subsidy_period", true);
                     $("#id_sub_service").empty();
                 });
-                update_services_and_sub_services_by_date($("#id_date_start").val(), cloneService, "id_service", "get_subsidy_period")
+                update_services_by_date($("#id_date_start").val(), cloneService, "id_service", "get_subsidy_period")
             }
             $("#id_service").change(function(){
                 update_sub_services($(this).val(), cloneSubService, "id_sub_service", "get_sub_services", true)
@@ -30,11 +30,38 @@ jQuery(function($){
         }
     });
 
-    function update_services_and_sub_services_by_date(date_start, clone, id, url, cap=false) {
+    function update_services_by_date(date_start, clone, id, url, cap=false) {
         $.ajax({
             url:`/chained_dropdowns/${url}/`,
             type:"GET",
             data:{date_start: date_start,},
+            success: function(result) {
+                const cols = document.getElementById(id);
+                cols.innerHTML = clone.innerHTML
+                if (cap) $(`#${id}`).val("");
+                Array.from(cols.options).forEach(function(option_element) {
+                    let existing = false;
+                    for (let k in result) {
+                        if (option_element.value == k || option_element.value == "") {
+                            existing = true
+                        }
+                    }
+                    if (existing == false) {
+                        $(`#${id} option[value='${option_element.value}']`).remove();
+                    }
+                })
+            },
+            error: function(e){
+                console.error(JSON.stringify(e));
+            },
+        })
+    }
+
+    function update_services_by_subsidy_period(selected_subsidy_period, clone, id, url, cap=false) {
+        $.ajax({
+            url:`/chained_dropdowns/${url}/`,
+            type:"GET",
+            data:{selected_subsidy_period: selected_subsidy_period,},
             success: function(result) {
                 const cols = document.getElementById(id);
                 cols.innerHTML = clone.innerHTML
