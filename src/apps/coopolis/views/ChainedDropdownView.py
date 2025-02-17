@@ -51,7 +51,10 @@ def get_subsidy_period(request):
                 safe=False,
             )
         try:
-            subsidy_period = SubsidyPeriod.objects.get(date_start__lte=date_start, date_end__gte=date_start)
+            subsidy_period = SubsidyPeriod.objects.get(
+                date_start__lte=date_start,
+                date_end__gte=date_start,
+            )
         except SubsidyPeriod.DoesNotExist:
             return JsonResponse(
                 data=None,
@@ -60,7 +63,9 @@ def get_subsidy_period(request):
     selected_subsidy_period = request.GET.get("selected_subsidy_period")
     if selected_subsidy_period:
         try:
-            subsidy_period = SubsidyPeriod.objects.get(name=selected_subsidy_period)
+            subsidy_period = SubsidyPeriod.objects.get(
+                name=selected_subsidy_period,
+            )
         except SubsidyPeriod.DoesNotExist:
             return JsonResponse(
                 data=None,
