@@ -201,57 +201,57 @@ class SubServicesChoices(models.IntegerChoices):
 
     # Nomenclatura subserveis | HORES ITERACIONS 2023
     # A) Servei anàlisi i prospectiva.
-    F1 = 601, ("A.1) Diagnosi i/o avaluació de necessitats de forma participada "
-               "a nivell general i/o sectorial")
-    F2 = 602, ("A.2) Identificació i visualització de béns comuns urbans i "
-               "altres iniciatives de suport mutu, activisme i ESS del territori")
-    F3 = 603, ("A.3) Elaboració de materials i suports de difusió de bones "
-               "pràctiques de suport mutu, activisme i ESS del territori")
-    F4 = 604, "A.4) Enxarxament territorial i de barri"
-    F5 = 605, ("A.5) Articulació i posada en funcionament de l’Assemblea, així "
+    F1 = 601, ("A1) Diagnosi i/o avaluació de necessitats de forma participada "
+               "en l’àmbit general i/o sectorial.")
+    F2 = 602, ("A2) Identificació i visualització de béns comuns urbans i altres"
+               " iniciatives de suport mutu, activisme i ESS del territori.")
+    F3 = 603, ("A3) Elaboració de materials i elements de difusió de bones "
+               "pràctiques de suport mutu, activisme i ESS del territori.")
+    F4 = 604, "A4) Enxarxament territorial i de la comunalitat al barri."
+    F5 = 605, ("A5) Articulació i posada en funcionament de l’Assemblea, així "
                "com d’altres espais de governança democràtica i inclusiva de "
-               "la Comunalitat")
+               "la comunalitat.")
 
     # B) Servei de formació i difusió per a l'activisme al barri/espai urbà
     # adreçat a entitats i persones
-    G1 = 701, "B.1) Campanya de comunicació a col·lectius d'especial atenció"
-    G2 = 702, ("B.2) Dinamització per donar a conèixer projectes d’ajuda mútua, "
+    G1 = 701, ("B1) Campanya temàtica de sensibilització i/o incidència sobre "
+               "suport mutu, béns comuns, activisme i ESS.")
+    G2 = 702, ("B2) Dinamització per donar a conèixer projectes d’ajuda mútua, "
                "l’autogestió, ESS i cooperativisme, al teixit associatiu i a "
-               "les empreses")
-    G3 = 703, ("B.3) Organització de jornades i assistència a accions directes "
-               "de la comunalitat per visibilitzar experiències")
-    G4 = 704, ("B.4) Generació d’espais de trobada i d'intercanvi d’experiències"
+               "les empreses.")
+    G3 = 703, ("B3) Organització logística i metodològica de jornades pròpies.")
+    G4 = 704, ("B4) Participació en actes, jornades, fires, programes, "
+               "publicacions, etc. que ja s’estiguin duent a terme al territori.")
+    G5 = 705, ("B5) Generació d’espais de trobada i d’intercanvi d’experiències"
                " i col·laboració en iniciatives conjuntes entre actors i "
                "sectors diversos.")
-    G5 = 705, ("B.5) Realització de formacions i/o divulgació de coneixement "
+    G6 = 706, ("B6) Realització de formacions i/o divulgació de coneixement "
                "compartit entorn el suport mutu, l’activisme, els béns comuns "
-               "i l’ESS")
+               "i l’ESS.")
 
     # C) Servei de foment a projectes d'ajuda mútua, d'intercooperació i de
     # cooperació entre els bens comuns urbans i la ciutadania.
-    H1 = 801, ("C.1) Orientació a persones, empreses i entitats per la creació "
-               "d’activitats econòmiques i iniciatives empresarials de l’ESS")
-    H2 = 802, ("C.2) Generació d’aliances entre professionals per promoure "
-               "l'ocupabilitat digne a través de la intercooperació")
-    H3 = 803, ("C.3) Creació o consolidació dinàmiques de col·laboració i"
-               " aliances entre diferents agents econòmics de forma "
-               "democràtica i inclusiva")
-    H4 = 804, ("C.4) Organització de sessions per al disseny d'estratègies "
+    H1 = 801, ("C1) Orientació a persones, empreses i entitats per la creació "
+               "d’activitats econòmiques i iniciatives empresarials de l’ESS.")
+    H2 = 802, ("C2) Generació d’aliances entre professionals per promoure "
+               "l'ocupabilitat digne a través de la intercooperació.")
+    H3 = 803, ("C3) Creació o consolidació dinàmiques de col·laboració i "
+               "aliances entre diferents agents econòmics de forma democràtica "
+               "i inclusiva")
+    H4 = 804, ("C4) Organització de sessions per al disseny d'estratègies "
                "vinculades a l'autoorganització col·lectiva, xarxes de suport "
-               "mutu, intercooperació")
-    H5 = 805, ("C.5) Activitats per a la creació d’aliances i l’accés a l’ús "
+               "mutu, intercooperació, entre d'altres.")
+    H5 = 805, ("C5) Activitats per a la creació d’aliances i l’accés a l’ús "
                "comunal d’infraestructures i recursos")
 
     # D) Servei d’acompanyament a la creació i a la consolidació de projectes
     # d'ajuda mútua.
-    J1 = 901, ("D.1) Acompanyament a projectes veïnals, socials i/o comunitaris "
-               "per a la resolució de necessitats col·lectives")
-    J2 = 902, ("D.2) Generació de nous projectes d'intercooperació o ajuda "
-               "mútua dirigides i realitzades amb col·lectius específics")
+    J1 = 901, ("D1) Acompanyament per a la creació o la consolidació de "
+               "projectes d’ajuda mútua o xarxes d’intercooperació o "
+               "d’organització col·lectiva al territori de la comunalitat.")
 
     # E) Punt de trobada i d'informació de comunalitat urbana
-    K1 = 1001, "E.1) Atenció als usuaris a l'espai físic de referència"
-    K2 = 1002, "E.2) Difusió del punt d'informació"
+    K1 = 1001, "E1) Espai físic, punt de trobada i d’informació."
 
 
 class ProjectSectorChoices(models.IntegerChoices):
